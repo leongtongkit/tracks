@@ -47,6 +47,7 @@ export class Voice {
     note: number,
     t: number,
     mods?: VoiceMods,
+    velocity = 1,
   ): void {
     this.dispose()
     const freq = midiToFreq(note)
@@ -122,7 +123,7 @@ export class Voice {
     // on top of a key-tracking base offset.
     this.filterBase = patch.filter.keyTrack * (note - 60) * 100
     triggerAttack(filter.detune, patch.env.filter, t, this.filterBase, patch.filter.envAmount * FILTER_ENV_CENTS)
-    triggerAttack(vca.gain, patch.env.amp, t, 0, VOICE_PEAK)
+    triggerAttack(vca.gain, patch.env.amp, t, 0, VOICE_PEAK * (0.3 + 0.7 * velocity))
 
     this.filter = filter
     this.vca = vca

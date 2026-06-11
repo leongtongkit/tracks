@@ -670,6 +670,44 @@ body {
   border-color: var(--coral);
 }
 
+/* ---------- record + midi ---------- */
+
+.rec-midi {
+  display: flex;
+  gap: 6px;
+}
+
+.rec-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.rec-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(36, 30, 24, 0.25);
+  transition: background 0.15s;
+}
+
+.rec-live {
+  color: var(--bone);
+  background: var(--coral-deep);
+  border-color: var(--coral-deep);
+}
+
+.rec-live .rec-dot {
+  background: var(--bone);
+  animation: rec-pulse 1.1s ease-in-out infinite;
+}
+
+@keyframes rec-pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+
 /* ---------- sequencer ---------- */
 
 .seq-strip {

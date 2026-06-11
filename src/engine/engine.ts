@@ -63,7 +63,7 @@ export class Engine {
     store.subscribeAll((value, path) => this.onParamChange(value, path))
   }
 
-  noteOn(note: number, at?: number): void {
+  noteOn(note: number, at?: number, velocity = 1): void {
     const patch = this.store.getPatch()
     const t = at ?? this.ctx.currentTime
 
@@ -74,7 +74,7 @@ export class Engine {
         const retrigger = patch.voice.mode === 'mono'
         this.voices[0].glideTo(patch, note, patch.voice.glide, t, retrigger)
       } else {
-        this.voices[0].noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
+        this.voices[0].noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods, velocity)
       }
       if (this.bendCents !== 0) this.voices[0].setBend(this.bendCents, t)
       return
@@ -85,7 +85,7 @@ export class Engine {
     if (voice.state === 'active' || (voice.state === 'releasing' && !voice.isReclaimable(t))) {
       voice.steal(t)
     }
-    voice.noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
+    voice.noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods, velocity)
     if (this.bendCents !== 0) voice.setBend(this.bendCents, t)
   }
 
