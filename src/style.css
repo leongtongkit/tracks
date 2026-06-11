@@ -909,6 +909,56 @@ body {
   width: 100%;
 }
 
+/* ---------- narrow screens ---------- */
+
+@media (max-width: 680px) {
+  .brand-row {
+    flex-wrap: wrap;
+  }
+
+  .preset-slot {
+    flex-basis: 100%;
+    flex-wrap: wrap;
+    order: 3;
+  }
+
+  .preset-name {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .seq-strip {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .seq-transport {
+    justify-content: center;
+  }
+
+  .seq-grid {
+    grid-template-columns: repeat(8, 1fr);
+  }
+
+  .piano-row {
+    flex-direction: column;
+  }
+
+  .oct-ctl {
+    flex-direction: row;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .oct-ctl .seg-btn {
+    width: auto;
+  }
+
+  .key-hint {
+    display: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     transition: none !important;
