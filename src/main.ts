@@ -1,29 +1,17 @@
 import { Engine } from './engine/engine'
 import { KeyboardInput } from './input/keyboard'
 import { Store } from './state/store'
-import { buildDebugUI } from './ui/debug'
+import { buildApp } from './ui/panels'
+import { Piano } from './ui/piano'
 import { installRenderTest } from './test/offline'
 
 const store = new Store()
 let engine: Engine | null = null
-let keyboard: KeyboardInput | null = null
 
-function startAudio(): Engine {
+function ensureEngine(): Engine {
   if (!engine) {
     const ctx = new AudioContext({ latencyHint: 'interactive' })
     engine = new Engine(ctx, store)
-    keyboard = new KeyboardInput({
-      noteOn: n => {
-        if (ctx.state !== 'running') ctx.resume().catch(() => {})
-        engine!.noteOn(n)
-      },
-      noteOff: n => engine!.noteOff(n),
-      allNotesOff: () => engine!.allNotesOff(),
-      octaveChanged: o => {
-        const el = document.getElementById('octave-readout')
-        if (el) el.textContent = `octave: C${o} (Z/X to shift)`
-      },
-    })
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'visible' && ctx.state !== 'running') {
         ctx.resume().catch(() => {})
@@ -35,27 +23,46 @@ function startAudio(): Engine {
   return engine
 }
 
-function unlock(e: Event): void {
+const piano = new Piano({
+  noteOn: n => ensureEngine().noteOn(n),
+  noteOff: n => engine?.noteOff(n),
+})
+
+const keyboard = new KeyboardInput({
+  noteOn: n => {
+    ensureEngine().noteOn(n)
+    piano.highlight(n, true)
+  },
+  noteOff: n => {
+    engine?.noteOff(n)
+    piano.highlight(n, false)
+  },
+  allNotesOff: () => {
+    engine?.allNotesOff()
+    piano.clearHighlights()
+  },
+  octaveChanged: o => {
+    piano.setOctave(o)
+    refs.octaveReadout.textContent = `C${o}`
+  },
+})
+
+const refs = buildApp(document.getElementById('app')!, store, {
+  octaveDown: () => keyboard.setOctave(keyboard.octave - 1),
+  octaveUp: () => keyboard.setOctave(keyboard.octave + 1),
+})
+refs.pianoSlot.appendChild(piano.el)
+
+function unlock(): void {
   document.getElementById('scrim')?.classList.add('hidden')
   document.removeEventListener('pointerdown', unlock, true)
   document.removeEventListener('keydown', unlock, true)
-  startAudio()
-  // If the unlocking gesture was a playable key, sound it immediately:
-  // re-dispatch so KeyboardInput (registered inside startAudio) sees it.
-  if (e instanceof KeyboardEvent && !e.repeat) {
-    window.dispatchEvent(new KeyboardEvent('keydown', { code: e.code }))
-  }
+  ensureEngine()
 }
 
 document.addEventListener('pointerdown', unlock, true)
 document.addEventListener('keydown', unlock, true)
 
-const app = document.getElementById('app')!
-const help = document.createElement('p')
-help.id = 'octave-readout'
-help.textContent = 'octave: C4 (Z/X to shift) — play with A-row/W-row keys'
-app.appendChild(help)
-buildDebugUI(app, store)
 installRenderTest()
 
 export { store, keyboard }
