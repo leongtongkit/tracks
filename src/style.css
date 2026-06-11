@@ -407,10 +407,15 @@ body {
   box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4) inset;
 }
 
+.piano-2up {
+  display: grid;
+  gap: 8px;
+}
+
 .piano {
   position: relative;
   display: flex;
-  height: clamp(96px, 14vw, 150px);
+  height: clamp(70px, 9vw, 105px);
   touch-action: none;
 }
 
