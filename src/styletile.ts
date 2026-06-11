@@ -1,3 +1,7 @@
+import '@fontsource/ibm-plex-sans-condensed/600.css'
+import '@fontsource/ibm-plex-sans-condensed/700.css'
+import '@fontsource/ibm-plex-mono/500.css'
+
 // Style tile: the design language on one screen, built from PRODUCTION
 // components (Knob, segmented, power, panel) so what Jay reviews is what ships.
 
