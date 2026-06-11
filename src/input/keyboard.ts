@@ -1,38 +1,38 @@
-// Computer-keyboard note input. Uses event.code (physical position) so
-// AZERTY/QWERTZ layouts play the same shape. A-row = white keys, W-row =
-// black keys, Z/X shift octaves.
+// Computer-keyboard note input: two-manual FL-Studio-style layout using all
+// four rows. Z-row + S-row = lower manual; Q-row + number row = upper manual
+// (one octave up). ArrowUp/ArrowDown shift octaves. Tab bends up, Left Shift
+// bends down. Uses event.code (physical position) so AZERTY/QWERTZ play the
+// same shape.
 
-const KEY_TO_SEMITONE: Record<string, number> = {
-  KeyA: 0, // C
-  KeyW: 1,
-  KeyS: 2,
-  KeyE: 3,
-  KeyD: 4,
-  KeyF: 5,
-  KeyT: 6,
-  KeyG: 7,
-  KeyY: 8,
-  KeyH: 9,
-  KeyU: 10,
-  KeyJ: 11,
-  KeyK: 12, // C one octave up
-  KeyO: 13,
-  KeyL: 14,
-  KeyP: 15,
-  Semicolon: 16,
-  Quote: 17,
+const LOWER: Record<string, number> = {
+  KeyZ: 0, KeyS: 1, KeyX: 2, KeyD: 3, KeyC: 4, KeyV: 5, KeyG: 6, KeyB: 7,
+  KeyH: 8, KeyN: 9, KeyJ: 10, KeyM: 11, Comma: 12, KeyL: 13, Period: 14,
+  Semicolon: 15, Slash: 16,
 }
+
+const UPPER: Record<string, number> = {
+  KeyQ: 12, Digit2: 13, KeyW: 14, Digit3: 15, KeyE: 16, KeyR: 17, Digit5: 18,
+  KeyT: 19, Digit6: 20, KeyY: 21, Digit7: 22, KeyU: 23, KeyI: 24, Digit9: 25,
+  KeyO: 26, Digit0: 27, KeyP: 28, BracketLeft: 29, Equal: 30, BracketRight: 31,
+}
+
+const KEY_TO_SEMITONE: Record<string, number> = { ...LOWER, ...UPPER }
+
+const BEND_SEMITONES = 2
 
 export interface KeyboardHandlers {
   noteOn(note: number): void
   noteOff(note: number): void
   allNotesOff(): void
+  bend?(semitones: number): void
   octaveChanged?(octave: number): void
 }
 
 export class KeyboardInput {
-  octave = 4 // middle C = C4 = MIDI 60 on KeyA
+  octave = 4 // lower-manual C on KeyZ = C4 = MIDI 60
   private readonly down = new Map<string, number>() // code -> sounding MIDI note
+  private bendUp = false
+  private bendDown = false
   private readonly handlers: KeyboardHandlers
 
   constructor(handlers: KeyboardHandlers) {
@@ -54,8 +54,20 @@ export class KeyboardInput {
       this.panic()
       return
     }
-    if (e.code === 'KeyZ' || e.code === 'KeyX') {
-      this.setOctave(this.octave + (e.code === 'KeyZ' ? -1 : 1))
+    if (e.code === 'ArrowDown' || e.code === 'ArrowUp') {
+      e.preventDefault()
+      this.setOctave(this.octave + (e.code === 'ArrowDown' ? -1 : 1))
+      return
+    }
+    if (e.code === 'Tab') {
+      e.preventDefault()
+      this.bendUp = true
+      this.applyBend()
+      return
+    }
+    if (e.code === 'ShiftLeft') {
+      this.bendDown = true
+      this.applyBend()
       return
     }
 
@@ -68,14 +80,32 @@ export class KeyboardInput {
   }
 
   private onKeyUp = (e: KeyboardEvent): void => {
+    if (e.code === 'Tab') {
+      this.bendUp = false
+      this.applyBend()
+      return
+    }
+    if (e.code === 'ShiftLeft') {
+      this.bendDown = false
+      this.applyBend()
+      return
+    }
     const note = this.down.get(e.code)
     if (note === undefined) return
     this.down.delete(e.code)
     this.handlers.noteOff(note)
   }
 
+  private applyBend(): void {
+    const semis = (this.bendUp ? BEND_SEMITONES : 0) - (this.bendDown ? BEND_SEMITONES : 0)
+    this.handlers.bend?.(semis)
+  }
+
   private panic = (): void => {
     this.down.clear()
+    this.bendUp = false
+    this.bendDown = false
+    this.handlers.bend?.(0)
     this.handlers.allNotesOff()
   }
 

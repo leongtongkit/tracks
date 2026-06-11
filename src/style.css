@@ -85,6 +85,11 @@ body {
   font-size: 0.85rem;
 }
 
+#scrim .scrim-help {
+  color: var(--bone-dim);
+  font-size: 0.7rem;
+}
+
 #scrim.hidden {
   display: none;
 }

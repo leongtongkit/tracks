@@ -13,6 +13,7 @@ interface SourceSlot {
   gain: GainNode
   oscIndex: number
   ratio: number // frequency multiplier from octave/semi; 0 for noise
+  fine: number // base detune in cents; pitch bend adds on top
 }
 
 // External modulation sources (global LFO depth gains) a voice hooks into
@@ -73,7 +74,7 @@ export class Voice {
         node.loopStart = Math.random()
         node.connect(gain)
         node.start(t, node.loopStart)
-        this.sources.push({ node, gain, oscIndex: i, ratio: 0 })
+        this.sources.push({ node, gain, oscIndex: i, ratio: 0, fine: 0 })
       } else {
         const node = ctx.createOscillator()
         node.type = cfg.wave === 'saw' ? 'sawtooth' : cfg.wave
@@ -82,7 +83,7 @@ export class Voice {
         node.detune.value = cfg.fine
         node.connect(gain)
         node.start(t)
-        this.sources.push({ node, gain, oscIndex: i, ratio })
+        this.sources.push({ node, gain, oscIndex: i, ratio, fine: cfg.fine })
       }
     }
 
@@ -192,6 +193,16 @@ export class Voice {
     } else if (path === 'fm.ratio' && this.fmOsc) {
       this.fmOsc.frequency.setTargetAtTime(this.baseFreq * (value as number), t, 0.02)
     }
+  }
+
+  // Pitch bend in cents, applied on top of each oscillator's fine detune.
+  // (Global LFO pitch modulation also sums into detune via its connection.)
+  setBend(cents: number, t: number): void {
+    for (const s of this.sources) {
+      if (s.ratio === 0) continue
+      ;(s.node as OscillatorNode).detune.setTargetAtTime(s.fine + cents, t, 0.03)
+    }
+    this.fmOsc?.detune.setTargetAtTime(cents, t, 0.03)
   }
 
   // True when the slot can be reallocated.

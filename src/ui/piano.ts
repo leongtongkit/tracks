@@ -3,9 +3,12 @@
 
 const SEMIS_IN_VIEW = 24
 const WHITE_SEMIS = [0, 2, 4, 5, 7, 9, 11]
+// Lower manual letters on the first octave, upper manual on the second.
 const KEY_HINTS: Record<number, string> = {
-  0: 'A', 1: 'W', 2: 'S', 3: 'E', 4: 'D', 5: 'F', 6: 'T', 7: 'G', 8: 'Y',
-  9: 'H', 10: 'U', 11: 'J', 12: 'K', 13: 'O', 14: 'L', 15: 'P', 16: ';', 17: "'",
+  0: 'Z', 1: 'S', 2: 'X', 3: 'D', 4: 'C', 5: 'V', 6: 'G', 7: 'B', 8: 'H',
+  9: 'N', 10: 'J', 11: 'M',
+  12: 'Q', 13: '2', 14: 'W', 15: '3', 16: 'E', 17: 'R', 18: '5', 19: 'T',
+  20: '6', 21: 'Y', 22: '7', 23: 'U',
 }
 
 export interface PianoHandlers {

@@ -183,12 +183,14 @@ export function buildApp(root: HTMLElement, store: Store, cb: AppCallbacks): App
   const down = document.createElement('button')
   down.type = 'button'
   down.className = 'seg-btn'
-  down.textContent = 'Z -'
+  down.textContent = 'Oct -'
+  down.title = 'Octave down (Arrow Down)'
   down.addEventListener('click', cb.octaveDown)
   const up = document.createElement('button')
   up.type = 'button'
   up.className = 'seg-btn'
-  up.textContent = 'X +'
+  up.textContent = 'Oct +'
+  up.title = 'Octave up (Arrow Up)'
   up.addEventListener('click', cb.octaveUp)
   const octaveReadout = document.createElement('span')
   octaveReadout.className = 'oct-readout'

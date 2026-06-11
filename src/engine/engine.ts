@@ -22,6 +22,7 @@ export class Engine {
   private readonly lfoBank: LfoBank
   private readonly fxChain: FxChain
   private readonly mods: VoiceMods
+  private bendCents = 0
 
   constructor(ctx: BaseAudioContext, store: Store) {
     this.ctx = ctx
@@ -75,6 +76,7 @@ export class Engine {
       } else {
         this.voices[0].noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
       }
+      if (this.bendCents !== 0) this.voices[0].setBend(this.bendCents, t)
       return
     }
 
@@ -84,6 +86,7 @@ export class Engine {
       voice.steal(t)
     }
     voice.noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
+    if (this.bendCents !== 0) voice.setBend(this.bendCents, t)
   }
 
   noteOff(note: number): void {
@@ -107,6 +110,15 @@ export class Engine {
       if (voice.state === 'active' && voice.note === note) {
         voice.noteOff(patch, t)
       }
+    }
+  }
+
+  // Pitch bend in semitones; affects sounding voices and future notes until reset.
+  setBend(semitones: number): void {
+    this.bendCents = semitones * 100
+    const t = this.ctx.currentTime
+    for (const voice of this.voices) {
+      if (voice.state !== 'free') voice.setBend(this.bendCents, t)
     }
   }
 

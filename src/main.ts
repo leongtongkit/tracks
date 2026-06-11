@@ -42,6 +42,7 @@ const keyboard = new KeyboardInput({
     engine?.allNotesOff()
     piano.clearHighlights()
   },
+  bend: semis => engine?.setBend(semis),
   octaveChanged: o => {
     piano.setOctave(o)
     refs.octaveReadout.textContent = `C${o}`
