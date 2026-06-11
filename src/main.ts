@@ -1,9 +1,13 @@
 import { Engine } from './engine/engine'
 import { KeyboardInput } from './input/keyboard'
+import { hashToPatch } from './patch/serialize'
+import { loadSession, saveSession } from './patch/storage'
 import { Store } from './state/store'
 import { buildApp } from './ui/panels'
 import { Piano } from './ui/piano'
 import { PresetBrowser } from './ui/preset-browser'
+import { buildSaveShare } from './ui/save-share'
+import { toast } from './ui/toast'
 import { installRenderTest } from './test/offline'
 
 const store = new Store()
@@ -57,7 +61,49 @@ refs.pianoSlot.appendChild(piano.el)
 
 const presets = new PresetBrowser(store)
 refs.presetSlot.appendChild(presets.el)
-presets.load(0)
+refs.presetSlot.appendChild(buildSaveShare(store, presets))
+
+// Boot priority: shared link in the URL → autosaved session → first preset.
+async function loadInitialPatch(): Promise<void> {
+  try {
+    const fromHash = await hashToPatch(location.hash)
+    if (fromHash) {
+      store.loadPatch(fromHash)
+      presets.showLoaded(fromHash)
+      toast(`Loaded shared sound "${fromHash.name}"`)
+      return
+    }
+  } catch {
+    toast('That share link is damaged. Starting fresh.')
+  }
+  const session = loadSession()
+  if (session) {
+    store.loadPatch(session)
+    presets.showLoaded(session)
+    return
+  }
+  presets.load(0)
+}
+void loadInitialPatch()
+
+window.addEventListener('hashchange', () => {
+  void hashToPatch(location.hash)
+    .then(patch => {
+      if (patch) {
+        store.loadPatch(patch)
+        presets.showLoaded(patch)
+        toast(`Loaded shared sound "${patch.name}"`)
+      }
+    })
+    .catch(() => toast('That share link is damaged.'))
+})
+
+// Autosave the working patch so a reload comes back where you left off.
+let autosaveTimer: ReturnType<typeof setTimeout> | undefined
+store.subscribeAll(() => {
+  clearTimeout(autosaveTimer)
+  autosaveTimer = setTimeout(() => saveSession(store.getPatch()), 800)
+})
 
 function unlock(): void {
   document.getElementById('scrim')?.classList.add('hidden')
