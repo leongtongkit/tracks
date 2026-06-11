@@ -1,29 +1,58 @@
+import type { FxId } from '../patch/schema'
 import type { Store } from '../state/store'
 import { chooseSlot, NoteStack, type SlotInfo } from './allocator'
-import { Voice } from './voice'
+import { FxChain } from './fx/chain'
+import { LfoBank } from './lfo'
+import { Voice, type VoiceMods } from './voice'
 
 const MAX_VOICES = 10
 
-// Owns the voice pool and the master bus. The FX chain (Phase 3) slots in
-// between voiceBus and masterGain.
+// Owns the voice pool and the master bus:
+// voices → voiceBus → tremolo (LFO amp) → FX chain → limiter → masterGain → out
 export class Engine {
   readonly ctx: BaseAudioContext
   readonly voiceBus: GainNode
   readonly masterGain: GainNode
+  readonly ready: Promise<void>
 
   private readonly store: Store
   private readonly voices: Voice[] = []
   private readonly stack = new NoteStack()
   private readonly slotInfo: SlotInfo[] = []
+  private readonly lfoBank: LfoBank
+  private readonly fxChain: FxChain
+  private readonly mods: VoiceMods
 
   constructor(ctx: BaseAudioContext, store: Store) {
     this.ctx = ctx
     this.store = store
+    const patch = store.getPatch()
+
     this.voiceBus = ctx.createGain()
+    this.lfoBank = new LfoBank(ctx, patch)
+    this.fxChain = new FxChain(ctx, patch)
+    this.ready = this.fxChain.ready
+
+    const limiter = ctx.createDynamicsCompressor()
+    limiter.threshold.value = -9
+    limiter.knee.value = 6
+    limiter.ratio.value = 16
+    limiter.attack.value = 0.002
+    limiter.release.value = 0.2
+
     this.masterGain = ctx.createGain()
-    this.masterGain.gain.value = store.getPatch().master.gain
-    this.voiceBus.connect(this.masterGain)
+    this.masterGain.gain.value = patch.master.gain
+
+    this.voiceBus.connect(this.lfoBank.tremolo)
+    this.lfoBank.tremolo.connect(this.fxChain.input)
+    this.fxChain.output.connect(limiter)
+    limiter.connect(this.masterGain)
     this.masterGain.connect(ctx.destination)
+
+    this.mods = {
+      pitch: this.lfoBank.pitchSources(),
+      filter: this.lfoBank.filterSources(),
+    }
 
     for (let i = 0; i < MAX_VOICES; i++) {
       this.voices.push(new Voice())
@@ -44,7 +73,7 @@ export class Engine {
         const retrigger = patch.voice.mode === 'mono'
         this.voices[0].glideTo(patch, note, patch.voice.glide, t, retrigger)
       } else {
-        this.voices[0].noteOn(this.ctx, this.voiceBus, patch, note, t)
+        this.voices[0].noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
       }
       return
     }
@@ -54,7 +83,7 @@ export class Engine {
     if (voice.state === 'active' || (voice.state === 'releasing' && !voice.isReclaimable(t))) {
       voice.steal(t)
     }
-    voice.noteOn(this.ctx, this.voiceBus, patch, note, t)
+    voice.noteOn(this.ctx, this.voiceBus, patch, note, t, this.mods)
   }
 
   noteOff(note: number): void {
@@ -118,15 +147,35 @@ export class Engine {
       return
     }
     if (path === '*') {
-      // whole-patch load: kill sounding notes, apply master level
+      // whole-patch load: kill sounding notes, re-apply the whole engine state
       this.allNotesOff()
-      this.masterGain.gain.setTargetAtTime(this.store.getPatch().master.gain, t, 0.02)
+      const patch = this.store.getPatch()
+      this.masterGain.gain.setTargetAtTime(patch.master.gain, t, 0.02)
+      this.lfoBank.applyAll(patch, t)
+      this.fxChain.applyAll(patch, t)
+      return
+    }
+    if (path.startsWith('lfo.')) {
+      this.lfoBank.apply(path, value as number | string, t)
+      return
+    }
+    if (path.startsWith('fx.')) {
+      const [, id, key] = path.split('.')
+      if (key === 'on') {
+        this.fxChain.setEnabled(id as FxId, value as boolean)
+      } else if (key === 'order') {
+        // handled on whole-patch load; live reorder UI calls setOrder directly
+      } else if (typeof value === 'number') {
+        this.fxChain.apply(id as FxId, key, value, t)
+      }
       return
     }
     if (
       path === 'filter.cutoff' ||
       path === 'filter.resonance' ||
       path === 'filter.type' ||
+      path === 'fm.depth' ||
+      path === 'fm.ratio' ||
       (path.startsWith('osc.') && path.endsWith('.level'))
     ) {
       for (const voice of this.voices) {

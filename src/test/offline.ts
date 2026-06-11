@@ -4,7 +4,7 @@
 
 import { Engine } from '../engine/engine'
 import { Store } from '../state/store'
-import { defaultPatch, type Patch } from '../patch/schema'
+import { migrate, PATCH_VERSION, type Patch } from '../patch/schema'
 
 export interface RenderStats {
   peak: number
@@ -24,9 +24,11 @@ export async function renderTest(
   const ctx = new OfflineAudioContext(2, Math.ceil(44100 * duration), 44100)
   const store = new Store()
   if (patchOverride) {
-    store.loadPatch({ ...defaultPatch(), ...patchOverride } as Patch)
+    // deep-merge partial overrides onto defaults via the schema migrator
+    store.loadPatch(migrate({ v: PATCH_VERSION, ...patchOverride }))
   }
   const engine = new Engine(ctx, store)
+  await engine.ready // worklet modules must load before rendering starts
 
   for (const n of notes) {
     ctx.suspend(n.on).catch(() => {}).then(() => {

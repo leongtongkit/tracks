@@ -6,12 +6,20 @@ import { getNoiseBuffer } from './noise'
 const VOICE_PEAK = 0.2 // per-voice ceiling so chords don't slam the master bus
 const FILTER_ENV_CENTS = 4800 // envAmount = 1 sweeps the cutoff 4 octaves
 const STEAL_FADE_TAU = 0.0015 // ~4 ms fade when a voice is stolen
+const FM_INDEX_SCALE = 6 // fm.depth = 1 → frequency deviation of 6 × f0
 
 interface SourceSlot {
   node: OscillatorNode | AudioBufferSourceNode
   gain: GainNode
   oscIndex: number
   ratio: number // frequency multiplier from octave/semi; 0 for noise
+}
+
+// External modulation sources (global LFO depth gains) a voice hooks into
+// its params at noteOn; tracked so dispose() can sever them cleanly.
+export interface VoiceMods {
+  pitch: AudioNode[] // cents into oscillator detune
+  filter: AudioNode[] // cents into filter detune
 }
 
 // One polyphony slot. The node graph is built per noteOn (idiomatic Web Audio)
@@ -26,10 +34,22 @@ export class Voice {
   private filter: BiquadFilterNode | null = null
   private vca: GainNode | null = null
   private filterBase = 0 // key-track detune offset in cents
+  private fmOsc: OscillatorNode | null = null
+  private fmGain: GainNode | null = null
+  private baseFreq = 0
+  private modTaps: { src: AudioNode; param: AudioParam }[] = []
 
-  noteOn(ctx: BaseAudioContext, dest: AudioNode, patch: Patch, note: number, t: number): void {
+  noteOn(
+    ctx: BaseAudioContext,
+    dest: AudioNode,
+    patch: Patch,
+    note: number,
+    t: number,
+    mods?: VoiceMods,
+  ): void {
     this.dispose()
     const freq = midiToFreq(note)
+    this.baseFreq = freq
 
     const vca = ctx.createGain()
     const filter = ctx.createBiquadFilter()
@@ -63,6 +83,37 @@ export class Voice {
         node.connect(gain)
         node.start(t)
         this.sources.push({ node, gain, oscIndex: i, ratio })
+      }
+    }
+
+    // FM: dedicated sine modulator into the first pitched oscillator's
+    // frequency; deviation scales with f0 so timbre is pitch-consistent.
+    const carrier = this.sources.find(s => s.ratio !== 0)
+    if (patch.fm.enabled && carrier) {
+      const fmOsc = ctx.createOscillator()
+      fmOsc.type = 'sine'
+      fmOsc.frequency.value = freq * patch.fm.ratio
+      const fmGain = ctx.createGain()
+      fmGain.gain.value = patch.fm.depth * freq * FM_INDEX_SCALE
+      fmOsc.connect(fmGain)
+      fmGain.connect((carrier.node as OscillatorNode).frequency)
+      fmOsc.start(t)
+      this.fmOsc = fmOsc
+      this.fmGain = fmGain
+    }
+
+    // Global LFO depth gains feed every voice's detune params (cents domain).
+    if (mods) {
+      for (const src of mods.pitch) {
+        for (const s of this.sources) {
+          if (s.ratio === 0) continue
+          src.connect((s.node as OscillatorNode).detune)
+          this.modTaps.push({ src, param: (s.node as OscillatorNode).detune })
+        }
+      }
+      for (const src of mods.filter) {
+        src.connect(filter.detune)
+        this.modTaps.push({ src, param: filter.detune })
       }
     }
 
@@ -136,6 +187,10 @@ export class Voice {
       for (const s of this.sources) {
         if (s.oscIndex === idx) s.gain.gain.setTargetAtTime(value as number, t, 0.02)
       }
+    } else if (path === 'fm.depth' && this.fmGain) {
+      this.fmGain.gain.setTargetAtTime((value as number) * this.baseFreq * FM_INDEX_SCALE, t, 0.02)
+    } else if (path === 'fm.ratio' && this.fmOsc) {
+      this.fmOsc.frequency.setTargetAtTime(this.baseFreq * (value as number), t, 0.02)
     }
   }
 
@@ -152,9 +207,24 @@ export class Voice {
         // already stopped
       }
     }
+    if (this.fmOsc) {
+      try {
+        this.fmOsc.stop(t)
+      } catch {
+        // already stopped
+      }
+    }
   }
 
   dispose(): void {
+    for (const tap of this.modTaps) {
+      try {
+        tap.src.disconnect(tap.param)
+      } catch {
+        // already severed with the node graph
+      }
+    }
+    this.modTaps.length = 0
     for (const s of this.sources) {
       try {
         s.node.stop()
@@ -165,6 +235,17 @@ export class Voice {
       s.gain.disconnect()
     }
     this.sources.length = 0
+    if (this.fmOsc) {
+      try {
+        this.fmOsc.stop()
+      } catch {
+        // already stopped
+      }
+      this.fmOsc.disconnect()
+      this.fmGain?.disconnect()
+      this.fmOsc = null
+      this.fmGain = null
+    }
     this.filter?.disconnect()
     this.vca?.disconnect()
     this.filter = null
