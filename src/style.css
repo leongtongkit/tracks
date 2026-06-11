@@ -1,0 +1,40 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  background: #1a1620;
+  color: #f4ead8;
+  font-family: system-ui, -apple-system, sans-serif;
+  user-select: none;
+}
+
+#app {
+  height: 100%;
+  display: grid;
+  place-items: center;
+}
+
+#scrim {
+  text-align: center;
+  cursor: pointer;
+}
+
+#scrim h1 {
+  font-size: 3rem;
+  letter-spacing: 0.4em;
+  color: #ff6b5e;
+}
+
+#scrim p {
+  margin-top: 1rem;
+  color: #7fd8c8;
+}
+
+#scrim.hidden {
+  display: none;
+}

@@ -1,0 +1,8 @@
+# synth.jfound.net — policy: cite AND train
+User-agent: Bytespider
+Disallow: /
+
+User-agent: *
+Allow: /
+
+Sitemap: https://synth.jfound.net/sitemap.xml
