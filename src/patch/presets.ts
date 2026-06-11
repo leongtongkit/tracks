@@ -25,7 +25,7 @@ export const PRESETS: PresetDef[] = [
     category: 'bass',
     patch: {
       osc: [
-        { enabled: on, wave: 'saw', octave: -1, fine: -10, level: 0.7 },
+        { enabled: on, wave: 'saw', octave: -1, fine: -10, level: 0.7, unison: { count: 3, detune: 14, spread: 0.4 } },
         { enabled: on, wave: 'saw', octave: -1, fine: 10, level: 0.7 },
       ],
       filter: { cutoff: 950, resonance: 1.2, envAmount: 0.35 },
@@ -84,7 +84,7 @@ export const PRESETS: PresetDef[] = [
     patch: {
       voice: { mode: 'legato', glide: 0.05 },
       osc: [
-        { enabled: on, wave: 'saw', fine: -8, level: 0.7 },
+        { enabled: on, wave: 'saw', fine: -8, level: 0.7, unison: { count: 3, detune: 18, spread: 0.5 } },
         { enabled: on, wave: 'square', fine: 8, level: 0.45 },
       ],
       filter: { cutoff: 4800, resonance: 3.5, envAmount: 0.3 },
@@ -144,8 +144,8 @@ export const PRESETS: PresetDef[] = [
     category: 'pad',
     patch: {
       osc: [
-        { enabled: on, wave: 'saw', fine: -14, level: 0.55 },
-        { enabled: on, wave: 'saw', fine: 14, level: 0.55 },
+        { enabled: on, wave: 'saw', fine: -14, level: 0.55, unison: { count: 5, detune: 22, spread: 0.8 } },
+        { enabled: on, wave: 'saw', fine: 14, level: 0.55, unison: { count: 3, detune: 16, spread: 0.6 } },
       ],
       filter: { cutoff: 1700, resonance: 0.7, envAmount: 0.15 },
       env: { amp: { a: 0.9, d: 0.5, s: 0.85, r: 1.8 }, filter: { a: 1.2, d: 0.8, s: 0.6, r: 1.5 } },

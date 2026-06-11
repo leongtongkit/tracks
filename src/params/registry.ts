@@ -35,6 +35,8 @@ const osc = (i: number): ContinuousParam[] => [
   { path: `osc.${i}.octave`, label: 'Octave', min: -2, max: 2, default: 0, taper: 'lin', unit: 'oct', smoothing: 0, group: `osc${i + 1}` },
   { path: `osc.${i}.semi`, label: 'Semi', min: -12, max: 12, default: 0, taper: 'lin', unit: 'st', smoothing: 0, group: `osc${i + 1}` },
   { path: `osc.${i}.fine`, label: 'Fine', min: -50, max: 50, default: 0, taper: 'lin', unit: 'ct', smoothing: 0, group: `osc${i + 1}` },
+  { path: `osc.${i}.unison.detune`, label: 'Detune', min: 0, max: 60, default: 12, taper: 'lin', unit: 'ct', smoothing: 0, group: `osc${i + 1}` },
+  { path: `osc.${i}.unison.spread`, label: 'Spread', min: 0, max: 1, default: 0.5, taper: 'lin', unit: '', smoothing: 0, group: `osc${i + 1}` },
 ]
 
 export const CONTINUOUS: ContinuousParam[] = [
@@ -79,6 +81,9 @@ export const CONTINUOUS: ContinuousParam[] = [
 
 export const STRUCTURAL: StructuralParam[] = [
   { path: 'osc.0.wave', label: 'Osc 1 Wave', options: ['saw', 'square', 'sine', 'triangle', 'noise'], group: 'osc1' },
+  { path: 'osc.0.unison.count', label: 'Osc 1 Unison', options: [1, 3, 5, 7], group: 'osc1' },
+  { path: 'osc.1.unison.count', label: 'Osc 2 Unison', options: [1, 3, 5, 7], group: 'osc2' },
+  { path: 'osc.2.unison.count', label: 'Osc 3 Unison', options: [1, 3, 5, 7], group: 'osc3' },
   { path: 'osc.0.enabled', label: 'Osc 1 On', options: [], group: 'osc1' },
   { path: 'osc.1.wave', label: 'Osc 2 Wave', options: ['saw', 'square', 'sine', 'triangle', 'noise'], group: 'osc2' },
   { path: 'osc.1.enabled', label: 'Osc 2 On', options: [], group: 'osc2' },

@@ -3,14 +3,20 @@ import { encodeWav } from './wav'
 // Taps an audio node (the master bus) through a worklet and produces a WAV.
 export class Recorder {
   recording = false
+  private starting = false
   private node: AudioWorkletNode | null = null
   private source: AudioNode | null = null
   private chunks: [Float32Array, Float32Array][] = []
   private startedAt = 0
 
   async start(ctx: AudioContext, source: AudioNode): Promise<void> {
-    if (this.recording) return
-    await ctx.audioWorklet.addModule('/worklets/recorder.js')
+    if (this.recording || this.starting) return
+    this.starting = true
+    try {
+      await ctx.audioWorklet.addModule('/worklets/recorder.js')
+    } finally {
+      this.starting = false
+    }
     this.chunks = []
     this.node = new AudioWorkletNode(ctx, 'recorder', {
       numberOfInputs: 1,

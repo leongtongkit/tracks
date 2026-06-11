@@ -35,7 +35,7 @@ export class FxChain {
   }
 
   setOrder(order: FxId[]): void {
-    this.order = order.filter(id => this.modules.has(id))
+    this.order = [...new Set(order)].filter(id => this.modules.has(id))
     this.wire()
   }
 

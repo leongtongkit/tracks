@@ -66,7 +66,6 @@ export class LfoBank {
       unit.filter.gain.setTargetAtTime(value as number, t, 0.02)
     } else if (leaf === 'amp') {
       this.ampDepths[Number(segs[1])] = value as number
-      unit.amp.gain.setTargetAtTime((value as number) * 0.5, t, 0.02)
       this.updateTremoloBase(t)
     }
   }
@@ -83,9 +82,15 @@ export class LfoBank {
   }
 
   // Tremolo sits at 1 with no amp modulation; with depth d the LFO swings
-  // gain between 1-d and 1 (sine ±1 scaled by d/2 around base 1-d/2).
+  // gain between 1-2d·scale and 1. When both LFOs run deep, their summed
+  // swing is rescaled so the gain never crosses below zero (phase inversion).
   private updateTremoloBase(t: number): void {
-    const total = Math.min(1, (this.ampDepths[0] + this.ampDepths[1]) / 2)
+    const half = (this.ampDepths[0] + this.ampDepths[1]) / 2
+    const total = Math.min(1, half)
+    const scale = half > 1 ? total / half : 1
+    for (let i = 0; i < 2; i++) {
+      this.units[i].amp.gain.setTargetAtTime(this.ampDepths[i] * 0.5 * scale, t, 0.02)
+    }
     this.tremolo.gain.setTargetAtTime(Math.max(0, 1 - total), t, 0.02)
   }
 }

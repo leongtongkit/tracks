@@ -139,6 +139,30 @@ store.subscribeAll(() => {
   autosaveTimer = setTimeout(() => saveSession(store.getPatch()), 800)
 })
 
+// Auto-fit: scale the whole device so the instrument always fills the
+// viewport exactly (no scrolling, no dead space). Phones (<=680px) keep the
+// flowing single-column layout instead, where shrink-to-fit would make
+// controls untappably small.
+const deviceEl = document.querySelector<HTMLElement>('.device')!
+function fitDevice(): void {
+  if (window.innerWidth <= 680) {
+    deviceEl.style.transform = ''
+    return
+  }
+  const w = deviceEl.offsetWidth // layout size: unaffected by the transform
+  const h = deviceEl.offsetHeight
+  if (!w || !h) return
+  const s = Math.min((window.innerWidth * 0.97) / w, (window.innerHeight * 0.97) / h)
+  // the grid track is sized by the unscaled layout box, so center manually:
+  // scale from the top, then shift the scaled box to the vertical middle
+  const offsetY = Math.max(0, (window.innerHeight - h * s) / 2) - deviceEl.offsetTop
+  deviceEl.style.transformOrigin = 'top center'
+  deviceEl.style.transform = `translateY(${offsetY.toFixed(1)}px) scale(${s.toFixed(4)})`
+}
+window.addEventListener('resize', fitDevice)
+new ResizeObserver(fitDevice).observe(deviceEl)
+fitDevice()
+
 function unlock(): void {
   document.getElementById('scrim')?.classList.add('hidden')
   document.removeEventListener('pointerdown', unlock, true)

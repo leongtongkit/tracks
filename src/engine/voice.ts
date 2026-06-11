@@ -11,9 +11,10 @@ const FM_INDEX_SCALE = 6 // fm.depth = 1 → frequency deviation of 6 × f0
 interface SourceSlot {
   node: OscillatorNode | AudioBufferSourceNode
   gain: GainNode
+  panner: StereoPannerNode | null
   oscIndex: number
   ratio: number // frequency multiplier from octave/semi; 0 for noise
-  fine: number // base detune in cents; pitch bend adds on top
+  fine: number // base detune in cents (incl. unison offset); bend adds on top
 }
 
 // External modulation sources (global LFO depth gains) a voice hooks into
@@ -38,6 +39,7 @@ export class Voice {
   private fmOsc: OscillatorNode | null = null
   private fmGain: GainNode | null = null
   private baseFreq = 0
+  private velocity = 1
   private modTaps: { src: AudioNode; param: AudioParam }[] = []
 
   noteOn(
@@ -52,6 +54,7 @@ export class Voice {
     this.dispose()
     const freq = midiToFreq(note)
     this.baseFreq = freq
+    this.velocity = velocity
 
     const vca = ctx.createGain()
     const filter = ctx.createBiquadFilter()
@@ -75,16 +78,32 @@ export class Voice {
         node.loopStart = Math.random()
         node.connect(gain)
         node.start(t, node.loopStart)
-        this.sources.push({ node, gain, oscIndex: i, ratio: 0, fine: 0 })
+        this.sources.push({ node, gain, panner: null, oscIndex: i, ratio: 0, fine: 0 })
       } else {
-        const node = ctx.createOscillator()
-        node.type = cfg.wave === 'saw' ? 'sawtooth' : cfg.wave
         const ratio = Math.pow(2, cfg.octave + cfg.semi / 12)
-        node.frequency.value = freq * ratio
-        node.detune.value = cfg.fine
-        node.connect(gain)
-        node.start(t)
-        this.sources.push({ node, gain, oscIndex: i, ratio, fine: cfg.fine })
+        const count = Math.max(1, cfg.unison.count)
+        // normalize summed level so 7 unison voices don't get 7x loud
+        gain.gain.value = cfg.level / Math.sqrt(count)
+        for (let u = 0; u < count; u++) {
+          const node = ctx.createOscillator()
+          node.type = cfg.wave === 'saw' ? 'sawtooth' : cfg.wave
+          node.frequency.value = freq * ratio
+          // spread sub-oscillators evenly across ±detune/2 cents and the stereo field
+          const pos = count === 1 ? 0 : u / (count - 1) - 0.5
+          const fine = cfg.fine + pos * cfg.unison.detune
+          node.detune.value = fine
+          let panner: StereoPannerNode | null = null
+          if (count > 1 && typeof ctx.createStereoPanner === 'function') {
+            panner = ctx.createStereoPanner()
+            panner.pan.value = pos * 2 * cfg.unison.spread
+            node.connect(panner)
+            panner.connect(gain)
+          } else {
+            node.connect(gain)
+          }
+          node.start(t)
+          this.sources.push({ node, gain, panner, oscIndex: i, ratio, fine })
+        }
       }
     }
 
@@ -143,6 +162,8 @@ export class Voice {
   }
 
   // Fast inaudible fade so the slot can be reused immediately without a click.
+  // The old graph is detached from this voice and cleans itself up when its
+  // sources end, so the immediately-following noteOn cannot cut the fade short.
   steal(t: number): void {
     if (this.state === 'free') return
     if (this.vca) {
@@ -150,6 +171,40 @@ export class Voice {
       this.vca.gain.setTargetAtTime(0, t, STEAL_FADE_TAU)
     }
     this.stopSourcesAt(t + 0.02)
+    const orphans = this.sources.slice()
+    const filter = this.filter
+    const vca = this.vca
+    const fmOsc = this.fmOsc
+    const fmGain = this.fmGain
+    const taps = this.modTaps.slice()
+    const last = orphans[orphans.length - 1]?.node
+    if (last) {
+      last.onended = () => {
+        for (const tap of taps) {
+          try {
+            tap.src.disconnect(tap.param)
+          } catch {
+            // already severed
+          }
+        }
+        for (const s of orphans) {
+          s.node.disconnect()
+          s.panner?.disconnect()
+          s.gain.disconnect()
+        }
+        fmOsc?.disconnect()
+        fmGain?.disconnect()
+        filter?.disconnect()
+        vca?.disconnect()
+      }
+    }
+    // detach without stopping: the scheduled fade/stop finishes on its own
+    this.sources = []
+    this.modTaps = []
+    this.filter = null
+    this.vca = null
+    this.fmOsc = null
+    this.fmGain = null
     this.state = 'free'
   }
 
@@ -165,7 +220,7 @@ export class Voice {
     const newBase = patch.filter.keyTrack * (note - 60) * 100
     if (retrigger) {
       triggerAttack(this.filter.detune, patch.env.filter, t, newBase, patch.filter.envAmount * FILTER_ENV_CENTS)
-      triggerAttack(this.vca.gain, patch.env.amp, t, 0, VOICE_PEAK)
+      triggerAttack(this.vca.gain, patch.env.amp, t, 0, VOICE_PEAK * (0.3 + 0.7 * this.velocity))
     } else {
       // shift key-tracking smoothly without restarting the envelope
       this.filter.detune.setTargetAtTime(
@@ -244,6 +299,7 @@ export class Voice {
         // never started or already stopped
       }
       s.node.disconnect()
+      s.panner?.disconnect()
       s.gain.disconnect()
     }
     this.sources.length = 0

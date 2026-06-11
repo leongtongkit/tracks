@@ -103,6 +103,24 @@ body {
   padding: clamp(8px, 3vw, 40px);
 }
 
+/* fit-to-viewport mode: the device is transform-scaled by main.ts */
+@media (min-width: 681px) {
+  html,
+  body {
+    height: 100%;
+    overflow: hidden;
+  }
+
+  #app {
+    height: 100vh;
+    padding: 0;
+  }
+
+  .device {
+    transform-origin: center center;
+  }
+}
+
 .device {
   background: linear-gradient(178deg, var(--cream-hi) 0%, var(--cream) 55%, var(--cream-lo) 100%);
   border: 1px solid var(--cream-edge);

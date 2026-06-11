@@ -167,6 +167,12 @@ export class Engine {
       this.fxChain.applyAll(patch, t)
       return
     }
+    if (path === 'voice.mode') {
+      // switching poly/mono mid-performance: end every sounding note so no
+      // poly voice is left unreachable by the mono noteOff path
+      this.allNotesOff()
+      return
+    }
     if (path.startsWith('lfo.')) {
       this.lfoBank.apply(path, value as number | string, t)
       return

@@ -121,7 +121,27 @@ export function migrate(raw: unknown): Patch {
   if (typeof raw !== 'object' || raw === null) throw new Error('not a patch')
   const p = raw as Record<string, unknown>
   if (p.v !== PATCH_VERSION) throw new Error(`unsupported patch version: ${String(p.v)}`)
-  return deepMerge(defaultPatch(), p) as Patch
+  const merged = deepMerge(defaultPatch(), p) as Patch
+  merged.fx.order = sanitizeOrder(merged.fx.order)
+  return merged
+}
+
+// Element-wise array merging can produce duplicate or missing FX ids from a
+// crafted/reordered patch; a duplicate would be wired into the chain twice.
+function sanitizeOrder(order: FxId[]): FxId[] {
+  const all = defaultPatch().fx.order
+  const seen = new Set<FxId>()
+  const out: FxId[] = []
+  for (const id of order) {
+    if (all.includes(id) && !seen.has(id)) {
+      seen.add(id)
+      out.push(id)
+    }
+  }
+  for (const id of all) {
+    if (!seen.has(id)) out.push(id)
+  }
+  return out
 }
 
 function deepMerge<T>(base: T, over: unknown): T {

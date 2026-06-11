@@ -22,6 +22,7 @@ export class Knob {
   private readonly param: ContinuousParam
   private readonly store: Store
   private readonly cap: HTMLDivElement
+  private readonly dial: HTMLDivElement
   private readonly arcFill: SVGPathElement
   private readonly readout: HTMLOutputElement
   private norm = 0
@@ -53,6 +54,7 @@ export class Knob {
     `
     this.arcFill = dial.querySelector('.knob-arc-fill')!
     this.cap = dial.querySelector('.knob-cap')!
+    this.dial = dial
 
     const label = document.createElement('span')
     label.className = 'knob-label'
@@ -145,10 +147,7 @@ export class Knob {
     this.cap.style.transform = `rotate(${deg}deg)`
     this.arcFill.style.strokeDasharray = `${this.norm * ARC_C} ${ARC_C}`
     this.readout.textContent = formatValue(this.param, value)
-    ;(this.el.querySelector('.knob-dial') as HTMLElement).setAttribute(
-      'aria-valuenow',
-      value.toPrecision(3),
-    )
+    this.dial.setAttribute('aria-valuenow', value.toPrecision(3))
   }
 }
 

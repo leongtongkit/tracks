@@ -20,6 +20,8 @@ function knob(
 const WAVE_LABELS = { saw: 'saw', square: 'sqr', sine: 'sin', triangle: 'tri', noise: 'nse', sawtooth: 'saw' }
 
 function oscPanel(store: Store, i: number): HTMLElement {
+  const uni = segmented(store, `osc.${i}.unison.count`, [1, 3, 5, 7])
+  uni.setAttribute('aria-label', `Oscillator ${i + 1} unison voices`)
   const el = panel(
     `OSC ${i + 1}`,
     'coral',
@@ -29,6 +31,11 @@ function oscPanel(store: Store, i: number): HTMLElement {
       knob(store, `osc.${i}.octave`, { size: 'sm', label: 'Oct' }),
       knob(store, `osc.${i}.semi`, { size: 'sm', label: 'Semi' }),
       knob(store, `osc.${i}.fine`, { size: 'sm', label: 'Fine' }),
+    ),
+    uni,
+    knobRow(
+      knob(store, `osc.${i}.unison.detune`, { size: 'sm', label: 'Detune' }),
+      knob(store, `osc.${i}.unison.spread`, { size: 'sm', label: 'Spread' }),
     ),
   )
   panelHeadExtra(el, power(store, `osc.${i}.enabled`, `Oscillator ${i + 1} on`))
