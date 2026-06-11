@@ -82,12 +82,28 @@ function analyze(buf: AudioBuffer): RenderStats {
   }
 }
 
+// Render every factory preset and return per-preset stats; drives the
+// automated Phase 5 sweep from the browser harness.
+export async function presetSweep(): Promise<
+  { name: string; peak: number; rms: number; silent: boolean; hasNaN: boolean }[]
+> {
+  const { PRESETS, buildPresetPatch } = await import('../patch/presets')
+  const out = []
+  for (const def of PRESETS) {
+    const stats = await renderTest(buildPresetPatch(def), [{ note: 57, on: 0, off: 0.6 }], 1.4)
+    out.push({ name: def.name, peak: stats.peak, rms: stats.rms, silent: stats.silent, hasNaN: stats.hasNaN })
+  }
+  return out
+}
+
 declare global {
   interface Window {
     __synthRenderTest: typeof renderTest
+    __synthPresetSweep: typeof presetSweep
   }
 }
 
 export function installRenderTest(): void {
   window.__synthRenderTest = renderTest
+  window.__synthPresetSweep = presetSweep
 }

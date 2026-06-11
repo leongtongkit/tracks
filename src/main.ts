@@ -3,6 +3,7 @@ import { KeyboardInput } from './input/keyboard'
 import { Store } from './state/store'
 import { buildApp } from './ui/panels'
 import { Piano } from './ui/piano'
+import { PresetBrowser } from './ui/preset-browser'
 import { installRenderTest } from './test/offline'
 
 const store = new Store()
@@ -52,6 +53,10 @@ const refs = buildApp(document.getElementById('app')!, store, {
   octaveUp: () => keyboard.setOctave(keyboard.octave + 1),
 })
 refs.pianoSlot.appendChild(piano.el)
+
+const presets = new PresetBrowser(store)
+refs.presetSlot.appendChild(presets.el)
+presets.load(0)
 
 function unlock(): void {
   document.getElementById('scrim')?.classList.add('hidden')
