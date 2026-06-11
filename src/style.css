@@ -14,14 +14,19 @@ body {
 }
 
 #app {
-  height: 100%;
-  display: grid;
-  place-items: center;
+  min-height: 100%;
+  padding: 1rem;
 }
 
 #scrim {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-content: center;
   text-align: center;
   cursor: pointer;
+  background: #1a1620;
+  z-index: 10;
 }
 
 #scrim h1 {
@@ -38,3 +43,46 @@ body {
 #scrim.hidden {
   display: none;
 }
+
+/* Throwaway Phase 2/3 debug surface */
+#octave-readout {
+  color: #7fd8c8;
+  margin-bottom: 1rem;
+}
+
+#debug-ui {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+#debug-ui fieldset {
+  border: 1px solid #3a3344;
+  padding: 0.6rem;
+  min-width: 230px;
+}
+
+#debug-ui legend {
+  color: #ff6b5e;
+  padding: 0 0.4rem;
+}
+
+.debug-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  margin: 0.2rem 0;
+}
+
+.debug-row span {
+  width: 90px;
+}
+
+.debug-row em {
+  color: #7fd8c8;
+  font-style: normal;
+  min-width: 70px;
+}
+

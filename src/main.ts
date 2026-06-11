@@ -1,51 +1,61 @@
-// Phase 1: audio unlock flow + beep through the master gain path.
-// The real engine replaces playBeep in Phase 2; the unlock pattern stays.
+import { Engine } from './engine/engine'
+import { KeyboardInput } from './input/keyboard'
+import { Store } from './state/store'
+import { buildDebugUI } from './ui/debug'
+import { installRenderTest } from './test/offline'
 
-let ctx: AudioContext | null = null
-let masterGain: GainNode | null = null
+const store = new Store()
+let engine: Engine | null = null
+let keyboard: KeyboardInput | null = null
 
-function ensureAudio(): AudioContext {
-  if (!ctx) {
-    ctx = new AudioContext({ latencyHint: 'interactive' })
-    masterGain = ctx.createGain()
-    masterGain.gain.value = 0.8
-    masterGain.connect(ctx.destination)
+function startAudio(): Engine {
+  if (!engine) {
+    const ctx = new AudioContext({ latencyHint: 'interactive' })
+    engine = new Engine(ctx, store)
+    keyboard = new KeyboardInput({
+      noteOn: n => {
+        if (ctx.state !== 'running') ctx.resume().catch(() => {})
+        engine!.noteOn(n)
+      },
+      noteOff: n => engine!.noteOff(n),
+      allNotesOff: () => engine!.allNotesOff(),
+      octaveChanged: o => {
+        const el = document.getElementById('octave-readout')
+        if (el) el.textContent = `octave: C${o} (Z/X to shift)`
+      },
+    })
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'visible' && ctx.state !== 'running') {
+        ctx.resume().catch(() => {})
+      }
+    })
   }
-  if (ctx.state !== 'running') void ctx.resume()
-  return ctx
+  const ctx = engine.ctx as AudioContext
+  if (ctx.state !== 'running') ctx.resume().catch(() => {})
+  return engine
 }
 
-function playBeep() {
-  const ac = ensureAudio()
-  const osc = ac.createOscillator()
-  const env = ac.createGain()
-  const now = ac.currentTime
-  osc.frequency.value = 440
-  env.gain.setValueAtTime(0, now)
-  env.gain.linearRampToValueAtTime(0.5, now + 0.01)
-  env.gain.setTargetAtTime(0, now + 0.2, 0.05)
-  osc.connect(env)
-  env.connect(masterGain!)
-  osc.start(now)
-  osc.stop(now + 0.6)
-  osc.onended = () => {
-    osc.disconnect()
-    env.disconnect()
-  }
-}
-
-function unlock() {
+function unlock(e: Event): void {
   document.getElementById('scrim')?.classList.add('hidden')
-  playBeep()
   document.removeEventListener('pointerdown', unlock, true)
   document.removeEventListener('keydown', unlock, true)
+  startAudio()
+  // If the unlocking gesture was a playable key, sound it immediately:
+  // re-dispatch so KeyboardInput (registered inside startAudio) sees it.
+  if (e instanceof KeyboardEvent && !e.repeat) {
+    window.dispatchEvent(new KeyboardEvent('keydown', { code: e.code }))
+  }
 }
 
 document.addEventListener('pointerdown', unlock, true)
 document.addEventListener('keydown', unlock, true)
 
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState === 'visible' && ctx && ctx.state !== 'running') {
-    void ctx.resume()
-  }
-})
+const app = document.getElementById('app')!
+const help = document.createElement('p')
+help.id = 'octave-readout'
+help.textContent = 'octave: C4 (Z/X to shift) — play with A-row/W-row keys'
+app.appendChild(help)
+buildDebugUI(app, store)
+installRenderTest()
+
+export { store, keyboard }
