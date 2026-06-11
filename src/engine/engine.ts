@@ -63,9 +63,9 @@ export class Engine {
     store.subscribeAll((value, path) => this.onParamChange(value, path))
   }
 
-  noteOn(note: number): void {
+  noteOn(note: number, at?: number): void {
     const patch = this.store.getPatch()
-    const t = this.ctx.currentTime
+    const t = at ?? this.ctx.currentTime
 
     if (patch.voice.mode !== 'poly') {
       const sounding = this.voices[0].state === 'active'
@@ -89,9 +89,9 @@ export class Engine {
     if (this.bendCents !== 0) voice.setBend(this.bendCents, t)
   }
 
-  noteOff(note: number): void {
+  noteOff(note: number, at?: number): void {
     const patch = this.store.getPatch()
-    const t = this.ctx.currentTime
+    const t = at ?? this.ctx.currentTime
 
     if (patch.voice.mode !== 'poly') {
       this.stack.remove(note)

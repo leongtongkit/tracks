@@ -7,6 +7,8 @@ import { buildApp } from './ui/panels'
 import { Piano } from './ui/piano'
 import { PresetBrowser } from './ui/preset-browser'
 import { buildSaveShare } from './ui/save-share'
+import { buildSequencer } from './ui/sequencer-grid'
+import { Sequencer } from './sequencer/sequencer'
 import { toast } from './ui/toast'
 import { installRenderTest } from './test/offline'
 
@@ -62,6 +64,17 @@ refs.pianoSlot.appendChild(piano.el)
 const presets = new PresetBrowser(store)
 refs.presetSlot.appendChild(presets.el)
 refs.presetSlot.appendChild(buildSaveShare(store, presets))
+
+const sequencer = new Sequencer({
+  events: {
+    noteOn: (n, t) => ensureEngine().noteOn(n, t),
+    noteOff: (n, t) => engine?.noteOff(n, t),
+  },
+  getNow: () => (engine ? engine.ctx.currentTime : 0),
+  getBpm: () => store.getPatch().master.bpm,
+  getBaseNote: () => (keyboard.octave + 1) * 12,
+})
+refs.seqSlot.appendChild(buildSequencer(store, sequencer))
 
 // Boot priority: shared link in the URL → autosaved session → first preset.
 async function loadInitialPatch(): Promise<void> {

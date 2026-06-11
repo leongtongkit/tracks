@@ -670,6 +670,86 @@ body {
   border-color: var(--coral);
 }
 
+/* ---------- sequencer ---------- */
+
+.seq-strip {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  background: var(--cream);
+  border: 1px solid var(--cream-edge);
+  border-radius: var(--radius-md);
+  padding: 10px;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.7) inset;
+}
+
+.seq-transport {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.seq-play {
+  min-width: 52px;
+}
+
+.seq-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(16, 1fr);
+  gap: 5px;
+}
+
+.seq-cell {
+  position: relative;
+  height: 46px;
+  border: 1px solid var(--cream-edge);
+  border-radius: 6px;
+  background: var(--cream-hi);
+  box-shadow: 0 2px 0 rgba(120, 100, 70, 0.22);
+  cursor: pointer;
+  touch-action: none;
+  display: grid;
+  place-items: center;
+  transition: transform 0.05s var(--ease-pop), background 0.08s;
+}
+
+.seq-beat {
+  border-color: #b9ad94;
+}
+
+.seq-cell:active {
+  transform: translateY(1px);
+}
+
+.seq-cell:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 1px;
+}
+
+.seq-on {
+  background: var(--teal);
+  border-color: var(--teal-deep);
+}
+
+.seq-note {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  font-weight: 500;
+  color: var(--desk);
+  pointer-events: none;
+}
+
+.seq-lit {
+  background: var(--coral);
+  border-color: var(--coral-deep);
+  box-shadow: 0 0 12px rgba(255, 92, 73, 0.55);
+}
+
+.seq-lit .seq-note {
+  color: var(--bone);
+}
+
 /* ---------- toast ---------- */
 
 .toast-host {

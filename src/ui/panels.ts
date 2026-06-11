@@ -138,6 +138,7 @@ export interface AppRefs {
   octaveReadout: HTMLElement
   pianoSlot: HTMLElement
   presetSlot: HTMLElement
+  seqSlot: HTMLElement
 }
 
 export function buildApp(root: HTMLElement, store: Store, cb: AppCallbacks): AppRefs {
@@ -175,6 +176,10 @@ export function buildApp(root: HTMLElement, store: Store, cb: AppCallbacks): App
 
   device.appendChild(fxRack(store))
 
+  const seqSlot = document.createElement('div')
+  seqSlot.className = 'seq-slot'
+  device.appendChild(seqSlot)
+
   // piano row with octave controls
   const pianoRow = document.createElement('div')
   pianoRow.className = 'piano-row'
@@ -205,5 +210,5 @@ export function buildApp(root: HTMLElement, store: Store, cb: AppCallbacks): App
   device.appendChild(pianoRow)
 
   root.appendChild(device)
-  return { octaveReadout, pianoSlot, presetSlot }
+  return { octaveReadout, pianoSlot, presetSlot, seqSlot }
 }
