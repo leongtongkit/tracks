@@ -3,6 +3,7 @@
 
 import type { DawApp } from '../daw-app'
 import { projectEndBeat, type Clip, type TrackData } from '../project'
+import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
 const ROW_H = 56
@@ -342,8 +343,24 @@ export class ArrangeView {
       lane.addEventListener('dblclick', e => {
         const rect = this.lanes.getBoundingClientRect()
         const beat = Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP
-        this.app.addClip(track.id, beat)
+        if (track.kind !== 'audio') this.app.addClip(track.id, beat)
       })
+      if (track.kind === 'audio') {
+        lane.addEventListener('dragover', e => {
+          e.preventDefault()
+          lane.classList.add('lane-drop')
+        })
+        lane.addEventListener('dragleave', () => lane.classList.remove('lane-drop'))
+        lane.addEventListener('drop', e => {
+          e.preventDefault()
+          lane.classList.remove('lane-drop')
+          const file = e.dataTransfer?.files?.[0]
+          if (!file) return
+          const rect = this.lanes.getBoundingClientRect()
+          const beat = Math.max(0, Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP)
+          void this.app.importAudioFile(file, track.id, beat).catch(() => alert('Could not decode that audio file.'))
+        })
+      }
       for (const clip of track.clips) {
         lane.appendChild(this.clipEl(track, clip))
       }
@@ -360,9 +377,23 @@ export class ArrangeView {
     el.style.left = `${clip.start * this.ppb}px`
     el.style.width = `${clip.length * this.ppb}px`
 
+    if (clip.audio) {
+      el.classList.add('clip-audio')
+      const wave = document.createElement('canvas')
+      wave.className = 'clip-wave'
+      const w = Math.max(2, Math.round(clip.length * this.ppb))
+      wave.width = w
+      wave.height = ROW_H - 12
+      drawWave(wave, clip, this.app.project.bpm)
+      el.appendChild(wave)
+    }
     const label = document.createElement('span')
     label.className = 'clip-label'
-    label.textContent = clip.notes.length ? `${clip.notes.length} notes` : 'empty'
+    label.textContent = clip.audio
+      ? (sampleStore.name(clip.audio.sampleId) ?? 'audio')
+      : clip.notes.length
+        ? `${clip.notes.length} notes`
+        : 'empty'
     el.appendChild(label)
 
     const grip = document.createElement('div')
@@ -435,6 +466,39 @@ export class ArrangeView {
       requestAnimationFrame(step)
     }
     requestAnimationFrame(step)
+  }
+}
+
+// min/max peak columns of the clip's slice of its sample
+function drawWave(canvas: HTMLCanvasElement, clip: Clip, bpm: number): void {
+  const region = clip.audio
+  if (!region) return
+  const buffer = sampleStore.get(region.sampleId)
+  const g = canvas.getContext('2d')
+  if (!buffer || !g) return
+  const data = buffer.getChannelData(0)
+  const spb = 60 / bpm
+  const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
+  const i1 = Math.min(data.length, i0 + Math.floor(clip.length * spb * buffer.sampleRate))
+  const span = Math.max(1, i1 - i0)
+  const w = canvas.width
+  const h = canvas.height
+  const mid = h / 2
+  g.clearRect(0, 0, w, h)
+  g.fillStyle = 'rgba(29, 29, 27, 0.55)'
+  const step = span / w
+  for (let x = 0; x < w; x++) {
+    let min = 1
+    let max = -1
+    const from = i0 + Math.floor(x * step)
+    const to = Math.min(i1, from + Math.ceil(step))
+    for (let i = from; i < to; i += Math.max(1, Math.floor(step / 24))) {
+      const v = data[i]
+      if (v < min) min = v
+      if (v > max) max = v
+    }
+    if (max < min) continue
+    g.fillRect(x, mid + min * mid, 1, Math.max(1, (max - min) * mid))
   }
 }
 

@@ -13,6 +13,7 @@ import { DawApp } from './daw-app'
 import { demoSong, downloadBlob, downloadProjectJson, importProjectJson, loadSession, saveSession } from './persist'
 import { defaultProject, newId, newTrack } from './project'
 import { sampleStore } from './samples'
+import { buildAudioTrackEditor } from './ui/audio-editor'
 import { buildDrumEditor } from './ui/drum-editor'
 import { buildSamplerEditor } from './ui/sampler-editor'
 import { renderProjectToWav } from './render'
@@ -53,10 +54,7 @@ bottom.setInstrumentMount((host, trackId) => {
     return
   }
   if (track.kind === 'audio') {
-    const p = document.createElement('p')
-    p.className = 'bottom-hint'
-    p.textContent = 'Audio track — record from the microphone or import an audio file.'
-    host.appendChild(p)
+    host.appendChild(buildAudioTrackEditor(app, trackId))
     return
   }
   const store = app.song?.store(trackId)
@@ -213,7 +211,37 @@ declare global {
     __tracksRenderTest: () => Promise<unknown>
     __tracksKitTest: () => Promise<unknown>
     __tracksMixTest: () => Promise<unknown>
+    __tracksAudioTest: () => Promise<unknown>
     __tracksApp: DawApp
+  }
+}
+
+// an audio clip placed at beat 2 renders at the right time in the bounce
+window.__tracksAudioTest = async () => {
+  const rate = 44100
+  const buf = new AudioBuffer({ length: rate, numberOfChannels: 1, sampleRate: rate })
+  const d = buf.getChannelData(0)
+  for (let i = 0; i < d.length; i++) d[i] = Math.sin((i / rate) * 330 * 2 * Math.PI) * 0.8
+  const sid = newId()
+  sampleStore.put(sid, 'tone-1s', buf)
+  const p = defaultProject()
+  const t = newTrack('A', { kind: 'audio' })
+  t.clips = [{ id: 'a1', start: 2, length: 2, notes: [], audio: { sampleId: sid, offsetSec: 0, gain: 1 } }]
+  p.tracks = [t]
+  const out = await renderProject(p) // 120 bpm → clip spans 1.0s..2.0s
+  const rms = (from: number, to: number): number => {
+    const ch = out.getChannelData(0)
+    let s = 0
+    const i0 = Math.floor(from * out.sampleRate)
+    const i1 = Math.floor(to * out.sampleRate)
+    for (let i = i0; i < i1; i++) s += ch[i] * ch[i]
+    return Math.sqrt(s / (i1 - i0))
+  }
+  return {
+    beforeClip: rms(0.2, 0.9),
+    duringClip: rms(1.2, 1.9),
+    afterClip: rms(2.3, 3),
+    placedRight: rms(1.2, 1.9) > 0.1 && rms(0.2, 0.9) < 0.01 && rms(2.3, 3) < 0.01,
   }
 }
 

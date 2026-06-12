@@ -530,6 +530,48 @@
   cursor: ew-resize;
 }
 
+/* ---------- audio clips ---------- */
+
+.lane-drop {
+  background: rgba(255, 77, 0, 0.12);
+}
+
+.clip-audio {
+  background: #d8d7d0;
+}
+
+.clip-wave {
+  position: absolute;
+  left: 0;
+  top: 5px;
+  pointer-events: none;
+}
+
+.audio-editor {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+  overflow: auto;
+  min-height: 0;
+}
+
+.audio-hint {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+  max-width: 70ch;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.audio-error {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--accent);
+  margin: 0;
+}
+
 /* ---------- mixer ---------- */
 
 .mixer {

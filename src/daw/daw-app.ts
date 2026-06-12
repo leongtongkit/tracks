@@ -3,6 +3,7 @@
 // re-renders from.
 
 import { History } from './history'
+import { MicRecorder } from './mic'
 import {
   defaultProject,
   newId,
@@ -13,6 +14,7 @@ import {
   type TrackData,
   type TrackKind,
 } from './project'
+import { sampleStore } from './samples'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
 
@@ -41,6 +43,8 @@ export class DawApp {
       events: {
         noteOn: (trackId, pitch, vel, t) => this.song?.noteOn(trackId, pitch, vel, t),
         noteOff: (trackId, pitch, t) => this.song?.noteOff(trackId, pitch, t),
+        audio: (trackId, region, t, offsetSec, durSec) => this.song?.playClip(trackId, region, t, offsetSec, durSec),
+        audioStopAll: at => this.song?.stopAudioClips(at),
         click: (t, accent) => this.click(t, accent),
       },
     })
@@ -124,6 +128,10 @@ export class DawApp {
   togglePlay(): void {
     this.ensureAudio()
     if (this.transport.playing) {
+      if (this.recording) {
+        this.recording = false
+        this.finishMic()
+      }
       this.transport.stop()
       this.song?.allNotesOff()
     } else {
@@ -360,10 +368,88 @@ export class DawApp {
     this.song?.channel(this.armedTrackId)?.setBend(semitones)
   }
 
+  // ---------- audio recording / import ----------
+
+  private mic: MicRecorder | null = null
+  private micStartBeat = 0
+  micError: string | null = null
+
   toggleRecord(): void {
     this.recording = !this.recording
-    if (this.recording && !this.transport.playing) this.togglePlay()
+    if (this.recording) {
+      if (!this.transport.playing) this.togglePlay()
+      if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
+    } else {
+      this.finishMic()
+    }
     this.emit('transport')
+  }
+
+  private async startMic(): Promise<void> {
+    if (this.mic?.recording) return
+    this.ensureAudio()
+    const ctx = this.audioCtx()
+    if (!ctx) return
+    this.mic = new MicRecorder()
+    this.micError = null
+    try {
+      await this.mic.start(ctx)
+      this.micStartBeat = this.transport.positionBeat()
+    } catch {
+      this.micError = 'Microphone unavailable or denied.'
+      this.mic = null
+      this.emit('transport')
+    }
+  }
+
+  // turn whatever the mic captured into an audio clip on the armed track
+  private finishMic(): void {
+    const buffer = this.mic?.stop() ?? null
+    this.mic = null
+    if (!buffer || buffer.duration < 0.1) return
+    const track = this.track(this.armedTrackId ?? '')
+    if (!track || track.kind !== 'audio') return
+    this.checkpoint('record audio')
+    const n = Object.keys(this.project.samples).length + 1
+    const id = newId()
+    sampleStore.put(id, `Recording ${n}`, buffer)
+    this.project.samples[id] = { name: `Recording ${n}`, duration: buffer.duration }
+    const spb = 60 / this.project.bpm
+    const clip: Clip = {
+      id: newId(),
+      start: Math.max(0, this.micStartBeat),
+      length: Math.max(0.25, buffer.duration / spb),
+      notes: [],
+      audio: { sampleId: id, offsetSec: 0, gain: 1 },
+    }
+    track.clips.push(clip)
+    this.selectClip(track.id, clip.id)
+    this.emit('clips')
+  }
+
+  // shared by the file picker and lane drag-drop
+  async importAudioFile(file: File, trackId: string, atBeat: number): Promise<Clip | null> {
+    this.ensureAudio()
+    const ctx = this.audioCtx()
+    const track = this.track(trackId)
+    if (!ctx || !track) return null
+    const buffer = await ctx.decodeAudioData(await file.arrayBuffer())
+    this.checkpoint('import audio')
+    const id = newId()
+    sampleStore.put(id, file.name, buffer)
+    this.project.samples[id] = { name: file.name, duration: buffer.duration }
+    const spb = 60 / this.project.bpm
+    const clip: Clip = {
+      id: newId(),
+      start: Math.max(0, atBeat),
+      length: Math.max(0.25, buffer.duration / spb),
+      notes: [],
+      audio: { sampleId: id, offsetSec: 0, gain: 1 },
+    }
+    track.clips.push(clip)
+    this.selectClip(trackId, clip.id)
+    this.emit('clips')
+    return clip
   }
 
   // Write a played note into a clip on the armed track, creating or extending

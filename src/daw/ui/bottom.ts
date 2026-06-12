@@ -2,6 +2,7 @@
 // current selection.
 
 import type { DawApp } from '../daw-app'
+import { buildAudioClipEditor } from './audio-editor'
 import { MixerView } from './mixer'
 import { PianoRoll } from './piano-roll'
 
@@ -103,7 +104,9 @@ export class BottomPanel {
     this.mixer.unmount()
     this.body.innerHTML = ''
     if (this.tab === 'clip') {
-      if (clip && sel) {
+      if (clip?.audio && sel) {
+        this.body.appendChild(buildAudioClipEditor(this.app, sel.trackId, clip))
+      } else if (clip && sel) {
         this.roll.show(sel.trackId, clip)
         this.body.appendChild(this.roll.el)
       } else {

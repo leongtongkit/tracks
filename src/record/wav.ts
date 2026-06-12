@@ -29,6 +29,37 @@ export function encodeWav(left: Float32Array, right: Float32Array, sampleRate: n
   return buf
 }
 
+// Decode the 16-bit PCM stereo WAVs this module writes (used when importing
+// project files with embedded samples — no AudioContext needed).
+export function decodeWav(buf: ArrayBuffer): { left: Float32Array<ArrayBuffer>; right: Float32Array<ArrayBuffer>; sampleRate: number } {
+  const view = new DataView(buf)
+  if (view.getUint32(0, false) !== 0x52494646 /* RIFF */) throw new Error('not a wav')
+  const channels = view.getUint16(22, true)
+  const sampleRate = view.getUint32(24, true)
+  const bits = view.getUint16(34, true)
+  if (bits !== 16 || channels < 1 || channels > 2) throw new Error('unsupported wav')
+  // find the data chunk (44 in our own files, but scan to be safe)
+  let off = 12
+  while (off + 8 <= view.byteLength) {
+    const id = view.getUint32(off, false)
+    const size = view.getUint32(off + 4, true)
+    if (id === 0x64617461 /* data */) {
+      const frames = Math.floor(size / (2 * channels))
+      const left = new Float32Array(frames)
+      const right = new Float32Array(frames)
+      let p = off + 8
+      for (let i = 0; i < frames; i++) {
+        left[i] = view.getInt16(p, true) / 0x8000
+        right[i] = channels === 2 ? view.getInt16(p + 2, true) / 0x8000 : left[i]
+        p += 2 * channels
+      }
+      return { left, right, sampleRate }
+    }
+    off += 8 + size + (size % 2)
+  }
+  throw new Error('wav has no data chunk')
+}
+
 function toPcm16(v: number): number {
   const clamped = Math.max(-1, Math.min(1, v))
   return Math.round(clamped < 0 ? clamped * 0x8000 : clamped * 0x7fff)

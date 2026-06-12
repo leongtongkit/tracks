@@ -23,6 +23,12 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
     song.noteOn(ev.trackId, ev.pitch, ev.vel, tOn)
     song.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
   }
+  for (const track of project.tracks) {
+    for (const clip of track.clips) {
+      if (!clip.audio) continue
+      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb)
+    }
+  }
 
   return ctx.startRendering()
 }

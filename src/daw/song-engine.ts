@@ -15,7 +15,7 @@ import { Store } from '../state/store'
 import { DrumMachine } from './instruments/drums'
 import { SamplerInstrument } from './instruments/sampler'
 import type { Instrument } from './instruments/types'
-import type { Project, TrackData, TrackKind } from './project'
+import type { AudioRegion, Project, TrackData, TrackKind } from './project'
 import { sampleStore, type SampleStore } from './samples'
 
 export interface SendBuses {
@@ -321,6 +321,43 @@ export class SongEngine {
 
   allNotesOff(): void {
     for (const ch of this.channels.values()) ch.allNotesOff()
+  }
+
+  // ---------- audio clip playback ----------
+
+  private readonly liveAudio = new Set<AudioBufferSourceNode>()
+
+  playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number): void {
+    const buffer = this.samples.get(region.sampleId)
+    const ch = this.channels.get(trackId)
+    if (!buffer || !ch || durSec <= 0.001) return
+    const off = Math.min(Math.max(0, offsetSec), buffer.duration)
+    const dur = Math.min(durSec, buffer.duration - off)
+    if (dur <= 0.001) return
+    const src = this.ctx.createBufferSource()
+    src.buffer = buffer
+    const g = this.ctx.createGain()
+    g.gain.value = region.gain
+    src.connect(g)
+    g.connect(ch.input)
+    src.start(t, off, dur)
+    this.liveAudio.add(src)
+    src.onended = () => {
+      this.liveAudio.delete(src)
+      src.disconnect()
+      g.disconnect()
+    }
+  }
+
+  stopAudioClips(at?: number): void {
+    const t = at ?? this.ctx.currentTime
+    for (const src of [...this.liveAudio]) {
+      try {
+        src.stop(t)
+      } catch {
+        // not started / already stopped
+      }
+    }
   }
 
   // Pull live synth patches back into the project (called before save/serialize).

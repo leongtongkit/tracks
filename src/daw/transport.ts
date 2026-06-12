@@ -2,7 +2,7 @@
 // interval books sample-accurate events a small window ahead. Loop wraps
 // re-anchor the beat→time mapping so timing stays exact across passes.
 
-import type { Project, TrackData } from './project'
+import type { AudioRegion, Project, TrackData } from './project'
 
 export interface SongEvent {
   trackId: string
@@ -12,9 +12,20 @@ export interface SongEvent {
   durBeats: number
 }
 
+export interface AudioEvent {
+  trackId: string
+  region: AudioRegion
+  startBeat: number // absolute timeline beats
+  durBeats: number
+}
+
 export interface TransportEvents {
   noteOn(trackId: string, pitch: number, vel: number, t: number): void
   noteOff(trackId: string, pitch: number, t: number): void
+  // schedule an audio region: start playing at ctx-time t, from offsetSec into
+  // the sample, for at most durSec
+  audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number): void
+  audioStopAll?(at?: number): void
   click?(t: number, accent: boolean): void
   onWrap?(): void
 }
@@ -42,6 +53,42 @@ export function collectEvents(tracks: TrackData[], from: number, to: number): So
             durBeats: Math.min(note.dur, clip.length - note.start),
           })
         }
+      }
+    }
+  }
+  return out
+}
+
+// Pure: audio clips whose start lands in [from, to).
+export function collectAudioEvents(tracks: TrackData[], from: number, to: number): AudioEvent[] {
+  const out: AudioEvent[] = []
+  for (const track of tracks) {
+    for (const clip of track.clips) {
+      if (!clip.audio) continue
+      if (clip.start >= from && clip.start < to) {
+        out.push({ trackId: track.id, region: clip.audio, startBeat: clip.start, durBeats: clip.length })
+      }
+    }
+  }
+  return out
+}
+
+// Pure: audio clips already sounding at atBeat (started earlier, not yet done).
+export function straddlingAudio(
+  tracks: TrackData[],
+  atBeat: number,
+): { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] {
+  const out: { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] = []
+  for (const track of tracks) {
+    for (const clip of track.clips) {
+      if (!clip.audio) continue
+      if (clip.start < atBeat && clip.start + clip.length > atBeat) {
+        out.push({
+          trackId: track.id,
+          region: clip.audio,
+          intoBeats: atBeat - clip.start,
+          remainBeats: clip.start + clip.length - atBeat,
+        })
       }
     }
   }
@@ -84,6 +131,7 @@ export class Transport {
     this.anchorBeat = fromBeat
     this.scanBeat = fromBeat
     this.anchorTime = this.getNow() + 0.06
+    this.scheduleStraddlingAudio(fromBeat, this.anchorTime)
     this.timer = setInterval(() => this.pump(), TICK_MS)
     this.pump()
   }
@@ -94,6 +142,19 @@ export class Transport {
     this.playing = false
     if (this.timer !== null) clearInterval(this.timer)
     this.timer = null
+    this.events.audioStopAll?.()
+  }
+
+  // restart audio clips that should already be sounding at `beat`
+  private scheduleStraddlingAudio(beat: number, t: number): void {
+    if (!this.events.audio) return
+    const spb = this.spbCached
+    const loop = this.getProject().loop
+    const cutBeat = loop.on && loop.end > beat ? loop.end : Infinity
+    for (const s of straddlingAudio(this.getProject().tracks, beat)) {
+      const remain = Math.min(s.remainBeats, cutBeat - beat)
+      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb, remain * spb)
+    }
   }
 
   toggle(): boolean {
@@ -105,9 +166,11 @@ export class Transport {
   setPosition(beat: number): void {
     this.stoppedAt = Math.max(0, beat)
     if (this.playing) {
+      this.events.audioStopAll?.()
       this.anchorBeat = this.stoppedAt
       this.anchorTime = this.getNow() + 0.03
       this.scanBeat = this.stoppedAt
+      this.scheduleStraddlingAudio(this.stoppedAt, this.anchorTime)
     }
   }
 
@@ -146,6 +209,14 @@ export class Transport {
         this.events.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
         booked.push(ev)
       }
+      if (this.events.audio) {
+        for (const ev of collectAudioEvents(project.tracks, this.scanBeat, sliceEnd)) {
+          // a clip crossing the loop end gets cut there, exactly at the wrap
+          let durBeats = ev.durBeats
+          if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat
+          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb)
+        }
+      }
       if (this.metronome && this.events.click) {
         for (let b = Math.ceil(this.scanBeat - 1e-9); b < sliceEnd; b++) {
           this.events.click(this.beatToTime(b), b % 4 === 0)
@@ -158,6 +229,7 @@ export class Transport {
         this.anchorTime = this.beatToTime(loop.end)
         this.anchorBeat = loop.start
         this.scanBeat = loop.start
+        this.scheduleStraddlingAudio(loop.start, this.anchorTime)
         this.events.onWrap?.()
       }
     }
