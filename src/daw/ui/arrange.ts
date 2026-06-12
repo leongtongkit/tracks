@@ -173,6 +173,7 @@ export class ArrangeView {
       if (dragStart === null) return
       const beat = this.beatAt(e)
       if (Math.abs(beat - dragStart) >= SNAP / 2) {
+        if (!dragged) this.app.checkpoint('loop region')
         dragged = true
         const loop = this.app.project.loop
         loop.start = Math.min(dragStart, beat)
@@ -246,10 +247,7 @@ export class ArrangeView {
     name.title = 'Double-click to rename'
     name.addEventListener('dblclick', () => {
       const next = prompt('Track name', track.name)
-      if (next?.trim()) {
-        track.name = next.trim().slice(0, 24)
-        this.renderHeaders()
-      }
+      if (next?.trim()) this.app.renameTrack(track.id, next)
     })
     const del = document.createElement('button')
     del.type = 'button'
@@ -385,7 +383,10 @@ export class ArrangeView {
     el.addEventListener('pointermove', e => {
       if (!mode) return
       const dBeats = Math.round((e.clientX - startX) / this.ppb / SNAP) * SNAP
-      if (dBeats !== 0) moved = true
+      if (dBeats !== 0 && !moved) {
+        moved = true
+        this.app.checkpoint(`${mode} clip ${clip.id}`)
+      }
       if (mode === 'move') {
         clip.start = Math.max(0, origStart + dBeats)
         el.style.left = `${clip.start * this.ppb}px`

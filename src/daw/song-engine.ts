@@ -28,6 +28,10 @@ class TrackChannel {
     this.applyMixer(data.mixer, false)
   }
 
+  setBend(semitones: number): void {
+    this.engine.setBend(semitones)
+  }
+
   applyMixer(mixer: TrackData['mixer'], soloElsewhere: boolean): void {
     const t = this.engine.ctx.currentTime
     this.volume.gain.setTargetAtTime(mixer.volume, t, 0.02)

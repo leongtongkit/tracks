@@ -4,7 +4,7 @@ import { collectEvents, Transport } from './transport'
 
 function projectWith(notes: { start: number; dur: number; pitch: number }[], opts: Partial<Project> = {}): Project {
   const p = defaultProject()
-  p.tracks = [newTrack('T1', 'Fat Saw')]
+  p.tracks = [newTrack('T1', { preset: 'Fat Saw' })]
   p.tracks[0].clips = [
     { id: 'c1', start: 0, length: 8, notes: notes.map(n => ({ ...n, vel: 0.8 })) },
   ]

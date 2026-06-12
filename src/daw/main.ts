@@ -116,6 +116,7 @@ fileInput.addEventListener('change', () => {
     .then(project => {
       app.transport.stop()
       app.song?.allNotesOff()
+      app.history.clear()
       app.project = project
       app.selectedClip = null
       app.armedTrackId = project.tracks[0]?.id ?? null
@@ -136,7 +137,29 @@ fileBar.appendChild(fileInput)
 window.addEventListener('keydown', e => {
   const target = e.target as HTMLElement | null
   if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
-  if (e.code === 'Space') {
+  const cmd = e.metaKey || e.ctrlKey
+  if (cmd && e.code === 'KeyZ') {
+    e.preventDefault()
+    if (e.shiftKey) app.redo()
+    else app.undo()
+  } else if (cmd && e.code === 'KeyY') {
+    e.preventDefault()
+    app.redo()
+  } else if (cmd && e.code === 'KeyC') {
+    if (app.copyClip()) e.preventDefault()
+  } else if (cmd && e.code === 'KeyV') {
+    if (app.pasteClip()) e.preventDefault()
+  } else if (cmd && e.code === 'KeyD') {
+    if (app.selectedClip) {
+      e.preventDefault()
+      app.duplicateClip(app.selectedClip.trackId, app.selectedClip.clipId)
+    }
+  } else if (cmd && e.code === 'KeyE') {
+    if (app.selectedClip) {
+      e.preventDefault()
+      app.splitClip(app.selectedClip.trackId, app.selectedClip.clipId, app.transport.positionBeat())
+    }
+  } else if (e.code === 'Space') {
     e.preventDefault()
     app.togglePlay()
   } else if (e.code === 'Enter') {

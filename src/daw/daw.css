@@ -344,6 +344,97 @@
 .proll {
   min-height: 0;
   display: grid;
+  grid-template-rows: 30px 1fr 64px;
+}
+
+.proll-bar {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 0 8px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.proll-bar .seg-btn {
+  padding: 2px 7px;
+  font-size: 0.58rem;
+}
+
+.proll-bar-label {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.proll-bar-hint {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ink-soft);
+}
+
+.seg-select {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--ink);
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  padding: 2px 4px;
+}
+
+/* velocity lane */
+
+.proll-vel {
+  position: relative;
+  border-top: 1px solid var(--edge);
+  background: var(--body-grey);
+  min-height: 0;
+}
+
+.proll-vel-tag {
+  position: absolute;
+  left: 6px;
+  top: 4px;
+  z-index: 2;
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
+  pointer-events: none;
+}
+
+.proll-vel-viewport {
+  overflow: hidden;
+  height: 100%;
+}
+
+.proll-vel-inner {
+  position: relative;
+  height: 100%;
+}
+
+.proll-vel-bars {
+  position: absolute;
+  top: 4px;
+  bottom: 4px;
+}
+
+.proll-vel-bar {
+  position: absolute;
+  bottom: 0;
+  width: 6px;
+  background: var(--accent);
+  border-radius: 1px 1px 0 0;
+  cursor: ns-resize;
+  touch-action: none;
+}
+
+.proll-key-drum {
+  color: var(--ink);
+  font-weight: 600;
 }
 
 .proll-scroll {
