@@ -95,28 +95,20 @@ body {
 /* ---------- device shell ---------- */
 
 #app {
-  min-height: 100vh;
   display: grid;
   place-items: center;
-  padding: clamp(8px, 3vw, 40px);
 }
 
-/* fit-to-viewport mode: the device is transform-scaled by main.ts */
-@media (min-width: 681px) {
-  html,
-  body {
-    height: 100%;
-    overflow: hidden;
-  }
+/* the device is transform-scaled by main.ts to fill the viewport */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+}
 
-  #app {
-    height: 100vh;
-    padding: 0;
-  }
-
-  .device {
-    transform-origin: center center;
-  }
+#app {
+  height: 100vh;
+  padding: 0;
 }
 
 .device {
@@ -128,7 +120,7 @@ body {
     0 -1px 0 rgba(0, 0, 0, 0.08) inset,
     0 24px 60px -18px rgba(0, 0, 0, 0.75);
   color: var(--ink);
-  width: min(1180px, 100%);
+  width: 1180px;
   padding: clamp(14px, 2vw, 24px);
   display: grid;
   gap: clamp(10px, 1.3vw, 16px);
@@ -487,14 +479,82 @@ body {
 
 .module-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: clamp(8px, 1vw, 12px);
 }
 
-@media (min-width: 880px) {
-  .module-grid {
-    grid-template-columns: repeat(3, 1fr);
-  }
+/* wide screens: 5-across modules, keyboard manuals side by side */
+.device[data-layout='l'] .module-grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+
+.device[data-layout='l'] .piano-2up {
+  grid-template-columns: 10fr 12fr;
+  align-items: end;
+}
+
+/* side-by-side: low notes left, high notes right */
+.device[data-layout='l'] .manual-upper {
+  order: 2;
+}
+
+.device[data-layout='l'] .piano {
+  width: 100% !important; /* overrides the per-manual inline width */
+}
+
+.device[data-layout='l'] .fx-rack {
+  grid-template-columns: repeat(6, 1fr);
+}
+
+/* tall screens: 2-across modules, everything narrows and stacks */
+.device[data-layout='p'] .module-grid {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.device[data-layout='p'] .fx-rack {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.device[data-layout='p'] .seq-grid {
+  grid-template-columns: repeat(8, 1fr);
+}
+
+.device[data-layout='p'] .seq-strip {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.device[data-layout='p'] .seq-transport {
+  justify-content: center;
+}
+
+.device[data-layout='p'] .brand-row {
+  flex-wrap: wrap;
+}
+
+.device[data-layout='p'] .preset-slot {
+  flex-basis: 100%;
+  flex-wrap: wrap;
+  order: 3;
+}
+
+.device[data-layout='p'] .preset-name {
+  min-width: 0;
+  flex: 1;
+}
+
+.device[data-layout='p'] .piano-row {
+  flex-direction: column;
+}
+
+.device[data-layout='p'] .oct-ctl {
+  flex-direction: row;
+  justify-content: center;
+  padding: 8px;
+}
+
+.device[data-layout='p'] .oct-ctl .seg-btn {
+  width: auto;
 }
 
 .preset-slot {
@@ -887,56 +947,6 @@ body {
 .toast-in {
   opacity: 1;
   translate: 0 0;
-}
-
-/* ---------- narrow screens ---------- */
-
-@media (max-width: 680px) {
-  .brand-row {
-    flex-wrap: wrap;
-  }
-
-  .preset-slot {
-    flex-basis: 100%;
-    flex-wrap: wrap;
-    order: 3;
-  }
-
-  .preset-name {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .seq-strip {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .seq-transport {
-    justify-content: center;
-  }
-
-  .seq-grid {
-    grid-template-columns: repeat(8, 1fr);
-  }
-
-  .piano-row {
-    flex-direction: column;
-  }
-
-  .oct-ctl {
-    flex-direction: row;
-    justify-content: center;
-    padding: 8px;
-  }
-
-  .oct-ctl .seg-btn {
-    width: auto;
-  }
-
-  .key-hint {
-    display: none;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

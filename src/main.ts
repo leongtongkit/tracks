@@ -145,28 +145,64 @@ store.subscribeAll(() => {
   autosaveTimer = setTimeout(() => saveSession(store.getPatch()), 800)
 })
 
-// Auto-fit: scale the whole device so the instrument always fills the
-// viewport exactly (no scrolling, no dead space). Phones (<=680px) keep the
-// flowing single-column layout instead, where shrink-to-fit would make
-// controls untappably small.
+// Auto-fit on every resolution and orientation: first pick a layout mode that
+// matches the viewport's shape (wide / square / tall — CSS rearranges the
+// panel grid, FX rack, sequencer, and keyboard per mode), then iterate the
+// device width until its aspect ratio is close to the viewport's, and finally
+// transform-scale it to fill the screen with no scrolling.
 const deviceEl = document.querySelector<HTMLElement>('.device')!
+const LAYOUT_BOUNDS: Record<string, [number, number]> = {
+  l: [1280, 2400],
+  m: [860, 1500],
+  p: [600, 950],
+}
+let fitting = false
+
 function fitDevice(): void {
-  if (window.innerWidth <= 680) {
-    deviceEl.style.transform = ''
-    return
+  if (fitting) return
+  fitting = true
+  try {
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    const va = vw / vh
+    const mode = va >= 1.25 ? 'l' : va >= 0.62 ? 'm' : 'p'
+    if (deviceEl.dataset.layout !== mode) {
+      deviceEl.dataset.layout = mode
+      deviceEl.style.width = ''
+    }
+    const [minW, maxW] = LAYOUT_BOUNDS[mode]
+    let width = Math.min(maxW, Math.max(minW, deviceEl.offsetWidth || minW))
+
+    // nudge width so the device's aspect approaches the viewport's; height
+    // responds sub-linearly to width (grids reflow), so sqrt-damp the step
+    for (let i = 0; i < 4; i++) {
+      deviceEl.style.width = `${Math.round(width)}px`
+      const h = deviceEl.offsetHeight
+      if (!h) break
+      const ratio = va / (width / h)
+      if (Math.abs(ratio - 1) < 0.03) break
+      const next = Math.min(maxW, Math.max(minW, width * Math.sqrt(ratio)))
+      if (Math.abs(next - width) < 4) break
+      width = next
+    }
+
+    const w = deviceEl.offsetWidth
+    const h = deviceEl.offsetHeight
+    if (!w || !h) return
+    const s = Math.min((vw * 0.985) / w, (vh * 0.985) / h)
+    // the grid track is sized by the unscaled layout box, so center manually
+    // on both axes: scale from the top-left, then shift the scaled box
+    const offsetX = (vw - w * s) / 2 - deviceEl.offsetLeft
+    const offsetY = (vh - h * s) / 2 - deviceEl.offsetTop
+    deviceEl.style.transformOrigin = 'top left'
+    deviceEl.style.transform = `translate(${offsetX.toFixed(1)}px, ${offsetY.toFixed(1)}px) scale(${s.toFixed(4)})`
+  } finally {
+    fitting = false
   }
-  const w = deviceEl.offsetWidth // layout size: unaffected by the transform
-  const h = deviceEl.offsetHeight
-  if (!w || !h) return
-  const s = Math.min((window.innerWidth * 0.97) / w, (window.innerHeight * 0.97) / h)
-  // the grid track is sized by the unscaled layout box, so center manually:
-  // scale from the top, then shift the scaled box to the vertical middle
-  const offsetY = Math.max(0, (window.innerHeight - h * s) / 2) - deviceEl.offsetTop
-  deviceEl.style.transformOrigin = 'top center'
-  deviceEl.style.transform = `translateY(${offsetY.toFixed(1)}px) scale(${s.toFixed(4)})`
 }
 window.addEventListener('resize', fitDevice)
-new ResizeObserver(fitDevice).observe(deviceEl)
+window.addEventListener('orientationchange', fitDevice)
+document.fonts?.ready.then(fitDevice).catch(() => {})
 fitDevice()
 
 function unlock(): void {
