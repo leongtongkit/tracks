@@ -14,6 +14,7 @@ export interface MiniDialOpts {
 export function miniDial(opts: MiniDialOpts): HTMLElement {
   const el = document.createElement('div')
   el.className = 'mini-dial'
+  el.title = `${opts.label}: drag up/down to change, double-click to reset`
   const label = document.createElement('span')
   label.textContent = opts.label
   const chip = document.createElement('output')

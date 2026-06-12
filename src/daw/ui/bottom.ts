@@ -68,9 +68,10 @@ export class BottomPanel {
       if (this.tab === 'clip') this.render()
     })
     app.on('tracks', () => this.render())
-    // arming a track (header click / arm dot) surfaces its instrument
+    // arming a track (header click / arm dot) surfaces its instrument —
+    // unless the user is working the mixer, which also arms via strip names
     app.on('arm', () => {
-      this.tab = 'instrument'
+      if (this.tab !== 'mixer') this.tab = 'instrument'
       this.render()
     })
     this.render()
