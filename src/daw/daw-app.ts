@@ -182,8 +182,9 @@ export class DawApp {
       track = newTrack(names[kind], { kind })
     }
     this.project.tracks.push(track)
+    this.armedTrackId = track.id // a new track is what you want to play next
     void this.song?.syncTracks(this.project)
-    this.emit('tracks')
+    this.emit('tracks', 'arm')
     return track
   }
 
