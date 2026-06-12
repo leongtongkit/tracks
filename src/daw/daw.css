@@ -1052,3 +1052,123 @@
 .instrument-editor .module-grid {
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+
+/* ---------- help overlay ---------- */
+
+.help-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(20, 20, 22, 0.55);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.help-overlay.hidden {
+  display: none;
+}
+
+.help-card {
+  background: var(--body-grey);
+  border: 1px solid #b5b4ab;
+  border-radius: 6px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.5);
+  padding: 18px 22px;
+  max-width: 560px;
+  max-height: 80vh;
+  overflow: auto;
+}
+
+.help-card h2 {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink);
+  margin: 0 0 12px;
+}
+
+.help-list {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 6px 16px;
+  margin: 0;
+}
+
+.help-list dt {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--ink);
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  padding: 2px 7px;
+  justify-self: start;
+  white-space: nowrap;
+}
+
+.help-list dd {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  margin: 0;
+  align-self: center;
+}
+
+/* ---------- small screens (tablet / phone) ---------- */
+
+@media (max-width: 1000px) {
+  .arrange-body {
+    grid-template-columns: 168px 1fr;
+  }
+
+  .transport-bar {
+    height: auto;
+    flex-wrap: wrap;
+    padding: 6px 10px;
+    gap: 6px;
+  }
+
+  .transport-bar .brand {
+    margin-right: 4px;
+  }
+
+  .daw {
+    grid-template-rows: 1fr 250px;
+  }
+
+  .pads-grid {
+    grid-template-columns: repeat(4, minmax(72px, 1fr));
+  }
+
+  .drum-pads-grid {
+    grid-template-columns: repeat(4, minmax(72px, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .arrange-body {
+    grid-template-columns: 124px 1fr;
+  }
+
+  .track-head-controls .mini-dial span {
+    display: none; /* keep dials, drop their labels */
+  }
+
+  .bar-space .seg-btn {
+    padding: 4px 5px;
+    font-size: 0.54rem;
+  }
+
+  .seg-btn {
+    min-height: 30px; /* touch targets */
+  }
+
+  .mix-strip {
+    flex: 0 0 240px;
+  }
+
+  .daw {
+    grid-template-rows: 1fr 220px;
+  }
+}

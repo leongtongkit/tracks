@@ -11,7 +11,7 @@ import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
 import { toast } from '../ui/toast'
 import { DawApp } from './daw-app'
-import { exportMidi } from './midi'
+import { exportMidi, importMidi } from './midi'
 import { encodeMp3 } from './mp3'
 import {
   demoSong,
@@ -34,6 +34,7 @@ import { renderProjectToWav } from './render'
 import { renderProject } from './render'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
+import { buildHelpOverlay } from './ui/help'
 
 const app = new DawApp()
 // recover persisted samples (recordings/imports) before anything plays
@@ -68,6 +69,8 @@ daw.appendChild(arrange.el)
 
 const bottom = new BottomPanel(app)
 daw.appendChild(bottom.el)
+
+const help = buildHelpOverlay()
 
 // synth editors are cached: knob subscriptions live on the track's store, so
 // rebuilding each render would leak listeners. Drum/sampler editors hold no
@@ -263,15 +266,18 @@ const openBtn = document.createElement('button')
 openBtn.type = 'button'
 openBtn.className = 'seg-btn'
 openBtn.textContent = 'Open'
-openBtn.title = 'Open a saved project file'
+openBtn.title = 'Open a saved project (.tracks.json) or a MIDI file (.mid)'
 const fileInput = document.createElement('input')
 fileInput.type = 'file'
-fileInput.accept = '.json,application/json'
+fileInput.accept = '.json,application/json,.mid,.midi,audio/midi'
 fileInput.style.display = 'none'
 fileInput.addEventListener('change', () => {
   const f = fileInput.files?.[0]
   if (!f) return
-  void importProjectJson(f)
+  const loader = /\.midi?$/i.test(f.name)
+    ? f.arrayBuffer().then(buf => importMidi(new Uint8Array(buf)))
+    : importProjectJson(f)
+  void loader
     .then(project => {
       app.transport.stop()
       app.song?.allNotesOff()
@@ -282,10 +288,17 @@ fileInput.addEventListener('change', () => {
       void app.song?.syncTracks(project)
       app.emit('tracks', 'clips', 'project', 'selection')
     })
-    .catch(() => alert('That file is not a Tracks project.'))
+    .catch(() => alert('That file is not a Tracks project or readable MIDI file.'))
   fileInput.value = ''
 })
 openBtn.addEventListener('click', () => fileInput.click())
+const helpBtn = document.createElement('button')
+helpBtn.type = 'button'
+helpBtn.className = 'seg-btn'
+helpBtn.textContent = '?'
+helpBtn.title = 'Keyboard shortcuts'
+helpBtn.addEventListener('click', () => help.toggle())
+fileBar.appendChild(helpBtn)
 fileBar.appendChild(shareBtn)
 fileBar.appendChild(wavBtn)
 fileBar.appendChild(mp3Btn)
@@ -301,7 +314,10 @@ window.addEventListener('keydown', e => {
   const target = e.target as HTMLElement | null
   if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)) return
   const cmd = e.metaKey || e.ctrlKey
-  if (cmd && e.code === 'KeyZ') {
+  if (e.key === '?') {
+    e.preventDefault()
+    help.toggle()
+  } else if (cmd && e.code === 'KeyZ') {
     e.preventDefault()
     if (e.shiftKey) app.redo()
     else app.undo()

@@ -1,7 +1,7 @@
 // Standard MIDI File (format 1) export of every note track. Drum tracks land
 // on channel 10 (GM percussion); everything else gets its own melodic channel.
 
-import { projectEndBeat, type Project } from './project'
+import { defaultProject, migrateProject, newId, newTrack, projectEndBeat, type Project } from './project'
 import { collectEvents } from './transport'
 
 const PPQ = 480
@@ -72,6 +72,111 @@ export function exportMidi(project: Project): Uint8Array {
     off += c.length
   }
   return out
+}
+
+// ---------- import ----------
+
+// Parse a standard MIDI file (format 0/1, PPQ division) into a Project:
+// one track per MTrk with notes, drums for channel-10 parts, tempo applied.
+export function importMidi(bytes: Uint8Array): Project {
+  const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
+  if (ascii(bytes, 0, 4) !== 'MThd') throw new Error('not a MIDI file')
+  const ntrks = view.getUint16(10)
+  const division = view.getUint16(12)
+  if (division & 0x8000) throw new Error('SMPTE-timed MIDI files are not supported')
+  const ppq = division || 480
+
+  const project = defaultProject()
+  project.tracks = []
+  project.name = 'Imported MIDI'
+  let tempoSet = false
+
+  let off = 14
+  for (let t = 0; t < ntrks && off + 8 <= bytes.length; t++) {
+    if (ascii(bytes, off, 4) !== 'MTrk') break
+    const len = view.getUint32(off + 4)
+    const end = off + 8 + len
+    let p = off + 8
+    let tick = 0
+    let running = 0
+    let name = ''
+    const open = new Map<string, { tick: number; vel: number }>()
+    const notes: { start: number; dur: number; pitch: number; vel: number }[] = []
+    let drumNotes = 0
+
+    const readVar = (): number => {
+      let v = 0
+      let b
+      do {
+        b = bytes[p++]
+        v = (v << 7) | (b & 0x7f)
+      } while (b & 0x80 && p < end)
+      return v
+    }
+
+    while (p < end) {
+      tick += readVar()
+      let status = bytes[p]
+      if (status & 0x80) p++
+      else status = running // running status reuses the previous status byte
+      running = status
+
+      if (status === 0xff) {
+        const type = bytes[p++]
+        const mlen = readVar()
+        if (type === 0x03 && !name) name = ascii(bytes, p, Math.min(mlen, 24))
+        if (type === 0x51 && mlen === 3 && !tempoSet) {
+          const us = (bytes[p] << 16) | (bytes[p + 1] << 8) | bytes[p + 2]
+          project.bpm = Math.min(240, Math.max(40, Math.round(60_000_000 / us)))
+          tempoSet = true
+        }
+        p += mlen
+        continue
+      }
+      if (status === 0xf0 || status === 0xf7) {
+        p += readVar()
+        continue
+      }
+      const kind = status & 0xf0
+      const channel = status & 0x0f
+      const d1 = bytes[p++]
+      const d2 = kind === 0xc0 || kind === 0xd0 ? 0 : bytes[p++]
+      if (kind === 0x90 && d2 > 0) {
+        open.set(`${channel}:${d1}`, { tick, vel: d2 })
+        if (channel === 9) drumNotes++
+      } else if (kind === 0x80 || (kind === 0x90 && d2 === 0)) {
+        const key = `${channel}:${d1}`
+        const on = open.get(key)
+        if (on) {
+          open.delete(key)
+          notes.push({
+            start: on.tick / ppq,
+            dur: Math.max(1 / 32, (tick - on.tick) / ppq),
+            pitch: d1,
+            vel: Math.max(0.05, on.vel / 127),
+          })
+        }
+      }
+    }
+    off = end
+
+    if (notes.length === 0) continue
+    const isDrums = drumNotes > notes.length / 2
+    const track = newTrack(name || (isDrums ? 'Drums' : `MIDI ${project.tracks.length + 1}`), {
+      kind: isDrums ? 'drums' : 'synth',
+    })
+    const span = Math.max(4, Math.ceil(Math.max(...notes.map(n => n.start + n.dur)) / 4) * 4)
+    track.clips = [{ id: newId(), start: 0, length: span, notes }]
+    project.tracks.push(track)
+    if (project.tracks.length >= 24) break
+  }
+
+  if (project.tracks.length === 0) throw new Error('no notes found in that MIDI file')
+  return migrateProject(JSON.parse(JSON.stringify(project)))
+}
+
+function ascii(bytes: Uint8Array, off: number, len: number): string {
+  return String.fromCharCode(...bytes.subarray(off, off + len))
 }
 
 function endTrack(data: number[]): void {
