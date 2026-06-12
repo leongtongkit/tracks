@@ -10,6 +10,7 @@ import { KeyboardInput } from '../input/keyboard'
 import { buildInstrumentEditor } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
+import { exportMidi } from './midi'
 import { demoSong, downloadBlob, downloadProjectJson, importProjectJson, loadSession, saveSession } from './persist'
 import { defaultProject, newId, newTrack } from './project'
 import { sampleStore } from './samples'
@@ -115,6 +116,44 @@ wavBtn.addEventListener('click', () => {
     }
   })()
 })
+const midiBtn = document.createElement('button')
+midiBtn.type = 'button'
+midiBtn.className = 'seg-btn'
+midiBtn.textContent = 'MIDI'
+midiBtn.title = 'Export all note tracks as a standard MIDI file'
+midiBtn.addEventListener('click', () => {
+  const bytes = exportMidi(app.project)
+  downloadBlob(new Blob([bytes.buffer as ArrayBuffer], { type: 'audio/midi' }), `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mid`)
+})
+const stemsBtn = document.createElement('button')
+stemsBtn.type = 'button'
+stemsBtn.className = 'seg-btn'
+stemsBtn.textContent = 'Stems'
+stemsBtn.title = 'Render each track to its own WAV file'
+stemsBtn.addEventListener('click', () => {
+  void (async () => {
+    stemsBtn.disabled = true
+    try {
+      app.song?.collectPatches(app.project)
+      const base = app.project.name.replaceAll(/\W+/g, '-') || 'tracks'
+      const tracks = app.project.tracks.filter(t => t.clips.length > 0)
+      for (let i = 0; i < tracks.length; i++) {
+        stemsBtn.textContent = `Stem ${i + 1}/${tracks.length}`
+        const solo = structuredClone(app.project)
+        for (const t of solo.tracks) {
+          t.mixer.mute = t.id !== tracks[i].id
+          t.mixer.solo = false
+        }
+        const blob = await renderProjectToWav(solo)
+        downloadBlob(blob, `${base}-${tracks[i].name.replaceAll(/\W+/g, '-')}.wav`)
+        await new Promise(r => setTimeout(r, 400)) // keep the browser's download UI happy
+      }
+    } finally {
+      stemsBtn.disabled = false
+      stemsBtn.textContent = 'Stems'
+    }
+  })()
+})
 const saveBtn = document.createElement('button')
 saveBtn.type = 'button'
 saveBtn.className = 'seg-btn'
@@ -149,6 +188,8 @@ fileInput.addEventListener('change', () => {
 })
 openBtn.addEventListener('click', () => fileInput.click())
 fileBar.appendChild(wavBtn)
+fileBar.appendChild(stemsBtn)
+fileBar.appendChild(midiBtn)
 fileBar.appendChild(saveBtn)
 fileBar.appendChild(openBtn)
 fileBar.appendChild(fileInput)
