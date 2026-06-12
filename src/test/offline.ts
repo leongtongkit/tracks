@@ -44,10 +44,10 @@ export async function renderTest(
   }
 
   const buf = await ctx.startRendering()
-  return analyze(buf)
+  return analyzeBuffer(buf)
 }
 
-function analyze(buf: AudioBuffer): RenderStats {
+export function analyzeBuffer(buf: AudioBuffer): RenderStats {
   let peak = 0
   let sumSq = 0
   let hasNaN = false

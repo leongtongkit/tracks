@@ -24,7 +24,7 @@ export class Engine {
   private readonly mods: VoiceMods
   private bendCents = 0
 
-  constructor(ctx: BaseAudioContext, store: Store) {
+  constructor(ctx: BaseAudioContext, store: Store, dest?: AudioNode) {
     this.ctx = ctx
     this.store = store
     const patch = store.getPatch()
@@ -48,7 +48,7 @@ export class Engine {
     this.lfoBank.tremolo.connect(this.fxChain.input)
     this.fxChain.output.connect(limiter)
     limiter.connect(this.masterGain)
-    this.masterGain.connect(ctx.destination)
+    this.masterGain.connect(dest ?? ctx.destination)
 
     this.mods = {
       pitch: this.lfoBank.pitchSources(),

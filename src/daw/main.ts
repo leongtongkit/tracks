@@ -23,3 +23,31 @@ shell.innerHTML = `
   <p><a href="https://synth.jfound.net" style="color:inherit">the synth lives here meanwhile</a></p>
 `
 app.appendChild(shell)
+
+// Verification harness: renders a small real project offline and returns
+// measurable stats; driven from the browser test rig.
+import { analyzeBuffer } from '../test/offline'
+import { defaultProject } from './project'
+import { renderProject } from './render'
+
+declare global {
+  interface Window {
+    __tracksRenderTest: (over?: Record<string, unknown>) => Promise<unknown>
+  }
+}
+
+window.__tracksRenderTest = async () => {
+  const p = defaultProject()
+  // a bar of bass + a pad chord, two tracks sounding together
+  p.tracks[0].clips = [{
+    id: 'c1', start: 0, length: 4,
+    notes: [0, 1, 2, 3].map(i => ({ start: i, dur: 0.5, pitch: 36 + (i % 2) * 12, vel: 0.9 })),
+  }]
+  p.tracks[3].clips = [{
+    id: 'c2', start: 0, length: 4,
+    notes: [60, 64, 67].map(pitch => ({ start: 0, dur: 4, pitch, vel: 0.7 })),
+  }]
+  const t0 = performance.now()
+  const buf = await renderProject(p)
+  return { ...analyzeBuffer(buf), renderMs: Math.round(performance.now() - t0) }
+}
