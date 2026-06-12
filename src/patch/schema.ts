@@ -17,6 +17,7 @@ export type FxId = 'distortion' | 'bitcrusher' | 'chorus' | 'phaser' | 'delay' |
 export type PatchCategory =
   | 'bass' | 'lead' | 'pad' | 'pluck' | 'keys'
   | 'bell' | 'brass' | 'wobble' | 'fx' | 'user'
+  | 'organ' | 'strings' | 'choir' | 'mallet' | 'pipe' | 'world'
 
 export interface UnisonConfig {
   count: 1 | 3 | 5 | 7

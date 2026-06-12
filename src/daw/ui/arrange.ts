@@ -223,9 +223,18 @@ export class ArrangeView {
     for (const track of this.app.project.tracks) {
       this.headers.appendChild(this.trackHeader(track))
     }
-    const add = btn('+ Track', 'Add a track')
-    add.className = 'seg-btn add-track'
-    add.addEventListener('click', () => this.app.addTrack())
+    const add = document.createElement('div')
+    add.className = 'add-track-row'
+    for (const [label, kind, title] of [
+      ['+ Synth', 'synth', 'Add a synthesizer track'],
+      ['+ Drums', 'drums', 'Add an 808/909 drum machine track'],
+      ['+ Sampler', 'sampler', 'Add a sampler track (load any audio, play it across the keys)'],
+      ['+ Audio', 'audio', 'Add an audio track (record mic / import files)'],
+    ] as const) {
+      const b = btn(label, title)
+      b.addEventListener('click', () => this.app.addTrack(kind))
+      add.appendChild(b)
+    }
     this.headers.appendChild(add)
   }
 

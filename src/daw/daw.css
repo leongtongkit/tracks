@@ -180,9 +180,16 @@
   font-size: 0.56rem;
 }
 
-.add-track {
+.add-track-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
   margin: 10px 8px;
-  width: calc(100% - 16px);
+}
+
+.add-track-row .seg-btn {
+  font-size: 0.56rem;
+  padding: 4px 2px;
 }
 
 /* ---------- lanes ---------- */
@@ -515,6 +522,79 @@
   bottom: 0;
   width: 6px;
   cursor: ew-resize;
+}
+
+/* ---------- drum editor ---------- */
+
+.drum-editor {
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+  overflow: auto;
+  min-height: 0;
+}
+
+.drum-editor-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drum-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 6px 18px;
+}
+
+.drum-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.drum-pad {
+  flex: 0 0 86px;
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  padding: 7px 4px;
+  cursor: pointer;
+  text-align: center;
+}
+
+.drum-pad-hit {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent-deep);
+}
+
+/* ---------- sampler editor ---------- */
+
+.sampler-editor {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+  align-content: start;
+}
+
+.sampler-info {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  color: var(--ink-soft);
+}
+
+.sampler-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
 /* ---------- embedded instrument ---------- */

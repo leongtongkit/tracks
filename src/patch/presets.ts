@@ -1,3 +1,4 @@
+import { INSTRUMENT_PRESETS } from './presets-instruments'
 import { migrate, PATCH_VERSION, type Patch, type PatchCategory } from './schema'
 
 type DeepPartial<T> = {
@@ -467,3 +468,6 @@ export const PRESETS: PresetDef[] = [
     },
   },
 ]
+
+// v2: instrument-modeled bank (organs, strings, choir, mallets, pipes, world)
+PRESETS.push(...INSTRUMENT_PRESETS)

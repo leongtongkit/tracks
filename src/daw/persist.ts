@@ -1,7 +1,7 @@
 // Project persistence: autosaved session, .json download/import, demo song.
 
 import type { DawApp } from './daw-app'
-import { migrateProject, newId, type Clip, type Note, type Project, defaultProject } from './project'
+import { migrateProject, newId, newTrack, type Clip, type Note, type Project, defaultProject } from './project'
 
 const SESSION_KEY = 'tracks.session.v1'
 
@@ -103,6 +103,22 @@ export function demoSong(): Project {
     }
   }
   p.tracks[3].clips = [clip(pad)]
+
+  // drums: four-on-the-floor 808 with offbeat hats, snare on 2 & 4
+  const drumTrack = newTrack('Drums', { kind: 'drums' })
+  const dn: Note[] = []
+  for (let bar = 0; bar < 8; bar++) {
+    const at = bar * 4
+    for (let b = 0; b < 4; b++) {
+      dn.push({ start: at + b, dur: 0.25, pitch: 36, vel: b === 0 ? 1 : 0.85 }) // kick
+      dn.push({ start: at + b + 0.5, dur: 0.25, pitch: 42, vel: 0.5 }) // offbeat hat
+      if (b === 1 || b === 3) dn.push({ start: at + b, dur: 0.25, pitch: 38, vel: 0.8 }) // snare
+    }
+    if (bar % 2 === 1) dn.push({ start: at + 3.75, dur: 0.25, pitch: 46, vel: 0.55 }) // open-hat pickup
+    if (bar === 3 || bar === 7) dn.push({ start: at + 3.5, dur: 0.25, pitch: 39, vel: 0.7 }) // clap fill
+  }
+  drumTrack.clips = [clip(dn)]
+  p.tracks.push(drumTrack)
 
   return p
 }

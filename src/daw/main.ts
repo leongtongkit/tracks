@@ -11,13 +11,18 @@ import { buildInstrumentEditor } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
 import { demoSong, downloadBlob, downloadProjectJson, importProjectJson, loadSession, saveSession } from './persist'
-import { defaultProject } from './project'
+import { defaultProject, newId, newTrack } from './project'
+import { sampleStore } from './samples'
+import { buildDrumEditor } from './ui/drum-editor'
+import { buildSamplerEditor } from './ui/sampler-editor'
 import { renderProjectToWav } from './render'
 import { renderProject } from './render'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
 
 const app = new DawApp()
+// recover persisted samples (recordings/imports) before anything plays
+void sampleStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
 app.project = loadSession() ?? demoSong()
 app.armedTrackId = app.project.tracks[0]?.id ?? null
@@ -31,11 +36,29 @@ daw.appendChild(arrange.el)
 const bottom = new BottomPanel(app)
 daw.appendChild(bottom.el)
 
-// per-track instrument editors are cached: knob subscriptions live on the
-// track's store, so rebuilding each render would leak listeners
+// synth editors are cached: knob subscriptions live on the track's store, so
+// rebuilding each render would leak listeners. Drum/sampler editors hold no
+// subscriptions and rebuild from live project data on every mount.
 const instrumentCache = new Map<string, HTMLElement>()
 bottom.setInstrumentMount((host, trackId) => {
+  const track = app.track(trackId)
+  if (!track) return
   app.ensureAudio()
+  if (track.kind === 'drums') {
+    host.appendChild(buildDrumEditor(app, trackId))
+    return
+  }
+  if (track.kind === 'sampler') {
+    host.appendChild(buildSamplerEditor(app, trackId))
+    return
+  }
+  if (track.kind === 'audio') {
+    const p = document.createElement('p')
+    p.className = 'bottom-hint'
+    p.textContent = 'Audio track — record from the microphone or import an audio file.'
+    host.appendChild(p)
+    return
+  }
   const store = app.song?.store(trackId)
   if (!store) return
   let editor = instrumentCache.get(trackId)
@@ -188,8 +211,36 @@ document.addEventListener('keydown', unlock, true)
 declare global {
   interface Window {
     __tracksRenderTest: () => Promise<unknown>
+    __tracksKitTest: () => Promise<unknown>
     __tracksApp: DawApp
   }
+}
+
+// drums + sampler render end-to-end in an offline context
+window.__tracksKitTest = async () => {
+  const p = defaultProject()
+  const drums = newTrack('D', { kind: 'drums' })
+  drums.clips = [{
+    id: 'kd', start: 0, length: 4,
+    notes: [36, 38, 42, 46, 41, 49, 39, 56].map((pitch, i) => ({ start: i * 0.5, dur: 0.25, pitch, vel: 0.9 })),
+  }]
+  const smp = newTrack('S', { kind: 'sampler' })
+  // synthesize a one-shot so the sampler has something to play
+  const rate = 44100
+  const buf = new AudioBuffer({ length: rate / 2, numberOfChannels: 1, sampleRate: rate })
+  const data = buf.getChannelData(0)
+  for (let i = 0; i < data.length; i++) data[i] = Math.sin((i / rate) * 440 * 2 * Math.PI) * Math.exp(-i / (rate * 0.2))
+  const sid = newId()
+  sampleStore.put(sid, 'test-tone', buf)
+  smp.sampler.sampleId = sid
+  smp.clips = [{
+    id: 'ks', start: 0, length: 4,
+    notes: [60, 64, 67, 72].map((pitch, i) => ({ start: i, dur: 0.5, pitch, vel: 0.9 })),
+  }]
+  p.tracks = [drums, smp]
+  const t0 = performance.now()
+  const out = await renderProject(p)
+  return { ...analyzeBuffer(out), renderMs: Math.round(performance.now() - t0) }
 }
 
 window.__tracksApp = app
