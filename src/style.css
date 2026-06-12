@@ -602,11 +602,9 @@ body {
 }
 
 .preset-list {
-  position: absolute;
-  top: calc(100% + 8px);
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 5;
+  position: fixed; /* placed by PresetBrowser.place(); never clipped by scroll ancestors */
+  z-index: 50;
+  overflow-y: auto;
   background: var(--well);
   border: 1px solid var(--well-edge);
   border-radius: var(--radius-md);

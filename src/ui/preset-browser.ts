@@ -38,7 +38,11 @@ export class PresetBrowser {
     this.nameBtn.className = 'preset-name'
     this.nameBtn.textContent = 'Select a preset'
     this.nameBtn.setAttribute('aria-haspopup', 'listbox')
-    this.nameBtn.addEventListener('click', () => this.list.classList.toggle('hidden'))
+    this.nameBtn.addEventListener('click', () => {
+      const opening = this.list.classList.contains('hidden')
+      this.list.classList.toggle('hidden')
+      if (opening) this.place()
+    })
 
     this.list = document.createElement('div')
     this.list.className = 'preset-list hidden'
@@ -89,6 +93,32 @@ export class PresetBrowser {
   showLoaded(patch: Patch): void {
     this.index = this.entries.findIndex(e => e.label === patch.name && e.category === patch.category)
     this.showName({ label: patch.name, category: patch.category } as Entry)
+  }
+
+  // The list is position:fixed so it can never be clipped by a scrolling
+  // ancestor (the DAW docks the browser inside the bottom panel). Open
+  // downward when there's room, otherwise upward; always cap height to the
+  // available space and scroll.
+  private place(): void {
+    const r = this.nameBtn.getBoundingClientRect()
+    const list = this.list
+    const margin = 8
+    const vw = window.innerWidth
+    const vh = window.innerHeight
+    list.style.maxWidth = `${vw - margin * 2}px`
+    const w = Math.min(list.offsetWidth, vw - margin * 2)
+    list.style.left = `${Math.min(Math.max(margin, r.left + r.width / 2 - w / 2), vw - w - margin)}px`
+    const below = vh - r.bottom - margin * 2
+    const above = r.top - margin * 2
+    if (below >= 260 || below >= above) {
+      list.style.top = `${r.bottom + margin}px`
+      list.style.bottom = 'auto'
+      list.style.maxHeight = `${below}px`
+    } else {
+      list.style.bottom = `${vh - r.top + margin}px`
+      list.style.top = 'auto'
+      list.style.maxHeight = `${above}px`
+    }
   }
 
   private showName(entry: Pick<Entry, 'label' | 'category'>): void {
