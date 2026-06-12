@@ -212,7 +212,51 @@ declare global {
   interface Window {
     __tracksRenderTest: () => Promise<unknown>
     __tracksKitTest: () => Promise<unknown>
+    __tracksMixTest: () => Promise<unknown>
     __tracksApp: DawApp
+  }
+}
+
+// channel strip + sends shape the rendered audio (EQ boost raises RMS,
+// reverb send lengthens the tail)
+window.__tracksMixTest = async () => {
+  const mk = (): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    p.tracks = [p.tracks[0]]
+    p.tracks[0].clips = [{
+      id: 'm1', start: 0, length: 4,
+      notes: [0, 1, 2, 3].map(i => ({ start: i, dur: 0.5, pitch: 48, vel: 0.9 })),
+    }]
+    return p
+  }
+  const rms = (b: AudioBuffer, from = 0, to = b.duration): number => {
+    const d = b.getChannelData(0)
+    const i0 = Math.floor(from * b.sampleRate)
+    const i1 = Math.min(d.length, Math.floor(to * b.sampleRate))
+    let s = 0
+    for (let i = i0; i < i1; i++) s += d[i] * d[i]
+    return Math.sqrt(s / Math.max(1, i1 - i0))
+  }
+  const dry = await renderProject(mk())
+  const eq = mk()
+  eq.tracks[0].mixer.eq.low = 12
+  const eqBuf = await renderProject(eq)
+  const send = mk()
+  send.tracks[0].mixer.sendA = 0.9
+  const sendBuf = await renderProject(send)
+  const comp = mk()
+  comp.tracks[0].mixer.comp = { on: true, threshold: -40, ratio: 12, attack: 0.002, release: 0.15, makeup: 1 }
+  const compBuf = await renderProject(comp)
+  const spb = 60 / 120
+  return {
+    dryRms: rms(dry),
+    eqRms: rms(eqBuf),
+    eqBoosts: rms(eqBuf) > rms(dry) * 1.05,
+    tailDry: rms(dry, 4 * spb + 0.8),
+    tailSend: rms(sendBuf, 4 * spb + 0.8),
+    sendAddsTail: rms(sendBuf, 4 * spb + 0.8) > rms(dry, 4 * spb + 0.8) * 1.5,
+    compRms: rms(compBuf),
+    compChanges: Math.abs(rms(compBuf) - rms(dry)) / rms(dry) > 0.03,
   }
 }
 

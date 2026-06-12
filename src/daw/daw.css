@@ -10,7 +10,7 @@
 .daw {
   width: 100vw;
   display: grid;
-  grid-template-rows: 1fr 240px;
+  grid-template-rows: 1fr 280px;
   height: 100vh;
   background: var(--desk);
 }
@@ -320,7 +320,13 @@
 
 .bottom-panel {
   display: grid;
-  grid-template-rows: 34px 1fr;
+  grid-template-rows: 6px 34px 1fr;
+}
+
+.bottom-resize {
+  cursor: ns-resize;
+  background: linear-gradient(180deg, #b5b4ab, var(--body-grey));
+  touch-action: none;
 }
 
 .bottom-tabs {
@@ -522,6 +528,87 @@
   bottom: 0;
   width: 6px;
   cursor: ew-resize;
+}
+
+/* ---------- mixer ---------- */
+
+.mixer {
+  display: flex;
+  gap: 1px;
+  overflow: auto;
+  min-height: 0;
+  background: #b5b4ab;
+  align-items: stretch;
+}
+
+.mix-strip {
+  flex: 0 0 252px;
+  background: var(--body-grey);
+  padding: 6px 8px;
+  display: grid;
+  grid-template-columns: 14px 1fr;
+  grid-auto-rows: min-content;
+  gap: 4px 8px;
+  align-content: start;
+}
+
+.mix-name {
+  grid-column: 1 / -1;
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mix-meter {
+  grid-row: 2 / span 4;
+  width: 10px;
+  height: 100%;
+  min-height: 120px;
+  border: 1px solid var(--well-edge);
+  border-radius: 2px;
+  background: var(--well);
+}
+
+.mix-section {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 3px 7px;
+}
+
+.mix-tag {
+  flex: 0 0 100%;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.mix-section .seg-btn {
+  padding: 1px 6px;
+  font-size: 0.54rem;
+}
+
+.mix-ms {
+  display: flex;
+  gap: 4px;
+}
+
+.mix-note {
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+  color: var(--ink-soft);
+  line-height: 1.5;
+}
+
+.mix-master .mix-name {
+  color: var(--accent);
 }
 
 /* ---------- drum editor ---------- */

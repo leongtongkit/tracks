@@ -1,10 +1,16 @@
 // Multi-track audio graph. Each track gets a channel whose instrument depends
 // on the track kind (synth Engine / drum machine / sampler / none for audio
-// clips), feeding a channel strip (pan → volume → mute) into the shared
-// master bus. Channels rebind to fresh TrackData objects on every sync so
-// undo/redo (which replaces the project object) keeps working graphs.
+// clips), feeding a full channel strip:
+//
+//   input → 3-band EQ → compressor → makeup → pan → volume → mute → master
+//                                                            └→ send A (reverb bus)
+//                                                            └→ send B (delay bus)
+//
+// Channels rebind to fresh TrackData objects on every sync so undo/redo
+// (which replaces the project object) keeps working graphs.
 
 import { Engine } from '../engine/engine'
+import { makeImpulse } from '../engine/fx/reverb'
 import { Store } from '../state/store'
 import { DrumMachine } from './instruments/drums'
 import { SamplerInstrument } from './instruments/sampler'
@@ -12,30 +18,67 @@ import type { Instrument } from './instruments/types'
 import type { Project, TrackData, TrackKind } from './project'
 import { sampleStore, type SampleStore } from './samples'
 
+export interface SendBuses {
+  a: AudioNode
+  b: AudioNode
+}
+
 export class TrackChannel {
   readonly kind: TrackKind
-  readonly input: GainNode // audio-clip sources (P4) and instruments both feed this
+  readonly input: GainNode // audio-clip sources and instruments both feed this
   readonly store: Store | null
   readonly engine: Engine | null
   readonly ready: Promise<void>
   private readonly instr: Instrument | null
   private readonly ctx: BaseAudioContext
+  private readonly eqLow: BiquadFilterNode
+  private readonly eqMid: BiquadFilterNode
+  private readonly eqHigh: BiquadFilterNode
+  private readonly comp: DynamicsCompressorNode
+  private readonly makeup: GainNode
   private readonly pan: StereoPannerNode | GainNode
   private readonly volume: GainNode
   private readonly muteGain: GainNode
+  private readonly sendA: GainNode
+  private readonly sendB: GainNode
+  private readonly analyser: AnalyserNode
+  private readonly meterBuf: Float32Array<ArrayBuffer>
   private data: TrackData
 
-  constructor(ctx: BaseAudioContext, data: TrackData, master: AudioNode, samples: SampleStore) {
+  constructor(ctx: BaseAudioContext, data: TrackData, master: AudioNode, samples: SampleStore, buses: SendBuses) {
     this.ctx = ctx
     this.data = data
     this.kind = data.kind
     this.input = ctx.createGain()
+
+    this.eqLow = ctx.createBiquadFilter()
+    this.eqLow.type = 'lowshelf'
+    this.eqLow.frequency.value = 130
+    this.eqMid = ctx.createBiquadFilter()
+    this.eqMid.type = 'peaking'
+    this.eqMid.frequency.value = 1000
+    this.eqMid.Q.value = 0.9
+    this.eqHigh = ctx.createBiquadFilter()
+    this.eqHigh.type = 'highshelf'
+    this.eqHigh.frequency.value = 6000
+
+    this.comp = ctx.createDynamicsCompressor()
+    this.comp.knee.value = 8
+    this.makeup = ctx.createGain()
+
     this.pan =
       typeof (ctx as AudioContext).createStereoPanner === 'function'
         ? ctx.createStereoPanner()
         : ctx.createGain()
     this.volume = ctx.createGain()
     this.muteGain = ctx.createGain()
+    this.sendA = ctx.createGain()
+    this.sendA.gain.value = 0
+    this.sendB = ctx.createGain()
+    this.sendB.gain.value = 0
+    this.analyser = ctx.createAnalyser()
+    this.analyser.fftSize = 512
+    this.meterBuf = new Float32Array(this.analyser.fftSize)
 
     if (data.kind === 'synth') {
       this.store = new Store()
@@ -57,10 +100,20 @@ export class TrackChannel {
       this.ready = Promise.resolve()
     }
 
-    this.input.connect(this.pan)
+    this.input.connect(this.eqLow)
+    this.eqLow.connect(this.eqMid)
+    this.eqMid.connect(this.eqHigh)
+    this.eqHigh.connect(this.comp)
+    this.comp.connect(this.makeup)
+    this.makeup.connect(this.pan)
     this.pan.connect(this.volume)
     this.volume.connect(this.muteGain)
     this.muteGain.connect(master)
+    this.muteGain.connect(this.sendA)
+    this.muteGain.connect(this.sendB)
+    this.sendA.connect(buses.a)
+    this.sendB.connect(buses.b)
+    this.muteGain.connect(this.analyser)
     this.applyMixer(data.mixer, false)
   }
 
@@ -71,6 +124,17 @@ export class TrackChannel {
 
   trackData(): TrackData {
     return this.data
+  }
+
+  // instantaneous output peak, 0..1+ (post-fader, post-mute)
+  meterPeak(): number {
+    this.analyser.getFloatTimeDomainData(this.meterBuf)
+    let peak = 0
+    for (let i = 0; i < this.meterBuf.length; i++) {
+      const a = Math.abs(this.meterBuf[i])
+      if (a > peak) peak = a
+    }
+    return peak
   }
 
   noteOn(pitch: number, vel: number, at?: number): void {
@@ -99,6 +163,25 @@ export class TrackChannel {
     if ('pan' in this.pan) {
       this.pan.pan.setTargetAtTime(mixer.pan, t, 0.02)
     }
+    this.eqLow.gain.setTargetAtTime(mixer.eq.low, t, 0.02)
+    this.eqMid.gain.setTargetAtTime(mixer.eq.mid, t, 0.02)
+    this.eqHigh.gain.setTargetAtTime(mixer.eq.high, t, 0.02)
+    if (mixer.comp.on) {
+      this.comp.threshold.setTargetAtTime(mixer.comp.threshold, t, 0.02)
+      this.comp.ratio.setTargetAtTime(mixer.comp.ratio, t, 0.02)
+      this.comp.attack.setTargetAtTime(mixer.comp.attack, t, 0.02)
+      this.comp.release.setTargetAtTime(mixer.comp.release, t, 0.02)
+      this.makeup.gain.setTargetAtTime(mixer.comp.makeup, t, 0.02)
+    } else {
+      // transparent: nothing crosses a 0 dB threshold at ratio 1, no knee
+      this.comp.threshold.setTargetAtTime(0, t, 0.02)
+      this.comp.ratio.setTargetAtTime(1, t, 0.02)
+      this.comp.knee.setTargetAtTime(0, t, 0.02)
+      this.makeup.gain.setTargetAtTime(1, t, 0.02)
+    }
+    if (mixer.comp.on) this.comp.knee.setTargetAtTime(8, t, 0.02)
+    this.sendA.gain.setTargetAtTime(mixer.sendA, t, 0.02)
+    this.sendB.gain.setTargetAtTime(mixer.sendB, t, 0.02)
     const audible = !mixer.mute && (!soloElsewhere || mixer.solo)
     this.muteGain.gain.setTargetAtTime(audible ? 1 : 0, t, 0.01)
     if (!audible) this.allNotesOff()
@@ -108,10 +191,9 @@ export class TrackChannel {
     this.allNotesOff()
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
-    this.input.disconnect()
-    this.pan.disconnect()
-    this.volume.disconnect()
-    this.muteGain.disconnect()
+    for (const n of [this.input, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]) {
+      n.disconnect()
+    }
   }
 }
 
@@ -121,6 +203,9 @@ export class SongEngine {
   readonly ready: Promise<void>
   readonly samples: SampleStore
   private readonly channels = new Map<string, TrackChannel>()
+  private readonly buses: SendBuses
+  private readonly masterAnalyser: AnalyserNode
+  private readonly masterMeterBuf: Float32Array<ArrayBuffer>
   private readyList: Promise<void>[] = []
 
   constructor(ctx: BaseAudioContext, dest?: AudioNode, samples: SampleStore = sampleStore) {
@@ -137,10 +222,52 @@ export class SongEngine {
     limiter.connect(this.masterGain)
     this.masterGain.connect(dest ?? ctx.destination)
     this.limiterIn = limiter
+
+    this.masterAnalyser = ctx.createAnalyser()
+    this.masterAnalyser.fftSize = 512
+    this.masterMeterBuf = new Float32Array(this.masterAnalyser.fftSize)
+    this.masterGain.connect(this.masterAnalyser)
+
+    // send bus A: plate-ish generated reverb
+    const busA = ctx.createGain()
+    const verb = ctx.createConvolver()
+    verb.buffer = makeImpulse(ctx, 2.6, 0.6)
+    const verbOut = ctx.createGain()
+    verbOut.gain.value = 0.9
+    busA.connect(verb)
+    verb.connect(verbOut)
+    verbOut.connect(limiter)
+
+    // send bus B: dark feedback delay
+    const busB = ctx.createGain()
+    const delay = ctx.createDelay(2)
+    delay.delayTime.value = 0.32
+    const fb = ctx.createGain()
+    fb.gain.value = 0.38
+    const damp = ctx.createBiquadFilter()
+    damp.type = 'lowpass'
+    damp.frequency.value = 4200
+    busB.connect(delay)
+    delay.connect(damp)
+    damp.connect(fb)
+    fb.connect(delay)
+    damp.connect(limiter)
+
+    this.buses = { a: busA, b: busB }
     this.ready = Promise.resolve()
   }
 
   private readonly limiterIn: DynamicsCompressorNode
+
+  masterPeak(): number {
+    this.masterAnalyser.getFloatTimeDomainData(this.masterMeterBuf)
+    let peak = 0
+    for (let i = 0; i < this.masterMeterBuf.length; i++) {
+      const a = Math.abs(this.masterMeterBuf[i])
+      if (a > peak) peak = a
+    }
+    return peak
+  }
 
   // Create/dispose channels so the graph matches the track list; existing
   // same-kind channels are kept (live knob state survives) and rebound to the
@@ -154,7 +281,7 @@ export class SongEngine {
         existing.rebind(data)
       } else {
         existing?.dispose()
-        const ch = new TrackChannel(this.ctx, data, this.limiterIn, this.samples)
+        const ch = new TrackChannel(this.ctx, data, this.limiterIn, this.samples, this.buses)
         this.channels.set(data.id, ch)
         this.readyList.push(ch.ready)
       }

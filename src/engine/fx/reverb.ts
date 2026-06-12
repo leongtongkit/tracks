@@ -39,7 +39,8 @@ export class Reverb extends BaseFx {
 
 // Generated stereo impulse response: decaying noise with slight L/R
 // decorrelation and a darkening tilt. Zero network, instantly tweakable.
-function makeImpulse(ctx: BaseAudioContext, size: number, decay: number): AudioBuffer {
+// Also used by the DAW's send-reverb bus.
+export function makeImpulse(ctx: BaseAudioContext, size: number, decay: number): AudioBuffer {
   const len = Math.max(64, Math.floor(ctx.sampleRate * size))
   const buf = ctx.createBuffer(2, len, ctx.sampleRate)
   // decay 0..1 → tail shape exponent: higher decay = longer, denser tail
