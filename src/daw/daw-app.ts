@@ -1,7 +1,7 @@
 // Central DAW state: the project document, the audio graph, the transport,
 // selection/arm state, and a coarse change bus the UI re-renders from.
 
-import { defaultProject, newTrack, type Clip, type Project, type TrackData } from './project'
+import { defaultProject, newId, newTrack, type Clip, type Project, type TrackData } from './project'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
 
@@ -15,6 +15,7 @@ export class DawApp {
   readonly transport: Transport
   selectedClip: { trackId: string; clipId: string } | null = null
   armedTrackId: string | null = null
+  recording = false
 
   private ctx: AudioContext | null = null
   private clickGain: GainNode | null = null
@@ -160,7 +161,7 @@ export class DawApp {
   addClip(trackId: string, startBeat: number, length = 4): Clip | null {
     const track = this.track(trackId)
     if (!track) return null
-    const clip: Clip = { id: cryptoId(), start: Math.max(0, startBeat), length, notes: [] }
+    const clip: Clip = { id: newId(), start: Math.max(0, startBeat), length, notes: [] }
     track.clips.push(clip)
     this.selectClip(trackId, clip.id)
     this.emit('clips')
@@ -181,18 +182,53 @@ export class DawApp {
   }
 
   // live keyboard/MIDI input goes to the armed track
+  private readonly heldRec = new Map<number, { startBeat: number; vel: number }>()
+
   liveNoteOn(pitch: number, vel = 1): void {
     if (!this.armedTrackId) return
     this.ensureAudio().noteOn(this.armedTrackId, pitch, vel)
+    if (this.recording && this.transport.playing) {
+      this.heldRec.set(pitch, { startBeat: this.transport.positionBeat(), vel })
+    }
   }
 
   liveNoteOff(pitch: number): void {
-    if (this.armedTrackId) this.song?.noteOff(this.armedTrackId, pitch)
+    if (!this.armedTrackId) return
+    this.song?.noteOff(this.armedTrackId, pitch)
+    const held = this.heldRec.get(pitch)
+    if (held) {
+      this.heldRec.delete(pitch)
+      this.commitRecordedNote(pitch, held.startBeat, this.transport.positionBeat(), held.vel)
+    }
+  }
+
+  liveBend(semitones: number): void {
+    if (!this.armedTrackId) return
+    this.song?.channel(this.armedTrackId)?.engine.setBend(semitones)
+  }
+
+  toggleRecord(): void {
+    this.recording = !this.recording
+    if (this.recording && !this.transport.playing) this.togglePlay()
+    this.emit('transport')
+  }
+
+  // Write a played note into a clip on the armed track, creating or extending
+  // the clip as needed. Loop wraps can make end < start; floor the duration.
+  private commitRecordedNote(pitch: number, startBeat: number, endBeat: number, vel: number): void {
+    const track = this.track(this.armedTrackId ?? '')
+    if (!track) return
+    let clip = track.clips.find(c => startBeat >= c.start && startBeat < c.start + c.length)
+    if (!clip) {
+      const at = Math.floor(startBeat / 4) * 4
+      clip = { id: newId(), start: at, length: 4, notes: [] }
+      track.clips.push(clip)
+    }
+    const rel = startBeat - clip.start
+    const dur = Math.max(0.125, endBeat - startBeat)
+    if (rel + dur > clip.length) clip.length = Math.ceil(rel + dur)
+    clip.notes.push({ start: rel, dur, pitch, vel })
+    this.emit('clips')
   }
 }
 
-function cryptoId(): string {
-  return typeof crypto !== 'undefined' && 'randomUUID' in crypto
-    ? crypto.randomUUID().slice(0, 8)
-    : `c${Date.now().toString(36)}`
-}

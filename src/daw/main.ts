@@ -6,10 +6,12 @@ import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
 
 import { analyzeBuffer } from '../test/offline'
+import { KeyboardInput } from '../input/keyboard'
 import { DawApp } from './daw-app'
 import { defaultProject } from './project'
 import { renderProject } from './render'
 import { ArrangeView } from './ui/arrange'
+import { BottomPanel } from './ui/bottom'
 
 const app = new DawApp()
 const root = document.getElementById('app')!
@@ -19,13 +21,20 @@ daw.className = 'daw'
 const arrange = new ArrangeView(app)
 daw.appendChild(arrange.el)
 
-// bottom editor panel: piano roll / instrument land in the next phases
-const bottom = document.createElement('div')
-bottom.className = 'bottom-panel'
-bottom.innerHTML = `<p class="bottom-hint">Select a clip to edit notes. Double-click an empty lane to create one.</p>`
-daw.appendChild(bottom)
+const bottom = new BottomPanel(app)
+daw.appendChild(bottom.el)
 
 root.appendChild(daw)
+
+// musical keyboard (same two-manual layout as the synth) plays the armed track
+new KeyboardInput({
+  noteOn: n => app.liveNoteOn(n),
+  noteOff: n => app.liveNoteOff(n),
+  allNotesOff: () => app.song?.allNotesOff(),
+  bend: s => app.liveBend(s),
+})
+
+export { bottom }
 
 // ---------- global keys ----------
 

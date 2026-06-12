@@ -19,6 +19,7 @@ export class ArrangeView {
   private playhead!: HTMLElement
   private positionChip!: HTMLElement
   private playBtn!: HTMLButtonElement
+  private recBtn!: HTMLButtonElement
   private loopBtn!: HTMLButtonElement
   private metroBtn!: HTMLButtonElement
 
@@ -56,6 +57,11 @@ export class ArrangeView {
 
     const rewind = btn('|<', 'Back to start (Enter)')
     rewind.addEventListener('click', () => this.app.rewind())
+
+    const recBtn = btn('Rec', 'Record what you play into the armed track')
+    recBtn.classList.add('transport-rec')
+    recBtn.addEventListener('click', () => this.app.toggleRecord())
+    this.recBtn = recBtn
 
     this.loopBtn = btn('Loop', 'Loop the marked region (drag on the ruler)')
     this.loopBtn.addEventListener('click', () => {
@@ -95,6 +101,7 @@ export class ArrangeView {
     bar.appendChild(brand)
     bar.appendChild(rewind)
     bar.appendChild(this.playBtn)
+    bar.appendChild(this.recBtn)
     bar.appendChild(this.loopBtn)
     bar.appendChild(this.metroBtn)
     bar.appendChild(this.positionChip)
@@ -206,6 +213,7 @@ export class ArrangeView {
   private renderTransport(): void {
     this.playBtn.textContent = this.app.transport.playing ? 'Stop' : 'Play'
     this.playBtn.classList.toggle('seg-on', this.app.transport.playing)
+    this.recBtn.classList.toggle('rec-live', this.app.recording)
     this.loopBtn.classList.toggle('seg-on', this.app.project.loop.on)
   }
 

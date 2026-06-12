@@ -305,3 +305,120 @@
   color: var(--ink-soft);
   padding: 18px;
 }
+
+/* ---------- bottom tabs ---------- */
+
+.bottom-panel {
+  display: grid;
+  grid-template-rows: 34px 1fr;
+}
+
+.bottom-tabs {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--edge);
+}
+
+.bottom-track-label {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-left: 8px;
+}
+
+.bottom-body {
+  min-height: 0;
+  overflow: hidden;
+  display: grid;
+}
+
+/* ---------- piano roll ---------- */
+
+.proll {
+  min-height: 0;
+  display: grid;
+}
+
+.proll-scroll {
+  overflow: auto;
+  min-height: 0;
+}
+
+.proll-inner {
+  position: relative;
+}
+
+.proll-keys {
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 2;
+  display: inline-block;
+  background: var(--panel-grey);
+  border-right: 1px solid var(--edge);
+}
+
+.proll-key {
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--ink-soft);
+  padding-left: 5px;
+  border-bottom: 1px solid rgba(29, 29, 27, 0.08);
+  line-height: 13px;
+}
+
+.proll-key-black {
+  background: rgba(29, 29, 27, 0.1);
+}
+
+.proll-grid {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  cursor: crosshair;
+  background-image:
+    linear-gradient(90deg, rgba(29, 29, 27, 0.28) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(29, 29, 27, 0.1) 1px, transparent 1px),
+    repeating-linear-gradient(
+      180deg,
+      rgba(29, 29, 27, 0.07) 0 13px,
+      transparent 13px 26px,
+      rgba(29, 29, 27, 0.07) 26px 39px,
+      transparent 39px 65px,
+      rgba(29, 29, 27, 0.07) 65px 78px,
+      transparent 78px 91px,
+      rgba(29, 29, 27, 0.07) 91px 104px,
+      transparent 104px 117px,
+      rgba(29, 29, 27, 0.07) 117px 130px,
+      transparent 130px 156px
+    );
+}
+
+.proll-notes {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  pointer-events: none;
+}
+
+.proll-note {
+  position: absolute;
+  background: var(--accent);
+  border: 1px solid var(--accent-deep);
+  border-radius: 2px;
+  pointer-events: auto;
+  cursor: grab;
+}
+
+.proll-note-grip {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  cursor: ew-resize;
+}
