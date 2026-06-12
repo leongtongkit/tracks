@@ -1,22 +1,307 @@
-/* Tracks DAW chrome — extends the synth's industrial token system */
+/* Tracks DAW chrome — extends the synth's industrial token system.
+   Dark workspace (like the wells), light controls only where touched. */
 
-.daw-shell {
+/* the DAW manages its own full-viewport layout; neutralize the synth page centering */
+#app {
+  display: block;
+  height: 100vh;
+}
+
+.daw {
+  width: 100vw;
   display: grid;
-  place-content: center;
-  gap: 1rem;
-  min-height: 100vh;
+  grid-template-rows: 1fr 240px;
+  height: 100vh;
+  background: var(--desk);
+}
+
+.transport-bar {
+  height: 46px;
+}
+
+/* ---------- transport bar ---------- */
+
+.transport-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  background: var(--body-grey);
+  border-bottom: 1px solid #b5b4ab;
+  color: var(--ink);
+}
+
+.transport-bar .brand {
+  font-size: 0.9rem;
+  margin-right: 10px;
+}
+
+.transport-play {
+  min-width: 56px;
+}
+
+.pos-chip {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--led);
+  background: var(--well);
+  border: 1px solid var(--well-edge);
+  border-radius: 3px;
+  padding: 4px 12px;
+  min-width: 64px;
   text-align: center;
 }
 
-.daw-shell h1 {
+.bar-space {
+  flex: 1;
+}
+
+/* ---------- mini dial ---------- */
+
+.mini-dial {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.mini-dial span {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.mini-dial-chip {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  color: var(--led);
+  background: var(--well);
+  border: 1px solid var(--well-edge);
+  border-radius: 3px;
+  padding: 2px 7px;
+  min-width: 34px;
+  text-align: center;
+  user-select: none;
+}
+
+/* ---------- arrange ---------- */
+
+.arrange {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 0;
+}
+
+.arrange-body {
+  display: grid;
+  grid-template-columns: 216px 1fr;
+  min-height: 0;
+}
+
+.track-headers {
+  background: var(--body-grey);
+  border-right: 1px solid #b5b4ab;
+  overflow-y: auto;
+  padding-top: 26px; /* aligns below the ruler */
+}
+
+.track-head {
+  height: 56px;
+  padding: 6px 8px;
+  border-bottom: 1px solid var(--edge);
+  color: var(--ink);
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+
+.track-armed {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.track-head-top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.arm-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1px solid var(--edge);
+  background: var(--panel-grey);
+  cursor: pointer;
+  padding: 0;
+}
+
+.track-armed .arm-dot {
+  background: var(--accent);
+  border-color: var(--accent-deep);
+}
+
+.track-name {
+  flex: 1;
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.3em;
-  margin-right: -0.3em;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.track-del {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  cursor: pointer;
+  padding: 0 4px;
+}
+
+.track-del:hover {
   color: var(--accent);
 }
 
-.daw-shell p {
+.track-head-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.track-head-controls .seg-btn {
+  padding: 2px 6px;
+  font-size: 0.56rem;
+}
+
+.add-track {
+  margin: 10px 8px;
+  width: calc(100% - 16px);
+}
+
+/* ---------- lanes ---------- */
+
+.lane-scroll {
+  overflow: auto;
+  min-height: 0;
+  position: relative;
+}
+
+.lane-inner {
+  position: relative;
+  min-width: 100%;
+  width: max-content;
+}
+
+.ruler {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  height: 26px;
+  background: #232326;
+  border-bottom: 1px solid var(--well-edge);
+  cursor: ew-resize;
+}
+
+.ruler-bar {
+  position: absolute;
+  top: 4px;
   font-family: var(--font-mono);
-  font-size: 0.8rem;
+  font-size: 0.6rem;
   color: var(--bone-dim);
+  padding-left: 5px;
+  border-left: 1px solid var(--well-edge);
+  height: 18px;
+  pointer-events: none;
+}
+
+.loop-region {
+  position: absolute;
+  top: 0;
+  height: 5px;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.loop-region.loop-off {
+  opacity: 0.3;
+}
+
+.lanes {
+  position: relative;
+  background-image:
+    linear-gradient(90deg, rgba(239, 234, 218, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(239, 234, 218, 0.05) 1px, transparent 1px);
+}
+
+.lane {
+  position: relative;
+  border-bottom: 1px solid #26262a;
+}
+
+.clip {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  cursor: grab;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+}
+
+.clip-on {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.clip-label {
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  color: var(--ink-soft);
+  padding: 0 0 3px 6px;
+  pointer-events: none;
+  user-select: none;
+}
+
+.clip-grip {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  cursor: ew-resize;
+}
+
+.playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 1px;
+  background: var(--accent);
+  box-shadow: 0 0 6px rgba(255, 77, 0, 0.6);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* ---------- bottom panel ---------- */
+
+.bottom-panel {
+  background: var(--body-grey);
+  border-top: 1px solid #b5b4ab;
+  min-height: 0;
+  overflow: auto;
+}
+
+.bottom-hint {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--ink-soft);
+  padding: 18px;
 }
