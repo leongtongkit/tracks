@@ -2,7 +2,7 @@
 // interval books sample-accurate events a small window ahead. Loop wraps
 // re-anchor the beat→time mapping so timing stays exact across passes.
 
-import type { AudioRegion, Project, TrackData } from './project'
+import { warpRate, type AudioRegion, type Project, type TrackData } from './project'
 
 export interface SongEvent {
   trackId: string
@@ -23,8 +23,8 @@ export interface TransportEvents {
   noteOn(trackId: string, pitch: number, vel: number, t: number): void
   noteOff(trackId: string, pitch: number, t: number): void
   // schedule an audio region: start playing at ctx-time t, from offsetSec into
-  // the sample, for at most durSec
-  audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number): void
+  // the sample (source seconds), for at most durSec (source seconds), at `rate`
+  audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate: number): void
   audioStopAll?(at?: number): void
   // every booked slice, for time-scheduled things beyond notes (automation)
   slice?(fromBeat: number, toBeat: number, beatToTime: (beat: number) => number): void
@@ -154,11 +154,13 @@ export class Transport {
   private scheduleStraddlingAudio(beat: number, t: number): void {
     if (!this.events.audio) return
     const spb = this.spbCached
-    const loop = this.getProject().loop
+    const project = this.getProject()
+    const loop = project.loop
     const cutBeat = loop.on && loop.end > beat ? loop.end : Infinity
-    for (const s of straddlingAudio(this.getProject().tracks, beat)) {
+    for (const s of straddlingAudio(project.tracks, beat)) {
       const remain = Math.min(s.remainBeats, cutBeat - beat)
-      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb, remain * spb)
+      const rate = warpRate(s.region, project.bpm)
+      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb * rate, remain * spb * rate, rate)
     }
   }
 
@@ -221,7 +223,8 @@ export class Transport {
           // a clip crossing the loop end gets cut there, exactly at the wrap
           let durBeats = ev.durBeats
           if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat
-          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb)
+          const rate = warpRate(ev.region, project.bpm)
+          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb * rate, rate)
         }
       }
       if (this.metronome && this.events.click) {

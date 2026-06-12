@@ -1,7 +1,7 @@
 // P4: audio clip scheduling math + WAV round-trip.
 import { describe, expect, it } from 'vitest'
 import { decodeWav, encodeWav } from '../record/wav'
-import { newTrack, type Clip } from './project'
+import { newTrack, warpRate, type Clip } from './project'
 import { collectAudioEvents, straddlingAudio } from './transport'
 
 function audioTrack(clips: Partial<Clip>[]): ReturnType<typeof newTrack> {
@@ -11,7 +11,7 @@ function audioTrack(clips: Partial<Clip>[]): ReturnType<typeof newTrack> {
     start: 0,
     length: 4,
     notes: [],
-    audio: { sampleId: 's1', offsetSec: 0, gain: 1 },
+    audio: { sampleId: 's1', offsetSec: 0, gain: 1, warp: false, origBpm: 120 },
     ...c,
   }))
   return t
@@ -39,6 +39,16 @@ describe('audio clip scheduling', () => {
     expect(s[0].remainBeats).toBe(5)
     expect(straddlingAudio([t], 2)).toHaveLength(0) // boundary start is not straddling
     expect(straddlingAudio([t], 10)).toHaveLength(0)
+  })
+})
+
+describe('tempo warp', () => {
+  it('rate follows project bpm only when warp is on', () => {
+    const region = { sampleId: 's', offsetSec: 0, gain: 1, warp: false, origBpm: 100 }
+    expect(warpRate(region, 150)).toBe(1)
+    region.warp = true
+    expect(warpRate(region, 150)).toBeCloseTo(1.5)
+    expect(warpRate(region, 50)).toBeCloseTo(0.5)
   })
 })
 

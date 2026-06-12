@@ -9,6 +9,7 @@ import {
   defaultProject,
   newId,
   newTrack,
+  warpRate,
   type Clip,
   type KeySig,
   type Project,
@@ -307,7 +308,8 @@ export class DawApp {
         .map(n => ({ ...n, start: n.start - rel })),
     }
     if (clip.audio) {
-      right.audio = { ...clip.audio, offsetSec: clip.audio.offsetSec + rel * (60 / this.project.bpm) }
+      const rate = warpRate(clip.audio, this.project.bpm)
+      right.audio = { ...clip.audio, offsetSec: clip.audio.offsetSec + rel * (60 / this.project.bpm) * rate }
     }
     clip.notes = clip.notes
       .filter(n => n.start < rel)
@@ -445,7 +447,7 @@ export class DawApp {
       start: Math.max(0, this.micStartBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1 },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: false, origBpm: this.project.bpm },
     }
     track.clips.push(clip)
     this.selectClip(track.id, clip.id)
@@ -497,7 +499,7 @@ export class DawApp {
       start: Math.max(0, atBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1 },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: false, origBpm: this.project.bpm },
     }
     track.clips.push(clip)
     this.selectClip(trackId, clip.id)

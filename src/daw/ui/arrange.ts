@@ -2,7 +2,7 @@
 // loop region, the clip grid with drag/move/resize, and the playhead.
 
 import type { DawApp } from '../daw-app'
-import { projectEndBeat, type Clip, type TrackData } from '../project'
+import { projectEndBeat, warpRate, type Clip, type TrackData } from '../project'
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -673,8 +673,9 @@ function drawWave(canvas: HTMLCanvasElement, clip: Clip, bpm: number): void {
   if (!buffer || !g) return
   const data = buffer.getChannelData(0)
   const spb = 60 / bpm
+  const rate = warpRate(region, bpm)
   const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
-  const i1 = Math.min(data.length, i0 + Math.floor(clip.length * spb * buffer.sampleRate))
+  const i1 = Math.min(data.length, i0 + Math.floor(clip.length * spb * rate * buffer.sampleRate))
   const span = Math.max(1, i1 - i0)
   const w = canvas.width
   const h = canvas.height

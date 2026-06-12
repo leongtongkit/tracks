@@ -24,8 +24,14 @@ export interface Note {
 // An audio clip references a sample in the SampleStore.
 export interface AudioRegion {
   sampleId: string
-  offsetSec: number // where in the sample this clip starts
+  offsetSec: number // where in the sample this clip starts (source seconds)
   gain: number // 0..2 linear
+  warp: boolean // follow the project tempo (repitch-style: rate = bpm/origBpm)
+  origBpm: number // the tempo this audio "is in"
+}
+
+export function warpRate(region: AudioRegion, bpm: number): number {
+  return region.warp ? bpm / region.origBpm : 1
 }
 
 export interface Clip {
@@ -402,6 +408,8 @@ function migrateClip(raw: unknown): Clip | null {
           sampleId: audioRaw.sampleId,
           offsetSec: clamp(audioRaw.offsetSec, 0, 3600, 0),
           gain: clamp(audioRaw.gain, 0, 2, 1),
+          warp: Boolean(audioRaw.warp),
+          origBpm: clamp(audioRaw.origBpm, 40, 240, 120),
         }
       : undefined
   return {

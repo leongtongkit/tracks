@@ -3,7 +3,7 @@
 
 import { encodeWav } from '../record/wav'
 import { scheduleAutomation } from './automation'
-import { projectEndBeat, type Project } from './project'
+import { projectEndBeat, warpRate, type Project } from './project'
 import { SongEngine } from './song-engine'
 import { collectEvents } from './transport'
 
@@ -27,7 +27,8 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
   for (const track of project.tracks) {
     for (const clip of track.clips) {
       if (!clip.audio) continue
-      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb)
+      const rate = warpRate(clip.audio, project.bpm)
+      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb * rate, rate)
     }
   }
   // automation curves, booked over the whole song in one pass

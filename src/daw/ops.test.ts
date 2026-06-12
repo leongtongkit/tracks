@@ -58,7 +58,7 @@ describe('v1 → v2 migration', () => {
     expect(t.kind).toBe('audio')
     // automation points come back sorted by beat
     expect(t.auto.volume.map(p => p.beat)).toEqual([0, 4])
-    expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2 })
+    expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2, warp: false, origBpm: 120 })
   })
 })
 

@@ -438,7 +438,7 @@ export class SongEngine {
 
   private readonly liveAudio = new Set<AudioBufferSourceNode>()
 
-  playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number): void {
+  playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate = 1): void {
     const buffer = this.samples.get(region.sampleId)
     const ch = this.channels.get(trackId)
     if (!buffer || !ch || durSec <= 0.001) return
@@ -447,6 +447,7 @@ export class SongEngine {
     if (dur <= 0.001) return
     const src = this.ctx.createBufferSource()
     src.buffer = buffer
+    if (rate !== 1) src.playbackRate.value = rate
     const g = this.ctx.createGain()
     g.gain.value = region.gain
     src.connect(g)

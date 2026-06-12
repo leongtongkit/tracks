@@ -122,6 +122,35 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
     replaceSample(app, clip, 'normalize', 'norm', chs => normalizeChannels(chs)))
   procBtn('Reverse', 'Flip the audio backwards', () =>
     replaceSample(app, clip, 'reverse', 'rev', chs => reverseChannels(chs)))
+
+  // tempo warp: follow the song BPM by repitching
+  const warpBtn = document.createElement('button')
+  warpBtn.type = 'button'
+  warpBtn.className = 'seg-btn'
+  warpBtn.textContent = 'Warp'
+  warpBtn.title = 'Follow the song tempo: playback speeds up/slows down with BPM (repitch)'
+  warpBtn.classList.toggle('seg-on', region.warp)
+  warpBtn.addEventListener('click', () => {
+    app.checkpoint('warp')
+    region.warp = !region.warp
+    warpBtn.classList.toggle('seg-on', region.warp)
+    app.emit('clips')
+  })
+  row.appendChild(warpBtn)
+  row.appendChild(
+    miniDial({
+      label: 'Orig BPM',
+      get: () => region.origBpm,
+      set: v => {
+        app.checkpoint('warp bpm')
+        region.origBpm = Math.round(v)
+      },
+      min: 40,
+      max: 240,
+      reset: app.project.bpm,
+      fmt: v => String(Math.round(v)),
+    }),
+  )
   root.appendChild(row)
 
   // ---------- autotune ----------
@@ -244,7 +273,7 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
           app.project.samples[id] = { name, duration: out.duration }
           const trackName = stem.name[0].toUpperCase() + stem.name.slice(1)
           const t = newTrack(trackName, { kind: 'audio' })
-          t.clips = [{ id: newId(), start: clip.start, length: clip.length, notes: [], audio: { sampleId: id, offsetSec: 0, gain: 1 } }]
+          t.clips = [{ id: newId(), start: clip.start, length: clip.length, notes: [], audio: { sampleId: id, offsetSec: 0, gain: 1, warp: region.warp, origBpm: region.origBpm } }]
           app.project.tracks.push(t)
           made++
         }

@@ -316,7 +316,7 @@ window.__tracksAudioTest = async () => {
   sampleStore.put(sid, 'tone-1s', buf)
   const p = defaultProject()
   const t = newTrack('A', { kind: 'audio' })
-  t.clips = [{ id: 'a1', start: 2, length: 2, notes: [], audio: { sampleId: sid, offsetSec: 0, gain: 1 } }]
+  t.clips = [{ id: 'a1', start: 2, length: 2, notes: [], audio: { sampleId: sid, offsetSec: 0, gain: 1, warp: false, origBpm: 120 } }]
   p.tracks = [t]
   const out = await renderProject(p) // 120 bpm → clip spans 1.0s..2.0s
   const rms = (from: number, to: number): number => {
