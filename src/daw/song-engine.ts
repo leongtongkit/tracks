@@ -10,7 +10,9 @@
 // (which replaces the project object) keeps working graphs.
 
 import { Engine } from '../engine/engine'
+import { FxChain } from '../engine/fx/chain'
 import { makeImpulse } from '../engine/fx/reverb'
+import type { FxId } from '../patch/schema'
 import { Store } from '../state/store'
 import { DrumMachine } from './instruments/drums'
 import { PadsInstrument } from './instruments/pads'
@@ -31,12 +33,15 @@ export class TrackChannel {
   readonly engine: Engine | null
   readonly ready: Promise<void>
   private readonly instr: Instrument | null
+  private readonly fxChain: FxChain | null
   private readonly ctx: BaseAudioContext
   private readonly eqLow: BiquadFilterNode
   private readonly eqMid: BiquadFilterNode
   private readonly eqHigh: BiquadFilterNode
   private readonly comp: DynamicsCompressorNode
   private readonly makeup: GainNode
+  private readonly duckGain: GainNode
+  private duckNodes: { source: AudioNode; abs: WaveShaperNode; lp: BiquadFilterNode; scale: GainNode } | null = null
   private readonly pan: StereoPannerNode | GainNode
   private readonly autoPan: StereoPannerNode | null
   private readonly volume: GainNode
@@ -68,6 +73,7 @@ export class TrackChannel {
     this.comp = ctx.createDynamicsCompressor()
     this.comp.knee.value = 8
     this.makeup = ctx.createGain()
+    this.duckGain = ctx.createGain()
 
     this.pan =
       typeof (ctx as AudioContext).createStereoPanner === 'function'
@@ -91,9 +97,13 @@ export class TrackChannel {
       this.store.loadPatch(data.patch)
       this.engine = new Engine(ctx, this.store, this.input)
       this.instr = null
+      this.fxChain = null // the synth engine has its own rack inside
       this.ready = this.engine.ready
     } else {
-      this.store = null
+      // non-synth tracks reuse the synth patch's FX section as their insert
+      // rack: same Store + FxChain + rack UI, zero new schema
+      this.store = new Store()
+      this.store.loadPatch(data.patch)
       this.engine = null
       if (data.kind === 'drums') {
         this.instr = new DrumMachine(ctx, () => this.data.drums)
@@ -105,15 +115,35 @@ export class TrackChannel {
         this.instr = null // audio tracks have no triggered instrument
       }
       this.instr?.output.connect(this.input)
-      this.ready = Promise.resolve()
+      this.fxChain = new FxChain(ctx, this.store.getPatch())
+      this.ready = this.fxChain.ready
+      this.store.subscribeAll((value, path) => {
+        const t = this.ctx.currentTime
+        const chain = this.fxChain
+        if (!chain) return
+        if (path === '*') {
+          chain.applyAll(this.store!.getPatch(), t)
+          return
+        }
+        if (!path.startsWith('fx.')) return
+        const [, id, key] = path.split('.')
+        if (key === 'on') chain.setEnabled(id as FxId, value as boolean)
+        else if (key !== 'order' && typeof value === 'number') chain.apply(id as FxId, key, value, t)
+      })
     }
 
-    this.input.connect(this.eqLow)
+    if (this.fxChain) {
+      this.input.connect(this.fxChain.input)
+      this.fxChain.output.connect(this.eqLow)
+    } else {
+      this.input.connect(this.eqLow)
+    }
     this.eqLow.connect(this.eqMid)
     this.eqMid.connect(this.eqHigh)
     this.eqHigh.connect(this.comp)
     this.comp.connect(this.makeup)
-    this.makeup.connect(this.pan)
+    this.makeup.connect(this.duckGain)
+    this.duckGain.connect(this.pan)
     if (this.autoPan) {
       this.pan.connect(this.autoPan)
       this.autoPan.connect(this.volume)
@@ -191,6 +221,45 @@ export class TrackChannel {
     this.instr?.setBend(semitones)
   }
 
+  // Sidechain: an envelope follower on `source` (another track's
+  // post-instrument signal) modulates this channel's duck gain downward.
+  // |x| → lowpass → negative gain into duckGain.gain (base 1).
+  setDuck(source: AudioNode | null, amount: number): void {
+    const t = this.ctx.currentTime
+    if (!source || amount <= 0.001) {
+      if (this.duckNodes) {
+        this.duckNodes.source.disconnect(this.duckNodes.abs)
+        this.duckNodes.abs.disconnect()
+        this.duckNodes.lp.disconnect()
+        this.duckNodes.scale.disconnect()
+        this.duckNodes = null
+        this.duckGain.gain.cancelScheduledValues(t)
+        this.duckGain.gain.setTargetAtTime(1, t, 0.02)
+      }
+      return
+    }
+    if (this.duckNodes && this.duckNodes.source === source) {
+      this.duckNodes.scale.gain.setTargetAtTime(-amount * 1.4, t, 0.02)
+      return
+    }
+    this.setDuck(null, 0) // tear down any previous wiring
+    const abs = this.ctx.createWaveShaper()
+    const curve = new Float32Array(257)
+    for (let i = 0; i < 257; i++) curve[i] = Math.abs(i / 128 - 1)
+    abs.curve = curve
+    const lp = this.ctx.createBiquadFilter()
+    lp.type = 'lowpass'
+    lp.frequency.value = 12 // pump speed
+    const scale = this.ctx.createGain()
+    scale.gain.value = -amount * 1.4
+    source.connect(abs)
+    abs.connect(lp)
+    lp.connect(scale)
+    scale.connect(this.duckGain.gain)
+    this.duckGain.gain.setValueAtTime(1, t)
+    this.duckNodes = { source, abs, lp, scale }
+  }
+
   applyMixer(mixer: TrackData['mixer'], soloElsewhere: boolean): void {
     const t = this.ctx.currentTime
     this.volume.gain.setTargetAtTime(mixer.volume, t, 0.02)
@@ -225,7 +294,8 @@ export class TrackChannel {
     this.allNotesOff()
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
-    const nodes: (AudioNode | null)[] = [this.input, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.pan, this.autoPan, this.volume, this.autoVol, this.muteGain, this.sendA, this.sendB, this.analyser]
+    this.setDuck(null, 0)
+    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.duckGain, this.pan, this.autoPan, this.volume, this.autoVol, this.muteGain, this.sendA, this.sendB, this.analyser]
     for (const n of nodes) n?.disconnect()
   }
 }
@@ -333,6 +403,14 @@ export class SongEngine {
     const soloActive = project.tracks.some(t => t.mixer.solo)
     for (const data of project.tracks) {
       this.channels.get(data.id)?.applyMixer(data.mixer, soloActive && !data.mixer.solo)
+    }
+    // sidechain wiring (after all channels exist)
+    for (const data of project.tracks) {
+      const ch = this.channels.get(data.id)
+      if (!ch) continue
+      const srcId = data.mixer.duck.source
+      const srcCh = srcId && srcId !== data.id ? this.channels.get(srcId) : undefined
+      ch.setDuck(srcCh ? srcCh.input : null, data.mixer.duck.amount)
     }
   }
 

@@ -111,7 +111,8 @@ const FX_DEFS: { id: string; name: string; knobs: [string, string][] }[] = [
   { id: 'reverb', name: 'Reverb', knobs: [['size', 'Size'], ['decay', 'Decay'], ['mix', 'Mix']] },
 ]
 
-function fxRack(store: Store): HTMLElement {
+// Store-driven FX rack; the DAW also mounts this standalone on non-synth tracks.
+export function fxRack(store: Store): HTMLElement {
   const rack = document.createElement('section')
   rack.className = 'fx-rack'
   for (const def of FX_DEFS) {

@@ -681,6 +681,23 @@
   padding-top: 10px;
 }
 
+/* ---------- per-track insert FX ---------- */
+
+.track-fx {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  border-top: 1px solid var(--edge);
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.track-fx .fx-rack {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 /* ---------- mixer ---------- */
 
 .mixer {

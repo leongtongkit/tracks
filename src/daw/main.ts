@@ -7,7 +7,7 @@ import '@fontsource/ibm-plex-mono/500.css'
 
 import { analyzeBuffer } from '../test/offline'
 import { KeyboardInput } from '../input/keyboard'
-import { buildInstrumentEditor } from '../ui/panels'
+import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
 import { exportMidi } from './midi'
@@ -43,24 +43,40 @@ daw.appendChild(bottom.el)
 // rebuilding each render would leak listeners. Drum/sampler editors hold no
 // subscriptions and rebuild from live project data on every mount.
 const instrumentCache = new Map<string, HTMLElement>()
+// FX racks hold knob subscriptions on the track store → cache them too
+const fxCache = new Map<string, HTMLElement>()
+const trackFxRack = (trackId: string): HTMLElement | null => {
+  const store = app.song?.store(trackId)
+  if (!store) return null
+  let rack = fxCache.get(trackId)
+  if (!rack) {
+    rack = document.createElement('div')
+    rack.className = 'track-fx'
+    const tag = document.createElement('span')
+    tag.className = 'mix-tag'
+    tag.textContent = 'Insert FX'
+    rack.appendChild(tag)
+    rack.appendChild(fxRack(store))
+    fxCache.set(trackId, rack)
+  }
+  return rack
+}
 bottom.setInstrumentMount((host, trackId) => {
   const track = app.track(trackId)
   if (!track) return
   app.ensureAudio()
-  if (track.kind === 'drums') {
-    host.appendChild(buildDrumEditor(app, trackId))
-    return
-  }
-  if (track.kind === 'sampler') {
-    host.appendChild(buildSamplerEditor(app, trackId))
-    return
-  }
-  if (track.kind === 'pads') {
-    host.appendChild(buildPadsEditor(app, trackId))
-    return
-  }
-  if (track.kind === 'audio') {
-    host.appendChild(buildAudioTrackEditor(app, trackId))
+  if (track.kind !== 'synth') {
+    const editor =
+      track.kind === 'drums'
+        ? buildDrumEditor(app, trackId)
+        : track.kind === 'sampler'
+          ? buildSamplerEditor(app, trackId)
+          : track.kind === 'pads'
+            ? buildPadsEditor(app, trackId)
+            : buildAudioTrackEditor(app, trackId)
+    host.appendChild(editor)
+    const rack = trackFxRack(trackId)
+    if (rack) editor.appendChild(rack)
     return
   }
   const store = app.song?.store(trackId)

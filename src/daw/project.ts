@@ -55,6 +55,7 @@ export interface MixerState {
   comp: { on: boolean; threshold: number; ratio: number; attack: number; release: number; makeup: number }
   sendA: number // 0..1 to the reverb bus
   sendB: number // 0..1 to the delay bus
+  duck: { source: string | null; amount: number } // sidechain: dip this track when `source` plays
 }
 
 export interface DrumVoiceParams {
@@ -144,6 +145,7 @@ export function defaultMixer(): MixerState {
     comp: { on: false, threshold: -18, ratio: 3, attack: 0.01, release: 0.18, makeup: 1 },
     sendA: 0,
     sendB: 0,
+    duck: { source: null, amount: 0 },
   }
 }
 
@@ -309,6 +311,13 @@ function migrateTrack(raw: unknown, index: number): TrackData {
       },
       sendA: clamp(mixer.sendA, 0, 1, 0),
       sendB: clamp(mixer.sendB, 0, 1, 0),
+      duck: (() => {
+        const d = (typeof mixer.duck === 'object' && mixer.duck !== null ? mixer.duck : {}) as Record<string, unknown>
+        return {
+          source: typeof d.source === 'string' && d.source ? d.source : null,
+          amount: clamp(d.amount, 0, 1, 0),
+        }
+      })(),
     },
     auto: {
       volume: migrateAutoPoints(auto.volume, 0, 1),

@@ -156,6 +156,31 @@ export class MixerView {
     sends.appendChild(this.dial('Dly', track, { min: 0, max: 1, reset: 0, fmt: x100 }, () => m.sendB, v => ({ sendB: v })))
     col.appendChild(sends)
 
+    const duck = document.createElement('div')
+    duck.className = 'mix-section'
+    duck.appendChild(sectionTag('Duck'))
+    const src = document.createElement('select')
+    src.className = 'seg-select'
+    src.title = 'Sidechain: dip this track whenever the chosen track plays (classic kick-pump)'
+    const none = document.createElement('option')
+    none.value = ''
+    none.textContent = 'Off'
+    src.appendChild(none)
+    for (const other of this.app.project.tracks) {
+      if (other.id === track.id) continue
+      const o = document.createElement('option')
+      o.value = other.id
+      o.textContent = other.name
+      if (m.duck.source === other.id) o.selected = true
+      src.appendChild(o)
+    }
+    src.addEventListener('change', () =>
+      this.app.setMixer(track.id, { duck: { amount: m.duck.amount || (src.value ? 0.6 : 0), source: src.value || null } }),
+    )
+    duck.appendChild(src)
+    duck.appendChild(this.dial('Amt', track, { min: 0, max: 1, reset: 0, fmt: x100 }, () => m.duck.amount, v => ({ duck: { ...m.duck, amount: v } })))
+    col.appendChild(duck)
+
     main.appendChild(col)
     strip.appendChild(main)
     return strip
