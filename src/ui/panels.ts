@@ -136,6 +136,27 @@ function fxRack(store: Store): HTMLElement {
   return rack
 }
 
+// Embeddable instrument editor: the full synth surface (modules + FX rack)
+// bound to any store — used by the DAW per track.
+export function buildInstrumentEditor(store: Store): HTMLElement {
+  const wrap = document.createElement('div')
+  wrap.className = 'instrument-editor'
+  const grid = document.createElement('div')
+  grid.className = 'module-grid'
+  grid.appendChild(oscPanel(store, 0))
+  grid.appendChild(oscPanel(store, 1))
+  grid.appendChild(oscPanel(store, 2))
+  grid.appendChild(filterPanel(store))
+  grid.appendChild(envPanel(store, 'amp'))
+  grid.appendChild(envPanel(store, 'filter'))
+  grid.appendChild(voicePanel(store))
+  grid.appendChild(lfoPanel(store, 0))
+  grid.appendChild(lfoPanel(store, 1))
+  wrap.appendChild(grid)
+  wrap.appendChild(fxRack(store))
+  return wrap
+}
+
 export interface AppCallbacks {
   octaveDown(): void
   octaveUp(): void

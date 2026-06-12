@@ -1,6 +1,10 @@
-# Synth
+# Tracks
 
-Browser synthesizer at [synth.jfound.net](https://synth.jfound.net). Play with your computer keyboard, design sounds with a full subtractive + FM engine, add effects, sequence loops, record to WAV, and share patches by link.
+Browser music studio at [tracks.jfound.net](https://tracks.jfound.net): multi-track arrangement, piano roll, per-track synth instruments and effects, mixer, loop transport with metronome, live keyboard/MIDI recording, project save/open, and full-song WAV export. Boots into an 8-bar demo song.
+
+The standalone synthesizer lives at [synth.jfound.net](https://synth.jfound.net) (same repo, `synth.html`, served by the `synth-jfound` worker; deploy via `wrangler-synth.toml`).
+
+## Synth Play with your computer keyboard, design sounds with a full subtractive + FM engine, add effects, sequence loops, record to WAV, and share patches by link.
 
 ## Features
 

@@ -54,6 +54,9 @@
 
 .bar-space {
   flex: 1;
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
 }
 
 /* ---------- mini dial ---------- */
@@ -421,4 +424,28 @@
   bottom: 0;
   width: 6px;
   cursor: ew-resize;
+}
+
+/* ---------- embedded instrument ---------- */
+
+.instrument-host {
+  overflow: auto;
+  min-height: 0;
+  padding: 10px;
+  display: grid;
+  gap: 10px;
+  align-content: start;
+}
+
+.instrument-presets {
+  justify-self: start;
+}
+
+.instrument-editor {
+  display: grid;
+  gap: 10px;
+}
+
+.instrument-editor .module-grid {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }

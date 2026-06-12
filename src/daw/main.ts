@@ -7,13 +7,20 @@ import '@fontsource/ibm-plex-mono/500.css'
 
 import { analyzeBuffer } from '../test/offline'
 import { KeyboardInput } from '../input/keyboard'
+import { buildInstrumentEditor } from '../ui/panels'
+import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
+import { demoSong, downloadBlob, downloadProjectJson, importProjectJson, loadSession, saveSession } from './persist'
 import { defaultProject } from './project'
+import { renderProjectToWav } from './render'
 import { renderProject } from './render'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
 
 const app = new DawApp()
+// boot: last session if it exists, otherwise the demo song
+app.project = loadSession() ?? demoSong()
+app.armedTrackId = app.project.tracks[0]?.id ?? null
 const root = document.getElementById('app')!
 const daw = document.createElement('div')
 daw.className = 'daw'
@@ -23,6 +30,26 @@ daw.appendChild(arrange.el)
 
 const bottom = new BottomPanel(app)
 daw.appendChild(bottom.el)
+
+// per-track instrument editors are cached: knob subscriptions live on the
+// track's store, so rebuilding each render would leak listeners
+const instrumentCache = new Map<string, HTMLElement>()
+bottom.setInstrumentMount((host, trackId) => {
+  app.ensureAudio()
+  const store = app.song?.store(trackId)
+  if (!store) return
+  let editor = instrumentCache.get(trackId)
+  if (!editor) {
+    editor = document.createElement('div')
+    editor.className = 'instrument-host'
+    const browser = new PresetBrowser(store)
+    browser.el.classList.add('instrument-presets')
+    editor.appendChild(browser.el)
+    editor.appendChild(buildInstrumentEditor(store))
+    instrumentCache.set(trackId, editor)
+  }
+  host.appendChild(editor)
+})
 
 root.appendChild(daw)
 
@@ -35,6 +62,74 @@ new KeyboardInput({
 })
 
 export { bottom }
+
+// autosave on every document change, debounced
+let saveTimer: ReturnType<typeof setTimeout> | undefined
+for (const ev of ['project', 'tracks', 'clips', 'mixer'] as const) {
+  app.on(ev, () => {
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => saveSession(app), 900)
+  })
+}
+window.addEventListener('beforeunload', () => saveSession(app))
+
+// file actions live on the transport bar's right side
+const fileBar = document.querySelector('.bar-space')!
+const wavBtn = document.createElement('button')
+wavBtn.type = 'button'
+wavBtn.className = 'seg-btn'
+wavBtn.textContent = 'Export WAV'
+wavBtn.title = 'Render the whole song to a WAV file'
+wavBtn.addEventListener('click', () => {
+  void (async () => {
+    wavBtn.disabled = true
+    wavBtn.textContent = 'Rendering...'
+    try {
+      app.song?.collectPatches(app.project)
+      const blob = await renderProjectToWav(app.project)
+      downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.wav`)
+    } finally {
+      wavBtn.disabled = false
+      wavBtn.textContent = 'Export WAV'
+    }
+  })()
+})
+const saveBtn = document.createElement('button')
+saveBtn.type = 'button'
+saveBtn.className = 'seg-btn'
+saveBtn.textContent = 'Save'
+saveBtn.title = 'Download the project as a file'
+saveBtn.addEventListener('click', () => downloadProjectJson(app))
+const openBtn = document.createElement('button')
+openBtn.type = 'button'
+openBtn.className = 'seg-btn'
+openBtn.textContent = 'Open'
+openBtn.title = 'Open a saved project file'
+const fileInput = document.createElement('input')
+fileInput.type = 'file'
+fileInput.accept = '.json,application/json'
+fileInput.style.display = 'none'
+fileInput.addEventListener('change', () => {
+  const f = fileInput.files?.[0]
+  if (!f) return
+  void importProjectJson(f)
+    .then(project => {
+      app.transport.stop()
+      app.song?.allNotesOff()
+      app.project = project
+      app.selectedClip = null
+      app.armedTrackId = project.tracks[0]?.id ?? null
+      void app.song?.syncTracks(project)
+      app.emit('tracks', 'clips', 'project', 'selection')
+    })
+    .catch(() => alert('That file is not a Tracks project.'))
+  fileInput.value = ''
+})
+openBtn.addEventListener('click', () => fileInput.click())
+fileBar.appendChild(wavBtn)
+fileBar.appendChild(saveBtn)
+fileBar.appendChild(openBtn)
+fileBar.appendChild(fileInput)
 
 // ---------- global keys ----------
 
