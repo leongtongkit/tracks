@@ -4,7 +4,8 @@
 
 import type { DawApp } from '../daw-app'
 import { autotuneChannel, normalizeChannels, reverseChannels } from '../dsp/autotune'
-import { newId, type Clip } from '../project'
+import { extractStems } from '../dsp/stems'
+import { newId, newTrack, type Clip } from '../project'
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -193,5 +194,75 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
   tuneRow.appendChild(apply)
   tune.appendChild(tuneRow)
   root.appendChild(tune)
+
+  // ---------- stem extraction ----------
+
+  const ext = document.createElement('div')
+  ext.className = 'autotune'
+  const extTag = document.createElement('span')
+  extTag.className = 'mix-tag'
+  extTag.textContent = 'Extract'
+  ext.appendChild(extTag)
+  const extNote = document.createElement('span')
+  extNote.className = 'audio-hint'
+  extNote.textContent = 'Split this clip into vocals / drums / bass / other — each lands on its own new track.'
+  ext.appendChild(extNote)
+  const extRow = document.createElement('div')
+  extRow.className = 'sampler-row'
+  const extBtn = document.createElement('button')
+  extBtn.type = 'button'
+  extBtn.className = 'seg-btn'
+  extBtn.textContent = 'Extract stems'
+  extBtn.title = 'Separate vocal, drum, bass, and remaining components of this clip'
+  extBtn.addEventListener('click', () => {
+    void (async () => {
+      const buffer = sampleStore.get(region.sampleId)
+      if (!buffer) return
+      extBtn.disabled = true
+      try {
+        const spb = 60 / app.project.bpm
+        const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
+        const i1 = Math.min(buffer.length, i0 + Math.ceil(clip.length * spb * buffer.sampleRate))
+        const channels: Float32Array<ArrayBuffer>[] = []
+        for (let c = 0; c < Math.min(2, buffer.numberOfChannels); c++) {
+          channels.push(buffer.getChannelData(c).slice(i0, i1))
+        }
+        const stems = await extractStems(channels, buffer.sampleRate, frac => {
+          extBtn.textContent = `Extracting ${Math.round(frac * 100)}%`
+        })
+        app.checkpoint('extract stems')
+        const base = (sampleStore.name(region.sampleId) ?? 'audio').replace(/ \(.*\)$/, '')
+        let made = 0
+        for (const stem of stems) {
+          if (stem.rms < 2e-4) continue // skip stems the source doesn't contain
+          const out = new AudioBuffer({ length: stem.channels[0].length, numberOfChannels: 2, sampleRate: buffer.sampleRate })
+          out.copyToChannel(stem.channels[0], 0)
+          out.copyToChannel(stem.channels[1], 1)
+          const id = newId()
+          const name = `${base} (${stem.name})`
+          sampleStore.put(id, name, out)
+          app.project.samples[id] = { name, duration: out.duration }
+          const trackName = stem.name[0].toUpperCase() + stem.name.slice(1)
+          const t = newTrack(trackName, { kind: 'audio' })
+          t.clips = [{ id: newId(), start: clip.start, length: clip.length, notes: [], audio: { sampleId: id, offsetSec: 0, gain: 1 } }]
+          app.project.tracks.push(t)
+          made++
+        }
+        void app.song?.syncTracks(app.project)
+        app.emit('tracks', 'clips')
+        extBtn.textContent = made > 0 ? `Done — ${made} tracks added` : 'Nothing to extract'
+        setTimeout(() => {
+          extBtn.textContent = 'Extract stems'
+          extBtn.disabled = false
+        }, 1800)
+      } catch {
+        extBtn.textContent = 'Extract stems'
+        extBtn.disabled = false
+      }
+    })()
+  })
+  extRow.appendChild(extBtn)
+  ext.appendChild(extRow)
+  root.appendChild(ext)
   return root
 }
