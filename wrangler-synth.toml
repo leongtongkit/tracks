@@ -1,0 +1,8 @@
+name = "synth-jfound"
+main = "synth-worker.js"
+compatibility_date = "2026-06-01"
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true

@@ -1,0 +1,22 @@
+/* Tracks DAW chrome — extends the synth's industrial token system */
+
+.daw-shell {
+  display: grid;
+  place-content: center;
+  gap: 1rem;
+  min-height: 100vh;
+  text-align: center;
+}
+
+.daw-shell h1 {
+  font-weight: 700;
+  letter-spacing: 0.3em;
+  margin-right: -0.3em;
+  color: var(--accent);
+}
+
+.daw-shell p {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--bone-dim);
+}

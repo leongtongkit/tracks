@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Synth — play synthesizers in your browser</title>
+    <meta name="description" content="A free synthesizer you play with your computer keyboard. Design sounds, add effects, sequence loops, record WAVs, and share patches by link." />
+    <link rel="canonical" href="https://synth.jfound.net/" />
+    <meta property="og:title" content="Synth — play synthesizers in your browser" />
+    <meta property="og:description" content="A free synthesizer played with your computer keyboard. 35 presets, full sound editor, effects, sequencer, recording, and shareable patch links." />
+    <meta property="og:url" content="https://synth.jfound.net/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://synth.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://synth.jfound.net/og.png" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Synth",
+        "url": "https://synth.jfound.net/",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "A free browser synthesizer played with your computer keyboard: full subtractive and FM engine, effects rack, step sequencer, WAV recording, and shareable patch links."
+      }
+    </script>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <main id="app">
+      <div id="scrim">
+        <h1>SYNTH</h1>
+        <p>Click anywhere or press any key to start audio</p>
+        <p class="scrim-help">Z-row + Q-row play notes / Arrows shift octave / Tab and Left Shift bend pitch</p>
+      </div>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
