@@ -4,8 +4,9 @@
 
 import type { DawApp } from '../daw-app'
 import { autotuneChannel, normalizeChannels, reverseChannels } from '../dsp/autotune'
+import { detectOnsets } from '../dsp/onsets'
 import { extractStems } from '../dsp/stems'
-import { newId, newTrack, type Clip } from '../project'
+import { newId, newTrack, warpRate, type Clip } from '../project'
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -291,6 +292,61 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
     })()
   })
   extRow.appendChild(extBtn)
+
+  // chop at transients onto a fresh Pads track, replayed at original timing
+  const sliceBtn = document.createElement('button')
+  sliceBtn.type = 'button'
+  sliceBtn.className = 'seg-btn'
+  sliceBtn.textContent = 'Slice to pads'
+  sliceBtn.title = 'Chop this clip at its transients onto a new 16-pad track, with a clip replaying the chops'
+  sliceBtn.addEventListener('click', () => {
+    const buffer = sampleStore.get(region.sampleId)
+    if (!buffer) return
+    const spb = 60 / app.project.bpm
+    const rate = warpRate(region, app.project.bpm)
+    const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
+    const i1 = Math.min(buffer.length, i0 + Math.ceil(clip.length * spb * rate * buffer.sampleRate))
+    const mono = buffer.getChannelData(0).slice(i0, i1)
+    const onsets = detectOnsets(mono, buffer.sampleRate, 16)
+    if (onsets.length < 2) {
+      sliceBtn.textContent = 'No transients found'
+      setTimeout(() => (sliceBtn.textContent = 'Slice to pads'), 1500)
+      return
+    }
+    app.checkpoint('slice to pads')
+    const base = (sampleStore.name(region.sampleId) ?? 'audio').replace(/ \(.*\)$/, '')
+    const padsTrack = newTrack(`${base.slice(0, 12)} chops`, { kind: 'pads' })
+    const notes = []
+    for (let s = 0; s < onsets.length; s++) {
+      const from = onsets[s]
+      const to = s + 1 < onsets.length ? onsets[s + 1] : i1 - i0
+      const sliceBuf = new AudioBuffer({
+        length: Math.max(64, to - from),
+        numberOfChannels: Math.min(2, buffer.numberOfChannels),
+        sampleRate: buffer.sampleRate,
+      })
+      for (let c = 0; c < sliceBuf.numberOfChannels; c++) {
+        sliceBuf.copyToChannel(buffer.getChannelData(c).slice(i0 + from, i0 + to), c)
+      }
+      const id = newId()
+      const name = `${base} #${s + 1}`
+      sampleStore.put(id, name, sliceBuf)
+      app.project.samples[id] = { name, duration: sliceBuf.duration }
+      padsTrack.pads.pads[s] = { sampleId: id, gain: 1, tune: 0, oneshot: true }
+      notes.push({
+        start: from / buffer.sampleRate / rate / spb,
+        dur: Math.max(0.125, (to - from) / buffer.sampleRate / rate / spb),
+        pitch: 36 + s,
+        vel: 0.9,
+      })
+    }
+    padsTrack.clips = [{ id: newId(), start: clip.start, length: clip.length, notes }]
+    app.project.tracks.push(padsTrack)
+    app.armedTrackId = padsTrack.id
+    void app.song?.syncTracks(app.project)
+    app.emit('tracks', 'clips', 'arm')
+  })
+  extRow.appendChild(sliceBtn)
   ext.appendChild(extRow)
   root.appendChild(ext)
   return root
