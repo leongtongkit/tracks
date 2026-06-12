@@ -572,6 +572,14 @@
   margin: 0;
 }
 
+.autotune {
+  display: grid;
+  gap: 8px;
+  justify-items: start;
+  border-top: 1px solid var(--edge);
+  padding-top: 10px;
+}
+
 /* ---------- mixer ---------- */
 
 .mixer {

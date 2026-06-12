@@ -91,6 +91,35 @@ export class ArrangeView {
       fmt: v => String(Math.round(v)),
     })
 
+    // song key (drives autotune)
+    const key = document.createElement('span')
+    key.className = 'mini-dial'
+    const keyLabel = document.createElement('span')
+    keyLabel.textContent = 'Key'
+    const rootSel = document.createElement('select')
+    rootSel.className = 'seg-select'
+    ;['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].forEach((n, i) => {
+      const o = document.createElement('option')
+      o.value = String(i)
+      o.textContent = n
+      if (this.app.project.key.root === i) o.selected = true
+      rootSel.appendChild(o)
+    })
+    rootSel.addEventListener('change', () => this.app.setKey({ root: Number(rootSel.value) }))
+    const scaleSel = document.createElement('select')
+    scaleSel.className = 'seg-select'
+    for (const [v, label] of [['chromatic', 'Chrom'], ['major', 'Major'], ['minor', 'Minor']] as const) {
+      const o = document.createElement('option')
+      o.value = v
+      o.textContent = label
+      if (this.app.project.key.scale === v) o.selected = true
+      scaleSel.appendChild(o)
+    }
+    scaleSel.addEventListener('change', () => this.app.setKey({ scale: scaleSel.value as 'chromatic' | 'major' | 'minor' }))
+    key.appendChild(keyLabel)
+    key.appendChild(rootSel)
+    key.appendChild(scaleSel)
+
     const zoomOut = btn('-', 'Zoom out')
     zoomOut.addEventListener('click', () => this.setZoom(this.ppb / 1.4))
     const zoomIn = btn('+', 'Zoom in')
@@ -107,6 +136,7 @@ export class ArrangeView {
     bar.appendChild(this.metroBtn)
     bar.appendChild(this.positionChip)
     bar.appendChild(bpm)
+    bar.appendChild(key)
     bar.appendChild(spacer)
     bar.appendChild(zoomOut)
     bar.appendChild(zoomIn)
