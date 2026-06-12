@@ -16,6 +16,7 @@
     "vitest": "^3.0.0"
   },
   "dependencies": {
+    "@breezystack/lamejs": "^1.2.7",
     "@fontsource/ibm-plex-mono": "^5.2.7",
     "@fontsource/ibm-plex-sans-condensed": "^5.2.8"
   }

@@ -27,9 +27,9 @@ export function loadSession(): Project | null {
   }
 }
 
-// Project files embed every referenced sample as base64 WAV so a .tracks.json
-// is fully self-contained — recordings and imports travel with the song.
-export function downloadProjectJson(app: DawApp): void {
+// Project JSON with every referenced sample embedded as base64 WAV — fully
+// self-contained, used by both file export and share links.
+export function serializeProjectWithSamples(app: DawApp): string {
   app.song?.collectPatches(app.project)
   pruneSamples(app.project)
   const out = JSON.parse(JSON.stringify(app.project)) as Project & {
@@ -42,7 +42,11 @@ export function downloadProjectJson(app: DawApp): void {
     const right = buffer.numberOfChannels > 1 ? buffer.getChannelData(1) : left
     meta.wav = bufToB64(encodeWav(left, right, buffer.sampleRate))
   }
-  const blob = new Blob([JSON.stringify(out)], { type: 'application/json' })
+  return JSON.stringify(out)
+}
+
+export function downloadProjectJson(app: DawApp): void {
+  const blob = new Blob([serializeProjectWithSamples(app)], { type: 'application/json' })
   downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.tracks.json`)
 }
 
@@ -73,7 +77,12 @@ export function downloadBlob(blob: Blob, filename: string): void {
 }
 
 export async function importProjectJson(file: File): Promise<Project> {
-  const raw = JSON.parse(await file.text()) as Record<string, unknown>
+  return importProjectText(await file.text())
+}
+
+// shared by file import and share-link loading
+export function importProjectText(text: string): Project {
+  const raw = JSON.parse(text) as Record<string, unknown>
   // rebuild embedded samples BEFORE migrate (which keeps metadata only)
   const samples = raw && typeof raw === 'object' ? (raw.samples as Record<string, { name?: string; wav?: string }> | undefined) : undefined
   if (samples && typeof samples === 'object') {

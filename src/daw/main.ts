@@ -9,9 +9,21 @@ import { analyzeBuffer } from '../test/offline'
 import { KeyboardInput } from '../input/keyboard'
 import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
+import { toast } from '../ui/toast'
 import { DawApp } from './daw-app'
 import { exportMidi } from './midi'
-import { demoSong, downloadBlob, downloadProjectJson, importProjectJson, loadSession, saveSession } from './persist'
+import { encodeMp3 } from './mp3'
+import {
+  demoSong,
+  downloadBlob,
+  downloadProjectJson,
+  importProjectJson,
+  importProjectText,
+  loadSession,
+  saveSession,
+  serializeProjectWithSamples,
+} from './persist'
+import { fetchShare, shareIdFromHash, uploadShare } from './share'
 import { defaultProject, newId, newTrack } from './project'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
@@ -28,6 +40,24 @@ const app = new DawApp()
 void sampleStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
 app.project = loadSession() ?? demoSong()
+
+// a share link (#s=...) replaces the workspace once it arrives
+const shareId = shareIdFromHash(location.hash)
+if (shareId) {
+  void fetchShare(shareId)
+    .then(text => {
+      app.transport.stop()
+      app.song?.allNotesOff()
+      app.history.clear()
+      app.project = importProjectText(text)
+      app.selectedClip = null
+      app.armedTrackId = app.project.tracks[0]?.id ?? null
+      void app.song?.syncTracks(app.project)
+      app.emit('tracks', 'clips', 'project', 'selection')
+      toast(`Loaded shared project "${app.project.name}"`)
+    })
+    .catch(() => toast('That share link was not found (links expire after 90 days)'))
+}
 app.armedTrackId = app.project.tracks[0]?.id ?? null
 const root = document.getElementById('app')!
 const daw = document.createElement('div')
@@ -137,6 +167,54 @@ wavBtn.addEventListener('click', () => {
     }
   })()
 })
+const mp3Btn = document.createElement('button')
+mp3Btn.type = 'button'
+mp3Btn.className = 'seg-btn'
+mp3Btn.textContent = 'MP3'
+mp3Btn.title = 'Render the song to a small, shareable MP3 (192 kbps)'
+mp3Btn.addEventListener('click', () => {
+  void (async () => {
+    mp3Btn.disabled = true
+    mp3Btn.textContent = 'Rendering...'
+    try {
+      app.song?.collectPatches(app.project)
+      const buf = await renderProject(app.project)
+      mp3Btn.textContent = 'Encoding...'
+      await new Promise(r => setTimeout(r, 30)) // let the label paint
+      const blob = encodeMp3(buf)
+      downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mp3`)
+    } finally {
+      mp3Btn.disabled = false
+      mp3Btn.textContent = 'MP3'
+    }
+  })()
+})
+const shareBtn = document.createElement('button')
+shareBtn.type = 'button'
+shareBtn.className = 'seg-btn'
+shareBtn.textContent = 'Share'
+shareBtn.title = 'Upload this project and copy a link — anyone can listen and remix it in their browser'
+shareBtn.addEventListener('click', () => {
+  void (async () => {
+    shareBtn.disabled = true
+    shareBtn.textContent = 'Uploading...'
+    try {
+      const id = await uploadShare(serializeProjectWithSamples(app))
+      const link = `${location.origin}/#s=${id}`
+      try {
+        await navigator.clipboard.writeText(link)
+        toast('Share link copied — valid for 90 days')
+      } catch {
+        prompt('Share link (copy it):', link)
+      }
+    } catch (err) {
+      toast(err instanceof Error ? err.message : 'Sharing failed')
+    } finally {
+      shareBtn.disabled = false
+      shareBtn.textContent = 'Share'
+    }
+  })()
+})
 const midiBtn = document.createElement('button')
 midiBtn.type = 'button'
 midiBtn.className = 'seg-btn'
@@ -208,7 +286,9 @@ fileInput.addEventListener('change', () => {
   fileInput.value = ''
 })
 openBtn.addEventListener('click', () => fileInput.click())
+fileBar.appendChild(shareBtn)
 fileBar.appendChild(wavBtn)
+fileBar.appendChild(mp3Btn)
 fileBar.appendChild(stemsBtn)
 fileBar.appendChild(midiBtn)
 fileBar.appendChild(saveBtn)
