@@ -26,6 +26,10 @@ export interface TransportEvents {
   // the sample, for at most durSec
   audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number): void
   audioStopAll?(at?: number): void
+  // every booked slice, for time-scheduled things beyond notes (automation)
+  slice?(fromBeat: number, toBeat: number, beatToTime: (beat: number) => number): void
+  // playback jumped (stop/seek/wrap): cancel anything booked into the future
+  discontinuity?(at?: number): void
   click?(t: number, accent: boolean): void
   onWrap?(): void
 }
@@ -143,6 +147,7 @@ export class Transport {
     if (this.timer !== null) clearInterval(this.timer)
     this.timer = null
     this.events.audioStopAll?.()
+    this.events.discontinuity?.()
   }
 
   // restart audio clips that should already be sounding at `beat`
@@ -167,6 +172,7 @@ export class Transport {
     this.stoppedAt = Math.max(0, beat)
     if (this.playing) {
       this.events.audioStopAll?.()
+      this.events.discontinuity?.()
       this.anchorBeat = this.stoppedAt
       this.anchorTime = this.getNow() + 0.03
       this.scanBeat = this.stoppedAt
@@ -209,6 +215,7 @@ export class Transport {
         this.events.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
         booked.push(ev)
       }
+      this.events.slice?.(this.scanBeat, sliceEnd, b => this.beatToTime(b))
       if (this.events.audio) {
         for (const ev of collectAudioEvents(project.tracks, this.scanBeat, sliceEnd)) {
           // a clip crossing the loop end gets cut there, exactly at the wrap
@@ -229,6 +236,7 @@ export class Transport {
         this.anchorTime = this.beatToTime(loop.end)
         this.anchorBeat = loop.start
         this.scanBeat = loop.start
+        this.events.discontinuity?.(this.anchorTime)
         this.scheduleStraddlingAudio(loop.start, this.anchorTime)
         this.events.onWrap?.()
       }

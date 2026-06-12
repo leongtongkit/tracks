@@ -288,6 +288,38 @@
   cursor: ew-resize;
 }
 
+/* automation lane */
+
+.auto-lane {
+  position: relative;
+  border-bottom: 1px solid #26262a;
+  background: rgba(255, 106, 43, 0.04);
+  cursor: copy;
+}
+
+.auto-line {
+  fill: none;
+  stroke: var(--led);
+  stroke-width: 1.5;
+}
+
+.auto-line-idle {
+  stroke-dasharray: 3 4;
+  opacity: 0.45;
+}
+
+.auto-dot {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 1px solid #fff;
+  cursor: grab;
+  touch-action: none;
+  z-index: 1;
+}
+
 .playhead {
   position: absolute;
   top: 0;

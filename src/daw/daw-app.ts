@@ -2,6 +2,7 @@
 // selection/arm state, undo history, and a coarse change bus the UI
 // re-renders from.
 
+import { scheduleAutomation } from './automation'
 import { History } from './history'
 import { MicRecorder } from './mic'
 import {
@@ -45,6 +46,12 @@ export class DawApp {
         noteOff: (trackId, pitch, t) => this.song?.noteOff(trackId, pitch, t),
         audio: (trackId, region, t, offsetSec, durSec) => this.song?.playClip(trackId, region, t, offsetSec, durSec),
         audioStopAll: at => this.song?.stopAudioClips(at),
+        slice: (from, to, beatToTime) => this.scheduleAutomationSlice(from, to, beatToTime),
+        discontinuity: at => {
+          for (const track of this.project.tracks) {
+            this.song?.channel(track.id)?.resetAutomation(at)
+          }
+        },
         click: (t, accent) => this.click(t, accent),
       },
     })
@@ -366,6 +373,23 @@ export class DawApp {
   liveBend(semitones: number): void {
     if (!this.armedTrackId) return
     this.song?.channel(this.armedTrackId)?.setBend(semitones)
+  }
+
+  // ---------- automation ----------
+
+  private scheduleAutomationSlice(from: number, to: number, beatToTime: (beat: number) => number): void {
+    if (!this.song) return
+    for (const track of this.project.tracks) {
+      const ch = this.song.channel(track.id)
+      if (!ch) continue
+      if (track.auto.volume.length > 0) {
+        scheduleAutomation(ch.autoVolParam(), track.auto.volume, from, to, beatToTime, 1)
+      }
+      const panParam = ch.autoPanParam()
+      if (panParam && track.auto.pan.length > 0) {
+        scheduleAutomation(panParam, track.auto.pan, from, to, beatToTime, 0)
+      }
+    }
   }
 
   // ---------- audio recording / import ----------

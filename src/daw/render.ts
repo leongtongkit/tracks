@@ -2,6 +2,7 @@
 // schedule every note up front, render, and encode a WAV.
 
 import { encodeWav } from '../record/wav'
+import { scheduleAutomation } from './automation'
 import { projectEndBeat, type Project } from './project'
 import { SongEngine } from './song-engine'
 import { collectEvents } from './transport'
@@ -27,6 +28,19 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
     for (const clip of track.clips) {
       if (!clip.audio) continue
       song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb)
+    }
+  }
+  // automation curves, booked over the whole song in one pass
+  const beatToTime = (beat: number): number => startAt + beat * spb
+  for (const track of project.tracks) {
+    const ch = song.channel(track.id)
+    if (!ch) continue
+    if (track.auto.volume.length > 0) {
+      scheduleAutomation(ch.autoVolParam(), track.auto.volume, 0, endBeat, beatToTime, 1)
+    }
+    const panParam = ch.autoPanParam()
+    if (panParam && track.auto.pan.length > 0) {
+      scheduleAutomation(panParam, track.auto.pan, 0, endBeat, beatToTime, 0)
     }
   }
 

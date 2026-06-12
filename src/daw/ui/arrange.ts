@@ -7,12 +7,15 @@ import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
 const ROW_H = 56
+const AUTO_H = 44
 const SNAP = 1 // beats
+const AUTO_SNAP = 0.25
 
 export class ArrangeView {
   readonly el: HTMLElement
   private readonly app: DawApp
   private ppb = 26 // pixels per beat (zoom)
+  private readonly autoOpen = new Map<string, 'volume' | 'pan'>()
   private ruler!: HTMLElement
   private lanes!: HTMLElement
   private headers!: HTMLElement
@@ -301,8 +304,35 @@ export class ArrangeView {
     top.appendChild(name)
     top.appendChild(del)
 
+    if (this.autoOpen.has(track.id)) el.style.height = `${ROW_H + AUTO_H}px`
+
     const controls = document.createElement('div')
     controls.className = 'track-head-controls'
+    const auto = btn('A', 'Show the automation lane (volume / pan curves)')
+    auto.classList.toggle('seg-on', this.autoOpen.has(track.id))
+    auto.addEventListener('click', () => {
+      if (this.autoOpen.has(track.id)) this.autoOpen.delete(track.id)
+      else this.autoOpen.set(track.id, 'volume')
+      this.renderHeaders()
+      this.renderLanes()
+    })
+    controls.appendChild(auto)
+    if (this.autoOpen.has(track.id)) {
+      const sel = document.createElement('select')
+      sel.className = 'seg-select'
+      for (const [v, label] of [['volume', 'Vol'], ['pan', 'Pan']] as const) {
+        const o = document.createElement('option')
+        o.value = v
+        o.textContent = label
+        if (this.autoOpen.get(track.id) === v) o.selected = true
+        sel.appendChild(o)
+      }
+      sel.addEventListener('change', () => {
+        this.autoOpen.set(track.id, sel.value as 'volume' | 'pan')
+        this.renderLanes()
+      })
+      controls.appendChild(sel)
+    }
     const mute = btn('M', 'Mute')
     mute.classList.toggle('seg-on', track.mixer.mute)
     mute.addEventListener('click', () => this.app.setMixer(track.id, { mute: !track.mixer.mute }))
@@ -395,6 +425,9 @@ export class ArrangeView {
         lane.appendChild(this.clipEl(track, clip))
       }
       this.lanes.appendChild(lane)
+      if (this.autoOpen.has(track.id)) {
+        this.lanes.appendChild(this.autoLaneEl(track))
+      }
     })
     this.renderRuler()
   }
@@ -475,6 +508,122 @@ export class ArrangeView {
     el.addEventListener('pointercancel', up)
     el.addEventListener('dblclick', e => e.stopPropagation())
     return el
+  }
+
+  // ---------- automation lane ----------
+
+  private autoLaneEl(track: TrackData): HTMLElement {
+    const param = this.autoOpen.get(track.id) ?? 'volume'
+    const points = track.auto[param]
+    const isPan = param === 'pan'
+    const toY = (v: number): number => (isPan ? ((1 - v) / 2) * AUTO_H : (1 - v) * AUTO_H)
+    const fromY = (y: number): number => {
+      const n = Math.min(1, Math.max(0, y / AUTO_H))
+      return isPan ? Math.max(-1, Math.min(1, 1 - n * 2)) : 1 - n
+    }
+
+    const lane = document.createElement('div')
+    lane.className = 'auto-lane'
+    lane.style.height = `${AUTO_H}px`
+    lane.style.width = `${this.widthBeats() * this.ppb}px`
+
+    const draw = (): void => {
+      const old = lane.querySelector('svg')
+      old?.remove()
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+      svg.setAttribute('width', String(this.widthBeats() * this.ppb))
+      svg.setAttribute('height', String(AUTO_H))
+      if (points.length > 0) {
+        const sorted = [...points].sort((a, b) => a.beat - b.beat)
+        const coords = [
+          `0,${toY(sorted[0].value)}`,
+          ...sorted.map(p => `${p.beat * this.ppb},${toY(p.value)}`),
+          `${this.widthBeats() * this.ppb},${toY(sorted[sorted.length - 1].value)}`,
+        ]
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline')
+        line.setAttribute('points', coords.join(' '))
+        line.setAttribute('class', 'auto-line')
+        svg.appendChild(line)
+      } else {
+        const mid = document.createElementNS('http://www.w3.org/2000/svg', 'line')
+        mid.setAttribute('x1', '0')
+        mid.setAttribute('x2', String(this.widthBeats() * this.ppb))
+        mid.setAttribute('y1', String(toY(isPan ? 0 : 1)))
+        mid.setAttribute('y2', String(toY(isPan ? 0 : 1)))
+        mid.setAttribute('class', 'auto-line auto-line-idle')
+        svg.appendChild(mid)
+      }
+      lane.prepend(svg)
+    }
+
+    const dotEl = (p: { beat: number; value: number }): HTMLElement => {
+      const dot = document.createElement('div')
+      dot.className = 'auto-dot'
+      const place = (): void => {
+        dot.style.left = `${p.beat * this.ppb - 4}px`
+        dot.style.top = `${toY(p.value) - 4}px`
+      }
+      place()
+      let dragging = false
+      let touched = false
+      dot.addEventListener('pointerdown', e => {
+        e.preventDefault()
+        e.stopPropagation()
+        dragging = true
+        touched = false
+        try {
+          dot.setPointerCapture(e.pointerId)
+        } catch {
+          // synthetic
+        }
+      })
+      dot.addEventListener('pointermove', e => {
+        if (!dragging) return
+        if (!touched) {
+          touched = true
+          this.app.checkpoint(`automation ${track.id}`)
+        }
+        const rect = lane.getBoundingClientRect()
+        p.beat = Math.max(0, Math.round((e.clientX - rect.left) / this.ppb / AUTO_SNAP) * AUTO_SNAP)
+        p.value = fromY(e.clientY - rect.top)
+        place()
+        draw()
+      })
+      const up = (): void => {
+        if (dragging && touched) {
+          points.sort((a, b) => a.beat - b.beat)
+          this.app.emit('clips')
+        }
+        dragging = false
+      }
+      dot.addEventListener('pointerup', up)
+      dot.addEventListener('pointercancel', up)
+      dot.addEventListener('dblclick', e => {
+        e.stopPropagation()
+        this.app.checkpoint(`automation ${track.id}`)
+        const i = points.indexOf(p)
+        if (i !== -1) points.splice(i, 1)
+        this.app.emit('clips')
+      })
+      return dot
+    }
+
+    lane.addEventListener('pointerdown', e => {
+      if (e.target !== lane && (e.target as HTMLElement).tagName !== 'svg') return
+      const rect = lane.getBoundingClientRect()
+      this.app.checkpoint(`automation ${track.id}`)
+      const p = {
+        beat: Math.max(0, Math.round((e.clientX - rect.left) / this.ppb / AUTO_SNAP) * AUTO_SNAP),
+        value: fromY(e.clientY - rect.top),
+      }
+      points.push(p)
+      points.sort((a, b) => a.beat - b.beat)
+      this.app.emit('clips')
+    })
+
+    draw()
+    for (const p of points) lane.appendChild(dotEl(p))
+    return lane
   }
 
   // ---------- playhead ----------

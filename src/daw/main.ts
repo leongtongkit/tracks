@@ -212,8 +212,36 @@ declare global {
     __tracksKitTest: () => Promise<unknown>
     __tracksMixTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
+    __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
   }
+}
+
+// a volume automation ramp 1→0 must fade the rendered audio accordingly
+window.__tracksAutoTest = async () => {
+  const p = defaultProject()
+  p.tracks = [p.tracks[3]] // pad: sustained chord exposes the fade
+  p.tracks[0].clips = [{
+    id: 'au1', start: 0, length: 8,
+    notes: [60, 64, 67].map(pitch => ({ start: 0, dur: 8, pitch, vel: 0.9 })),
+  }]
+  p.tracks[0].auto.volume = [
+    { beat: 1, value: 1 },
+    { beat: 7, value: 0 },
+  ]
+  const out = await renderProject(p)
+  const rms = (from: number, to: number): number => {
+    const ch = out.getChannelData(0)
+    let s = 0
+    const i0 = Math.floor(from * out.sampleRate)
+    const i1 = Math.floor(to * out.sampleRate)
+    for (let i = i0; i < i1; i++) s += ch[i] * ch[i]
+    return Math.sqrt(s / (i1 - i0))
+  }
+  const spb = 60 / 120
+  const early = rms(1.2 * spb, 2.2 * spb)
+  const late = rms(5.8 * spb, 6.8 * spb)
+  return { early, late, fades: late < early * 0.45 }
 }
 
 // an audio clip placed at beat 2 renders at the right time in the bounce

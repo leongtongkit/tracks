@@ -37,7 +37,9 @@ export class TrackChannel {
   private readonly comp: DynamicsCompressorNode
   private readonly makeup: GainNode
   private readonly pan: StereoPannerNode | GainNode
+  private readonly autoPan: StereoPannerNode | null
   private readonly volume: GainNode
+  private readonly autoVol: GainNode
   private readonly muteGain: GainNode
   private readonly sendA: GainNode
   private readonly sendB: GainNode
@@ -70,7 +72,10 @@ export class TrackChannel {
       typeof (ctx as AudioContext).createStereoPanner === 'function'
         ? ctx.createStereoPanner()
         : ctx.createGain()
+    this.autoPan =
+      typeof (ctx as AudioContext).createStereoPanner === 'function' ? ctx.createStereoPanner() : null
     this.volume = ctx.createGain()
+    this.autoVol = ctx.createGain()
     this.muteGain = ctx.createGain()
     this.sendA = ctx.createGain()
     this.sendA.gain.value = 0
@@ -106,8 +111,14 @@ export class TrackChannel {
     this.eqHigh.connect(this.comp)
     this.comp.connect(this.makeup)
     this.makeup.connect(this.pan)
-    this.pan.connect(this.volume)
-    this.volume.connect(this.muteGain)
+    if (this.autoPan) {
+      this.pan.connect(this.autoPan)
+      this.autoPan.connect(this.volume)
+    } else {
+      this.pan.connect(this.volume)
+    }
+    this.volume.connect(this.autoVol)
+    this.autoVol.connect(this.muteGain)
     this.muteGain.connect(master)
     this.muteGain.connect(this.sendA)
     this.muteGain.connect(this.sendB)
@@ -124,6 +135,26 @@ export class TrackChannel {
 
   trackData(): TrackData {
     return this.data
+  }
+
+  // automation targets (volume rides the fader as a 0..1 multiplier)
+  autoVolParam(): AudioParam {
+    return this.autoVol.gain
+  }
+
+  autoPanParam(): AudioParam | null {
+    return this.autoPan?.pan ?? null
+  }
+
+  // clear booked automation and return to neutral (stop/seek/wrap)
+  resetAutomation(at?: number): void {
+    const t = at ?? this.ctx.currentTime
+    this.autoVol.gain.cancelScheduledValues(t)
+    this.autoVol.gain.setValueAtTime(1, t)
+    if (this.autoPan) {
+      this.autoPan.pan.cancelScheduledValues(t)
+      this.autoPan.pan.setValueAtTime(0, t)
+    }
   }
 
   // instantaneous output peak, 0..1+ (post-fader, post-mute)
@@ -191,9 +222,8 @@ export class TrackChannel {
     this.allNotesOff()
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
-    for (const n of [this.input, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]) {
-      n.disconnect()
-    }
+    const nodes: (AudioNode | null)[] = [this.input, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.pan, this.autoPan, this.volume, this.autoVol, this.muteGain, this.sendA, this.sendB, this.analyser]
+    for (const n of nodes) n?.disconnect()
   }
 }
 
