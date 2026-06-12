@@ -44,15 +44,42 @@ export class PianoRoll {
   private velViewport!: HTMLElement
   private lastDur = 1
   private gridBeats = 0.25
+  private readonly selection = new Set<Note>()
+  private readonly noteEls = new Map<Note, HTMLElement>()
+
+  // reposition the selection's elements from note data (group drag)
+  private placeAll(): void {
+    for (const [n, el] of this.noteEls) {
+      if (!this.selection.has(n)) continue
+      el.style.left = `${n.start * PPB}px`
+      el.style.top = `${(PITCH_MAX - n.pitch) * KEY_H}px`
+    }
+  }
 
   constructor(app: DawApp) {
     this.app = app
     this.el = document.createElement('div')
     this.el.className = 'proll'
+    this.el.tabIndex = -1 // focusable so Delete targets notes, not the clip
+    this.el.addEventListener('keydown', e => {
+      if ((e.code === 'Delete' || e.code === 'Backspace') && this.selection.size > 0 && this.clip) {
+        e.preventDefault()
+        e.stopPropagation()
+        this.app.checkpoint('delete notes')
+        this.clip.notes = this.clip.notes.filter(n => !this.selection.has(n))
+        this.selection.clear()
+        this.app.emit('clips')
+        this.render()
+      } else if (e.code === 'Escape') {
+        this.selection.clear()
+        this.render()
+      }
+    })
   }
 
   show(trackId: string, clip: Clip): void {
     const fresh = this.clip?.id !== clip.id
+    if (fresh) this.selection.clear()
     this.trackId = trackId
     this.clip = clip
     this.render()
@@ -122,6 +149,7 @@ export class PianoRoll {
     this.notesLayer = document.createElement('div')
     this.notesLayer.className = 'proll-notes'
     this.notesLayer.style.left = `${KEYS_W}px`
+    this.noteEls.clear()
     for (const note of clip.notes) this.notesLayer.appendChild(this.noteEl(note))
     inner.appendChild(this.notesLayer)
 
@@ -173,14 +201,27 @@ export class PianoRoll {
     bar.appendChild(mk('Humanize', 'Add subtle timing and velocity variation', () => {
       if (this.clip) this.app.humanizeClip(this.trackId, this.clip.id)
     }))
+    bar.appendChild(mk('Repeat x2', 'Double the clip and tile its notes into the new half', () => {
+      if (this.clip) this.app.repeatClip(this.trackId, this.clip.id)
+    }))
     for (const [text, semi] of [['-12', -12], ['-1', -1], ['+1', 1], ['+12', 12]] as const) {
-      bar.appendChild(mk(text, `Transpose all notes ${semi > 0 ? 'up' : 'down'} ${Math.abs(semi)} semitone${Math.abs(semi) > 1 ? 's' : ''}`, () => {
-        if (this.clip) this.app.transposeClip(this.trackId, this.clip.id, semi)
+      bar.appendChild(mk(text, `Transpose ${semi > 0 ? 'up' : 'down'} ${Math.abs(semi)} semitone${Math.abs(semi) > 1 ? 's' : ''} (selection if any, else all)`, () => {
+        if (!this.clip) return
+        if (this.selection.size > 0) {
+          this.app.checkpoint('transpose selection')
+          for (const n of this.selection) n.pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, n.pitch + semi))
+          this.app.emit('clips')
+          this.render()
+        } else {
+          this.app.transposeClip(this.trackId, this.clip.id, semi)
+        }
       }))
     }
     const hint = document.createElement('span')
     hint.className = 'proll-bar-hint'
-    hint.textContent = `${this.clip?.notes.length ?? 0} notes`
+    hint.textContent = this.selection.size > 0
+      ? `${this.selection.size} of ${this.clip?.notes.length ?? 0} notes selected — shift-drag to select, Delete removes`
+      : `${this.clip?.notes.length ?? 0} notes — shift-drag selects`
     bar.appendChild(hint)
     return bar
   }
@@ -272,12 +313,16 @@ export class PianoRoll {
     setTimeout(() => this.app.song?.noteOff(this.trackId, pitch), 180)
   }
 
-  // draw a new note by pressing on empty grid and dragging right
+  // draw a new note by pressing on empty grid and dragging right;
+  // shift-drag sweeps a marquee selection instead
   private bindGrid(grid: HTMLElement): void {
     let draft: Note | null = null
     let draftEl: HTMLElement | null = null
+    let marqueeFrom: { beat: number; pitch: number } | null = null
+    let marqueeEl: HTMLElement | null = null
     grid.addEventListener('pointerdown', e => {
       e.preventDefault()
+      this.el.focus()
       const clip = this.clip
       if (!clip) return
       try {
@@ -286,19 +331,55 @@ export class PianoRoll {
         // synthetic
       }
       const { beat, pitch } = this.posOf(e)
+      if (e.shiftKey) {
+        marqueeFrom = { beat, pitch }
+        marqueeEl = document.createElement('div')
+        marqueeEl.className = 'proll-marquee'
+        this.notesLayer.appendChild(marqueeEl)
+        return
+      }
+      this.selection.clear()
       if (beat >= clip.length) return
       draft = { start: beat, dur: Math.min(this.lastDur, clip.length - beat), pitch, vel: 0.8 }
       draftEl = this.noteEl(draft)
       this.notesLayer.appendChild(draftEl)
     })
     grid.addEventListener('pointermove', e => {
+      if (marqueeFrom && marqueeEl) {
+        const to = this.posOf(e)
+        const b0 = Math.min(marqueeFrom.beat, to.beat)
+        const b1 = Math.max(marqueeFrom.beat, to.beat) + SNAP
+        const p0 = Math.min(marqueeFrom.pitch, to.pitch)
+        const p1 = Math.max(marqueeFrom.pitch, to.pitch)
+        marqueeEl.style.left = `${b0 * PPB}px`
+        marqueeEl.style.width = `${(b1 - b0) * PPB}px`
+        marqueeEl.style.top = `${(PITCH_MAX - p1) * KEY_H}px`
+        marqueeEl.style.height = `${(p1 - p0 + 1) * KEY_H}px`
+        return
+      }
       if (!draft || !draftEl || !this.clip) return
       const { beat } = this.posOf(e)
       const dur = Math.max(SNAP, beat + SNAP - draft.start)
       draft.dur = Math.min(dur, this.clip.length - draft.start)
       draftEl.style.width = `${draft.dur * PPB - 1}px`
     })
-    const up = (): void => {
+    const up = (e: PointerEvent): void => {
+      if (marqueeFrom && this.clip) {
+        const to = this.posOf(e)
+        const b0 = Math.min(marqueeFrom.beat, to.beat)
+        const b1 = Math.max(marqueeFrom.beat, to.beat) + SNAP
+        const p0 = Math.min(marqueeFrom.pitch, to.pitch)
+        const p1 = Math.max(marqueeFrom.pitch, to.pitch)
+        this.selection.clear()
+        for (const n of this.clip.notes) {
+          if (n.start < b1 && n.start + n.dur > b0 && n.pitch >= p0 && n.pitch <= p1) this.selection.add(n)
+        }
+        marqueeEl?.remove()
+        marqueeFrom = null
+        marqueeEl = null
+        this.render()
+        return
+      }
       if (!draft || !this.clip) return
       this.app.checkpoint('add note')
       this.clip.notes.push(draft)
@@ -312,14 +393,19 @@ export class PianoRoll {
     grid.addEventListener('pointerup', up)
     grid.addEventListener('pointercancel', () => {
       draftEl?.remove()
+      marqueeEl?.remove()
       draft = null
       draftEl = null
+      marqueeFrom = null
+      marqueeEl = null
     })
   }
 
   private noteEl(note: Note): HTMLElement {
     const el = document.createElement('div')
     el.className = 'proll-note'
+    this.noteEls.set(note, el)
+    if (this.selection.has(note)) el.classList.add('proll-note-sel')
     const place = (): void => {
       el.style.left = `${note.start * PPB}px`
       el.style.top = `${(PITCH_MAX - note.pitch) * KEY_H}px`
@@ -332,16 +418,29 @@ export class PianoRoll {
     el.appendChild(grip)
 
     let mode: 'move' | 'size' | null = null
+    let group: Map<Note, { start: number; pitch: number }> | null = null
     let touched = false
     let start = { beat: 0, pitch: 0 }
     let orig = { start: 0, pitch: 0, dur: 0 }
     el.addEventListener('pointerdown', e => {
       e.preventDefault()
       e.stopPropagation()
+      this.el.focus()
+      if (e.shiftKey) {
+        // shift-click toggles membership
+        if (this.selection.has(note)) this.selection.delete(note)
+        else this.selection.add(note)
+        this.render()
+        return
+      }
       mode = e.target === grip ? 'size' : 'move'
       touched = false
       start = this.posOf(e)
       orig = { start: note.start, pitch: note.pitch, dur: note.dur }
+      // dragging a selected note moves the whole selection
+      group = this.selection.has(note) && this.selection.size > 1
+        ? new Map([...this.selection].map(n => [n, { start: n.start, pitch: n.pitch }]))
+        : null
       try {
         el.setPointerCapture(e.pointerId)
       } catch {
@@ -356,20 +455,34 @@ export class PianoRoll {
         this.app.checkpoint(`edit note ${this.clip.id}`)
       }
       if (mode === 'move') {
-        note.start = Math.min(this.clip.length - note.dur, Math.max(0, orig.start + pos.beat - start.beat))
-        note.pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, orig.pitch + pos.pitch - start.pitch))
+        const dBeat = pos.beat - start.beat
+        const dPitch = pos.pitch - start.pitch
+        if (group) {
+          for (const [n, o] of group) {
+            n.start = Math.min(this.clip.length - n.dur, Math.max(0, o.start + dBeat))
+            n.pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, o.pitch + dPitch))
+          }
+          this.placeAll()
+        } else {
+          note.start = Math.min(this.clip.length - note.dur, Math.max(0, orig.start + dBeat))
+          note.pitch = Math.min(PITCH_MAX, Math.max(PITCH_MIN, orig.pitch + dPitch))
+          place()
+        }
       } else {
         note.dur = Math.min(this.clip.length - note.start, Math.max(SNAP, orig.dur + pos.beat - start.beat))
         this.lastDur = note.dur
+        place()
       }
-      place()
     })
     const up = (): void => {
       if (!mode) return
       const pitchChanged = note.pitch !== orig.pitch
+      const wasGroup = group !== null
       mode = null
-      if (pitchChanged) this.audition(note.pitch)
+      group = null
+      if (pitchChanged && !wasGroup) this.audition(note.pitch)
       this.app.emit('clips')
+      if (wasGroup) this.render()
     }
     el.addEventListener('pointerup', up)
     el.addEventListener('pointercancel', up)

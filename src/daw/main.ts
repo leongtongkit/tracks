@@ -248,6 +248,7 @@ window.addEventListener('keydown', e => {
   } else if (e.code === 'Enter') {
     app.rewind()
   } else if (e.code === 'Delete' || e.code === 'Backspace') {
+    if (target?.closest('.proll')) return // the roll handles note deletion itself
     if (app.selectedClip) {
       e.preventDefault()
       app.deleteClip(app.selectedClip.trackId, app.selectedClip.clipId)

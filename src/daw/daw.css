@@ -622,6 +622,23 @@
   cursor: grab;
 }
 
+.proll-note-sel {
+  background: #fff;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.proll-marquee {
+  position: absolute;
+  border: 1px dashed var(--accent);
+  background: rgba(255, 77, 0, 0.08);
+  pointer-events: none;
+}
+
+.proll:focus {
+  outline: none;
+}
+
 .proll-note-grip {
   position: absolute;
   right: 0;

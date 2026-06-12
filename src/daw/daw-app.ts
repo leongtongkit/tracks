@@ -342,6 +342,17 @@ export class DawApp {
     this.emit('clips')
   }
 
+  // double the clip and tile its notes into the new half
+  repeatClip(trackId: string, clipId: string): void {
+    const clip = this.track(trackId)?.clips.find(c => c.id === clipId)
+    if (!clip || clip.audio) return
+    this.checkpoint('repeat clip')
+    const len = clip.length
+    clip.notes.push(...clip.notes.map(n => ({ ...n, start: n.start + len })))
+    clip.length = len * 2
+    this.emit('clips')
+  }
+
   transposeClip(trackId: string, clipId: string, semitones: number): void {
     const clip = this.track(trackId)?.clips.find(c => c.id === clipId)
     if (!clip) return
@@ -400,16 +411,46 @@ export class DawApp {
   private mic: MicRecorder | null = null
   private micStartBeat = 0
   micError: string | null = null
+  countingIn = false
+  private countInTimer: ReturnType<typeof setTimeout> | null = null
 
   toggleRecord(): void {
     this.recording = !this.recording
     if (this.recording) {
-      if (!this.transport.playing) this.togglePlay()
-      if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
+      if (this.transport.playing) {
+        if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
+      } else {
+        this.startWithCountIn() // one bar of clicks, then roll
+      }
     } else {
+      if (this.countInTimer !== null) {
+        clearTimeout(this.countInTimer)
+        this.countInTimer = null
+        this.countingIn = false
+      }
       this.finishMic()
     }
     this.emit('transport')
+  }
+
+  // one bar of metronome before recording starts
+  private startWithCountIn(): void {
+    this.ensureAudio()
+    const ctx = this.audioCtx()
+    if (!ctx) return
+    const spb = 60 / this.project.bpm
+    const t0 = ctx.currentTime + 0.08
+    for (let i = 0; i < 4; i++) this.click(t0 + i * spb, i === 0)
+    this.countingIn = true
+    this.countInTimer = setTimeout(() => {
+      this.countInTimer = null
+      this.countingIn = false
+      if (this.recording && !this.transport.playing) {
+        this.transport.start()
+        if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
+        this.emit('transport')
+      }
+    }, (4 * spb - 0.02) * 1000)
   }
 
   private async startMic(): Promise<void> {
