@@ -16,6 +16,7 @@ import { defaultProject, newId, newTrack } from './project'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
 import { buildDrumEditor } from './ui/drum-editor'
+import { buildPadsEditor } from './ui/pads-editor'
 import { buildSamplerEditor } from './ui/sampler-editor'
 import { renderProjectToWav } from './render'
 import { renderProject } from './render'
@@ -52,6 +53,10 @@ bottom.setInstrumentMount((host, trackId) => {
   }
   if (track.kind === 'sampler') {
     host.appendChild(buildSamplerEditor(app, trackId))
+    return
+  }
+  if (track.kind === 'pads') {
+    host.appendChild(buildPadsEditor(app, trackId))
     return
   }
   if (track.kind === 'audio') {

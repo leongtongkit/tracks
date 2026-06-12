@@ -12,7 +12,7 @@ import { defaultPatch, migrate, type Patch } from '../patch/schema'
 
 export const PROJECT_VERSION = 2
 
-export type TrackKind = 'synth' | 'drums' | 'sampler' | 'audio'
+export type TrackKind = 'synth' | 'drums' | 'sampler' | 'pads' | 'audio'
 
 export interface Note {
   start: number // beats, relative to clip start
@@ -78,6 +78,21 @@ export interface SamplerPatch {
   loop: boolean
 }
 
+// 16 sample pads (MPC-style), mapped to MIDI 36..51.
+export interface PadConfig {
+  sampleId: string | null
+  gain: number // 0..2
+  tune: number // semitones, -24..24
+  oneshot: boolean // true = always play the full sample
+}
+
+export interface PadsPatch {
+  pads: PadConfig[] // exactly PAD_COUNT entries
+}
+
+export const PAD_COUNT = 16
+export const PAD_BASE_PITCH = 36
+
 export interface TrackData {
   id: string
   name: string
@@ -85,6 +100,7 @@ export interface TrackData {
   patch: Patch
   drums: DrumPatch
   sampler: SamplerPatch
+  pads: PadsPatch
   mixer: MixerState
   auto: Automation
   clips: Clip[]
@@ -139,6 +155,12 @@ export function defaultSampler(): SamplerPatch {
   return { sampleId: null, root: 60, gain: 0.9, attack: 0.003, release: 0.08, loop: false }
 }
 
+export function defaultPads(): PadsPatch {
+  return {
+    pads: Array.from({ length: PAD_COUNT }, () => ({ sampleId: null, gain: 1, tune: 0, oneshot: true })),
+  }
+}
+
 export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind } = {}): TrackData {
   const def = opts.preset ? PRESETS.find(p => p.name === opts.preset) : undefined
   return {
@@ -148,6 +170,7 @@ export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind
     patch: def ? buildPresetPatch(def) : defaultPatch(),
     drums: defaultDrums(),
     sampler: defaultSampler(),
+    pads: defaultPads(),
     mixer: defaultMixer(),
     auto: { volume: [], pan: [] },
     clips: [],
@@ -187,6 +210,9 @@ export function pruneSamples(project: Project): void {
   const used = new Set<string>()
   for (const track of project.tracks) {
     if (track.sampler.sampleId) used.add(track.sampler.sampleId)
+    for (const pad of track.pads.pads) {
+      if (pad.sampleId) used.add(pad.sampleId)
+    }
     for (const clip of track.clips) {
       if (clip.audio) used.add(clip.audio.sampleId)
     }
@@ -201,7 +227,7 @@ const clamp = (v: unknown, min: number, max: number, fallback: number): number =
   return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback
 }
 
-const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'audio']
+const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'pads', 'audio']
 const SCALES: ScaleName[] = ['chromatic', 'major', 'minor']
 
 // Accepts parsed JSON (v1 or v2); returns a valid v2 Project or throws.
@@ -262,6 +288,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
     patch,
     drums: migrateDrums(t.drums),
     sampler: migrateSampler(t.sampler),
+    pads: migratePads(t.pads),
     mixer: {
       volume: clamp(mixer.volume, 0, 1, 0.8),
       pan: clamp(mixer.pan, -1, 1, 0),
@@ -320,6 +347,22 @@ function migrateSampler(raw: unknown): SamplerPatch {
     release: clamp(s.release, 0.005, 4, 0.08),
     loop: Boolean(s.loop),
   }
+}
+
+function migratePads(raw: unknown): PadsPatch {
+  const p = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
+  const padsRaw = Array.isArray(p.pads) ? p.pads : []
+  const pads: PadConfig[] = []
+  for (let i = 0; i < PAD_COUNT; i++) {
+    const o = (typeof padsRaw[i] === 'object' && padsRaw[i] !== null ? padsRaw[i] : {}) as Record<string, unknown>
+    pads.push({
+      sampleId: typeof o.sampleId === 'string' && o.sampleId ? o.sampleId : null,
+      gain: clamp(o.gain, 0, 2, 1),
+      tune: clamp(o.tune, -24, 24, 0),
+      oneshot: o.oneshot === undefined ? true : Boolean(o.oneshot),
+    })
+  }
+  return { pads }
 }
 
 function migrateAutoPoints(raw: unknown, min: number, max: number): AutoPoint[] {

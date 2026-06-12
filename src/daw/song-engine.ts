@@ -13,6 +13,7 @@ import { Engine } from '../engine/engine'
 import { makeImpulse } from '../engine/fx/reverb'
 import { Store } from '../state/store'
 import { DrumMachine } from './instruments/drums'
+import { PadsInstrument } from './instruments/pads'
 import { SamplerInstrument } from './instruments/sampler'
 import type { Instrument } from './instruments/types'
 import type { AudioRegion, Project, TrackData, TrackKind } from './project'
@@ -98,6 +99,8 @@ export class TrackChannel {
         this.instr = new DrumMachine(ctx, () => this.data.drums)
       } else if (data.kind === 'sampler') {
         this.instr = new SamplerInstrument(ctx, () => this.data.sampler, samples)
+      } else if (data.kind === 'pads') {
+        this.instr = new PadsInstrument(ctx, () => this.data.pads, samples)
       } else {
         this.instr = null // audio tracks have no triggered instrument
       }

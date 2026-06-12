@@ -13,7 +13,7 @@ export class BottomPanel {
   private readonly app: DawApp
   private readonly roll: PianoRoll
   private readonly mixer: MixerView
-  private tab: Tab = 'clip'
+  private tab: Tab = 'instrument'
   private readonly tabs: HTMLElement
   private readonly body: HTMLElement
   private mountInstrument: ((host: HTMLElement, trackId: string) => void) | null = null
@@ -59,11 +59,20 @@ export class BottomPanel {
     this.el.appendChild(this.tabs)
     this.el.appendChild(this.body)
 
-    app.on('selection', () => this.render())
+    app.on('selection', () => {
+      // picking a clip is an editing intent: show it
+      if (app.selectedClip && this.tab === 'instrument') this.tab = 'clip'
+      this.render()
+    })
     app.on('clips', () => {
       if (this.tab === 'clip') this.render()
     })
     app.on('tracks', () => this.render())
+    // arming a track (header click / arm dot) surfaces its instrument
+    app.on('arm', () => {
+      this.tab = 'instrument'
+      this.render()
+    })
     this.render()
   }
 

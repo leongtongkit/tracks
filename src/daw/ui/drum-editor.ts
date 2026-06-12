@@ -1,6 +1,7 @@
-// Drum machine editor: kit picker, master level, and a row per drum voice —
-// pad to audition, dials for level/tune/decay. Edits write straight into the
-// project's DrumPatch; the machine reads it live at trigger time.
+// Drum machine editor: kit picker, master level, and a pad grid — tap a pad
+// to hear it and select it; the selected drum's level/tune/decay dials sit
+// below the grid. Edits write straight into the project's DrumPatch; the
+// machine reads it live at trigger time.
 
 import type { DawApp } from '../daw-app'
 import { DRUM_ORDER } from '../instruments/drums'
@@ -12,6 +13,7 @@ export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
   root.className = 'drum-editor'
   if (!track) return root
   const drums = track.drums
+  let selected = 0
 
   const top = document.createElement('div')
   top.className = 'drum-editor-top'
@@ -20,6 +22,7 @@ export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
     b.type = 'button'
     b.className = 'seg-btn'
     b.textContent = kit
+    b.title = kit === '808' ? 'Deep, boomy kit' : 'Punchy, bright kit'
     b.classList.toggle('seg-on', drums.kit === kit)
     b.addEventListener('click', () => {
       app.checkpoint(`drum kit ${trackId}`)
@@ -42,33 +45,32 @@ export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
       fmt: v => String(Math.round(v * 100)),
     }),
   )
+  const hint = document.createElement('span')
+  hint.className = 'audio-hint'
+  hint.textContent = 'Tap a pad to hear it. Drums live on the labeled piano-roll rows, so draw beats in a clip.'
+  top.appendChild(hint)
   root.appendChild(top)
 
   const grid = document.createElement('div')
-  grid.className = 'drum-grid'
-  for (const { id, pitch, label } of DRUM_ORDER) {
-    const row = document.createElement('div')
-    row.className = 'drum-row'
+  grid.className = 'pads-grid drum-pads-grid'
 
-    const pad = document.createElement('button')
-    pad.type = 'button'
-    pad.className = 'drum-pad'
-    pad.textContent = label
-    pad.title = 'Click to hear'
-    pad.addEventListener('pointerdown', () => {
-      app.ensureAudio().noteOn(trackId, pitch, 0.9)
-      pad.classList.add('drum-pad-hit')
-      setTimeout(() => pad.classList.remove('drum-pad-hit'), 120)
-    })
-    row.appendChild(pad)
+  const params = document.createElement('div')
+  params.className = 'sampler-row'
 
-    const params = [
-      { key: 'level' as const, label: 'Lvl', min: 0, max: 1.5, reset: 1, fmt: (v: number) => String(Math.round(v * 100)) },
+  const renderParams = (): void => {
+    const { id, label } = DRUM_ORDER[selected]
+    params.innerHTML = ''
+    const tag = document.createElement('span')
+    tag.className = 'mix-tag pads-param-tag'
+    tag.textContent = label
+    params.appendChild(tag)
+    const defs = [
+      { key: 'level' as const, label: 'Level', min: 0, max: 1.5, reset: 1, fmt: (v: number) => String(Math.round(v * 100)) },
       { key: 'tune' as const, label: 'Tune', min: -12, max: 12, reset: 0, fmt: (v: number) => (v > 0 ? `+${v.toFixed(0)}` : v.toFixed(0)) },
-      { key: 'decay' as const, label: 'Dec', min: 0.2, max: 3, reset: 1, fmt: (v: number) => v.toFixed(2) },
+      { key: 'decay' as const, label: 'Decay', min: 0.2, max: 3, reset: 1, fmt: (v: number) => v.toFixed(2) },
     ]
-    for (const p of params) {
-      row.appendChild(
+    for (const p of defs) {
+      params.appendChild(
         miniDial({
           label: p.label,
           get: () => drums.drums[id]?.[p.key] ?? p.reset,
@@ -83,8 +85,32 @@ export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
         }),
       )
     }
-    grid.appendChild(row)
   }
+
+  DRUM_ORDER.forEach(({ pitch, label }, i) => {
+    const cell = document.createElement('button')
+    cell.type = 'button'
+    cell.className = 'pad-cell'
+    cell.classList.toggle('pad-cell-on', i === selected)
+    const name = document.createElement('span')
+    name.className = 'pad-name'
+    name.textContent = label
+    cell.appendChild(name)
+    cell.title = 'Tap to play, select to edit'
+    cell.addEventListener('pointerdown', () => {
+      selected = i
+      renderParams()
+      for (const el of grid.children) el.classList.remove('pad-cell-on')
+      cell.classList.add('pad-cell-on')
+      app.ensureAudio().noteOn(trackId, pitch, 0.9)
+      cell.classList.add('pad-cell-hit')
+      setTimeout(() => cell.classList.remove('pad-cell-hit'), 130)
+    })
+    grid.appendChild(cell)
+  })
+
+  renderParams()
   root.appendChild(grid)
+  root.appendChild(params)
   return root
 }

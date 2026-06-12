@@ -263,6 +263,7 @@ export class ArrangeView {
       ['+ Synth', 'synth', 'Add a synthesizer track'],
       ['+ Drums', 'drums', 'Add an 808/909 drum machine track'],
       ['+ Sampler', 'sampler', 'Add a sampler track (load any audio, play it across the keys)'],
+      ['+ Pads', 'pads', 'Add a 16-pad sample bank (drop audio on pads, finger-drum them)'],
       ['+ Audio', 'audio', 'Add an audio track (record mic / import files)'],
     ] as const) {
       const b = btn(label, title)
@@ -276,6 +277,13 @@ export class ArrangeView {
     const el = document.createElement('div')
     el.className = 'track-head'
     if (this.app.armedTrackId === track.id) el.classList.add('track-armed')
+    el.title = 'Click to select this track and open its instrument'
+    // clicking anywhere that isn't a control arms the track + shows its instrument
+    el.addEventListener('click', e => {
+      const t = e.target as HTMLElement
+      if (t.closest('button, select, .mini-dial')) return
+      this.app.armTrack(track.id)
+    })
 
     const top = document.createElement('div')
     top.className = 'track-head-top'
@@ -405,7 +413,7 @@ export class ArrangeView {
         const beat = Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP
         if (track.kind !== 'audio') this.app.addClip(track.id, beat)
       })
-      if (track.kind === 'audio') {
+      if (track.kind === 'audio' || track.kind === 'sampler' || track.kind === 'pads') {
         lane.addEventListener('dragover', e => {
           e.preventDefault()
           lane.classList.add('lane-drop')
@@ -416,9 +424,17 @@ export class ArrangeView {
           lane.classList.remove('lane-drop')
           const file = e.dataTransfer?.files?.[0]
           if (!file) return
-          const rect = this.lanes.getBoundingClientRect()
-          const beat = Math.max(0, Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP)
-          void this.app.importAudioFile(file, track.id, beat).catch(() => alert('Could not decode that audio file.'))
+          const fail = (): void => alert('Could not decode that audio file.')
+          if (track.kind === 'audio') {
+            const rect = this.lanes.getBoundingClientRect()
+            const beat = Math.max(0, Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP)
+            void this.app.importAudioFile(file, track.id, beat).catch(fail)
+          } else if (track.kind === 'sampler') {
+            void this.app.loadSamplerFile(track.id, file).catch(fail)
+          } else {
+            const empty = track.pads.pads.findIndex(p => !p.sampleId)
+            void this.app.loadPadFile(track.id, empty === -1 ? 0 : empty, file).catch(fail)
+          }
         })
       }
       for (const clip of track.clips) {

@@ -93,6 +93,7 @@ export class PianoRoll {
 
     // sticky key column
     const drums = this.isDrumTrack()
+    const pads = this.app.track(this.trackId)?.kind === 'pads'
     const keys = document.createElement('div')
     keys.className = 'proll-keys'
     keys.style.width = `${KEYS_W}px`
@@ -104,6 +105,11 @@ export class PianoRoll {
       if (drums) {
         if (DRUM_NAMES[pitch]) {
           row.textContent = DRUM_NAMES[pitch]
+          row.classList.add('proll-key-drum')
+        }
+      } else if (pads) {
+        if (pitch >= 36 && pitch < 52) {
+          row.textContent = `P${pitch - 35}`
           row.classList.add('proll-key-drum')
         }
       } else if (pitch % 12 === 0) {

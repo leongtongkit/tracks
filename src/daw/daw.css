@@ -710,38 +710,96 @@
   gap: 8px;
 }
 
-.drum-grid {
+.drum-editor-top .audio-hint {
+  margin-left: 10px;
+}
+
+/* ---------- pad grids (drums + sampled pads) ---------- */
+
+.pads-editor {
+  padding: 12px 14px;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
-  gap: 6px 18px;
+  gap: 10px;
+  align-content: start;
+  justify-items: start;
+  overflow: auto;
+  min-height: 0;
 }
 
-.drum-row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.pads-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(86px, 110px));
+  gap: 6px;
 }
 
-.drum-pad {
-  flex: 0 0 86px;
+.drum-pads-grid {
+  grid-template-columns: repeat(7, minmax(86px, 110px));
+}
+
+.pad-cell {
+  position: relative;
+  height: 52px;
+  display: grid;
+  align-content: center;
+  justify-items: center;
+  gap: 2px;
+  padding: 4px 6px;
   font-family: var(--font-mono);
-  font-size: 0.6rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--ink);
   background: var(--panel-grey);
   border: 1px solid var(--edge);
-  border-radius: 4px;
-  padding: 7px 4px;
+  border-radius: 5px;
   cursor: pointer;
-  text-align: center;
+  box-shadow: 0 2px 0 rgba(29, 29, 27, 0.18);
+  transition: transform 0.05s ease, box-shadow 0.05s ease, background 0.1s ease;
 }
 
-.drum-pad-hit {
+.pad-cell:active,
+.pad-cell-hit {
+  transform: translateY(2px);
+  box-shadow: 0 0 0 rgba(29, 29, 27, 0.18);
   background: var(--accent);
   color: #fff;
-  border-color: var(--accent-deep);
+}
+
+.pad-cell-on {
+  border-color: var(--accent);
+  box-shadow: 0 2px 0 rgba(29, 29, 27, 0.18), inset 0 0 0 1px var(--accent);
+}
+
+.pad-cell-empty {
+  color: var(--ink-soft);
+  background: var(--body-grey);
+  border-style: dashed;
+}
+
+.pad-cell-drop {
+  background: rgba(255, 77, 0, 0.15);
+  border-color: var(--accent);
+}
+
+.pad-num {
+  font-size: 0.52rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  color: inherit;
+  opacity: 0.65;
+}
+
+.pad-name {
+  font-size: 0.58rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pads-param-tag {
+  flex: 0 0 auto !important;
+  min-width: 64px;
 }
 
 /* ---------- sampler editor ---------- */

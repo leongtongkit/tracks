@@ -19,7 +19,7 @@ import { sampleStore } from './samples'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
 
-export type DawEvent = 'project' | 'tracks' | 'clips' | 'selection' | 'transport' | 'mixer'
+export type DawEvent = 'project' | 'tracks' | 'clips' | 'selection' | 'transport' | 'mixer' | 'arm'
 
 const TRACK_PRESETS = ['Fat Saw', 'EP Glow', 'Retro Solo', 'Warm Pad', 'Pop Pluck', 'FM Bell', 'Synth Brass', 'Dub Wob']
 
@@ -178,7 +178,7 @@ export class DawApp {
       const preset = TRACK_PRESETS[this.project.tracks.length % TRACK_PRESETS.length]
       track = newTrack(preset, { preset })
     } else {
-      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', audio: 'Audio' }
+      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio' }
       track = newTrack(names[kind], { kind })
     }
     this.project.tracks.push(track)
@@ -217,7 +217,7 @@ export class DawApp {
 
   armTrack(id: string): void {
     this.armedTrackId = id
-    this.emit('tracks')
+    this.emit('tracks', 'arm')
   }
 
   // ---------- clips ----------
@@ -451,17 +451,45 @@ export class DawApp {
     this.emit('clips')
   }
 
-  // shared by the file picker and lane drag-drop
-  async importAudioFile(file: File, trackId: string, atBeat: number): Promise<Clip | null> {
+  // decode any audio file into the sample store + project metadata
+  async decodeAudioFile(file: File): Promise<{ id: string; buffer: AudioBuffer }> {
     this.ensureAudio()
     const ctx = this.audioCtx()
-    const track = this.track(trackId)
-    if (!ctx || !track) return null
+    if (!ctx) throw new Error('no audio context')
     const buffer = await ctx.decodeAudioData(await file.arrayBuffer())
-    this.checkpoint('import audio')
     const id = newId()
     sampleStore.put(id, file.name, buffer)
     this.project.samples[id] = { name: file.name, duration: buffer.duration }
+    return { id, buffer }
+  }
+
+  // load an uploaded file as the sampler's sample
+  async loadSamplerFile(trackId: string, file: File): Promise<void> {
+    const track = this.track(trackId)
+    if (!track) return
+    const { id } = await this.decodeAudioFile(file)
+    this.checkpoint('load sample')
+    track.sampler.sampleId = id
+    this.emit('tracks')
+  }
+
+  // load an uploaded file onto one pad (padIndex 0..15)
+  async loadPadFile(trackId: string, padIndex: number, file: File): Promise<void> {
+    const track = this.track(trackId)
+    const pad = track?.pads.pads[padIndex]
+    if (!pad) return
+    const { id } = await this.decodeAudioFile(file)
+    this.checkpoint('load pad')
+    pad.sampleId = id
+    this.emit('tracks')
+  }
+
+  // shared by the file picker and lane drag-drop
+  async importAudioFile(file: File, trackId: string, atBeat: number): Promise<Clip | null> {
+    const track = this.track(trackId)
+    if (!track) return null
+    const { id, buffer } = await this.decodeAudioFile(file)
+    this.checkpoint('import audio')
     const spb = 60 / this.project.bpm
     const clip: Clip = {
       id: newId(),
