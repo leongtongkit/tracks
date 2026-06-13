@@ -526,17 +526,19 @@ export class SongEngine {
   private readonly kBuf: Float32Array<ArrayBuffer>
   private lufsEma = 1e-7
 
-  constructor(ctx: BaseAudioContext, dest?: AudioNode, samples: SampleStore = sampleStore) {
+  // neutralMaster = transparent 2-bus (no limiter clamp, unity gain): used when
+  // bouncing a single track to freeze so the master chain isn't baked in twice.
+  constructor(ctx: BaseAudioContext, dest?: AudioNode, samples: SampleStore = sampleStore, opts: { neutralMaster?: boolean } = {}) {
     this.ctx = ctx
     this.samples = samples
     const limiter = ctx.createDynamicsCompressor()
-    limiter.threshold.value = -6
-    limiter.knee.value = 4
-    limiter.ratio.value = 12
+    limiter.threshold.value = opts.neutralMaster ? 0 : -6
+    limiter.knee.value = opts.neutralMaster ? 0 : 4
+    limiter.ratio.value = opts.neutralMaster ? 1 : 12
     limiter.attack.value = 0.003
     limiter.release.value = 0.25
     this.masterGain = ctx.createGain()
-    this.masterGain.gain.value = 0.9
+    this.masterGain.gain.value = opts.neutralMaster ? 1 : 0.9
     limiter.connect(this.masterGain)
     this.masterGain.connect(dest ?? ctx.destination)
     this.limiterIn = limiter

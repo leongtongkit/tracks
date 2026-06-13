@@ -1337,3 +1337,37 @@
   color: var(--ink);
   font-variant-numeric: tabular-nums;
 }
+
+/* ---------- track freeze ---------- */
+.track-freeze {
+  font-size: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 5px;
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  background: var(--panel-grey);
+  color: var(--ink-soft);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.track-freeze:hover:not(:disabled) {
+  color: var(--ink);
+  border-color: #6db3d8;
+}
+
+.track-freeze.seg-on {
+  background: #2a4d63;
+  border-color: #4a86ad;
+  color: #cfeaff;
+}
+
+.track-freeze:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.track-frozen {
+  box-shadow: inset 3px 0 0 #4a86ad;
+}

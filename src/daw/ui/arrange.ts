@@ -287,6 +287,7 @@ export class ArrangeView {
     const el = document.createElement('div')
     el.className = 'track-head'
     if (this.app.armedTrackId === track.id) el.classList.add('track-armed')
+    if (track.frozen) el.classList.add('track-frozen')
     el.title = 'Click to select this track and open its instrument'
     // clicking anywhere that isn't a control arms the track + shows its instrument
     el.addEventListener('click', e => {
@@ -320,6 +321,22 @@ export class ArrangeView {
     })
     top.appendChild(arm)
     top.appendChild(name)
+    if (track.kind !== 'bus') {
+      const busy = this.app.freezing === track.id
+      const frz = document.createElement('button')
+      frz.type = 'button'
+      frz.className = 'track-freeze' + (track.frozen ? ' seg-on' : '')
+      frz.textContent = busy ? '…' : track.frozen ? 'Frozen' : 'Freeze'
+      frz.disabled = busy
+      frz.title = track.frozen
+        ? 'Unfreeze — edit this track live again'
+        : 'Freeze — bounce this track to audio to save CPU (unfreeze to edit)'
+      frz.addEventListener('click', () => {
+        if (track.frozen) this.app.unfreezeTrack(track.id)
+        else void this.app.freezeTrack(track.id)
+      })
+      top.appendChild(frz)
+    }
     top.appendChild(del)
 
     if (this.autoOpen.has(track.id)) el.style.height = `${ROW_H + AUTO_H}px`

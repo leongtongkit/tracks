@@ -156,6 +156,10 @@ export interface TrackData {
   mixer: MixerState
   auto: Automation
   clips: Clip[]
+  // when set, the track's instrument is bounced to this sample (rendered with a
+  // neutral strip) and played back through the live strip instead of synthesised
+  // live — saves CPU. lengthBeats is the bounce length on the song timeline.
+  frozen?: { sampleId: string; lengthBeats: number }
 }
 
 export interface SampleMeta {
@@ -265,6 +269,7 @@ export function projectEndBeat(project: Project): number {
 export function pruneSamples(project: Project): void {
   const used = new Set<string>()
   for (const track of project.tracks) {
+    if (track.frozen) used.add(track.frozen.sampleId)
     if (track.sampler.sampleId) used.add(track.sampler.sampleId)
     for (const pad of track.pads.pads) {
       if (pad.sampleId) used.add(pad.sampleId)
@@ -379,6 +384,12 @@ function migrateTrack(raw: unknown, index: number): TrackData {
     },
     auto: migrateAuto(auto),
     clips: clips.slice(0, 256).map(migrateClip).filter((c): c is Clip => c !== null),
+    ...(() => {
+      const f = (typeof t.frozen === 'object' && t.frozen !== null ? t.frozen : null) as Record<string, unknown> | null
+      return f && typeof f.sampleId === 'string' && f.sampleId
+        ? { frozen: { sampleId: f.sampleId, lengthBeats: clamp(f.lengthBeats, 1, 1e5, 4) } }
+        : {}
+    })(),
   }
 }
 

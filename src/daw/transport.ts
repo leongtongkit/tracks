@@ -2,7 +2,34 @@
 // interval books sample-accurate events a small window ahead. Loop wraps
 // re-anchor the beat→time mapping so timing stays exact across passes.
 
-import { warpRate, type AudioRegion, type Project, type TrackData } from './project'
+import { warpRate, type AudioRegion, type Clip, type Project, type TrackData } from './project'
+
+// the leading silence renderProject prepends to every bounce (see render.ts
+// startAt); a frozen clip skips it so the bounce sits flush on the timeline.
+export const FROZEN_LEAD_SEC = 0.05
+
+// the synthetic full-song audio clip a frozen track plays (its bounce)
+export function frozenClip(track: TrackData): Clip | null {
+  if (!track.frozen) return null
+  return {
+    id: '__frozen',
+    start: 0,
+    length: track.frozen.lengthBeats,
+    notes: [],
+    audio: { sampleId: track.frozen.sampleId, offsetSec: FROZEN_LEAD_SEC, gain: 1, warp: 'off', origBpm: 120, fadeIn: 0, fadeOut: 0 },
+  }
+}
+
+// audio-bearing clips to schedule for a track: just the frozen bounce when
+// frozen, otherwise its real audio clips. (Frozen tracks mute their own notes
+// and original clips — the bounce already contains them.)
+export function scheduledAudioClips(track: TrackData): Clip[] {
+  if (track.frozen) {
+    const c = frozenClip(track)
+    return c ? [c] : []
+  }
+  return track.clips.filter(c => c.audio)
+}
 
 export interface SongEvent {
   trackId: string
@@ -43,6 +70,7 @@ const CHUNK_BEATS = 1
 export function collectEvents(tracks: TrackData[], from: number, to: number): SongEvent[] {
   const out: SongEvent[] = []
   for (const track of tracks) {
+    if (track.frozen) continue // frozen tracks play their bounce, not live notes
     for (const clip of track.clips) {
       if (clip.start >= to || clip.start + clip.length <= from) continue
       for (const note of clip.notes) {
@@ -67,7 +95,7 @@ export function collectEvents(tracks: TrackData[], from: number, to: number): So
 export function collectAudioEvents(tracks: TrackData[], from: number, to: number): AudioEvent[] {
   const out: AudioEvent[] = []
   for (const track of tracks) {
-    for (const clip of track.clips) {
+    for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
       if (clip.start >= from && clip.start < to) {
         out.push({ trackId: track.id, region: clip.audio, startBeat: clip.start, durBeats: clip.length })
@@ -84,7 +112,7 @@ export function straddlingAudio(
 ): { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] {
   const out: { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] = []
   for (const track of tracks) {
-    for (const clip of track.clips) {
+    for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
       if (clip.start < atBeat && clip.start + clip.length > atBeat) {
         out.push({

@@ -6,9 +6,12 @@ import { scheduleAutomation } from './automation'
 import { History } from './history'
 import { MicRecorder } from './mic'
 import {
+  defaultMixer,
   defaultProject,
   newId,
   newTrack,
+  projectEndBeat,
+  pruneSamples,
   warpRate,
   type AutoTarget,
   type Clip,
@@ -17,6 +20,7 @@ import {
   type TrackData,
   type TrackKind,
 } from './project'
+import { renderProject } from './render'
 import { sampleStore } from './samples'
 import { settings } from './settings'
 import { SongEngine } from './song-engine'
@@ -207,6 +211,48 @@ export class DawApp {
     if (this.armedTrackId === id) this.armedTrackId = this.project.tracks[0]?.id ?? null
     void this.song?.syncTracks(this.project)
     this.emit('tracks', 'selection')
+  }
+
+  // Freeze: bounce the track (in isolation, with a neutral strip) to a sample,
+  // then play that back through the live strip instead of synthesising it —
+  // saves CPU on dense projects. Returns false if the track can't be frozen.
+  freezing: string | null = null
+  async freezeTrack(id: string): Promise<boolean> {
+    const track = this.track(id)
+    if (!track || track.kind === 'bus' || track.frozen || this.freezing) return false
+    this.freezing = id
+    this.emit('tracks')
+    try {
+      const endBeat = projectEndBeat(this.project)
+      const clone = structuredClone(track)
+      clone.frozen = undefined
+      clone.mixer = { ...defaultMixer(), volume: 1, output: 'master' } // neutral: capture the dry tone
+      const solo: Project = { ...this.project, tracks: [clone], loop: { on: false, start: 0, end: endBeat } }
+      const buf = await renderProject(solo, 44100, { neutralMaster: true })
+      const sid = newId()
+      const name = `${track.name} (frozen)`
+      sampleStore.put(sid, name, buf)
+      this.project.samples[sid] = { name, duration: buf.duration }
+      this.checkpoint('freeze track')
+      track.frozen = { sampleId: sid, lengthBeats: endBeat }
+      await this.song?.syncTracks(this.project)
+      return true
+    } finally {
+      this.freezing = null
+      this.emit('tracks')
+    }
+  }
+
+  unfreezeTrack(id: string): void {
+    const track = this.track(id)
+    if (!track?.frozen) return
+    this.checkpoint('unfreeze track')
+    const sid = track.frozen.sampleId
+    delete track.frozen
+    pruneSamples(this.project)
+    if (!this.project.samples[sid]) void sampleStore.remove(sid)
+    void this.song?.syncTracks(this.project)
+    this.emit('tracks')
   }
 
   renameTrack(id: string, name: string): void {

@@ -5,17 +5,17 @@ import { encodeWav } from '../record/wav'
 import { scheduleAutomation } from './automation'
 import { projectEndBeat, warpRate, type AutoTarget, type Project } from './project'
 import { SongEngine } from './song-engine'
-import { collectEvents } from './transport'
+import { collectEvents, scheduledAudioClips } from './transport'
 
 const TAIL_S = 2.5 // let releases/delays/reverbs ring out
 
-export async function renderProject(project: Project, sampleRate = 44100): Promise<AudioBuffer> {
+export async function renderProject(project: Project, sampleRate = 44100, opts: { neutralMaster?: boolean } = {}): Promise<AudioBuffer> {
   const spb = 60 / project.bpm
   const endBeat = projectEndBeat(project)
   const duration = endBeat * spb + TAIL_S
   const ctx = new OfflineAudioContext(2, Math.ceil(duration * sampleRate), sampleRate)
 
-  const song = new SongEngine(ctx)
+  const song = new SongEngine(ctx, undefined, undefined, opts)
   await song.syncTracks(project)
 
   const startAt = 0.05
@@ -25,7 +25,7 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
     song.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
   }
   for (const track of project.tracks) {
-    for (const clip of track.clips) {
+    for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
       const rate = warpRate(clip.audio, project.bpm)
       song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb * rate, rate, clip.audio.fadeIn * spb, clip.audio.fadeOut * spb)

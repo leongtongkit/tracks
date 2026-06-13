@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { defaultProject, newTrack, type Project } from './project'
-import { collectEvents, Transport } from './transport'
+import { collectAudioEvents, collectEvents, scheduledAudioClips, Transport } from './transport'
 
 function projectWith(notes: { start: number; dur: number; pitch: number }[], opts: Partial<Project> = {}): Project {
   const p = defaultProject()
@@ -10,6 +10,29 @@ function projectWith(notes: { start: number; dur: number; pitch: number }[], opt
   ]
   return { ...p, ...opts }
 }
+
+describe('frozen tracks', () => {
+  it('skip their live notes and play a single full-song bounce clip instead', () => {
+    const p = projectWith([{ start: 0, dur: 1, pitch: 60 }, { start: 4, dur: 1, pitch: 64 }])
+    p.tracks[0].frozen = { sampleId: 'bounce1', lengthBeats: 12 }
+    // notes are silenced
+    expect(collectEvents(p.tracks, 0, 16)).toEqual([])
+    // a single frozen audio clip spans the bounce, sourced from the bounce sample
+    const clips = scheduledAudioClips(p.tracks[0])
+    expect(clips).toHaveLength(1)
+    expect(clips[0].audio?.sampleId).toBe('bounce1')
+    expect(clips[0].length).toBe(12)
+    // it's scheduled as an audio event at beat 0
+    const audio = collectAudioEvents(p.tracks, 0, 4)
+    expect(audio.map(a => a.startBeat)).toEqual([0])
+  })
+
+  it('falls back to real clips when not frozen', () => {
+    const p = projectWith([{ start: 0, dur: 1, pitch: 60 }])
+    expect(scheduledAudioClips(p.tracks[0]).filter(c => c.audio)).toHaveLength(0) // note clip, no audio
+    expect(collectEvents(p.tracks, 0, 8)).toHaveLength(1)
+  })
+})
 
 describe('collectEvents', () => {
   it('returns events inside the window with absolute beats', () => {

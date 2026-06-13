@@ -22,7 +22,8 @@ import {
   loadSession,
   saveSession,
 } from './persist'
-import { defaultEqBands, defaultProject, newId, newTrack } from './project'
+import { defaultEqBands, defaultMixer, defaultProject, newId, newTrack, projectEndBeat } from './project'
+import { collectEvents } from './transport'
 import { settings } from './settings'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
@@ -377,6 +378,7 @@ declare global {
     __tracksMixTest: () => Promise<unknown>
     __tracksEqTest: () => Promise<unknown>
     __tracksRoutingTest: () => Promise<unknown>
+    __tracksFreezeTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -616,6 +618,50 @@ window.__tracksRoutingTest = async () => {
     busLpCutsHighs: hf(busLp) < hf(toMaster) * 0.6,
     cycleRms: rms(cycle),
     cycleStaysFiniteAndAudible: finite(cycle) && rms(cycle) > rms(toMaster) * 0.5,
+  }
+}
+
+// track freeze: bouncing a track (neutral strip) then playing it back frozen
+// must reproduce the live-synthesised sound, and frozen tracks must skip notes.
+window.__tracksFreezeTest = async () => {
+  const mk = (): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    const t = newTrack('Saw', { preset: 'Fat Saw', kind: 'synth' })
+    t.clips = [{ id: 'f1', start: 0, length: 4, notes: [0, 1, 2, 3].map(i => ({ start: i, dur: 0.6, pitch: 50, vel: 0.9 })) }]
+    p.tracks = [t]
+    return p
+  }
+  const rms = (b: AudioBuffer, from: number, to: number): number => {
+    const d = b.getChannelData(0)
+    const i0 = Math.floor(from * b.sampleRate)
+    const i1 = Math.min(d.length, Math.floor(to * b.sampleRate))
+    let s = 0
+    for (let i = i0; i < i1; i++) s += d[i] * d[i]
+    return Math.sqrt(s / Math.max(1, i1 - i0))
+  }
+  const spb = 60 / 120
+  const live = await renderProject(mk())
+
+  // freeze: bounce with a neutral strip, then mark the track frozen
+  const p2 = mk()
+  const endBeat = projectEndBeat(p2)
+  const clone = structuredClone(p2.tracks[0])
+  clone.mixer = { ...defaultMixer(), volume: 1, output: 'master' }
+  const bounce = await renderProject({ ...p2, tracks: [clone], loop: { on: false, start: 0, end: endBeat } }, 44100, { neutralMaster: true })
+  const sid = newId()
+  sampleStore.put(sid, 'frozen', bounce)
+  p2.samples[sid] = { name: 'frozen', duration: bounce.duration }
+  p2.tracks[0].frozen = { sampleId: sid, lengthBeats: endBeat }
+  const frozen = await renderProject(p2)
+
+  const liveRms = rms(live, 0, endBeat * spb)
+  const frozenRms = rms(frozen, 0, endBeat * spb)
+  return {
+    liveRms,
+    frozenRms,
+    frozenMatchesLive: Math.abs(liveRms - frozenRms) / liveRms < 0.15,
+    frozenIsAudible: frozenRms > 0.005,
+    notesSkippedWhenFrozen: collectEvents(p2.tracks, 0, endBeat).length === 0,
   }
 }
 
