@@ -6,7 +6,7 @@ import type { DawApp } from '../daw-app'
 import { autotuneChannel, normalizeChannels, reverseChannels } from '../dsp/autotune'
 import { detectOnsets } from '../dsp/onsets'
 import { extractStems } from '../dsp/stems'
-import { newId, newTrack, warpRate, type Clip } from '../project'
+import { newId, newTrack, TempoMap, warpRate, type Clip } from '../project'
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -84,6 +84,8 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
   root.className = 'audio-editor'
   const region = clip.audio
   if (!region) return root
+  // tempo at this clip's start → correct beats↔seconds under a variable tempo map
+  const localSpb = 60 / new TempoMap(app.project.bpm, app.project.tempoMap).bpmAtBeat(clip.start)
 
   const buffer = sampleStore.get(region.sampleId)
   const info = document.createElement('p')
@@ -319,7 +321,7 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
       if (!buffer) return
       extBtn.disabled = true
       try {
-        const spb = 60 / app.project.bpm
+        const spb = localSpb
         const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
         const i1 = Math.min(buffer.length, i0 + Math.ceil(clip.length * spb * buffer.sampleRate))
         const channels: Float32Array<ArrayBuffer>[] = []
@@ -371,7 +373,7 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
   sliceBtn.addEventListener('click', () => {
     const buffer = sampleStore.get(region.sampleId)
     if (!buffer) return
-    const spb = 60 / app.project.bpm
+    const spb = localSpb
     const rate = warpRate(region, app.project.bpm)
     const i0 = Math.floor(region.offsetSec * buffer.sampleRate)
     const i1 = Math.min(buffer.length, i0 + Math.ceil(clip.length * spb * rate * buffer.sampleRate))

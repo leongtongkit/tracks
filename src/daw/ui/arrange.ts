@@ -3,7 +3,7 @@
 
 import { AUTO_TARGETS, autoTargetMeta } from '../automation-targets'
 import type { DawApp } from '../daw-app'
-import { beatsPerBar, projectEndBeat, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
+import { beatsPerBar, projectEndBeat, TempoMap, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
 import { buildSessionGrid } from './session-grid'
 import { sampleStore } from '../samples'
 import { settings } from '../settings'
@@ -285,6 +285,11 @@ export class ArrangeView {
         if (name?.trim()) this.app.addMarker(beat, name.trim())
       }
     })
+  }
+
+  // tempo at a beat (for clip-display seconds↔beats under a variable tempo map)
+  private localBpm(beat: number): number {
+    return new TempoMap(this.app.project.bpm, this.app.project.tempoMap).bpmAtBeat(beat)
   }
 
   private beatAt(e: MouseEvent): number {
@@ -579,7 +584,7 @@ export class ArrangeView {
       const w = Math.max(2, Math.round(clip.length * this.ppb))
       wave.width = w
       wave.height = ROW_H - 12
-      drawWave(wave, clip, this.app.project.bpm)
+      drawWave(wave, clip, this.localBpm(clip.start))
       el.appendChild(wave)
     }
     const label = document.createElement('span')
@@ -643,7 +648,7 @@ export class ArrangeView {
         clip.length = origLen - d
         if (clip.audio) {
           const rate = warpRate(clip.audio, this.app.project.bpm)
-          clip.audio.offsetSec = Math.max(0, origOffset + d * (60 / this.app.project.bpm) * rate)
+          clip.audio.offsetSec = Math.max(0, origOffset + d * (60 / this.localBpm(clip.start)) * rate)
         }
         el.style.left = `${clip.start * this.ppb}px`
         el.style.width = `${clip.length * this.ppb}px`
