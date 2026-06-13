@@ -26,6 +26,10 @@ export interface KeyboardHandlers {
   allNotesOff(): void
   bend?(semitones: number): void
   octaveChanged?(octave: number): void
+  // override the note a physical key plays (drum/pad tracks remap keys to
+  // specific voices). Return a MIDI note to play it; null = silence this key in
+  // the current mode; undefined = use the default chromatic mapping.
+  noteForCode?(code: string): number | null | undefined
 }
 
 export class KeyboardInput {
@@ -71,10 +75,18 @@ export class KeyboardInput {
       return
     }
 
-    const semi = KEY_TO_SEMITONE[e.code]
-    if (semi === undefined || this.down.has(e.code)) return
+    if (this.down.has(e.code)) return
+    const custom = this.handlers.noteForCode?.(e.code)
+    if (custom === null) return // key intentionally silent in this mode (e.g. non-drum key on a drum track)
+    let note: number
+    if (typeof custom === 'number') {
+      note = custom // remapped (drum/pad voice), absolute — no octave offset
+    } else {
+      const semi = KEY_TO_SEMITONE[e.code]
+      if (semi === undefined) return
+      note = (this.octave + 1) * 12 + semi
+    }
     e.preventDefault()
-    const note = (this.octave + 1) * 12 + semi
     this.down.set(e.code, note)
     this.handlers.noteOn(note)
   }

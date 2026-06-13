@@ -11,6 +11,7 @@ import { initMidi, type MidiSession } from '../input/midi'
 import { registerMidiControl } from './midi-control'
 import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { Piano } from '../ui/piano'
+import { drumKeyNote, padKeyNote } from './percussion-keys'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
 import { exportMidi, importMidi } from './midi'
@@ -173,6 +174,13 @@ new KeyboardInput({
   },
   octaveChanged: o => playPiano.setOctave(o),
   bend: s => app.liveBend(s),
+  // drum/pad tracks remap keys to specific voices instead of chromatic notes
+  noteForCode: code => {
+    const kind = app.armedTrackId ? app.track(app.armedTrackId)?.kind : undefined
+    if (kind === 'drums') return drumKeyNote(code) ?? null
+    if (kind === 'pads') return padKeyNote(code) ?? null
+    return undefined
+  },
 })
 
 // hardware MIDI keyboard plays + records into the armed track (velocity +

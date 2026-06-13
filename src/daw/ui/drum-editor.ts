@@ -5,6 +5,7 @@
 
 import type { DawApp } from '../daw-app'
 import { DRUM_ORDER } from '../instruments/drums'
+import { DRUM_KEY_LABEL } from '../percussion-keys'
 import { miniDial } from './mini-dial'
 
 export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
@@ -96,7 +97,11 @@ export function buildDrumEditor(app: DawApp, trackId: string): HTMLElement {
     name.className = 'pad-name'
     name.textContent = label
     cell.appendChild(name)
-    cell.title = 'Tap to play, select to edit'
+    const key = document.createElement('span')
+    key.className = 'pad-key'
+    key.textContent = DRUM_KEY_LABEL[i] ?? ''
+    cell.appendChild(key)
+    cell.title = `Tap or press "${DRUM_KEY_LABEL[i] ?? ''}" to play; select to edit`
     cell.addEventListener('pointerdown', () => {
       selected = i
       renderParams()

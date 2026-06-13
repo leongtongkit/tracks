@@ -4,6 +4,7 @@
 
 import type { DawApp } from '../daw-app'
 import { PAD_BASE_PITCH, PAD_COUNT } from '../project'
+import { PAD_KEY_LABEL } from '../percussion-keys'
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -63,8 +64,12 @@ export function buildPadsEditor(app: DawApp, trackId: string): HTMLElement {
       const name = document.createElement('span')
       name.className = 'pad-name'
       name.textContent = pad.sampleId ? (sampleStore.name(pad.sampleId) ?? 'sample') : 'drop audio'
+      const key = document.createElement('span')
+      key.className = 'pad-key'
+      key.textContent = PAD_KEY_LABEL[i] ?? ''
       cell.appendChild(num)
       cell.appendChild(name)
+      cell.appendChild(key)
       cell.title = pad.sampleId ? 'Tap to play — drop audio to replace' : 'Drop an audio file here, or click then Load'
       cell.addEventListener('pointerdown', () => {
         selected = i
