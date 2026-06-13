@@ -1,7 +1,8 @@
 // On-screen keyboard as TWO stacked manuals mirroring the computer keyboard:
-// upper row = Q-row + number row (one octave up), lower row = Z-row + S-row.
-// Every key shows its computer-key hint in keyboard order. Pointer/multitouch
-// with glissando; external highlight API lights the same keys for key presses.
+// upper row = Q-row + number row (one octave up), lower row = Z-row (one octave,
+// C..B). The manuals are contiguous and do NOT overlap. Every key shows its
+// computer-key hint in keyboard order. Pointer/multitouch with glissando;
+// external highlight API lights the same keys for key presses.
 
 const WHITE_SEMIS = [0, 2, 4, 5, 7, 9, 11]
 
@@ -22,8 +23,8 @@ const MANUALS: ManualSpec[] = [
   {
     name: 'lower',
     startSemi: 0,
-    endSemi: 16,
-    hints: ['Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M', ',', 'L', '.', ';', '/'],
+    endSemi: 11,
+    hints: ['Z', 'S', 'X', 'D', 'C', 'V', 'G', 'B', 'H', 'N', 'J', 'M'],
   },
 ]
 

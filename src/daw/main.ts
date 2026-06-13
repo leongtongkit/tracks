@@ -10,6 +10,7 @@ import { KeyboardInput } from '../input/keyboard'
 import { initMidi, type MidiSession } from '../input/midi'
 import { registerMidiControl } from './midi-control'
 import { buildInstrumentEditor, fxRack } from '../ui/panels'
+import { Piano } from '../ui/piano'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
 import { exportMidi, importMidi } from './midi'
@@ -92,6 +93,21 @@ const trackFxRack = (trackId: string): HTMLElement | null => {
   }
   return rack
 }
+// on-screen keyboard shown under melodic instruments — same two-manual layout +
+// computer-key hints as the synth page; clicking/touching plays the armed track.
+const playPiano = new Piano({
+  noteOn: n => app.liveNoteOn(n),
+  noteOff: n => app.liveNoteOff(n),
+})
+const pianoSlot = document.createElement('div')
+pianoSlot.className = 'instrument-piano'
+const pianoLabel = document.createElement('span')
+pianoLabel.className = 'piano-label'
+pianoLabel.textContent = 'Keyboard — your computer keys play these notes'
+pianoSlot.appendChild(pianoLabel)
+pianoSlot.appendChild(playPiano.el)
+const MELODIC = new Set<string>(['synth', 'sampler', 'soundfont'])
+
 bottom.setInstrumentMount((host, trackId) => {
   const track = app.track(trackId)
   if (!track) return
@@ -119,6 +135,7 @@ bottom.setInstrumentMount((host, trackId) => {
     host.appendChild(editor)
     const rack = trackFxRack(trackId)
     if (rack) editor.appendChild(rack)
+    if (MELODIC.has(track.kind)) host.appendChild(pianoSlot)
     return
   }
   const store = app.song?.store(trackId)
@@ -134,15 +151,27 @@ bottom.setInstrumentMount((host, trackId) => {
     instrumentCache.set(trackId, editor)
   }
   host.appendChild(editor)
+  host.appendChild(pianoSlot) // synth is melodic → show the keyboard
 })
 
 root.appendChild(daw)
 
 // musical keyboard (same two-manual layout as the synth) plays the armed track
+// and lights the matching keys on the instrument-section piano
 new KeyboardInput({
-  noteOn: n => app.liveNoteOn(n),
-  noteOff: n => app.liveNoteOff(n),
-  allNotesOff: () => app.song?.allNotesOff(),
+  noteOn: n => {
+    app.liveNoteOn(n)
+    playPiano.highlight(n, true)
+  },
+  noteOff: n => {
+    app.liveNoteOff(n)
+    playPiano.highlight(n, false)
+  },
+  allNotesOff: () => {
+    app.song?.allNotesOff()
+    playPiano.clearHighlights()
+  },
+  octaveChanged: o => playPiano.setOctave(o),
   bend: s => app.liveBend(s),
 })
 

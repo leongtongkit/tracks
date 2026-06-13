@@ -1,13 +1,13 @@
-// Computer-keyboard note input: two-manual FL-Studio-style layout using all
-// four rows. Z-row + S-row = lower manual; Q-row + number row = upper manual
-// (one octave up). ArrowUp/ArrowDown shift octaves. Tab bends up, Left Shift
-// bends down. Uses event.code (physical position) so AZERTY/QWERTZ play the
-// same shape.
+// Computer-keyboard note input: two-manual FL-Studio-style layout. Z-row =
+// lower manual (one full octave, C..B); Q-row + number row = upper manual,
+// exactly one octave up and contiguous — NO overlap (the lower manual stops at
+// B so it can't double the upper manual's notes). ArrowUp/ArrowDown shift
+// octaves. Tab bends up, Left Shift bends down. Uses event.code (physical
+// position) so AZERTY/QWERTZ play the same shape.
 
 const LOWER: Record<string, number> = {
   KeyZ: 0, KeyS: 1, KeyX: 2, KeyD: 3, KeyC: 4, KeyV: 5, KeyG: 6, KeyB: 7,
-  KeyH: 8, KeyN: 9, KeyJ: 10, KeyM: 11, Comma: 12, KeyL: 13, Period: 14,
-  Semicolon: 15, Slash: 16,
+  KeyH: 8, KeyN: 9, KeyJ: 10, KeyM: 11,
 }
 
 const UPPER: Record<string, number> = {

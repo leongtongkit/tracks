@@ -1649,3 +1649,93 @@
   background: var(--accent);
   opacity: 0.85;
 }
+
+/* ---------- instrument-section keyboard (mirrors the synth's on-screen piano) ---------- */
+.instrument-piano {
+  margin-top: 10px;
+}
+
+.instrument-piano .piano-label {
+  font-size: 0.56rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 5px;
+  display: block;
+}
+
+.piano-shell {
+  background: var(--well, #1c1c1e);
+  border: 1px solid var(--well-edge, #0c0c0d);
+  border-radius: 6px;
+  padding: 8px;
+}
+
+.piano-2up {
+  display: grid;
+  gap: 6px;
+}
+
+.piano {
+  position: relative;
+  display: flex;
+  height: clamp(48px, 6vw, 70px);
+  touch-action: none;
+}
+
+.piano-shell .key-w {
+  flex: 1;
+  position: relative;
+  background: var(--bone, #e2e1dc);
+  border: 1px solid #b9b2a0;
+  border-radius: 0 0 3px 3px;
+  margin-right: 2px;
+  cursor: pointer;
+  transition: background 0.05s;
+}
+
+.piano-shell .key-w:last-child {
+  margin-right: 0;
+}
+
+.piano-shell .key-b {
+  position: absolute;
+  top: 0;
+  width: 7%;
+  height: 58%;
+  background: #232325;
+  border: 1px solid #0c0c0d;
+  border-radius: 0 0 2px 2px;
+  z-index: 2;
+  cursor: pointer;
+}
+
+.piano-shell .key-w.key-down {
+  background: var(--accent, #ff4d00);
+  border-color: var(--accent-deep, #b23700);
+}
+
+.piano-shell .key-b.key-down {
+  background: var(--accent-deep, #b23700);
+  border-color: var(--accent-deep, #b23700);
+}
+
+.piano-shell .key-hint {
+  position: absolute;
+  bottom: 5px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 0.54rem;
+  color: var(--ink-soft, #6a6a70);
+  pointer-events: none;
+}
+
+.piano-shell .key-b .key-hint {
+  color: #9a958a;
+}
+
+.piano-shell .key-down .key-hint {
+  color: var(--bone, #e2e1dc);
+}
