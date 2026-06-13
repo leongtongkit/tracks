@@ -1,8 +1,10 @@
-# synth.jfound.net — policy: cite AND train
+# tracks.jfound.net + synth.jfound.net — policy: cite AND train
 User-agent: Bytespider
 Disallow: /
 
 User-agent: *
 Allow: /
 
-Sitemap: https://synth.jfound.net/sitemap.xml
+# Both hosts serve this same file; each sitemap lists only its own host's URLs.
+Sitemap: https://tracks.jfound.net/sitemap.xml
+Sitemap: https://synth.jfound.net/sitemap-synth.xml

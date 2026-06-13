@@ -1,0 +1,34 @@
+[
+  {
+    "slug": "free-online-music-studio",
+    "title": "The best free online music studio (no download, no account)",
+    "dek": "What a browser-based music studio can actually do in 2026 — and how to make a full track in one without spending a cent.",
+    "date": "2026-06-14",
+    "tags": ["free", "browser DAW", "getting started"],
+    "readingTime": "7 min"
+  },
+  {
+    "slug": "how-to-make-beats-in-browser",
+    "title": "How to make beats in your browser (step by step)",
+    "dek": "Build a beat from scratch using the drum machine, sampler, and piano roll — no plugins, no install.",
+    "date": "2026-06-14",
+    "tags": ["beats", "drums", "tutorial"],
+    "readingTime": "6 min"
+  },
+  {
+    "slug": "free-garageband-alternative",
+    "title": "A free GarageBand alternative that runs in any browser",
+    "dek": "No Mac? No problem. Here's how Tracks compares to GarageBand and other desktop DAWs — and where a browser studio wins.",
+    "date": "2026-06-14",
+    "tags": ["comparison", "GarageBand", "free"],
+    "readingTime": "6 min"
+  },
+  {
+    "slug": "record-vocals-in-browser",
+    "title": "How to record and tune vocals in your browser",
+    "dek": "Record a vocal take through your mic, comp the best parts, and snap it to key with built-in autotune — all online and free.",
+    "date": "2026-06-14",
+    "tags": ["vocals", "recording", "autotune"],
+    "readingTime": "6 min"
+  }
+]

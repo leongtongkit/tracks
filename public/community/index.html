@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Community — share tracks &amp; get help | Tracks</title>
+    <meta name="description" content="The Tracks community: share what you've made, ask for help, request features, and trade tips with other people making music in the browser." />
+    <link rel="canonical" href="https://tracks.jfound.net/community/" />
+    <meta property="og:title" content="Tracks Community" />
+    <meta property="og:description" content="Share tracks, ask for help, and request features." />
+    <meta property="og:url" content="https://tracks.jfound.net/community/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a href="https://synth.jfound.net/">Synth</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="community">
+        <h1 class="section-h" style="margin-top:0">Community</h1>
+        <p>Share what you've made, ask for help, request a feature, or trade tips with other people making music in the browser. The board below is powered by GitHub Discussions — sign in with a GitHub account to post. No separate account, and nothing is stored on our servers.</p>
+
+        <div class="giscus-wrap">
+          <div class="giscus"></div>
+          <div id="community-fallback" class="community-setup" hidden>
+            Discussions are being set up — check back soon. In the meantime, the
+            studio is live at <a href="/studio">tracks.jfound.net/studio</a>.
+          </div>
+        </div>
+
+        <div class="community-links">
+          <a class="btn-ghost" href="/blog/">Read the guides</a>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+
+    <!--
+      ============================================================
+      GISCUS SETUP (Jay — one time, ~5 minutes):
+      1. Create a PUBLIC GitHub repo for discussions, e.g.
+         leongtongkit/tracks-community  (creating a public repo is a
+         Red-tier action, so it's left to you).
+      2. In that repo: Settings → General → Features → enable "Discussions".
+      3. Install the giscus app on it: https://github.com/apps/giscus
+      4. Go to https://giscus.app, enter the repo, pick a Discussions
+         category (e.g. "General" or make an "Announcements"-style one),
+         and copy the four values it gives you into GISCUS below.
+      Once GISCUS.repo is no longer 'OWNER/REPO', the board activates
+      automatically and the fallback message disappears.
+      ============================================================
+    -->
+    <script>
+      (function () {
+        var GISCUS = {
+          repo: 'OWNER/REPO',          // e.g. 'leongtongkit/tracks-community'
+          repoId: '',                  // from giscus.app
+          category: 'General',
+          categoryId: '',              // from giscus.app
+        };
+        var mount = document.querySelector('.giscus');
+        var fallback = document.getElementById('community-fallback');
+        if (!GISCUS.repo || GISCUS.repo === 'OWNER/REPO' || !GISCUS.repoId || !GISCUS.categoryId) {
+          if (fallback) fallback.hidden = false;
+          return;
+        }
+        var s = document.createElement('script');
+        s.src = 'https://giscus.app/client.js';
+        s.setAttribute('data-repo', GISCUS.repo);
+        s.setAttribute('data-repo-id', GISCUS.repoId);
+        s.setAttribute('data-category', GISCUS.category);
+        s.setAttribute('data-category-id', GISCUS.categoryId);
+        s.setAttribute('data-mapping', 'pathname');
+        s.setAttribute('data-strict', '0');
+        s.setAttribute('data-reactions-enabled', '1');
+        s.setAttribute('data-emit-metadata', '0');
+        s.setAttribute('data-input-position', 'top');
+        s.setAttribute('data-theme', 'dark');
+        s.setAttribute('data-lang', 'en');
+        s.crossOrigin = 'anonymous';
+        s.async = true;
+        mount.appendChild(s);
+      })();
+    </script>
+  </body>
+</html>

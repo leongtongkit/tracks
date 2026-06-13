@@ -90,7 +90,8 @@
     box.setAttribute('aria-label', 'Privacy');
     box.innerHTML =
       '<div class="cm-head"><i></i>PRIVACY</div>' +
-      '<div class="cm-body">Anonymous usage analytics (GA4) only — no ads, nothing resold. ' +
+      '<div class="cm-body">Allow anonymous analytics (GA4) and ads to keep Tracks free. ' +
+      'Your music never leaves your device and is never collected or resold. ' +
       '<a href="https://jfound.net/privacy-notice" target="_blank" rel="noopener">Details</a></div>' +
       '<div class="cm-row">' +
       '<button type="button" class="cm-no">DECLINE</button>' +

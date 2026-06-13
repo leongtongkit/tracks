@@ -7,6 +7,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, 'index.html'),
+        studio: resolve(__dirname, 'studio.html'),
         synth: resolve(__dirname, 'synth.html'),
         styletile: resolve(__dirname, 'styletile.html'),
       },

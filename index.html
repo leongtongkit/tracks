@@ -3,26 +3,197 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tracks — make music in your browser</title>
-    <meta name="description" content="A free browser music studio: multi-track arrangement, piano roll, built-in synthesizer, effects, mixer, and WAV export. No install, no account." />
+    <title>Tracks — free online music studio in your browser</title>
+    <meta name="description" content="Tracks is a completely free, full music production studio that runs in your browser — multi-track recording, piano roll, synths, drums, effects, mixer, autotune, and WAV/MP3 export. No download, no account, no paywall." />
     <link rel="canonical" href="https://tracks.jfound.net/" />
-    <meta property="og:title" content="Tracks — make music in your browser" />
-    <meta property="og:description" content="A free browser music studio: multi-track arrangement, piano roll, built-in synthesizer, effects, mixer, and WAV export." />
+    <meta name="keywords" content="free online music studio, browser DAW, make music online free, free beat maker, online music maker, free GarageBand alternative, browser music production" />
+    <meta property="og:title" content="Tracks — free online music studio in your browser" />
+    <meta property="og:description" content="A complete music production studio in your browser. Free, no download, no account. Record, arrange, mix, and export." />
     <meta property="og:url" content="https://tracks.jfound.net/" />
     <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="stylesheet" href="/src/style.css" />
-    <link rel="stylesheet" href="/src/daw/daw.css" />
+    <link rel="preconnect" href="https://tracks.jfound.net" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tracks",
+        "alternateName": "Tracks — online music studio",
+        "url": "https://tracks.jfound.net/",
+        "applicationCategory": "MultimediaApplication",
+        "applicationSubCategory": "Music Production / DAW",
+        "operatingSystem": "Any (web browser)",
+        "browserRequirements": "Requires a modern browser with Web Audio support",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "featureList": [
+          "Multi-track arrangement and piano roll",
+          "Built-in synthesizers and drum machines",
+          "Audio recording and import",
+          "Effects, mixer, EQ, and autotune",
+          "WAV and MP3 export",
+          "MIDI keyboard and SoundFont support"
+        ],
+        "description": "A free browser-based music production studio: multi-track recording, piano roll, synths, drums, effects, mixer, autotune, and WAV/MP3 export. No install, no account."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "mainEntity": [
+          {
+            "@type": "Question",
+            "name": "Is Tracks really free?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. Tracks is completely free with no account, no trial, and no paywall. Every feature — recording, synths, effects, mixing, and exporting to WAV or MP3 — is available to everyone." }
+          },
+          {
+            "@type": "Question",
+            "name": "Do I need to download or install anything?",
+            "acceptedAnswer": { "@type": "Answer", "text": "No. Tracks runs entirely in your web browser using the Web Audio API. Open the page and start making music — there is nothing to install." }
+          },
+          {
+            "@type": "Question",
+            "name": "Where are my projects stored?",
+            "acceptedAnswer": { "@type": "Answer", "text": "On your own device. Tracks does not upload your music to any server. Your work stays local in your browser, and you can save a project file or export audio whenever you want." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I use Tracks on a phone or tablet?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Tracks works best on a desktop or laptop, but the studio is responsive and usable on tablets and phones for sketching ideas." }
+          },
+          {
+            "@type": "Question",
+            "name": "Can I import my own samples or a MIDI keyboard?",
+            "acceptedAnswer": { "@type": "Answer", "text": "Yes. You can drag in audio files, load SoundFont (.sf2) instruments, import MIDI files, and play or record with a connected MIDI keyboard via Web MIDI." }
+          }
+        ]
+      }
+    </script>
     <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
   </head>
-  <body>
-    <main id="app">
-      <div id="scrim">
-        <h1>TRACKS</h1>
-        <p>Click anywhere or press any key to start audio</p>
-        <p class="scrim-help">Space plays and stops / double-click the grid to create a clip</p>
-      </div>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/">
+        <span class="brand-mark">●</span>
+        <span class="brand-name">TRACKS</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a href="https://synth.jfound.net/">Synth</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <p class="eyebrow">FREE · NO ACCOUNT · RUNS IN YOUR BROWSER</p>
+        <h1>A complete music studio,<br />right in your browser.</h1>
+        <p class="hero-sub">
+          Record, arrange, play synths and drums, mix, autotune, and export to WAV or
+          MP3 — a full music production studio that is <strong>completely free</strong>,
+          with nothing to download and no account to create.
+        </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+          <a class="btn-ghost" href="/blog/">Read the guides</a>
+        </div>
+        <p class="hero-note">Your projects stay on your device. We never upload your music.</p>
+      </section>
+
+      <section class="feat" aria-label="Features">
+        <h2 class="section-h">Everything you need to make a track</h2>
+        <div class="feat-grid">
+          <article class="card">
+            <span class="card-tag">ARRANGE</span>
+            <h3>Multi-track timeline</h3>
+            <p>Lay out clips on an unlimited multi-track timeline with a full piano roll, velocity editing, quantize, and swing.</p>
+          </article>
+          <article class="card">
+            <span class="card-tag">INSTRUMENTS</span>
+            <h3>Synths, drums &amp; samplers</h3>
+            <p>A built-in synthesizer, 808/909 drum machines, a 16-pad sampler, and SoundFont (.sf2) support — no plugins to buy.</p>
+          </article>
+          <article class="card">
+            <span class="card-tag">RECORD</span>
+            <h3>Mic &amp; MIDI recording</h3>
+            <p>Record vocals or instruments through your mic, or play and capture with a MIDI keyboard. Comp takes and tune them.</p>
+          </article>
+          <article class="card">
+            <span class="card-tag">MIX</span>
+            <h3>Mixer, EQ &amp; effects</h3>
+            <p>Per-track parametric EQ, compression, gate, de-esser, reverb and delay sends, group buses, and full automation.</p>
+          </article>
+          <article class="card">
+            <span class="card-tag">VOCALS</span>
+            <h3>Autotune &amp; stems</h3>
+            <p>Snap vocals to your key with built-in autotune, and split a mix into drums, bass, vocals, and other with stem extraction.</p>
+          </article>
+          <article class="card">
+            <span class="card-tag">EXPORT</span>
+            <h3>WAV &amp; MP3 export</h3>
+            <p>Bounce your finished track to high-quality WAV or MP3, export per-track stems, or save a standard MIDI file.</p>
+          </article>
+        </div>
+      </section>
+
+      <!-- ad-slot: leaderboard between content sections -->
+      <div class="ad-slot ad-leaderboard" data-ad-slot="landing-mid" aria-hidden="true"></div>
+
+      <section class="how">
+        <h2 class="section-h">Start making music in seconds</h2>
+        <ol class="steps">
+          <li><span class="step-n">1</span> Open the studio — no sign-up, no download.</li>
+          <li><span class="step-n">2</span> Double-click the grid to add a clip, then draw notes or hit record.</li>
+          <li><span class="step-n">3</span> Mix it, then export a WAV or MP3 to keep.</li>
+        </ol>
+        <a class="btn-primary" href="/studio">Open the studio →</a>
+      </section>
+
+      <section class="faq">
+        <h2 class="section-h">Questions</h2>
+        <details open>
+          <summary>Is Tracks really free?</summary>
+          <p>Yes — completely free, with no account, no trial, and no paywall. Every feature is available to everyone.</p>
+        </details>
+        <details>
+          <summary>Do I need to download or install anything?</summary>
+          <p>No. Tracks runs entirely in your browser using the Web Audio API. Open the page and start making music.</p>
+        </details>
+        <details>
+          <summary>Where are my projects stored?</summary>
+          <p>On your own device. Tracks never uploads your music. Your work stays local in your browser, and you can save a project file or export audio whenever you want.</p>
+        </details>
+        <details>
+          <summary>Can I use it on a phone or tablet?</summary>
+          <p>It works best on a desktop or laptop, but the studio is responsive and usable on tablets and phones for sketching ideas.</p>
+        </details>
+        <details>
+          <summary>Can I import samples or use a MIDI keyboard?</summary>
+          <p>Yes — drag in audio files, load SoundFont (.sf2) instruments, import MIDI files, and play or record with a connected MIDI keyboard.</p>
+        </details>
+      </section>
     </main>
-    <script type="module" src="/src/daw/main.ts"></script>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div>
+          <span class="brand-name">TRACKS</span>
+          <p class="foot-tag">A free music studio for the open web.</p>
+        </div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
   </body>
 </html>
