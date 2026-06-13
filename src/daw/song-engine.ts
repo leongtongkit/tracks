@@ -14,12 +14,16 @@ import { FxChain } from '../engine/fx/chain'
 import { makeImpulse } from '../engine/fx/reverb'
 import type { FxId } from '../patch/schema'
 import { Store } from '../state/store'
+import { autoValueAt } from './automation'
 import { DrumMachine } from './instruments/drums'
 import { PadsInstrument } from './instruments/pads'
 import { SamplerInstrument } from './instruments/sampler'
 import type { Instrument } from './instruments/types'
-import type { AudioRegion, Project, TrackData, TrackKind } from './project'
+import type { AudioRegion, AutoTarget, Project, TrackData, TrackKind } from './project'
 import { sampleStore, type SampleStore } from './samples'
+
+// every channel-strip param that can be automated (order is display order)
+const AUTOMATABLE: AutoTarget[] = ['volume', 'pan', 'sendA', 'sendB', 'eqLow', 'eqMid', 'eqHigh']
 
 export interface SendBuses {
   a: AudioNode
@@ -43,9 +47,7 @@ export class TrackChannel {
   private readonly duckGain: GainNode
   private duckNodes: { source: AudioNode; abs: WaveShaperNode; lp: BiquadFilterNode; scale: GainNode } | null = null
   private readonly pan: StereoPannerNode | GainNode
-  private readonly autoPan: StereoPannerNode | null
   private readonly volume: GainNode
-  private readonly autoVol: GainNode
   private readonly muteGain: GainNode
   private readonly sendA: GainNode
   private readonly sendB: GainNode
@@ -79,10 +81,7 @@ export class TrackChannel {
       typeof (ctx as AudioContext).createStereoPanner === 'function'
         ? ctx.createStereoPanner()
         : ctx.createGain()
-    this.autoPan =
-      typeof (ctx as AudioContext).createStereoPanner === 'function' ? ctx.createStereoPanner() : null
     this.volume = ctx.createGain()
-    this.autoVol = ctx.createGain()
     this.muteGain = ctx.createGain()
     this.sendA = ctx.createGain()
     this.sendA.gain.value = 0
@@ -144,14 +143,8 @@ export class TrackChannel {
     this.comp.connect(this.makeup)
     this.makeup.connect(this.duckGain)
     this.duckGain.connect(this.pan)
-    if (this.autoPan) {
-      this.pan.connect(this.autoPan)
-      this.autoPan.connect(this.volume)
-    } else {
-      this.pan.connect(this.volume)
-    }
-    this.volume.connect(this.autoVol)
-    this.autoVol.connect(this.muteGain)
+    this.pan.connect(this.volume)
+    this.volume.connect(this.muteGain)
     this.muteGain.connect(master)
     this.muteGain.connect(this.sendA)
     this.muteGain.connect(this.sendB)
@@ -170,23 +163,41 @@ export class TrackChannel {
     return this.data
   }
 
-  // automation targets (volume rides the fader as a 0..1 multiplier)
-  autoVolParam(): AudioParam {
-    return this.autoVol.gain
+  // the AudioParam an automation target drives (null = unsupported here, e.g.
+  // pan when StereoPanner is unavailable). Automation is ABSOLUTE: it owns the
+  // param while points exist, and applyMixer skips automated targets.
+  paramForTarget(target: AutoTarget): AudioParam | null {
+    switch (target) {
+      case 'volume': return this.volume.gain
+      case 'pan': return 'pan' in this.pan ? this.pan.pan : null
+      case 'sendA': return this.sendA.gain
+      case 'sendB': return this.sendB.gain
+      case 'eqLow': return this.eqLow.gain
+      case 'eqMid': return this.eqMid.gain
+      case 'eqHigh': return this.eqHigh.gain
+      default: return null
+    }
   }
 
-  autoPanParam(): AudioParam | null {
-    return this.autoPan?.pan ?? null
-  }
-
-  // clear booked automation and return to neutral (stop/seek/wrap)
-  resetAutomation(at?: number): void {
+  // cancel any booked automation ramps from `at` onward (stop/seek/wrap); the
+  // next pump slice rebooks, or applyAutomationStatic pins them when stopped.
+  cancelAutomation(at?: number): void {
     const t = at ?? this.ctx.currentTime
-    this.autoVol.gain.cancelScheduledValues(t)
-    this.autoVol.gain.setValueAtTime(1, t)
-    if (this.autoPan) {
-      this.autoPan.pan.cancelScheduledValues(t)
-      this.autoPan.pan.setValueAtTime(0, t)
+    for (const target of AUTOMATABLE) {
+      this.paramForTarget(target)?.cancelScheduledValues(t)
+    }
+  }
+
+  // pin automated params to their curve value at `beat` (used when stopped so
+  // the mix reflects the cursor position).
+  applyAutomationStatic(beat: number): void {
+    const t = this.ctx.currentTime
+    for (const target of AUTOMATABLE) {
+      const points = this.data.auto[target]
+      const param = this.paramForTarget(target)
+      if (!points || points.length === 0 || !param) continue
+      param.cancelScheduledValues(t)
+      param.setValueAtTime(autoValueAt(points, beat, param.value), t)
     }
   }
 
@@ -260,15 +271,21 @@ export class TrackChannel {
     this.duckNodes = { source, abs, lp, scale }
   }
 
+  // is this target currently owned by automation? (then applyMixer leaves it)
+  private automated(target: AutoTarget): boolean {
+    const pts = this.data.auto[target]
+    return !!pts && pts.length > 0
+  }
+
   applyMixer(mixer: TrackData['mixer'], soloElsewhere: boolean): void {
     const t = this.ctx.currentTime
-    this.volume.gain.setTargetAtTime(mixer.volume, t, 0.02)
-    if ('pan' in this.pan) {
+    if (!this.automated('volume')) this.volume.gain.setTargetAtTime(mixer.volume, t, 0.02)
+    if ('pan' in this.pan && !this.automated('pan')) {
       this.pan.pan.setTargetAtTime(mixer.pan, t, 0.02)
     }
-    this.eqLow.gain.setTargetAtTime(mixer.eq.low, t, 0.02)
-    this.eqMid.gain.setTargetAtTime(mixer.eq.mid, t, 0.02)
-    this.eqHigh.gain.setTargetAtTime(mixer.eq.high, t, 0.02)
+    if (!this.automated('eqLow')) this.eqLow.gain.setTargetAtTime(mixer.eq.low, t, 0.02)
+    if (!this.automated('eqMid')) this.eqMid.gain.setTargetAtTime(mixer.eq.mid, t, 0.02)
+    if (!this.automated('eqHigh')) this.eqHigh.gain.setTargetAtTime(mixer.eq.high, t, 0.02)
     if (mixer.comp.on) {
       this.comp.threshold.setTargetAtTime(mixer.comp.threshold, t, 0.02)
       this.comp.ratio.setTargetAtTime(mixer.comp.ratio, t, 0.02)
@@ -283,8 +300,8 @@ export class TrackChannel {
       this.makeup.gain.setTargetAtTime(1, t, 0.02)
     }
     if (mixer.comp.on) this.comp.knee.setTargetAtTime(8, t, 0.02)
-    this.sendA.gain.setTargetAtTime(mixer.sendA, t, 0.02)
-    this.sendB.gain.setTargetAtTime(mixer.sendB, t, 0.02)
+    if (!this.automated('sendA')) this.sendA.gain.setTargetAtTime(mixer.sendA, t, 0.02)
+    if (!this.automated('sendB')) this.sendB.gain.setTargetAtTime(mixer.sendB, t, 0.02)
     const audible = !mixer.mute && (!soloElsewhere || mixer.solo)
     this.muteGain.gain.setTargetAtTime(audible ? 1 : 0, t, 0.01)
     if (!audible) this.allNotesOff()
@@ -295,7 +312,7 @@ export class TrackChannel {
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
     this.setDuck(null, 0)
-    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.duckGain, this.pan, this.autoPan, this.volume, this.autoVol, this.muteGain, this.sendA, this.sendB, this.analyser]
+    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.duckGain, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]
     for (const n of nodes) n?.disconnect()
   }
 }
@@ -416,6 +433,22 @@ export class SongEngine {
 
   channel(trackId: string): TrackChannel | undefined {
     return this.channels.get(trackId)
+  }
+
+  // ---------- automation ----------
+
+  automationParam(trackId: string, target: AutoTarget): AudioParam | null {
+    return this.channels.get(trackId)?.paramForTarget(target) ?? null
+  }
+
+  // cancel future ramps on every channel (stop/seek/wrap)
+  cancelAutomation(at?: number): void {
+    for (const ch of this.channels.values()) ch.cancelAutomation(at)
+  }
+
+  // pin automated params to their value at `beat` (stopped/seek-while-stopped)
+  applyAutomationStatic(beat: number): void {
+    for (const ch of this.channels.values()) ch.applyAutomationStatic(beat)
   }
 
   store(trackId: string): Store | undefined {

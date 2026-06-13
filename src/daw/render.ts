@@ -3,7 +3,7 @@
 
 import { encodeWav } from '../record/wav'
 import { scheduleAutomation } from './automation'
-import { projectEndBeat, warpRate, type Project } from './project'
+import { projectEndBeat, warpRate, type AutoTarget, type Project } from './project'
 import { SongEngine } from './song-engine'
 import { collectEvents } from './transport'
 
@@ -34,14 +34,11 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
   // automation curves, booked over the whole song in one pass
   const beatToTime = (beat: number): number => startAt + beat * spb
   for (const track of project.tracks) {
-    const ch = song.channel(track.id)
-    if (!ch) continue
-    if (track.auto.volume.length > 0) {
-      scheduleAutomation(ch.autoVolParam(), track.auto.volume, 0, endBeat, beatToTime, 1)
-    }
-    const panParam = ch.autoPanParam()
-    if (panParam && track.auto.pan.length > 0) {
-      scheduleAutomation(panParam, track.auto.pan, 0, endBeat, beatToTime, 0)
+    for (const target of Object.keys(track.auto) as AutoTarget[]) {
+      const points = track.auto[target]
+      const param = song.automationParam(track.id, target)
+      if (!points || points.length === 0 || !param) continue
+      scheduleAutomation(param, points, 0, endBeat, beatToTime, param.value)
     }
   }
 

@@ -19,6 +19,16 @@ describe('autoValueAt', () => {
   it('returns the fallback with no points', () => {
     expect(autoValueAt([], 5, 0.42)).toBe(0.42)
   })
+
+  it('honors curve shapes between points', () => {
+    const hold = [{ beat: 0, value: 0, shape: 'hold' as const }, { beat: 4, value: 1 }]
+    expect(autoValueAt(hold, 2, 0)).toBe(0) // step: stays flat until the next point
+    expect(autoValueAt(hold, 4, 0)).toBe(1)
+    const exp = [{ beat: 0, value: 0, shape: 'exp' as const }, { beat: 4, value: 1 }]
+    expect(autoValueAt(exp, 2, 0)).toBeCloseTo(0.25) // x^2 at midpoint = 0.25
+    const lin = [{ beat: 0, value: 0 }, { beat: 4, value: 1 }]
+    expect(autoValueAt(lin, 2, 0)).toBeCloseTo(0.5) // default linear
+  })
 })
 
 interface Call {

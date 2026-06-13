@@ -31,7 +31,7 @@ describe('v1 → v2 migration', () => {
     expect(t.mixer.eq).toEqual({ low: 0, mid: 0, high: 0 })
     expect(t.mixer.comp.on).toBe(false)
     expect(t.mixer.sendA).toBe(0)
-    expect(t.auto).toEqual({ volume: [], pan: [] })
+    expect(t.auto).toEqual({}) // no automation in the v1 fixture → empty map
     expect(t.drums.kit).toBe('808')
     expect(t.sampler.sampleId).toBeNull()
     expect(t.clips[0].notes).toHaveLength(1)
@@ -56,8 +56,9 @@ describe('v1 → v2 migration', () => {
     expect(v2.samples.s1.duration).toBeCloseTo(3.2)
     const t = v2.tracks[0]
     expect(t.kind).toBe('audio')
-    // automation points come back sorted by beat
-    expect(t.auto.volume.map(p => p.beat)).toEqual([0, 4])
+    // automation points come back sorted by beat; empty pan lane is dropped
+    expect(t.auto.volume?.map(p => p.beat)).toEqual([0, 4])
+    expect(t.auto.pan).toBeUndefined()
     expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2, warp: false, origBpm: 120 })
   })
 })

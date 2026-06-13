@@ -10,6 +10,7 @@ import {
   newId,
   newTrack,
   warpRate,
+  type AutoTarget,
   type Clip,
   type KeySig,
   type Project,
@@ -46,13 +47,12 @@ export class DawApp {
       events: {
         noteOn: (trackId, pitch, vel, t) => this.song?.noteOn(trackId, pitch, vel, t),
         noteOff: (trackId, pitch, t) => this.song?.noteOff(trackId, pitch, t),
-        audio: (trackId, region, t, offsetSec, durSec) => this.song?.playClip(trackId, region, t, offsetSec, durSec),
+        audio: (trackId, region, t, offsetSec, durSec, rate) => this.song?.playClip(trackId, region, t, offsetSec, durSec, rate),
         audioStopAll: at => this.song?.stopAudioClips(at),
         slice: (from, to, beatToTime) => this.scheduleAutomationSlice(from, to, beatToTime),
         discontinuity: at => {
-          for (const track of this.project.tracks) {
-            this.song?.channel(track.id)?.resetAutomation(at)
-          }
+          this.song?.cancelAutomation(at)
+          if (!this.transport.playing) this.song?.applyAutomationStatic(this.transport.positionBeat())
         },
         click: (t, accent) => this.click(t, accent),
       },
@@ -221,9 +221,12 @@ export class DawApp {
     const track = this.track(id)
     if (!track) return
     this.checkpoint(`mixer ${id} ${Object.keys(patch).join(',')}`)
+    // write mode records the move into automation at the playhead
+    const captured = this.writeAutomation(id, patch)
     Object.assign(track.mixer, patch)
     this.song?.applyMixers(this.project)
-    this.emit('mixer')
+    if (captured) this.emit('clips', 'mixer') // clips event redraws lanes
+    else this.emit('mixer')
   }
 
   armTrack(id: string): void {
@@ -400,19 +403,65 @@ export class DawApp {
 
   // ---------- automation ----------
 
+  automationWrite = false
+
+  toggleAutomationWrite(): void {
+    this.automationWrite = !this.automationWrite
+    this.emit('transport')
+  }
+
+  // call after editing automation points: re-sync the engine so newly-empty
+  // targets fall back to their static mixer value and the cursor reflects edits.
+  automationEdited(): void {
+    this.song?.applyMixers(this.project)
+    if (this.song && !this.transport.playing) this.song.applyAutomationStatic(this.transport.positionBeat())
+    this.emit('clips')
+  }
+
+  // book every track's automated params over the pump slice
   private scheduleAutomationSlice(from: number, to: number, beatToTime: (beat: number) => number): void {
-    if (!this.song) return
+    const song = this.song
+    if (!song) return
     for (const track of this.project.tracks) {
-      const ch = this.song.channel(track.id)
-      if (!ch) continue
-      if (track.auto.volume.length > 0) {
-        scheduleAutomation(ch.autoVolParam(), track.auto.volume, from, to, beatToTime, 1)
-      }
-      const panParam = ch.autoPanParam()
-      if (panParam && track.auto.pan.length > 0) {
-        scheduleAutomation(panParam, track.auto.pan, from, to, beatToTime, 0)
+      for (const target of Object.keys(track.auto) as AutoTarget[]) {
+        const points = track.auto[target]
+        const param = song.automationParam(track.id, target)
+        if (!points || points.length === 0 || !param) continue
+        scheduleAutomation(param, points, from, to, beatToTime, param.value)
       }
     }
+  }
+
+  // write mode: when a mixer param maps to an automation target, recording, and
+  // the transport is rolling, drop a breakpoint at the playhead. Returns true
+  // if the change was captured as automation.
+  private writeAutomation(trackId: string, patch: Partial<TrackData['mixer']>): boolean {
+    if (!this.automationWrite || !this.transport.playing) return false
+    const track = this.track(trackId)
+    if (!track) return false
+    const beat = this.transport.positionBeat()
+    let wrote = false
+    const put = (target: AutoTarget, value: number): void => {
+      const list = (track.auto[target] ??= [])
+      // replace a point within a 16th of the playhead, else insert sorted
+      const near = list.find(p => Math.abs(p.beat - beat) < 0.06)
+      if (near) near.value = value
+      else {
+        list.push({ beat, value })
+        list.sort((a, b) => a.beat - b.beat)
+      }
+      wrote = true
+    }
+    if (patch.volume !== undefined) put('volume', patch.volume)
+    if (patch.pan !== undefined) put('pan', patch.pan)
+    if (patch.sendA !== undefined) put('sendA', patch.sendA)
+    if (patch.sendB !== undefined) put('sendB', patch.sendB)
+    if (patch.eq) {
+      if (patch.eq.low !== undefined) put('eqLow', patch.eq.low)
+      if (patch.eq.mid !== undefined) put('eqMid', patch.eq.mid)
+      if (patch.eq.high !== undefined) put('eqHigh', patch.eq.high)
+    }
+    return wrote
   }
 
   // ---------- audio recording / import ----------

@@ -1,8 +1,9 @@
 // Arrangement view: transport bar, track headers with mixer, beat-ruler with
 // loop region, the clip grid with drag/move/resize, and the playhead.
 
+import { AUTO_TARGETS, autoTargetMeta } from '../automation-targets'
 import type { DawApp } from '../daw-app'
-import { projectEndBeat, warpRate, type Clip, type TrackData } from '../project'
+import { projectEndBeat, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
 import { sampleStore } from '../samples'
 import { settings } from '../settings'
 import { miniDial } from './mini-dial'
@@ -17,7 +18,7 @@ export class ArrangeView {
   readonly el: HTMLElement
   private readonly app: DawApp
   private ppb = 26 // pixels per beat (zoom)
-  private readonly autoOpen = new Map<string, 'volume' | 'pan'>()
+  private readonly autoOpen = new Map<string, AutoTarget>()
   private ruler!: HTMLElement
   private lanes!: HTMLElement
   private headers!: HTMLElement
@@ -28,6 +29,7 @@ export class ArrangeView {
   private recBtn!: HTMLButtonElement
   private loopBtn!: HTMLButtonElement
   private metroBtn!: HTMLButtonElement
+  private writeBtn!: HTMLButtonElement
 
   constructor(app: DawApp) {
     this.app = app
@@ -81,6 +83,9 @@ export class ArrangeView {
       this.app.transport.metronome = !this.app.transport.metronome
       this.metroBtn.classList.toggle('seg-on', this.app.transport.metronome)
     })
+
+    this.writeBtn = btn('W', 'Automation write: move a mixer knob while playing to record it')
+    this.writeBtn.addEventListener('click', () => this.app.toggleAutomationWrite())
 
     this.positionChip = document.createElement('output')
     this.positionChip.className = 'pos-chip'
@@ -139,6 +144,7 @@ export class ArrangeView {
     bar.appendChild(this.recBtn)
     bar.appendChild(this.loopBtn)
     bar.appendChild(this.metroBtn)
+    bar.appendChild(this.writeBtn)
     bar.appendChild(this.positionChip)
     bar.appendChild(bpm)
     bar.appendChild(key)
@@ -252,6 +258,7 @@ export class ArrangeView {
     this.playBtn.classList.toggle('seg-on', this.app.transport.playing)
     this.recBtn.classList.toggle('rec-live', this.app.recording)
     this.loopBtn.classList.toggle('seg-on', this.app.project.loop.on)
+    this.writeBtn.classList.toggle('seg-on', this.app.automationWrite)
   }
 
   private renderHeaders(): void {
@@ -318,7 +325,7 @@ export class ArrangeView {
 
     const controls = document.createElement('div')
     controls.className = 'track-head-controls'
-    const auto = btn('A', 'Show the automation lane (volume / pan curves)')
+    const auto = btn('A', 'Show the automation lane (any channel parameter)')
     auto.classList.toggle('seg-on', this.autoOpen.has(track.id))
     auto.addEventListener('click', () => {
       if (this.autoOpen.has(track.id)) this.autoOpen.delete(track.id)
@@ -330,15 +337,15 @@ export class ArrangeView {
     if (this.autoOpen.has(track.id)) {
       const sel = document.createElement('select')
       sel.className = 'seg-select'
-      for (const [v, label] of [['volume', 'Vol'], ['pan', 'Pan']] as const) {
+      for (const meta of AUTO_TARGETS) {
         const o = document.createElement('option')
-        o.value = v
-        o.textContent = label
-        if (this.autoOpen.get(track.id) === v) o.selected = true
+        o.value = meta.key
+        o.textContent = meta.label + ((track.auto[meta.key]?.length ?? 0) > 0 ? ' •' : '')
+        if (this.autoOpen.get(track.id) === meta.key) o.selected = true
         sel.appendChild(o)
       }
       sel.addEventListener('change', () => {
-        this.autoOpen.set(track.id, sel.value as 'volume' | 'pan')
+        this.autoOpen.set(track.id, sel.value as AutoTarget)
         this.renderLanes()
       })
       controls.appendChild(sel)
@@ -531,14 +538,16 @@ export class ArrangeView {
   // ---------- automation lane ----------
 
   private autoLaneEl(track: TrackData): HTMLElement {
-    const param = this.autoOpen.get(track.id) ?? 'volume'
-    const points = track.auto[param]
-    const isPan = param === 'pan'
-    const toY = (v: number): number => (isPan ? ((1 - v) / 2) * AUTO_H : (1 - v) * AUTO_H)
+    const target = this.autoOpen.get(track.id) ?? 'volume'
+    const meta = autoTargetMeta(target)
+    const points = (track.auto[target] ??= []) // lazily create on first interaction
+    const range = meta.max - meta.min
+    const toY = (v: number): number => (1 - (v - meta.min) / range) * AUTO_H
     const fromY = (y: number): number => {
       const n = Math.min(1, Math.max(0, y / AUTO_H))
-      return isPan ? Math.max(-1, Math.min(1, 1 - n * 2)) : 1 - n
+      return meta.min + (1 - n) * range
     }
+    const idleV = meta.staticValue(track.mixer)
 
     const lane = document.createElement('div')
     lane.className = 'auto-lane'
@@ -546,18 +555,22 @@ export class ArrangeView {
     lane.style.width = `${this.widthBeats() * this.ppb}px`
 
     const draw = (): void => {
-      const old = lane.querySelector('svg')
-      old?.remove()
+      lane.querySelector('svg')?.remove()
       const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
       svg.setAttribute('width', String(this.widthBeats() * this.ppb))
       svg.setAttribute('height', String(AUTO_H))
       if (points.length > 0) {
         const sorted = [...points].sort((a, b) => a.beat - b.beat)
-        const coords = [
-          `0,${toY(sorted[0].value)}`,
-          ...sorted.map(p => `${p.beat * this.ppb},${toY(p.value)}`),
-          `${this.widthBeats() * this.ppb},${toY(sorted[sorted.length - 1].value)}`,
-        ]
+        // step segments (hold) draw flat-then-jump; others are straight
+        const coords = [`0,${toY(sorted[0].value)}`]
+        for (let i = 0; i < sorted.length; i++) {
+          const p = sorted[i]
+          coords.push(`${p.beat * this.ppb},${toY(p.value)}`)
+          if (p.shape === 'hold' && i + 1 < sorted.length) {
+            coords.push(`${sorted[i + 1].beat * this.ppb},${toY(p.value)}`)
+          }
+        }
+        coords.push(`${this.widthBeats() * this.ppb},${toY(sorted[sorted.length - 1].value)}`)
         const line = document.createElementNS('http://www.w3.org/2000/svg', 'polyline')
         line.setAttribute('points', coords.join(' '))
         line.setAttribute('class', 'auto-line')
@@ -566,20 +579,23 @@ export class ArrangeView {
         const mid = document.createElementNS('http://www.w3.org/2000/svg', 'line')
         mid.setAttribute('x1', '0')
         mid.setAttribute('x2', String(this.widthBeats() * this.ppb))
-        mid.setAttribute('y1', String(toY(isPan ? 0 : 1)))
-        mid.setAttribute('y2', String(toY(isPan ? 0 : 1)))
+        mid.setAttribute('y1', String(toY(idleV)))
+        mid.setAttribute('y2', String(toY(idleV)))
         mid.setAttribute('class', 'auto-line auto-line-idle')
         svg.appendChild(mid)
       }
       lane.prepend(svg)
     }
 
-    const dotEl = (p: { beat: number; value: number }): HTMLElement => {
+    const dotEl = (p: { beat: number; value: number; shape?: 'linear' | 'hold' | 'exp' }): HTMLElement => {
       const dot = document.createElement('div')
       dot.className = 'auto-dot'
       const place = (): void => {
         dot.style.left = `${p.beat * this.ppb - 4}px`
         dot.style.top = `${toY(p.value) - 4}px`
+        dot.classList.toggle('auto-dot-hold', p.shape === 'hold')
+        dot.classList.toggle('auto-dot-exp', p.shape === 'exp')
+        dot.title = `${meta.fmt(p.value)} — alt-click cycles curve shape (${p.shape ?? 'linear'}), double-click deletes`
       }
       place()
       let dragging = false
@@ -587,6 +603,15 @@ export class ArrangeView {
       dot.addEventListener('pointerdown', e => {
         e.preventDefault()
         e.stopPropagation()
+        if (e.altKey) {
+          // cycle the segment shape leaving this point
+          this.app.checkpoint(`automation ${track.id}`)
+          p.shape = p.shape === undefined ? 'hold' : p.shape === 'hold' ? 'exp' : undefined
+          place()
+          draw()
+          this.app.automationEdited()
+          return
+        }
         dragging = true
         touched = false
         try {
@@ -610,7 +635,7 @@ export class ArrangeView {
       const up = (): void => {
         if (dragging && touched) {
           points.sort((a, b) => a.beat - b.beat)
-          this.app.emit('clips')
+          this.app.automationEdited()
         }
         dragging = false
       }
@@ -621,7 +646,7 @@ export class ArrangeView {
         this.app.checkpoint(`automation ${track.id}`)
         const i = points.indexOf(p)
         if (i !== -1) points.splice(i, 1)
-        this.app.emit('clips')
+        this.app.automationEdited()
       })
       return dot
     }
@@ -630,13 +655,12 @@ export class ArrangeView {
       if (e.target !== lane && (e.target as HTMLElement).tagName !== 'svg') return
       const rect = lane.getBoundingClientRect()
       this.app.checkpoint(`automation ${track.id}`)
-      const p = {
+      points.push({
         beat: Math.max(0, Math.round((e.clientX - rect.left) / this.ppb / AUTO_SNAP) * AUTO_SNAP),
         value: fromY(e.clientY - rect.top),
-      }
-      points.push(p)
+      })
       points.sort((a, b) => a.beat - b.beat)
-      this.app.emit('clips')
+      this.app.automationEdited()
     })
 
     draw()

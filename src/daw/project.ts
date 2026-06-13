@@ -42,15 +42,20 @@ export interface Clip {
   audio?: AudioRegion
 }
 
+export type CurveShape = 'linear' | 'hold' | 'exp'
+
 export interface AutoPoint {
   beat: number
   value: number
+  shape?: CurveShape // how the curve LEAVES this point toward the next (default linear)
 }
 
-export interface Automation {
-  volume: AutoPoint[] // 0..1; empty = no automation
-  pan: AutoPoint[] // -1..1
-}
+// Any channel-strip parameter can be automated. Each maps to a single
+// AudioParam on the channel (see automation-targets.ts for ranges).
+export type AutoTarget = 'volume' | 'pan' | 'sendA' | 'sendB' | 'eqLow' | 'eqMid' | 'eqHigh'
+
+// Per-target breakpoint lists; absent/empty target = not automated.
+export type Automation = Partial<Record<AutoTarget, AutoPoint[]>>
 
 export interface MixerState {
   volume: number
@@ -180,7 +185,7 @@ export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind
     sampler: defaultSampler(),
     pads: defaultPads(),
     mixer: defaultMixer(),
-    auto: { volume: [], pan: [] },
+    auto: {},
     clips: [],
   }
 }
@@ -325,13 +330,31 @@ function migrateTrack(raw: unknown, index: number): TrackData {
         }
       })(),
     },
-    auto: {
-      volume: migrateAutoPoints(auto.volume, 0, 1),
-      pan: migrateAutoPoints(auto.pan, -1, 1),
-    },
+    auto: migrateAuto(auto),
     clips: clips.slice(0, 256).map(migrateClip).filter((c): c is Clip => c !== null),
   }
 }
+
+function migrateAuto(raw: Record<string, unknown>): Automation {
+  const out: Automation = {}
+  for (const t of AUTO_TARGET_RANGES) {
+    const pts = migrateAutoPoints(raw[t.key], t.min, t.max)
+    if (pts.length > 0) out[t.key] = pts
+  }
+  return out
+}
+
+// Range table (kept here so migration clamps correctly without importing the
+// UI-facing target registry).
+const AUTO_TARGET_RANGES: { key: AutoTarget; min: number; max: number }[] = [
+  { key: 'volume', min: 0, max: 1 },
+  { key: 'pan', min: -1, max: 1 },
+  { key: 'sendA', min: 0, max: 1 },
+  { key: 'sendB', min: 0, max: 1 },
+  { key: 'eqLow', min: -12, max: 12 },
+  { key: 'eqMid', min: -12, max: 12 },
+  { key: 'eqHigh', min: -12, max: 12 },
+]
 
 function migrateDrums(raw: unknown): DrumPatch {
   const d = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
@@ -389,7 +412,10 @@ function migrateAutoPoints(raw: unknown, min: number, max: number): AutoPoint[] 
       const beat = Number(o.beat)
       const value = Number(o.value)
       if (!Number.isFinite(beat) || !Number.isFinite(value)) return null
-      return { beat: Math.min(1e5, Math.max(0, beat)), value: Math.min(max, Math.max(min, value)) }
+      const shape = o.shape === 'hold' || o.shape === 'exp' ? o.shape : undefined
+      const pt: AutoPoint = { beat: Math.min(1e5, Math.max(0, beat)), value: Math.min(max, Math.max(min, value)) }
+      if (shape) pt.shape = shape
+      return pt
     })
     .filter((p): p is AutoPoint => p !== null)
     .sort((a, b) => a.beat - b.beat)

@@ -1196,3 +1196,11 @@
 .settings-close {
   justify-self: end;
 }
+
+/* automation curve-shape markers */
+.auto-dot-hold {
+  border-radius: 2px;
+}
+.auto-dot-exp {
+  background: var(--led);
+}
