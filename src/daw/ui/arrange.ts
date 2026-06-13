@@ -274,6 +274,7 @@ export class ArrangeView {
       ['+ Sampler', 'sampler', 'Add a sampler track (load any audio, play it across the keys)'],
       ['+ Pads', 'pads', 'Add a 16-pad sample bank (drop audio on pads, finger-drum them)'],
       ['+ Audio', 'audio', 'Add an audio track (record mic / import files)'],
+      ['+ SoundFont', 'soundfont', 'Add a SoundFont track — load a .sf2 bank of multisampled instruments'],
       ['+ Group', 'bus', 'Add a group bus — route other tracks into it for shared EQ/comp/FX and one fader'],
     ] as const) {
       const b = btn(label, title)

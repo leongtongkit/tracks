@@ -19,9 +19,11 @@ import { timeStretch } from './dsp/stretch'
 import { DrumMachine } from './instruments/drums'
 import { PadsInstrument } from './instruments/pads'
 import { SamplerInstrument } from './instruments/sampler'
+import { SoundFontInstrument } from './instruments/soundfont'
 import type { Instrument } from './instruments/types'
 import { eqUsesGain, MAX_EQ_BANDS, type AudioRegion, type AutoTarget, type EqBand, type Project, type TrackData, type TrackKind } from './project'
 import { sampleStore, type SampleStore } from './samples'
+import { soundFontStore } from './soundfont-store'
 
 // every channel-strip param that can be automated (order is display order)
 const AUTOMATABLE: AutoTarget[] = ['volume', 'pan', 'sendA', 'sendB', 'eqLow', 'eqMid', 'eqHigh']
@@ -162,8 +164,10 @@ export class TrackChannel {
         this.instr = new SamplerInstrument(ctx, () => this.data.sampler, samples)
       } else if (data.kind === 'pads') {
         this.instr = new PadsInstrument(ctx, () => this.data.pads, samples)
+      } else if (data.kind === 'soundfont') {
+        this.instr = new SoundFontInstrument(ctx, () => this.data.soundfont, soundFontStore)
       } else {
-        this.instr = null // audio tracks have no triggered instrument
+        this.instr = null // audio / bus tracks have no triggered instrument
       }
       this.instr?.output.connect(this.input)
       this.fxChain = new FxChain(ctx, this.store.getPatch())

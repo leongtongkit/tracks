@@ -14,7 +14,7 @@ export const PROJECT_VERSION = 2
 
 // 'bus' = a group/summing track: no instrument or clips, just a channel strip
 // other tracks route their output into.
-export type TrackKind = 'synth' | 'drums' | 'sampler' | 'pads' | 'audio' | 'bus'
+export type TrackKind = 'synth' | 'drums' | 'sampler' | 'pads' | 'audio' | 'bus' | 'soundfont'
 
 export interface Note {
   start: number // beats, relative to clip start
@@ -142,6 +142,14 @@ export interface PadsPatch {
   pads: PadConfig[] // exactly PAD_COUNT entries
 }
 
+// References a SoundFont loaded into the runtime SoundFontStore by id. The .sf2
+// binary is never stored in the project (local to the browser).
+export interface SoundFontPatch {
+  id: string | null
+  name: string
+  presetIndex: number
+}
+
 export const PAD_COUNT = 16
 export const PAD_BASE_PITCH = 36
 
@@ -153,6 +161,7 @@ export interface TrackData {
   drums: DrumPatch
   sampler: SamplerPatch
   pads: PadsPatch
+  soundfont: SoundFontPatch
   mixer: MixerState
   auto: Automation
   clips: Clip[]
@@ -221,6 +230,10 @@ export function defaultPads(): PadsPatch {
   }
 }
 
+export function defaultSoundFont(): SoundFontPatch {
+  return { id: null, name: '', presetIndex: 0 }
+}
+
 export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind } = {}): TrackData {
   const def = opts.preset ? PRESETS.find(p => p.name === opts.preset) : undefined
   return {
@@ -231,6 +244,7 @@ export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind
     drums: defaultDrums(),
     sampler: defaultSampler(),
     pads: defaultPads(),
+    soundfont: defaultSoundFont(),
     mixer: defaultMixer(),
     auto: {},
     clips: [],
@@ -288,7 +302,7 @@ const clamp = (v: unknown, min: number, max: number, fallback: number): number =
   return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback
 }
 
-const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'pads', 'audio', 'bus']
+const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'pads', 'audio', 'bus', 'soundfont']
 const SCALES: ScaleName[] = ['chromatic', 'major', 'minor']
 
 // Accepts parsed JSON (v1 or v2); returns a valid v2 Project or throws.
@@ -349,6 +363,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
     drums: migrateDrums(t.drums),
     sampler: migrateSampler(t.sampler),
     pads: migratePads(t.pads),
+    soundfont: migrateSoundFont(t.soundfont),
     mixer: {
       volume: clamp(mixer.volume, 0, 1, 0.8),
       pan: clamp(mixer.pan, -1, 1, 0),
@@ -470,6 +485,15 @@ function migrateSampler(raw: unknown): SamplerPatch {
     attack: clamp(s.attack, 0, 2, 0.003),
     release: clamp(s.release, 0.005, 4, 0.08),
     loop: Boolean(s.loop),
+  }
+}
+
+function migrateSoundFont(raw: unknown): SoundFontPatch {
+  const s = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
+  return {
+    id: typeof s.id === 'string' && s.id ? s.id : null,
+    name: typeof s.name === 'string' ? s.name.slice(0, 60) : '',
+    presetIndex: Math.max(0, Math.round(clamp(s.presetIndex, 0, 4096, 0))),
   }
 }
 

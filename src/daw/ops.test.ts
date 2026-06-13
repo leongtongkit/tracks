@@ -76,6 +76,19 @@ describe('v1 → v2 migration', () => {
     expect(eq.map(b => b.type)).toEqual(['lowshelf', 'peaking', 'highshelf'])
   })
 
+  it('accepts a soundfont track and its patch', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      tracks: [{ kind: 'soundfont', soundfont: { id: 'sfA', name: 'piano.sf2', presetIndex: 3 } }],
+    })
+    expect(p.tracks[0].kind).toBe('soundfont')
+    expect(p.tracks[0].soundfont).toEqual({ id: 'sfA', name: 'piano.sf2', presetIndex: 3 })
+    // a track with no soundfont field gets a null default
+    const legacy = migrateProject({ v: 2, bpm: 120, tracks: [{ kind: 'synth' }] })
+    expect(legacy.tracks[0].soundfont).toEqual({ id: null, name: '', presetIndex: 0 })
+  })
+
   it('accepts a bus track kind and output routing', () => {
     const p = migrateProject({
       v: 2,

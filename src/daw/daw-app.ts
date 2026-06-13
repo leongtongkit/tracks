@@ -192,7 +192,7 @@ export class DawApp {
       const preset = TRACK_PRESETS[this.project.tracks.length % TRACK_PRESETS.length]
       track = newTrack(preset, { preset })
     } else {
-      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio', bus: 'Group' }
+      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio', bus: 'Group', soundfont: 'SoundFont' }
       track = newTrack(names[kind], { kind })
     }
     this.project.tracks.push(track)
@@ -251,6 +251,15 @@ export class DawApp {
     delete track.frozen
     pruneSamples(this.project)
     if (!this.project.samples[sid]) void sampleStore.remove(sid)
+    void this.song?.syncTracks(this.project)
+    this.emit('tracks')
+  }
+
+  setSoundFont(id: string, patch: Partial<TrackData['soundfont']>): void {
+    const track = this.track(id)
+    if (!track) return
+    this.checkpoint(`soundfont ${id}`)
+    Object.assign(track.soundfont, patch)
     void this.song?.syncTracks(this.project)
     this.emit('tracks')
   }

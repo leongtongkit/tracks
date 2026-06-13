@@ -30,8 +30,11 @@ import { buildAudioTrackEditor } from './ui/audio-editor'
 import { buildDrumEditor } from './ui/drum-editor'
 import { buildPadsEditor } from './ui/pads-editor'
 import { buildSamplerEditor } from './ui/sampler-editor'
+import { buildSoundFontEditor } from './ui/soundfont-editor'
+import { soundFontStore } from './soundfont-store'
 import { renderProjectToWav } from './render'
 import { renderProject } from './render'
+import { detectPitch } from './dsp/autotune'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
 import { buildHelpOverlay } from './ui/help'
@@ -40,6 +43,8 @@ import { buildSettingsPanel } from './ui/settings-panel'
 const app = new DawApp()
 // recover persisted samples (recordings/imports) before anything plays
 void sampleStore.loadAll()
+// recover persisted SoundFonts so loaded instruments survive a reload
+void soundFontStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
 app.project = loadSession() ?? demoSong()
 
@@ -108,7 +113,9 @@ bottom.setInstrumentMount((host, trackId) => {
           ? buildSamplerEditor(app, trackId)
           : track.kind === 'pads'
             ? buildPadsEditor(app, trackId)
-            : buildAudioTrackEditor(app, trackId)
+            : track.kind === 'soundfont'
+              ? buildSoundFontEditor(app, trackId)
+              : buildAudioTrackEditor(app, trackId)
     host.appendChild(editor)
     const rack = trackFxRack(trackId)
     if (rack) editor.appendChild(rack)
@@ -379,6 +386,7 @@ declare global {
     __tracksEqTest: () => Promise<unknown>
     __tracksRoutingTest: () => Promise<unknown>
     __tracksFreezeTest: () => Promise<unknown>
+    __tracksSf2Test: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -662,6 +670,72 @@ window.__tracksFreezeTest = async () => {
     frozenMatchesLive: Math.abs(liveRms - frozenRms) / liveRms < 0.15,
     frozenIsAudible: frozenRms > 0.005,
     notesSkippedWhenFrozen: collectEvents(p2.tracks, 0, endBeat).length === 0,
+  }
+}
+
+// SoundFont end-to-end: build a minimal .sf2 (one looped 220.5 Hz sine at root
+// key 57), load it via the store, play notes on a soundfont track, and confirm
+// the rendered pitch tracks the key (root → 220 Hz, +12 → 440 Hz).
+window.__tracksSf2Test = async () => {
+  // --- compact .sf2 builder ---
+  const enc = (s: string, n: number): Uint8Array => { const o = new Uint8Array(n); for (let i = 0; i < Math.min(s.length, n); i++) o[i] = s.charCodeAt(i); return o }
+  const cat = (...ps: Uint8Array[]): Uint8Array => { const out = new Uint8Array(ps.reduce((a, p) => a + p.length, 0)); let o = 0; for (const p of ps) { out.set(p, o); o += p.length } return out }
+  const u16 = (v: number): Uint8Array => { const b = new Uint8Array(2); new DataView(b.buffer).setUint16(0, v, true); return b }
+  const u32 = (v: number): Uint8Array => { const b = new Uint8Array(4); new DataView(b.buffer).setUint32(0, v >>> 0, true); return b }
+  const s16 = (v: number): Uint8Array => { const b = new Uint8Array(2); new DataView(b.buffer).setInt16(0, v, true); return b }
+  const ck = (id: string, body: Uint8Array): Uint8Array => { const h = cat(enc(id, 4), u32(body.length)); return body.length & 1 ? cat(h, body, new Uint8Array(1)) : cat(h, body) }
+  const lst = (t: string, ...s: Uint8Array[]): Uint8Array => ck('LIST', cat(enc(t, 4), ...s))
+  const gen = (op: number, amt: number): Uint8Array => cat(u16(op), s16(amt))
+  const Np = 200 // one period → 220.5 Hz at 44100
+  const smplBody = new Uint8Array(Np * 2)
+  const dv = new DataView(smplBody.buffer)
+  for (let i = 0; i < Np; i++) dv.setInt16(i * 2, Math.round(Math.sin((i / Np) * Math.PI * 2) * 22000), true)
+  const sdta = lst('sdta', ck('smpl', smplBody))
+  const shdrRec = (name: string, st: number, en: number, ls: number, le: number, sr: number, root: number, type: number): Uint8Array =>
+    cat(enc(name, 20), u32(st), u32(en), u32(ls), u32(le), u32(sr), new Uint8Array([root, 0]), u16(0), u16(type))
+  const shdr = ck('shdr', cat(shdrRec('sine', 0, Np, 0, Np, 44100, 57, 1), shdrRec('EOS', 0, 0, 0, 0, 0, 0, 0)))
+  const igen = ck('igen', cat(gen(43, 0 | (127 << 8)), gen(54, 1), gen(53, 0), gen(0, 0)))
+  const ibag = ck('ibag', cat(u16(0), u16(0), u16(3), u16(0)))
+  const imod = ck('imod', new Uint8Array(10))
+  const inst = ck('inst', cat(cat(enc('inst0', 20), u16(0)), cat(enc('EOI', 20), u16(1))))
+  const pgen = ck('pgen', cat(gen(41, 0), gen(0, 0)))
+  const pbag = ck('pbag', cat(u16(0), u16(0), u16(1), u16(0)))
+  const pmod = ck('pmod', new Uint8Array(10))
+  const phdr = ck('phdr', cat(
+    cat(enc('Sine', 20), u16(0), u16(0), u16(0), u32(0), u32(0), u32(0)),
+    cat(enc('EOP', 20), u16(0), u16(0), u16(1), u32(0), u32(0), u32(0)),
+  ))
+  const pdta = lst('pdta', phdr, pbag, pmod, pgen, inst, ibag, imod, igen, shdr)
+  const info = lst('INFO', ck('ifil', cat(u16(2), u16(1))))
+  const sf2 = ck('RIFF', cat(enc('sfbk', 4), info, sdta, pdta)).buffer as ArrayBuffer
+
+  const sfId = newId()
+  soundFontStore.put(sfId, 'sine.sf2', sf2)
+
+  const mk = (pitch: number): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    const t = newTrack('SF', { kind: 'soundfont' })
+    t.soundfont = { id: sfId, name: 'sine.sf2', presetIndex: 0 }
+    t.clips = [{ id: 's1', start: 0, length: 4, notes: [{ start: 0, dur: 3.5, pitch, vel: 0.9 }] }]
+    p.tracks = [t]
+    return p
+  }
+  const rms = (b: AudioBuffer): number => { const d = b.getChannelData(0); let s = 0; for (let i = 0; i < d.length; i++) s += d[i] * d[i]; return Math.sqrt(s / d.length) }
+
+  const root = await renderProject(mk(57)) // → ~220 Hz
+  const oct = await renderProject(mk(69)) // +12 → ~440 Hz
+  const mid = Math.floor(root.length * 0.4)
+  const pitchRoot = detectPitch(root.getChannelData(0), mid, 4096, root.sampleRate)
+  const pitchOct = detectPitch(oct.getChannelData(0), mid, 4096, oct.sampleRate)
+  return {
+    presetsParsed: soundFontStore.get(sfId)?.presets.length ?? 0,
+    samplesParsed: soundFontStore.get(sfId)?.samples.length ?? 0,
+    rootRms: rms(root),
+    rootIsAudible: rms(root) > 0.01,
+    pitchRoot,
+    pitchOct,
+    rootPitchOk: Math.abs(pitchRoot - 220.5) < 12,
+    octavePitchOk: Math.abs(pitchOct - 441) < 24,
   }
 }
 
