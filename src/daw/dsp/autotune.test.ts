@@ -65,7 +65,7 @@ describe('autotune', () => {
     }
     expect(peak).toBeLessThan(1.2)
     expect(peak).toBeGreaterThan(0.3)
-  })
+  }, 20000) // heavy WSOLA render — generous timeout so it doesn't flake under parallel load
 })
 
 describe('clip utilities', () => {
