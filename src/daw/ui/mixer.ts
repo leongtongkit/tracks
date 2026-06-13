@@ -4,18 +4,22 @@
 // mounted.
 
 import type { DawApp } from '../daw-app'
-import type { TrackData } from '../project'
+import type { EqBand, TrackData } from '../project'
+import { buildEqEditor } from './eq-editor'
 import { fader } from './fader'
 import { miniDial } from './mini-dial'
 
 export class MixerView {
   readonly el: HTMLElement
   private readonly app: DawApp
+  private readonly eqEditor: { open(trackId: string): void }
   private meters: { canvas: HTMLCanvasElement; peak: () => number; hold: number }[] = []
+  private lufsEl: HTMLElement | null = null
   private raf = 0
 
   constructor(app: DawApp) {
     this.app = app
+    this.eqEditor = buildEqEditor(app)
     this.el = document.createElement('div')
     this.el.className = 'mixer'
   }
@@ -34,6 +38,7 @@ export class MixerView {
   render(): void {
     this.el.innerHTML = ''
     this.meters = []
+    this.lufsEl = null
     for (const track of this.app.project.tracks) {
       this.el.appendChild(this.strip(track))
     }
@@ -122,10 +127,22 @@ export class MixerView {
 
     const eq = document.createElement('div')
     eq.className = 'mix-section'
-    eq.appendChild(sectionTag('EQ'))
-    eq.appendChild(this.dial('Hi', track, { min: -12, max: 12, reset: 0, fmt: db }, () => m.eq.high, v => ({ eq: { ...m.eq, high: v } })))
-    eq.appendChild(this.dial('Mid', track, { min: -12, max: 12, reset: 0, fmt: db }, () => m.eq.mid, v => ({ eq: { ...m.eq, mid: v } })))
-    eq.appendChild(this.dial('Lo', track, { min: -12, max: 12, reset: 0, fmt: db }, () => m.eq.low, v => ({ eq: { ...m.eq, low: v } })))
+    const eqTag = sectionTag('EQ')
+    const eqBtn = document.createElement('button')
+    eqBtn.type = 'button'
+    eqBtn.className = 'mix-eq-edit'
+    eqBtn.textContent = 'edit'
+    eqBtn.title = 'Open the parametric EQ (up to 8 bands, curve + spectrum)'
+    eqBtn.addEventListener('click', () => this.eqEditor.open(track.id))
+    const eqHead = document.createElement('div')
+    eqHead.className = 'mix-eq-head'
+    eqHead.appendChild(eqTag)
+    eqHead.appendChild(eqBtn)
+    eq.appendChild(eqHead)
+    // quick gain dials for the first three (low/mid/high) bands
+    eq.appendChild(this.dial('Hi', track, { min: -18, max: 18, reset: 0, fmt: db }, () => m.eq[2]?.gain ?? 0, v => ({ eq: setBandGain(m.eq, 2, v) })))
+    eq.appendChild(this.dial('Mid', track, { min: -18, max: 18, reset: 0, fmt: db }, () => m.eq[1]?.gain ?? 0, v => ({ eq: setBandGain(m.eq, 1, v) })))
+    eq.appendChild(this.dial('Lo', track, { min: -18, max: 18, reset: 0, fmt: db }, () => m.eq[0]?.gain ?? 0, v => ({ eq: setBandGain(m.eq, 0, v) })))
     col.appendChild(eq)
 
     const comp = document.createElement('div')
@@ -199,6 +216,18 @@ export class MixerView {
     faderCol.className = 'mix-fader-col'
     faderCol.appendChild(this.meterCanvas(() => this.app.song?.masterPeak() ?? 0))
     main.appendChild(faderCol)
+    const lufs = document.createElement('div')
+    lufs.className = 'mix-lufs'
+    const lufsTag = document.createElement('span')
+    lufsTag.className = 'mix-lufs-tag'
+    lufsTag.textContent = 'LUFS-M'
+    const lufsVal = document.createElement('span')
+    lufsVal.className = 'mix-lufs-val'
+    lufsVal.textContent = '−∞'
+    lufs.appendChild(lufsTag)
+    lufs.appendChild(lufsVal)
+    main.appendChild(lufs)
+    this.lufsEl = lufsVal
     const note = document.createElement('div')
     note.className = 'mix-note'
     note.textContent = 'Send buses: Rev = plate reverb, Dly = dark 1/8 delay. A limiter protects the 2-bus.'
@@ -210,6 +239,10 @@ export class MixerView {
   private startMeters(): void {
     cancelAnimationFrame(this.raf)
     const step = (): void => {
+      if (this.lufsEl) {
+        const l = this.app.song?.masterLufs()
+        this.lufsEl.textContent = l == null || l <= -70 ? '−∞' : l.toFixed(1)
+      }
       for (const m of this.meters) {
         const peak = m.peak()
         m.hold = Math.max(peak, m.hold * 0.94)
@@ -236,6 +269,11 @@ function segBtn(text: string, title: string): HTMLButtonElement {
   b.textContent = text
   b.title = title
   return b
+}
+
+// immutably set one band's gain (quick dials only touch the first three bands)
+function setBandGain(bands: EqBand[], i: number, gain: number): EqBand[] {
+  return bands.map((b, j) => (j === i ? { ...b, gain } : b))
 }
 
 function sectionTag(text: string): HTMLElement {

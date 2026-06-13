@@ -25,9 +25,9 @@ export const AUTO_TARGETS: AutoTargetMeta[] = [
   { key: 'pan', label: 'Pan', min: -1, max: 1, fmt: panFmt, staticValue: m => m.pan },
   { key: 'sendA', label: 'Reverb send', min: 0, max: 1, fmt: pct, staticValue: m => m.sendA },
   { key: 'sendB', label: 'Delay send', min: 0, max: 1, fmt: pct, staticValue: m => m.sendB },
-  { key: 'eqLow', label: 'EQ low', min: -12, max: 12, fmt: db, staticValue: m => m.eq.low },
-  { key: 'eqMid', label: 'EQ mid', min: -12, max: 12, fmt: db, staticValue: m => m.eq.mid },
-  { key: 'eqHigh', label: 'EQ high', min: -12, max: 12, fmt: db, staticValue: m => m.eq.high },
+  { key: 'eqLow', label: 'EQ low', min: -18, max: 18, fmt: db, staticValue: m => m.eq[0]?.gain ?? 0 },
+  { key: 'eqMid', label: 'EQ mid', min: -18, max: 18, fmt: db, staticValue: m => m.eq[1]?.gain ?? 0 },
+  { key: 'eqHigh', label: 'EQ high', min: -18, max: 18, fmt: db, staticValue: m => m.eq[2]?.gain ?? 0 },
 ]
 
 export function autoTargetMeta(key: AutoTarget): AutoTargetMeta {

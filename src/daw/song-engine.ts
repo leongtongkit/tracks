@@ -20,11 +20,13 @@ import { DrumMachine } from './instruments/drums'
 import { PadsInstrument } from './instruments/pads'
 import { SamplerInstrument } from './instruments/sampler'
 import type { Instrument } from './instruments/types'
-import type { AudioRegion, AutoTarget, Project, TrackData, TrackKind } from './project'
+import { eqUsesGain, MAX_EQ_BANDS, type AudioRegion, type AutoTarget, type EqBand, type Project, type TrackData, type TrackKind } from './project'
 import { sampleStore, type SampleStore } from './samples'
 
 // every channel-strip param that can be automated (order is display order)
 const AUTOMATABLE: AutoTarget[] = ['volume', 'pan', 'sendA', 'sendB', 'eqLow', 'eqMid', 'eqHigh']
+// automation targets that map to EQ band gains, by slot index
+const EQ_SLOT_TARGETS: AutoTarget[] = ['eqLow', 'eqMid', 'eqHigh']
 
 export interface SendBuses {
   a: AudioNode
@@ -40,9 +42,7 @@ export class TrackChannel {
   private readonly instr: Instrument | null
   private readonly fxChain: FxChain | null
   private readonly ctx: BaseAudioContext
-  private readonly eqLow: BiquadFilterNode
-  private readonly eqMid: BiquadFilterNode
-  private readonly eqHigh: BiquadFilterNode
+  private readonly eqBands: BiquadFilterNode[] // fixed MAX_EQ_BANDS slots, in series
   private readonly comp: DynamicsCompressorNode
   private readonly makeup: GainNode
   private readonly duckGain: GainNode
@@ -62,16 +62,15 @@ export class TrackChannel {
     this.kind = data.kind
     this.input = ctx.createGain()
 
-    this.eqLow = ctx.createBiquadFilter()
-    this.eqLow.type = 'lowshelf'
-    this.eqLow.frequency.value = 130
-    this.eqMid = ctx.createBiquadFilter()
-    this.eqMid.type = 'peaking'
-    this.eqMid.frequency.value = 1000
-    this.eqMid.Q.value = 0.9
-    this.eqHigh = ctx.createBiquadFilter()
-    this.eqHigh.type = 'highshelf'
-    this.eqHigh.frequency.value = 6000
+    // fixed pool of biquads; unused slots run transparent (peaking, 0 dB)
+    this.eqBands = Array.from({ length: MAX_EQ_BANDS }, () => {
+      const b = ctx.createBiquadFilter()
+      b.type = 'peaking'
+      b.frequency.value = 1000
+      b.gain.value = 0
+      b.Q.value = 1
+      return b
+    })
 
     this.comp = ctx.createDynamicsCompressor()
     this.comp.knee.value = 8
@@ -134,13 +133,12 @@ export class TrackChannel {
 
     if (this.fxChain) {
       this.input.connect(this.fxChain.input)
-      this.fxChain.output.connect(this.eqLow)
+      this.fxChain.output.connect(this.eqBands[0])
     } else {
-      this.input.connect(this.eqLow)
+      this.input.connect(this.eqBands[0])
     }
-    this.eqLow.connect(this.eqMid)
-    this.eqMid.connect(this.eqHigh)
-    this.eqHigh.connect(this.comp)
+    for (let i = 0; i < this.eqBands.length - 1; i++) this.eqBands[i].connect(this.eqBands[i + 1])
+    this.eqBands[this.eqBands.length - 1].connect(this.comp)
     this.comp.connect(this.makeup)
     this.makeup.connect(this.duckGain)
     this.duckGain.connect(this.pan)
@@ -173,9 +171,9 @@ export class TrackChannel {
       case 'pan': return 'pan' in this.pan ? this.pan.pan : null
       case 'sendA': return this.sendA.gain
       case 'sendB': return this.sendB.gain
-      case 'eqLow': return this.eqLow.gain
-      case 'eqMid': return this.eqMid.gain
-      case 'eqHigh': return this.eqHigh.gain
+      case 'eqLow': return this.eqBands[0].gain
+      case 'eqMid': return this.eqBands[1].gain
+      case 'eqHigh': return this.eqBands[2].gain
       default: return null
     }
   }
@@ -200,6 +198,20 @@ export class TrackChannel {
       param.cancelScheduledValues(t)
       param.setValueAtTime(autoValueAt(points, beat, param.value), t)
     }
+  }
+
+  // FFT magnitude (dB) of this channel's output, length = frequencyBinCount.
+  // Used by the EQ editor's spectrum backdrop.
+  spectrum(out: Float32Array<ArrayBuffer>): void {
+    this.analyser.getFloatFrequencyData(out)
+  }
+
+  get spectrumBins(): number {
+    return this.analyser.frequencyBinCount
+  }
+
+  get sampleRate(): number {
+    return this.ctx.sampleRate
   }
 
   // instantaneous output peak, 0..1+ (post-fader, post-mute)
@@ -278,15 +290,36 @@ export class TrackChannel {
     return !!pts && pts.length > 0
   }
 
+  // configure the biquad pool from the band list. Slots 0..2 expose gain to
+  // automation (eqLow/eqMid/eqHigh) so applyMixer leaves those gains alone when
+  // automated. Unused/off slots run transparent (peaking, 0 dB).
+  private applyEq(bands: EqBand[], t: number): void {
+    for (let i = 0; i < this.eqBands.length; i++) {
+      const node = this.eqBands[i]
+      const band = bands[i]
+      if (band && band.on) {
+        node.type = band.type
+        node.frequency.setTargetAtTime(Math.min(20000, Math.max(20, band.freq)), t, 0.02)
+        node.Q.setTargetAtTime(band.q, t, 0.02)
+        const automated = i < EQ_SLOT_TARGETS.length && this.automated(EQ_SLOT_TARGETS[i])
+        if (!automated) node.gain.setTargetAtTime(eqUsesGain(band.type) ? band.gain : 0, t, 0.02)
+      } else {
+        const automated = i < EQ_SLOT_TARGETS.length && this.automated(EQ_SLOT_TARGETS[i])
+        if (!automated) {
+          node.type = 'peaking'
+          node.gain.setTargetAtTime(0, t, 0.02)
+        }
+      }
+    }
+  }
+
   applyMixer(mixer: TrackData['mixer'], soloElsewhere: boolean): void {
     const t = this.ctx.currentTime
     if (!this.automated('volume')) this.volume.gain.setTargetAtTime(mixer.volume, t, 0.02)
     if ('pan' in this.pan && !this.automated('pan')) {
       this.pan.pan.setTargetAtTime(mixer.pan, t, 0.02)
     }
-    if (!this.automated('eqLow')) this.eqLow.gain.setTargetAtTime(mixer.eq.low, t, 0.02)
-    if (!this.automated('eqMid')) this.eqMid.gain.setTargetAtTime(mixer.eq.mid, t, 0.02)
-    if (!this.automated('eqHigh')) this.eqHigh.gain.setTargetAtTime(mixer.eq.high, t, 0.02)
+    this.applyEq(mixer.eq, t)
     if (mixer.comp.on) {
       this.comp.threshold.setTargetAtTime(mixer.comp.threshold, t, 0.02)
       this.comp.ratio.setTargetAtTime(mixer.comp.ratio, t, 0.02)
@@ -313,7 +346,7 @@ export class TrackChannel {
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
     this.setDuck(null, 0)
-    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, this.eqLow, this.eqMid, this.eqHigh, this.comp, this.makeup, this.duckGain, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]
+    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, ...this.eqBands, this.comp, this.makeup, this.duckGain, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]
     for (const n of nodes) n?.disconnect()
   }
 }
@@ -327,6 +360,9 @@ export class SongEngine {
   private readonly buses: SendBuses
   private readonly masterAnalyser: AnalyserNode
   private readonly masterMeterBuf: Float32Array<ArrayBuffer>
+  private readonly kAnalyser: AnalyserNode
+  private readonly kBuf: Float32Array<ArrayBuffer>
+  private lufsEma = 1e-7
 
   constructor(ctx: BaseAudioContext, dest?: AudioNode, samples: SampleStore = sampleStore) {
     this.ctx = ctx
@@ -347,6 +383,23 @@ export class SongEngine {
     this.masterAnalyser.fftSize = 512
     this.masterMeterBuf = new Float32Array(this.masterAnalyser.fftSize)
     this.masterGain.connect(this.masterAnalyser)
+
+    // momentary loudness (LUFS-ish): K-weight the master (highpass + high-shelf
+    // approximating ITU BS.1770), then mean-square with a ~400ms integrator.
+    const kHp = ctx.createBiquadFilter()
+    kHp.type = 'highpass'
+    kHp.frequency.value = 38
+    kHp.Q.value = 0.5
+    const kShelf = ctx.createBiquadFilter()
+    kShelf.type = 'highshelf'
+    kShelf.frequency.value = 1500
+    kShelf.gain.value = 4
+    this.masterGain.connect(kHp)
+    kHp.connect(kShelf)
+    this.kAnalyser = ctx.createAnalyser()
+    this.kAnalyser.fftSize = 1024
+    kShelf.connect(this.kAnalyser)
+    this.kBuf = new Float32Array(this.kAnalyser.fftSize)
 
     // send bus A: plate-ish generated reverb
     const busA = ctx.createGain()
@@ -387,6 +440,18 @@ export class SongEngine {
       if (a > peak) peak = a
     }
     return peak
+  }
+
+  // momentary loudness in LUFS (approximate). Call ~once per animation frame;
+  // an EMA gives the ~400ms integration window. Returns -70 when silent.
+  masterLufs(): number {
+    this.kAnalyser.getFloatTimeDomainData(this.kBuf)
+    let ms = 0
+    for (let i = 0; i < this.kBuf.length; i++) ms += this.kBuf[i] * this.kBuf[i]
+    ms /= this.kBuf.length
+    this.lufsEma = this.lufsEma * 0.94 + ms * 0.06
+    if (this.lufsEma < 1e-7) return -70
+    return -0.691 + 10 * Math.log10(this.lufsEma)
   }
 
   // Create/dispose channels so the graph matches the track list; existing

@@ -28,7 +28,9 @@ describe('v1 → v2 migration', () => {
     const t = p.tracks[0]
     expect(t.kind).toBe('synth')
     expect(t.mixer.volume).toBe(0.5)
-    expect(t.mixer.eq).toEqual({ low: 0, mid: 0, high: 0 })
+    // no eq in the v1 fixture → the three default flat bands
+    expect(t.mixer.eq).toHaveLength(3)
+    expect(t.mixer.eq.map(b => [b.type, b.gain])).toEqual([['lowshelf', 0], ['peaking', 0], ['highshelf', 0]])
     expect(t.mixer.comp.on).toBe(false)
     expect(t.mixer.sendA).toBe(0)
     expect(t.auto).toEqual({}) // no automation in the v1 fixture → empty map
@@ -60,6 +62,30 @@ describe('v1 → v2 migration', () => {
     expect(t.auto.volume?.map(p => p.beat)).toEqual([0, 4])
     expect(t.auto.pan).toBeUndefined()
     expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2, warp: 'off', origBpm: 120, fadeIn: 0, fadeOut: 0 })
+  })
+
+  it('migrates the legacy 3-band EQ object into parametric bands', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      tracks: [{ kind: 'synth', mixer: { eq: { low: 4, mid: -3, high: 6 } } }],
+    })
+    const eq = p.tracks[0].mixer.eq
+    expect(eq).toHaveLength(3)
+    expect(eq.map(b => b.gain)).toEqual([4, -3, 6])
+    expect(eq.map(b => b.type)).toEqual(['lowshelf', 'peaking', 'highshelf'])
+  })
+
+  it('round-trips a parametric EQ band array', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      tracks: [{ kind: 'synth', mixer: { eq: [{ type: 'highpass', freq: 80, gain: 0, q: 0.7, on: true }, { type: 'peaking', freq: 2500, gain: 5, q: 3, on: false }] } }],
+    })
+    const eq = p.tracks[0].mixer.eq
+    expect(eq).toHaveLength(2)
+    expect(eq[0]).toEqual({ type: 'highpass', freq: 80, gain: 0, q: 0.7, on: true })
+    expect(eq[1].on).toBe(false)
   })
 })
 

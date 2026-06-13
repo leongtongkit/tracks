@@ -457,9 +457,9 @@ export class DawApp {
     if (patch.sendA !== undefined) put('sendA', patch.sendA)
     if (patch.sendB !== undefined) put('sendB', patch.sendB)
     if (patch.eq) {
-      if (patch.eq.low !== undefined) put('eqLow', patch.eq.low)
-      if (patch.eq.mid !== undefined) put('eqMid', patch.eq.mid)
-      if (patch.eq.high !== undefined) put('eqHigh', patch.eq.high)
+      if (patch.eq[0]?.gain !== undefined) put('eqLow', patch.eq[0].gain)
+      if (patch.eq[1]?.gain !== undefined) put('eqMid', patch.eq[1].gain)
+      if (patch.eq[2]?.gain !== undefined) put('eqHigh', patch.eq[2].gain)
     }
     return wrote
   }

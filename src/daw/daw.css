@@ -1210,3 +1210,130 @@
   left: 0;
   right: auto;
 }
+
+/* ---------- parametric EQ editor ---------- */
+.eq-card {
+  min-width: 760px;
+  max-width: 800px;
+  cursor: default;
+  display: grid;
+  gap: 12px;
+}
+
+.eq-canvas {
+  width: 720px;
+  max-width: 100%;
+  height: 260px;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  background: #161618;
+  touch-action: none;
+  cursor: crosshair;
+}
+
+.eq-list {
+  display: grid;
+  gap: 5px;
+}
+
+.eq-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.eq-row.eq-off {
+  opacity: 0.5;
+}
+
+.eq-chip {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  font-weight: 700;
+  color: #0b0b0c;
+  flex: 0 0 auto;
+}
+
+.eq-num {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.6rem;
+  color: var(--ink-soft);
+}
+
+.eq-num input {
+  width: 56px;
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  color: var(--ink);
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  padding: 3px 5px;
+}
+
+.eq-num.eq-dim {
+  opacity: 0.4;
+}
+
+.eq-del {
+  color: #c8503a;
+}
+
+.eq-add {
+  justify-self: start;
+  margin-top: 2px;
+}
+
+/* EQ "edit" button in the mixer strip */
+.mix-eq-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.mix-eq-edit {
+  background: var(--panel-grey);
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  color: var(--ink-soft);
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  cursor: pointer;
+}
+
+.mix-eq-edit:hover {
+  color: var(--ink);
+  border-color: var(--accent);
+}
+
+/* master LUFS readout */
+.mix-lufs {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  margin-top: 8px;
+}
+
+.mix-lufs-tag {
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.mix-lufs-val {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}

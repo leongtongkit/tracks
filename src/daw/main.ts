@@ -22,7 +22,7 @@ import {
   loadSession,
   saveSession,
 } from './persist'
-import { defaultProject, newId, newTrack } from './project'
+import { defaultEqBands, defaultProject, newId, newTrack } from './project'
 import { settings } from './settings'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
@@ -366,6 +366,7 @@ declare global {
     __tracksRenderTest: () => Promise<unknown>
     __tracksKitTest: () => Promise<unknown>
     __tracksMixTest: () => Promise<unknown>
+    __tracksEqTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -450,7 +451,7 @@ window.__tracksMixTest = async () => {
   }
   const dry = await renderProject(mk())
   const eq = mk()
-  eq.tracks[0].mixer.eq.low = 12
+  eq.tracks[0].mixer.eq[0].gain = 12
   const eqBuf = await renderProject(eq)
   const send = mk()
   send.tracks[0].mixer.sendA = 0.9
@@ -468,6 +469,63 @@ window.__tracksMixTest = async () => {
     sendAddsTail: rms(sendBuf, 4 * spb + 0.8) > rms(dry, 4 * spb + 0.8) * 1.5,
     compRms: rms(compBuf),
     compChanges: Math.abs(rms(compBuf) - rms(dry)) / rms(dry) > 0.03,
+  }
+}
+
+// parametric EQ: a lowpass band must cut high-frequency energy, a band beyond
+// the default three must still process, and an all-flat stack must be ~transparent.
+window.__tracksEqTest = async () => {
+  const mk = (): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    p.tracks = [newTrack('Saw', { preset: 'Fat Saw', kind: 'synth' })] // bright, harmonic-rich
+    p.tracks[0].clips = [{
+      id: 'e1', start: 0, length: 4,
+      notes: [0, 1, 2, 3].map(i => ({ start: i, dur: 0.6, pitch: 50, vel: 0.95 })),
+    }]
+    return p
+  }
+  // high-frequency energy proxy: mean squared first-difference of the signal
+  const hf = (b: AudioBuffer): number => {
+    const d = b.getChannelData(0)
+    let s = 0
+    for (let i = 1; i < d.length; i++) {
+      const diff = d[i] - d[i - 1]
+      s += diff * diff
+    }
+    return s / d.length
+  }
+  const rms = (b: AudioBuffer): number => {
+    const d = b.getChannelData(0)
+    let s = 0
+    for (let i = 0; i < d.length; i++) s += d[i] * d[i]
+    return Math.sqrt(s / d.length)
+  }
+  const dry = await renderProject(mk())
+
+  const lp = mk()
+  lp.tracks[0].mixer.eq = [{ type: 'lowpass', freq: 350, gain: 0, q: 0.7, on: true }]
+  const lpBuf = await renderProject(lp)
+
+  // a high-shelf in slot 5 (beyond the default three) must still process
+  const hi = mk()
+  hi.tracks[0].mixer.eq = [
+    ...defaultEqBands(),
+    { type: 'peaking', freq: 2000, gain: 0, q: 1, on: true },
+    { type: 'highshelf', freq: 3500, gain: 15, q: 0.7, on: true },
+  ]
+  const hiBuf = await renderProject(hi)
+
+  const flat = mk()
+  flat.tracks[0].mixer.eq = defaultEqBands() // all 0 dB → transparent
+  const flatBuf = await renderProject(flat)
+
+  return {
+    dryHf: hf(dry),
+    lpHf: hf(lpBuf),
+    lowpassCutsHighs: hf(lpBuf) < hf(dry) * 0.5,
+    hiHf: hf(hiBuf),
+    band6BoostsHighs: hf(hiBuf) > hf(dry) * 1.15,
+    flatTransparent: Math.abs(rms(flatBuf) - rms(dry)) / rms(dry) < 0.02,
   }
 }
 

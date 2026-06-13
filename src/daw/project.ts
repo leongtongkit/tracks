@@ -65,12 +65,39 @@ export type AutoTarget = 'volume' | 'pan' | 'sendA' | 'sendB' | 'eqLow' | 'eqMid
 // Per-target breakpoint lists; absent/empty target = not automated.
 export type Automation = Partial<Record<AutoTarget, AutoPoint[]>>
 
+// One band of the parametric EQ. shelf/peaking bands use gain; lowpass/highpass
+// ignore it. The first three bands are the legacy low/mid/high and stay the
+// automation targets eqLow/eqMid/eqHigh.
+export type EqBandType = 'lowshelf' | 'peaking' | 'highshelf' | 'lowpass' | 'highpass'
+export interface EqBand {
+  type: EqBandType
+  freq: number // Hz, 20..20000
+  gain: number // dB, -18..18 (shelf/peaking only)
+  q: number // 0.1..18
+  on: boolean
+}
+
+export const MAX_EQ_BANDS = 8
+
+export function defaultEqBands(): EqBand[] {
+  return [
+    { type: 'lowshelf', freq: 130, gain: 0, q: 0.7, on: true },
+    { type: 'peaking', freq: 1000, gain: 0, q: 0.9, on: true },
+    { type: 'highshelf', freq: 6000, gain: 0, q: 0.7, on: true },
+  ]
+}
+
+// does a band type respond to the gain control?
+export function eqUsesGain(type: EqBandType): boolean {
+  return type === 'lowshelf' || type === 'peaking' || type === 'highshelf'
+}
+
 export interface MixerState {
   volume: number
   pan: number
   mute: boolean
   solo: boolean
-  eq: { low: number; mid: number; high: number } // dB, -12..12
+  eq: EqBand[] // 1..MAX_EQ_BANDS parametric bands, in series
   comp: { on: boolean; threshold: number; ratio: number; attack: number; release: number; makeup: number }
   sendA: number // 0..1 to the reverb bus
   sendB: number // 0..1 to the delay bus
@@ -160,7 +187,7 @@ export function defaultMixer(): MixerState {
     pan: 0,
     mute: false,
     solo: false,
-    eq: { low: 0, mid: 0, high: 0 },
+    eq: defaultEqBands(),
     comp: { on: false, threshold: -18, ratio: 3, attack: 0.01, release: 0.18, makeup: 1 },
     sendA: 0,
     sendB: 0,
@@ -292,7 +319,6 @@ export function migrateProject(raw: unknown): Project {
 function migrateTrack(raw: unknown, index: number): TrackData {
   const t = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
   const mixer = (typeof t.mixer === 'object' && t.mixer !== null ? t.mixer : {}) as Record<string, unknown>
-  const eq = (typeof mixer.eq === 'object' && mixer.eq !== null ? mixer.eq : {}) as Record<string, unknown>
   const comp = (typeof mixer.comp === 'object' && mixer.comp !== null ? mixer.comp : {}) as Record<string, unknown>
   const auto = (typeof t.auto === 'object' && t.auto !== null ? t.auto : {}) as Record<string, unknown>
   let patch: Patch
@@ -315,11 +341,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
       pan: clamp(mixer.pan, -1, 1, 0),
       mute: Boolean(mixer.mute),
       solo: Boolean(mixer.solo),
-      eq: {
-        low: clamp(eq.low, -12, 12, 0),
-        mid: clamp(eq.mid, -12, 12, 0),
-        high: clamp(eq.high, -12, 12, 0),
-      },
+      eq: migrateEq(mixer.eq),
       comp: {
         on: Boolean(comp.on),
         threshold: clamp(comp.threshold, -60, 0, -18),
@@ -343,6 +365,34 @@ function migrateTrack(raw: unknown, index: number): TrackData {
   }
 }
 
+const EQ_TYPES: EqBandType[] = ['lowshelf', 'peaking', 'highshelf', 'lowpass', 'highpass']
+
+// Accepts the new EqBand[] array OR the legacy { low, mid, high } object.
+function migrateEq(raw: unknown): EqBand[] {
+  if (Array.isArray(raw)) {
+    const bands = raw
+      .slice(0, MAX_EQ_BANDS)
+      .map((b): EqBand => {
+        const o = (typeof b === 'object' && b !== null ? b : {}) as Record<string, unknown>
+        return {
+          type: EQ_TYPES.includes(o.type as EqBandType) ? (o.type as EqBandType) : 'peaking',
+          freq: clamp(o.freq, 20, 20000, 1000),
+          gain: clamp(o.gain, -18, 18, 0),
+          q: clamp(o.q, 0.1, 18, 0.9),
+          on: o.on === undefined ? true : Boolean(o.on),
+        }
+      })
+    return bands.length ? bands : defaultEqBands()
+  }
+  // legacy v2 { low, mid, high } in dB → the three default bands
+  const o = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
+  const bands = defaultEqBands()
+  bands[0].gain = clamp(o.low, -18, 18, 0)
+  bands[1].gain = clamp(o.mid, -18, 18, 0)
+  bands[2].gain = clamp(o.high, -18, 18, 0)
+  return bands
+}
+
 function migrateAuto(raw: Record<string, unknown>): Automation {
   const out: Automation = {}
   for (const t of AUTO_TARGET_RANGES) {
@@ -359,9 +409,9 @@ const AUTO_TARGET_RANGES: { key: AutoTarget; min: number; max: number }[] = [
   { key: 'pan', min: -1, max: 1 },
   { key: 'sendA', min: 0, max: 1 },
   { key: 'sendB', min: 0, max: 1 },
-  { key: 'eqLow', min: -12, max: 12 },
-  { key: 'eqMid', min: -12, max: 12 },
-  { key: 'eqHigh', min: -12, max: 12 },
+  { key: 'eqLow', min: -18, max: 18 },
+  { key: 'eqMid', min: -18, max: 18 },
+  { key: 'eqHigh', min: -18, max: 18 },
 ]
 
 function migrateDrums(raw: unknown): DrumPatch {
