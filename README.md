@@ -1,39 +1,57 @@
 # Tracks
 
-Browser music studio at [tracks.jfound.net](https://tracks.jfound.net): multi-track arrangement, piano roll, per-track synth instruments and effects, mixer, loop transport with metronome, live keyboard/MIDI recording, project save/open, and full-song WAV export. Boots into an 8-bar demo song.
+A complete music-production studio that runs in your browser, free, with no
+account and no install — live at **[tracks.jfound.net](https://tracks.jfound.net)**.
+Multi-track arrangement, piano roll, built-in synths/drums/samplers, mic and
+MIDI recording, mixer with EQ/dynamics/sends, autotune, stem extraction, and
+WAV/MP3 export. Your projects never leave your device.
 
-The standalone synthesizer lives at [synth.jfound.net](https://synth.jfound.net) (same repo, `synth.html`, served by the `synth-jfound` worker; deploy via `wrangler-synth.toml`).
-
-## Synth Play with your computer keyboard, design sounds with a full subtractive + FM engine, add effects, sequence loops, record to WAV, and share patches by link.
+A standalone synthesizer lives at **[synth.jfound.net](https://synth.jfound.net)**
+(same repo, `synth.html`, served by the `synth-jfound` worker).
 
 ## Features
 
-- **Two-manual computer keyboard**: Z-row + S-row = lower keyboard, Q-row + number row = upper (one octave up). Arrow keys shift octave, Tab bends pitch up, Left Shift bends down, Escape stops all notes.
-- **Engine**: 3 oscillators (saw/square/sine/triangle/noise, octave/semi/fine), FM (ratio + depth), LP/HP/BP filter with resonance, envelope amount and key tracking, dual ADSR, 2 LFOs routable to pitch/filter/amp, poly (10 voices with stealing) / mono / legato with glide.
-- **FX rack**: drive, bitcrusher (AudioWorklet), chorus, phaser, delay, reverb (generated impulse), master limiter. True bypass: an effect that is off costs nothing.
-- **35 factory presets** across bass/lead/pad/pluck/keys/bell/brass/wobble/fx, plus user patches saved to the browser.
-- **Share by link**: the entire patch is compressed into the URL fragment.
-- **16-step sequencer**: lookahead-scheduled (drift-free), per-step pitch via vertical drag, pattern persists.
-- **Recording**: capture everything you play to a 16-bit WAV download.
-- **Web MIDI**: plug in a keyboard (Chrome/Edge), velocity + pitch bend supported.
+- **Arrange** — multi-track timeline, piano roll with velocity, quantize, swing, tempo map, time signatures, markers, and a session/clip-launch view.
+- **Instruments** — subtractive + FM synthesizer, 808/909 drum machines, a 16-pad sampler, and SoundFont (`.sf2`) playback.
+- **Record** — capture mic input or a MIDI keyboard (Web MIDI), with count-in and take comping.
+- **Mix** — per-track parametric EQ, compressor, gate, de-esser, reverb/delay sends, group buses, sidechain ducking, and automation of any parameter.
+- **Vocals & audio** — built-in autotune, time-stretch/repitch, and stem extraction (drums/bass/vocals/other).
+- **Export** — WAV and MP3 bounce, per-track stems, standard MIDI file, and a self-contained `.tracks.json` project file.
+
+Everything runs on the Web Audio API with a custom engine and no audio
+dependencies. Nothing is uploaded; projects persist locally in your browser.
 
 ## Stack
 
 - Vite + vanilla TypeScript (no UI framework)
-- Raw Web Audio API — custom voice engine, zero audio dependencies
-- Cloudflare Worker with static assets
+- Raw Web Audio API — custom voice/transport engine
+- Cloudflare Workers Static Assets (two workers from one build: the studio and the synth)
 
 ## Develop
 
 ```
 npm install
 npm run dev      # local dev server
-npm test         # vitest (allocator, schema, serialization, sequencer timing, WAV encoder)
+npm test         # vitest (engine, schema, serialization, sequencer timing, WAV encoder)
 npm run build    # type-check + production build to dist/
 ```
 
-The in-browser verification harness (`window.__synthRenderTest`, `window.__synthPresetSweep`) renders the real engine through an OfflineAudioContext and returns measurable stats; CI-friendly via Playwright.
+In-browser verification harnesses (e.g. `window.__tracksEqTest`,
+`window.__tracksTempoTest`) render the real engine through an
+`OfflineAudioContext` and return measurable stats.
 
 ## Deploy
 
-Push to `main` — GitHub Actions builds and runs `wrangler deploy` (secrets: `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`). The custom domain `synth.jfound.net` is bound to the `synth-jfound` Worker in Cloudflare and persists across deploys.
+Push to `main` — GitHub Actions builds and runs `wrangler deploy` for both
+workers (repo secrets `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_ACCOUNT_ID`). The
+custom domains are bound in Cloudflare and persist across deploys.
+
+## License
+
+Copyright © JFound.
+
+Tracks is free software, licensed under the **GNU Affero General Public License
+v3.0 or later** (AGPL-3.0-or-later). You may use, study, share, and modify it
+under those terms. Because the AGPL covers network use, if you run a modified
+version of Tracks as a network service, you must make your modified source
+available to its users. See [`LICENSE`](LICENSE) for the full text.
