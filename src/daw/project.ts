@@ -54,6 +54,9 @@ export interface Clip {
   // take (takes[activeTake]); present only on audio clips that have ≥1 take.
   takes?: AudioRegion[]
   activeTake?: number
+  // swipe-comp: breakpoints (clip-relative beats, sorted) selecting which take
+  // plays from each point. Empty/absent → the whole clip uses activeTake.
+  comp?: { atBeat: number; take: number }[]
 }
 
 export type CurveShape = 'linear' | 'hold' | 'exp'
@@ -685,6 +688,18 @@ function migrateClip(raw: unknown): Clip | null {
     if (takes.length === 0) takes = [audio]
     activeTake = Math.round(clamp(c.activeTake, 0, takes.length - 1, 0))
   }
+  const compRaw = Array.isArray(c.comp) ? c.comp : null
+  const comp =
+    compRaw && takes
+      ? compRaw
+          .slice(0, 256)
+          .map(p => {
+            const o = (typeof p === 'object' && p !== null ? p : {}) as Record<string, unknown>
+            return { atBeat: clamp(o.atBeat, 0, 1e5, 0), take: Math.round(clamp(o.take, 0, takes.length - 1, 0)) }
+          })
+          .filter(p => Number.isFinite(p.atBeat))
+          .sort((a, b) => a.atBeat - b.atBeat)
+      : undefined
   return {
     id: typeof c.id === 'string' && c.id ? c.id : newId(),
     start: clamp(c.start, 0, 1e5, 0),
@@ -700,5 +715,6 @@ function migrateClip(raw: unknown): Clip | null {
     }),
     // keep the active take and `audio` in sync after migration
     ...(audio && takes ? { audio: takes[activeTake ?? 0], takes, activeTake } : {}),
+    ...(comp && comp.length ? { comp } : {}),
   }
 }

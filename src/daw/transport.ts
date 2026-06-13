@@ -42,8 +42,42 @@ export interface SongEvent {
 export interface AudioEvent {
   trackId: string
   region: AudioRegion
-  startBeat: number // absolute timeline beats
+  startBeat: number // absolute beat this segment starts sounding
   durBeats: number
+  regionStartBeat: number // absolute beat region.offsetSec is anchored to (= clip.start)
+  fadeInBeats: number // fade at this segment's start (0 unless first segment)
+  fadeOutBeats: number // fade at this segment's end (0 unless last segment)
+}
+
+// One contiguous playback span of a clip. Without swipe-comp a clip is a single
+// span of its active take; with comp it splits into one span per take region.
+export interface AudioSegment {
+  region: AudioRegion
+  startRel: number // clip-relative beats
+  endRel: number
+  isFirst: boolean
+  isLast: boolean
+}
+
+export function audioSegments(clip: Clip): AudioSegment[] {
+  const audio = clip.audio
+  if (!audio) return []
+  const whole: AudioSegment[] = [{ region: audio, startRel: 0, endRel: clip.length, isFirst: true, isLast: true }]
+  if (!clip.comp || clip.comp.length === 0) return whole
+  const takes = clip.takes ?? [audio]
+  const sorted = [...clip.comp].sort((a, b) => a.atBeat - b.atBeat)
+  const pts = sorted[0].atBeat > 1e-9 ? [{ atBeat: 0, take: clip.activeTake ?? 0 }, ...sorted] : sorted
+  const segs: AudioSegment[] = []
+  for (let i = 0; i < pts.length; i++) {
+    const startRel = Math.max(0, pts[i].atBeat)
+    const endRel = i + 1 < pts.length ? Math.min(clip.length, pts[i + 1].atBeat) : clip.length
+    if (endRel <= startRel + 1e-9) continue
+    segs.push({ region: takes[pts[i].take] ?? audio, startRel, endRel, isFirst: false, isLast: false })
+  }
+  if (segs.length === 0) return whole
+  segs[0].isFirst = true
+  segs[segs.length - 1].isLast = true
+  return segs
 }
 
 export interface TransportEvents {
@@ -95,36 +129,58 @@ export function collectEvents(tracks: TrackData[], from: number, to: number): So
   return out
 }
 
-// Pure: audio clips whose start lands in [from, to).
+// Pure: audio segments whose start lands in [from, to). Comp splits a clip into
+// per-take segments; a plain clip yields one segment.
 export function collectAudioEvents(tracks: TrackData[], from: number, to: number): AudioEvent[] {
   const out: AudioEvent[] = []
   for (const track of tracks) {
     for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
-      if (clip.start >= from && clip.start < to) {
-        out.push({ trackId: track.id, region: clip.audio, startBeat: clip.start, durBeats: clip.length })
+      for (const seg of audioSegments(clip)) {
+        const startBeat = clip.start + seg.startRel
+        if (startBeat >= from && startBeat < to) {
+          out.push({
+            trackId: track.id,
+            region: seg.region,
+            startBeat,
+            durBeats: seg.endRel - seg.startRel,
+            regionStartBeat: clip.start,
+            fadeInBeats: seg.isFirst ? clip.audio.fadeIn : 0,
+            fadeOutBeats: seg.isLast ? clip.audio.fadeOut : 0,
+          })
+        }
       }
     }
   }
   return out
 }
 
-// Pure: audio clips already sounding at atBeat (started earlier, not yet done).
-export function straddlingAudio(
-  tracks: TrackData[],
-  atBeat: number,
-): { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] {
-  const out: { trackId: string; region: AudioRegion; intoBeats: number; remainBeats: number }[] = []
+export interface StraddleEvent {
+  trackId: string
+  region: AudioRegion
+  regionStartBeat: number // clip.start — where region.offsetSec is anchored
+  remainBeats: number // beats left in this segment from atBeat
+  fadeOutBeats: number
+}
+
+// Pure: audio segments already sounding at atBeat (started earlier, not yet done).
+export function straddlingAudio(tracks: TrackData[], atBeat: number): StraddleEvent[] {
+  const out: StraddleEvent[] = []
   for (const track of tracks) {
     for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
-      if (clip.start < atBeat && clip.start + clip.length > atBeat) {
-        out.push({
-          trackId: track.id,
-          region: clip.audio,
-          intoBeats: atBeat - clip.start,
-          remainBeats: clip.start + clip.length - atBeat,
-        })
+      for (const seg of audioSegments(clip)) {
+        const segStart = clip.start + seg.startRel
+        const segEnd = clip.start + seg.endRel
+        if (segStart < atBeat && segEnd > atBeat) {
+          out.push({
+            trackId: track.id,
+            region: seg.region,
+            regionStartBeat: clip.start,
+            remainBeats: segEnd - atBeat,
+            fadeOutBeats: seg.isLast ? clip.audio.fadeOut : 0,
+          })
+        }
       }
     }
   }
@@ -201,12 +257,11 @@ export class Transport {
     for (const s of straddlingAudio(project.tracks, beat)) {
       const remain = Math.min(s.remainBeats, cutBeat - beat)
       const rate = warpRate(s.region, project.bpm)
-      const clipStart = beat - s.intoBeats
-      const clipEnd = beat + s.remainBeats
-      const intoSec = this.wallBetween(clipStart, beat) * rate
+      const offset = s.region.offsetSec + this.wallBetween(s.regionStartBeat, beat) * rate
       const remainSec = this.wallBetween(beat, beat + remain) * rate
-      const fadeOutSec = this.wallBetween(clipEnd - s.region.fadeOut, clipEnd)
-      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + intoSec, remainSec, rate, 0, fadeOutSec)
+      const segEnd = beat + s.remainBeats
+      const fadeOutSec = this.wallBetween(segEnd - s.fadeOutBeats, segEnd)
+      this.events.audio(s.trackId, s.region, t, offset, remainSec, rate, 0, fadeOutSec)
     }
   }
 
@@ -274,15 +329,16 @@ export class Transport {
           if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat
           const rate = warpRate(ev.region, project.bpm)
           const end = ev.startBeat + durBeats
+          const offset = ev.region.offsetSec + this.wallBetween(ev.regionStartBeat, ev.startBeat) * rate
           this.events.audio(
             ev.trackId,
             ev.region,
             this.beatToTime(ev.startBeat),
-            ev.region.offsetSec,
+            offset,
             this.wallBetween(ev.startBeat, end) * rate,
             rate,
-            this.wallBetween(ev.startBeat, ev.startBeat + ev.region.fadeIn),
-            this.wallBetween(end - ev.region.fadeOut, end),
+            this.wallBetween(ev.startBeat, ev.startBeat + ev.fadeInBeats),
+            this.wallBetween(end - ev.fadeOutBeats, end),
           )
         }
       }

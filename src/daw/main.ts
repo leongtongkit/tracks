@@ -389,6 +389,7 @@ declare global {
     __tracksSf2Test: () => Promise<unknown>
     __tracksTempoTest: () => Promise<unknown>
     __tracksCompTest: () => Promise<unknown>
+    __tracksSwipeCompTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -807,6 +808,40 @@ window.__tracksCompTest = async () => {
     take0Is220: Math.abs(take0 - 220) < 12,
     take1Is440: Math.abs(take1 - 440) < 20,
     switchingChangesTake: Math.abs(take1 - take0) > 100,
+  }
+}
+
+// swipe-comp: a clip comped to take 0 for its first half and take 1 for its
+// second half must play take 0's pitch early and take 1's pitch late.
+window.__tracksSwipeCompTest = async () => {
+  const rate = 44100
+  const tone = (hz: number): string => {
+    const buf = new AudioBuffer({ length: rate * 2, numberOfChannels: 1, sampleRate: rate }) // 2s — spans the clip
+    const d = buf.getChannelData(0)
+    for (let i = 0; i < d.length; i++) d[i] = Math.sin((i / rate) * hz * 2 * Math.PI) * 0.6
+    const id = newId()
+    sampleStore.put(id, `t${hz}`, buf)
+    return id
+  }
+  const idA = tone(220)
+  const idB = tone(440)
+  const region = (sampleId: string): { sampleId: string; offsetSec: number; gain: number; warp: 'off'; origBpm: number; fadeIn: number; fadeOut: number } =>
+    ({ sampleId, offsetSec: 0, gain: 1, warp: 'off', origBpm: 120, fadeIn: 0, fadeOut: 0 })
+  const p = defaultProject()
+  const t = newTrack('Comp', { kind: 'audio' })
+  const takes = [region(idA), region(idB)]
+  // 4-beat clip @120 = 2s; comp: take 0 for beats 0-2, take 1 for beats 2-4
+  t.clips = [{ id: 'c', start: 0, length: 4, notes: [], takes, activeTake: 0, audio: takes[0], comp: [{ atBeat: 0, take: 0 }, { atBeat: 2, take: 1 }] }]
+  p.tracks = [t]
+  const buf = await renderProject(p)
+  const at = (sec: number): number => detectPitch(buf.getChannelData(0), Math.floor(sec * buf.sampleRate), 4096, buf.sampleRate)
+  const early = at(0.45) // ~beat 0.8 → first half → take 0 (220)
+  const late = at(1.5) // ~beat 2.9 → second half → take 1 (440)
+  return {
+    earlyPitch: early,
+    latePitch: late,
+    firstHalfIsTake0: Math.abs(early - 220) < 14,
+    secondHalfIsTake1: Math.abs(late - 440) < 24,
   }
 }
 

@@ -47,7 +47,7 @@ export function sessionAudioEvents(clip: Clip, trackId: string, launchBeat: numb
     const base = launchBeat + k * len
     if (base >= to) break
     if (base >= from && base >= launchBeat) {
-      out.push({ trackId, region: clip.audio, startBeat: base, durBeats: len })
+      out.push({ trackId, region: clip.audio, startBeat: base, durBeats: len, regionStartBeat: base, fadeInBeats: 0, fadeOutBeats: 0 })
     }
   }
   return out

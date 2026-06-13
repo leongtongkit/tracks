@@ -8,6 +8,7 @@ import { detectOnsets } from '../dsp/onsets'
 import { extractStems } from '../dsp/stems'
 import { newId, newTrack, TempoMap, warpRate, type Clip } from '../project'
 import { sampleStore } from '../samples'
+import { audioSegments } from '../transport'
 import { miniDial } from './mini-dial'
 
 export function buildAudioTrackEditor(app: DawApp, trackId: string): HTMLElement {
@@ -123,6 +124,53 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
       takes.appendChild(wrap)
     })
     root.appendChild(takes)
+
+    // swipe-comp: one lane per take — click in a take's lane to play it from
+    // that point onward; shaded spans show the current composite.
+    const compWrap = document.createElement('div')
+    compWrap.className = 'comp-lanes'
+    const compHead = document.createElement('div')
+    compHead.className = 'sampler-row'
+    const compTag = document.createElement('span')
+    compTag.className = 'mix-tag'
+    compTag.textContent = 'Comp'
+    compHead.appendChild(compTag)
+    const clearComp = document.createElement('button')
+    clearComp.type = 'button'
+    clearComp.className = 'seg-btn'
+    clearComp.textContent = 'Clear comp'
+    clearComp.title = 'Reset to a single take across the whole clip'
+    clearComp.addEventListener('click', () => app.clearComp(_trackId, clip.id))
+    compHead.appendChild(clearComp)
+    compWrap.appendChild(compHead)
+    const segs = audioSegments(clip)
+    clip.takes.forEach((take, i) => {
+      const lane = document.createElement('div')
+      lane.className = 'comp-lane'
+      const label = document.createElement('span')
+      label.className = 'comp-lane-label'
+      label.textContent = `T${i + 1}`
+      lane.appendChild(label)
+      const strip = document.createElement('div')
+      strip.className = 'comp-strip'
+      for (const s of segs) {
+        if (s.region !== take) continue
+        const fill = document.createElement('div')
+        fill.className = 'comp-fill'
+        fill.style.left = `${(s.startRel / clip.length) * 100}%`
+        fill.style.width = `${((s.endRel - s.startRel) / clip.length) * 100}%`
+        strip.appendChild(fill)
+      }
+      strip.title = `Click to play Take ${i + 1} from that point`
+      strip.addEventListener('pointerdown', e => {
+        const rect = strip.getBoundingClientRect()
+        const beat = ((e.clientX - rect.left) / rect.width) * clip.length
+        app.setCompPoint(_trackId, clip.id, beat, i)
+      })
+      lane.appendChild(strip)
+      compWrap.appendChild(lane)
+    })
+    root.appendChild(compWrap)
   }
 
   const row = document.createElement('div')

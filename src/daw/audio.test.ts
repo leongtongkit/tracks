@@ -35,7 +35,7 @@ describe('audio clip scheduling', () => {
     const t = audioTrack([{ start: 2, length: 8 }])
     const s = straddlingAudio([t], 5)
     expect(s).toHaveLength(1)
-    expect(s[0].intoBeats).toBe(3)
+    expect(s[0].regionStartBeat).toBe(2) // region anchored at clip start; 5 - 2 = 3 beats in
     expect(s[0].remainBeats).toBe(5)
     expect(straddlingAudio([t], 2)).toHaveLength(0) // boundary start is not straddling
     expect(straddlingAudio([t], 10)).toHaveLength(0)

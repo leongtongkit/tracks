@@ -809,6 +809,28 @@ export class DawApp {
     this.emit('clips')
   }
 
+  // swipe-comp: set which take plays from `atBeat` onward (clip-relative beats)
+  setCompPoint(trackId: string, clipId: string, atBeat: number, take: number): void {
+    const clip = this.clip({ trackId, clipId })
+    if (!clip?.takes || take < 0 || take >= clip.takes.length) return
+    this.checkpoint('comp')
+    const b = Math.max(0, Math.min(clip.length, atBeat))
+    clip.comp = clip.comp ?? []
+    const existing = clip.comp.find(p => Math.abs(p.atBeat - b) < 1e-4)
+    if (existing) existing.take = take
+    else clip.comp.push({ atBeat: b, take })
+    clip.comp.sort((a, c) => a.atBeat - c.atBeat)
+    this.emit('clips')
+  }
+
+  clearComp(trackId: string, clipId: string): void {
+    const clip = this.clip({ trackId, clipId })
+    if (!clip?.comp) return
+    this.checkpoint('clear comp')
+    delete clip.comp
+    this.emit('clips')
+  }
+
   removeTake(trackId: string, clipId: string, index: number): void {
     const clip = this.clip({ trackId, clipId })
     if (!clip?.takes || clip.takes.length <= 1 || index < 0 || index >= clip.takes.length) return
@@ -816,6 +838,11 @@ export class DawApp {
     clip.takes.splice(index, 1)
     clip.activeTake = Math.min(clip.activeTake ?? 0, clip.takes.length - 1)
     clip.audio = clip.takes[clip.activeTake]
+    // fix up comp breakpoints: drop refs to the removed take, shift higher ones down
+    if (clip.comp) {
+      clip.comp = clip.comp.filter(p => p.take !== index).map(p => (p.take > index ? { ...p, take: p.take - 1 } : p))
+      if (clip.comp.length === 0) delete clip.comp
+    }
     this.emit('clips')
   }
 

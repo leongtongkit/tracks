@@ -5,7 +5,7 @@ import { encodeWav } from '../record/wav'
 import { scheduleAutomation } from './automation'
 import { projectEndBeat, TempoMap, warpRate, type AutoTarget, type Project } from './project'
 import { SongEngine } from './song-engine'
-import { collectEvents, scheduledAudioClips } from './transport'
+import { audioSegments, collectEvents, scheduledAudioClips } from './transport'
 
 const TAIL_S = 2.5 // let releases/delays/reverbs ring out
 
@@ -29,18 +29,24 @@ export async function renderProject(project: Project, sampleRate = 44100, opts: 
   for (const track of project.tracks) {
     for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
-      const rate = warpRate(clip.audio, project.bpm)
-      const end = clip.start + clip.length
-      song.playClip(
-        track.id,
-        clip.audio,
-        at(clip.start),
-        clip.audio.offsetSec,
-        wall(clip.start, end) * rate,
-        rate,
-        wall(clip.start, clip.start + clip.audio.fadeIn),
-        wall(end - clip.audio.fadeOut, end),
-      )
+      const fadeIn = clip.audio.fadeIn
+      const fadeOut = clip.audio.fadeOut
+      for (const seg of audioSegments(clip)) {
+        const rate = warpRate(seg.region, project.bpm)
+        const segStart = clip.start + seg.startRel
+        const segEnd = clip.start + seg.endRel
+        const offset = seg.region.offsetSec + wall(clip.start, segStart) * rate
+        song.playClip(
+          track.id,
+          seg.region,
+          at(segStart),
+          offset,
+          wall(segStart, segEnd) * rate,
+          rate,
+          seg.isFirst ? wall(clip.start, clip.start + fadeIn) : 0,
+          seg.isLast ? wall(segEnd - fadeOut, segEnd) : 0,
+        )
+      }
     }
   }
   // automation curves, booked over the whole song in one pass
