@@ -21,17 +21,23 @@ export interface Note {
   vel: number // 0..1
 }
 
+// follow the project tempo. 'off' = play at native speed; 'repitch' = vinyl
+// (speed + pitch move together); 'stretch' = pitch-preserving time-stretch.
+export type WarpMode = 'off' | 'repitch' | 'stretch'
+
 // An audio clip references a sample in the SampleStore.
 export interface AudioRegion {
   sampleId: string
   offsetSec: number // where in the sample this clip starts (source seconds)
   gain: number // 0..2 linear
-  warp: boolean // follow the project tempo (repitch-style: rate = bpm/origBpm)
+  warp: WarpMode
   origBpm: number // the tempo this audio "is in"
 }
 
+// source-seconds per wall-clock-second when following tempo (same magnitude for
+// repitch and stretch; the difference is whether pitch moves).
 export function warpRate(region: AudioRegion, bpm: number): number {
-  return region.warp ? bpm / region.origBpm : 1
+  return region.warp === 'off' ? 1 : bpm / region.origBpm
 }
 
 export interface Clip {
@@ -421,6 +427,11 @@ function migrateAutoPoints(raw: unknown, min: number, max: number): AutoPoint[] 
     .sort((a, b) => a.beat - b.beat)
 }
 
+function migrateWarp(raw: unknown): WarpMode {
+  if (raw === 'repitch' || raw === 'stretch' || raw === 'off') return raw
+  return raw === true ? 'repitch' : 'off' // v3 boolean → mode
+}
+
 function migrateClip(raw: unknown): Clip | null {
   const c = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
   const rawLength = Number(c.length)
@@ -434,7 +445,7 @@ function migrateClip(raw: unknown): Clip | null {
           sampleId: audioRaw.sampleId,
           offsetSec: clamp(audioRaw.offsetSec, 0, 3600, 0),
           gain: clamp(audioRaw.gain, 0, 2, 1),
-          warp: Boolean(audioRaw.warp),
+          warp: migrateWarp(audioRaw.warp),
           origBpm: clamp(audioRaw.origBpm, 40, 240, 120),
         }
       : undefined

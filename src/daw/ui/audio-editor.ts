@@ -124,20 +124,29 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
   procBtn('Reverse', 'Flip the audio backwards', () =>
     replaceSample(app, clip, 'reverse', 'rev', chs => reverseChannels(chs)))
 
-  // tempo warp: follow the song BPM by repitching
-  const warpBtn = document.createElement('button')
-  warpBtn.type = 'button'
-  warpBtn.className = 'seg-btn'
-  warpBtn.textContent = 'Warp'
-  warpBtn.title = 'Follow the song tempo: playback speeds up/slows down with BPM (repitch)'
-  warpBtn.classList.toggle('seg-on', region.warp)
-  warpBtn.addEventListener('click', () => {
+  // tempo warp: off / repitch (vinyl) / stretch (pitch-preserving)
+  const warpWrap = document.createElement('span')
+  warpWrap.className = 'mini-dial'
+  warpWrap.title = 'Follow the song tempo. Repitch = speed+pitch move together (vinyl); Stretch = tempo changes, pitch stays'
+  const warpLabel = document.createElement('span')
+  warpLabel.textContent = 'Warp'
+  const warpSel = document.createElement('select')
+  warpSel.className = 'seg-select'
+  for (const [v, text] of [['off', 'Off'], ['repitch', 'Repitch'], ['stretch', 'Stretch']] as const) {
+    const o = document.createElement('option')
+    o.value = v
+    o.textContent = text
+    if (region.warp === v) o.selected = true
+    warpSel.appendChild(o)
+  }
+  warpSel.addEventListener('change', () => {
     app.checkpoint('warp')
-    region.warp = !region.warp
-    warpBtn.classList.toggle('seg-on', region.warp)
+    region.warp = warpSel.value as 'off' | 'repitch' | 'stretch'
     app.emit('clips')
   })
-  row.appendChild(warpBtn)
+  warpWrap.appendChild(warpLabel)
+  warpWrap.appendChild(warpSel)
+  row.appendChild(warpWrap)
   row.appendChild(
     miniDial({
       label: 'Orig BPM',

@@ -15,6 +15,7 @@ import { makeImpulse } from '../engine/fx/reverb'
 import type { FxId } from '../patch/schema'
 import { Store } from '../state/store'
 import { autoValueAt } from './automation'
+import { timeStretch } from './dsp/stretch'
 import { DrumMachine } from './instruments/drums'
 import { PadsInstrument } from './instruments/pads'
 import { SamplerInstrument } from './instruments/sampler'
@@ -470,17 +471,39 @@ export class SongEngine {
   // ---------- audio clip playback ----------
 
   private readonly liveAudio = new Set<AudioBufferSourceNode>()
+  // stretched buffers cached by sample + factor (heavy to compute once)
+  private readonly stretchCache = new Map<string, AudioBuffer>()
 
+  // offset/dur arrive in SOURCE seconds with `rate` = source-sec per wall-sec.
+  // repitch plays the source at playbackRate=rate (pitch moves); stretch plays
+  // a pre-stretched buffer at rate 1 (pitch preserved).
   playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate = 1): void {
-    const buffer = this.samples.get(region.sampleId)
     const ch = this.channels.get(trackId)
-    if (!buffer || !ch || durSec <= 0.001) return
-    const off = Math.min(Math.max(0, offsetSec), buffer.duration)
-    const dur = Math.min(durSec, buffer.duration - off)
+    if (!ch || durSec <= 0.001) return
+
+    let buffer = this.samples.get(region.sampleId)
+    if (!buffer) return
+    let off = offsetSec
+    let dur = durSec
+    let playbackRate = rate
+
+    if (region.warp === 'stretch' && Math.abs(rate - 1) > 1e-4) {
+      const factor = 1 / rate // output length relative to source
+      const stretched = this.getStretched(region.sampleId, factor)
+      if (stretched) {
+        buffer = stretched
+        off = offsetSec * factor // map source-sec → stretched-sec
+        dur = durSec * factor
+        playbackRate = 1 // pitch preserved
+      }
+    }
+
+    off = Math.min(Math.max(0, off), buffer.duration)
+    dur = Math.min(dur, buffer.duration - off)
     if (dur <= 0.001) return
     const src = this.ctx.createBufferSource()
     src.buffer = buffer
-    if (rate !== 1) src.playbackRate.value = rate
+    if (playbackRate !== 1) src.playbackRate.value = playbackRate
     const g = this.ctx.createGain()
     g.gain.value = region.gain
     src.connect(g)
@@ -492,6 +515,23 @@ export class SongEngine {
       src.disconnect()
       g.disconnect()
     }
+  }
+
+  private getStretched(sampleId: string, factor: number): AudioBuffer | null {
+    const source = this.samples.get(sampleId)
+    if (!source) return null
+    const key = `${sampleId}:${factor.toFixed(3)}`
+    let buf = this.stretchCache.get(key)
+    if (!buf) {
+      const ch0 = timeStretch(source.getChannelData(0), factor)
+      buf = new AudioBuffer({ length: ch0.length, numberOfChannels: source.numberOfChannels, sampleRate: source.sampleRate })
+      buf.copyToChannel(ch0, 0)
+      for (let c = 1; c < source.numberOfChannels; c++) {
+        buf.copyToChannel(timeStretch(source.getChannelData(c), factor), c)
+      }
+      this.stretchCache.set(key, buf)
+    }
+    return buf
   }
 
   stopAudioClips(at?: number): void {

@@ -551,7 +551,7 @@ export class DawApp {
       start: Math.max(0, this.micStartBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: false, origBpm: this.project.bpm },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm },
     }
     track.clips.push(clip)
     this.selectClip(track.id, clip.id)
@@ -610,7 +610,7 @@ export class DawApp {
       start: Math.max(0, atBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: false, origBpm: this.project.bpm },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm },
     }
     track.clips.push(clip)
     this.selectClip(trackId, clip.id)

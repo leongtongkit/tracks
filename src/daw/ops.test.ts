@@ -59,7 +59,7 @@ describe('v1 → v2 migration', () => {
     // automation points come back sorted by beat; empty pan lane is dropped
     expect(t.auto.volume?.map(p => p.beat)).toEqual([0, 4])
     expect(t.auto.pan).toBeUndefined()
-    expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2, warp: false, origBpm: 120 })
+    expect(t.clips[0].audio).toEqual({ sampleId: 's1', offsetSec: 0.5, gain: 1.2, warp: 'off', origBpm: 120 })
   })
 })
 
