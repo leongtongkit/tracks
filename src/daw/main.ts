@@ -7,6 +7,8 @@ import '@fontsource/ibm-plex-mono/500.css'
 
 import { analyzeBuffer } from '../test/offline'
 import { KeyboardInput } from '../input/keyboard'
+import { initMidi, type MidiSession } from '../input/midi'
+import { registerMidiControl } from './midi-control'
 import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
 import { DawApp } from './daw-app'
@@ -126,6 +128,25 @@ new KeyboardInput({
   allNotesOff: () => app.song?.allNotesOff(),
   bend: s => app.liveBend(s),
 })
+
+// hardware MIDI keyboard plays + records into the armed track (velocity +
+// pitch-bend + sustain pedal). Requested once, on the first user gesture.
+let midiSession: MidiSession | null = null
+let midiInitStarted = false
+registerMidiControl(
+  () => midiSession?.inputs ?? [],
+  name => midiSession?.setActiveInput(name),
+)
+async function initDawMidi(): Promise<void> {
+  if (midiInitStarted) return
+  midiInitStarted = true
+  midiSession = await initMidi({
+    noteOn: (n, v) => app.liveNoteOn(n, v),
+    noteOff: n => app.liveNoteOff(n),
+    bend: s => app.liveBend(s),
+  })
+  midiSession.setActiveInput(settings.midiInput)
+}
 
 export { bottom }
 
@@ -333,6 +354,7 @@ function unlock(): void {
   document.removeEventListener('pointerdown', unlock, true)
   document.removeEventListener('keydown', unlock, true)
   app.ensureAudio()
+  void initDawMidi()
 }
 document.addEventListener('pointerdown', unlock, true)
 document.addEventListener('keydown', unlock, true)

@@ -2,6 +2,7 @@
 // this browser's localStorage — Tracks is a local tool, nothing is uploaded.
 
 import type { DawApp } from '../daw-app'
+import { midiInputs, setMidiInput } from '../midi-control'
 import { saveSettings, settings, type AppSettings } from '../settings'
 import { miniDial } from './mini-dial'
 
@@ -112,6 +113,38 @@ export function buildSettingsPanel(app: DawApp): { toggle(): void } {
     [true, 'Voice cleanup'],
   ])
 
+  // MIDI device picker — populated live from the connected hardware
+  const midiWrap = document.createElement('span')
+  midiWrap.className = 'mini-dial'
+  midiWrap.title = 'Hardware MIDI keyboard that plays/records into the armed track'
+  const midiLabel = document.createElement('span')
+  midiLabel.textContent = 'MIDI in'
+  const midiSel = document.createElement('select')
+  midiSel.className = 'seg-select'
+  const refreshMidi = (): void => {
+    const devices = midiInputs()
+    midiSel.innerHTML = ''
+    const all = document.createElement('option')
+    all.value = ''
+    all.textContent = devices.length ? 'All devices' : 'None connected'
+    midiSel.appendChild(all)
+    for (const name of devices) {
+      const o = document.createElement('option')
+      o.value = name
+      o.textContent = name
+      if (settings.midiInput === name) o.selected = true
+      midiSel.appendChild(o)
+    }
+  }
+  midiSel.addEventListener('change', () => {
+    settings.midiInput = midiSel.value || null
+    setMidiInput(settings.midiInput)
+    changed()
+  })
+  midiWrap.appendChild(midiLabel)
+  midiWrap.appendChild(midiSel)
+  rec.appendChild(midiWrap)
+
   // ---------- editing ----------
   const edit = section('Editing')
   select(edit, 'Clip snap', 'Grid for dragging/resizing clips and the loop ruler', 'arrangeSnap', [
@@ -149,6 +182,10 @@ export function buildSettingsPanel(app: DawApp): { toggle(): void } {
   overlay.addEventListener('click', () => overlay.classList.add('hidden'))
   document.body.appendChild(overlay)
   return {
-    toggle: () => overlay.classList.toggle('hidden'),
+    toggle: () => {
+      const opening = overlay.classList.contains('hidden')
+      if (opening) refreshMidi() // pick up devices connected since last open
+      overlay.classList.toggle('hidden')
+    },
   }
 }
