@@ -3,7 +3,7 @@
 
 import { AUTO_TARGETS, autoTargetMeta } from '../automation-targets'
 import type { DawApp } from '../daw-app'
-import { projectEndBeat, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
+import { beatsPerBar, projectEndBeat, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
 import { sampleStore } from '../samples'
 import { settings } from '../settings'
 import { miniDial } from './mini-dial'
@@ -42,7 +42,12 @@ export class ArrangeView {
     app.on('clips', () => this.renderLanes())
     app.on('mixer', () => this.renderHeaders())
     app.on('selection', () => this.renderLanes())
-    app.on('project', () => this.renderTransport())
+    app.on('project', () => {
+      // bpm/time-sig/markers all affect the ruler + grid (and waveforms scale with bpm)
+      this.renderTransport()
+      this.renderRuler()
+      this.renderLanes()
+    })
     app.on('transport', () => this.renderTransport())
 
     this.renderAll()
@@ -130,6 +135,28 @@ export class ArrangeView {
     key.appendChild(rootSel)
     key.appendChild(scaleSel)
 
+    // time signature (display: bar grouping on the ruler/grid)
+    const sig = document.createElement('span')
+    sig.className = 'mini-dial'
+    sig.title = 'Time signature (sets the bar length shown on the ruler)'
+    const sigLabel = document.createElement('span')
+    sigLabel.textContent = 'Sig'
+    const sigSel = document.createElement('select')
+    sigSel.className = 'seg-select'
+    for (const [num, den] of [[4, 4], [3, 4], [2, 4], [5, 4], [6, 8], [7, 8], [12, 8]] as const) {
+      const o = document.createElement('option')
+      o.value = `${num}/${den}`
+      o.textContent = `${num}/${den}`
+      if (this.app.project.timeSig.num === num && this.app.project.timeSig.den === den) o.selected = true
+      sigSel.appendChild(o)
+    }
+    sigSel.addEventListener('change', () => {
+      const [num, den] = sigSel.value.split('/').map(Number)
+      this.app.setTimeSig({ num, den })
+    })
+    sig.appendChild(sigLabel)
+    sig.appendChild(sigSel)
+
     const zoomOut = btn('-', 'Zoom out')
     zoomOut.addEventListener('click', () => this.setZoom(this.ppb / 1.4))
     const zoomIn = btn('+', 'Zoom in')
@@ -147,6 +174,7 @@ export class ArrangeView {
     bar.appendChild(this.writeBtn)
     bar.appendChild(this.positionChip)
     bar.appendChild(bpm)
+    bar.appendChild(sig)
     bar.appendChild(key)
     bar.appendChild(spacer)
     bar.appendChild(zoomOut)
@@ -236,9 +264,16 @@ export class ArrangeView {
     }
     this.ruler.addEventListener('pointerup', up)
     this.ruler.addEventListener('pointercancel', () => (dragStart = null))
+    // double-click an empty spot on the ruler to drop a named marker
+    this.ruler.addEventListener('dblclick', e => {
+      if ((e.target as HTMLElement).classList.contains('ruler-marker')) return
+      const beat = Math.round(this.beatAt(e) * 4) / 4
+      const name = prompt('Marker name', `Section ${this.app.project.markers.length + 1}`)
+      if (name?.trim()) this.app.addMarker(beat, name.trim())
+    })
   }
 
-  private beatAt(e: PointerEvent): number {
+  private beatAt(e: MouseEvent): number {
     const rect = this.lanes.getBoundingClientRect()
     const beat = (e.clientX - rect.left) / this.ppb
     return Math.max(0, Math.round(beat / SNAP()) * SNAP())
@@ -407,13 +442,33 @@ export class ArrangeView {
     const beats = this.widthBeats()
     this.ruler.style.width = `${beats * this.ppb}px`
     this.ruler.innerHTML = ''
-    for (let b = 0; b < beats; b += 4) {
+    const bpb = beatsPerBar(this.app.project.timeSig)
+    let bar = 1
+    for (let b = 0; b < beats; b += bpb) {
       const tick = document.createElement('span')
       tick.className = 'ruler-bar'
       tick.style.left = `${b * this.ppb}px`
-      tick.textContent = String(b / 4 + 1)
+      tick.textContent = String(bar++)
       this.ruler.appendChild(tick)
     }
+    // section markers — click to jump, alt-click to delete
+    this.app.project.markers.forEach((m, i) => {
+      const flag = document.createElement('span')
+      flag.className = 'ruler-marker'
+      flag.style.left = `${m.beat * this.ppb}px`
+      flag.textContent = m.name
+      flag.title = `${m.name} — click to jump, ${altKey()}-click to delete`
+      flag.addEventListener('pointerdown', e => {
+        e.stopPropagation()
+        if (e.altKey) {
+          this.app.removeMarker(i)
+        } else {
+          this.app.transport.setPosition(m.beat)
+          this.app.emit('transport')
+        }
+      })
+      this.ruler.appendChild(flag)
+    })
     const loop = this.app.project.loop
     if (loop.end > loop.start) {
       const region = document.createElement('div')
@@ -429,7 +484,7 @@ export class ArrangeView {
     const beats = this.widthBeats()
     this.lanes.innerHTML = ''
     this.lanes.style.width = `${beats * this.ppb}px`
-    this.lanes.style.backgroundSize = `${this.ppb * 4}px 100%, ${this.ppb}px 100%`
+    this.lanes.style.backgroundSize = `${this.ppb * beatsPerBar(this.app.project.timeSig)}px 100%, ${this.ppb}px 100%`
 
     this.app.project.tracks.forEach(track => {
       const lane = document.createElement('div')
@@ -769,4 +824,8 @@ function btn(text: string, title: string): HTMLButtonElement {
   b.textContent = text
   b.title = title
   return b
+}
+
+function altKey(): string {
+  return typeof navigator !== 'undefined' && /Mac/.test(navigator.platform) ? 'Option' : 'Alt'
 }

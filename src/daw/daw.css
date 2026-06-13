@@ -228,6 +228,30 @@
   pointer-events: none;
 }
 
+.ruler-marker {
+  position: absolute;
+  bottom: 0;
+  transform: translateX(-1px);
+  font-family: var(--font-mono);
+  font-size: 0.56rem;
+  line-height: 1;
+  color: #0b0b0c;
+  background: var(--accent);
+  padding: 1px 4px 1px 5px;
+  border-left: 2px solid var(--accent-deep, #b23700);
+  border-top-right-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 4;
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ruler-marker:hover {
+  filter: brightness(1.1);
+}
+
 .loop-region {
   position: absolute;
   top: 0;

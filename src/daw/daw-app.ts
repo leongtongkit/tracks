@@ -179,6 +179,28 @@ export class DawApp {
     this.emit('project')
   }
 
+  setTimeSig(ts: Partial<{ num: number; den: number }>): void {
+    this.checkpoint('time signature')
+    Object.assign(this.project.timeSig, ts)
+    this.emit('project')
+  }
+
+  // ---------- markers ----------
+
+  addMarker(beat: number, name: string): void {
+    this.checkpoint('add marker')
+    this.project.markers.push({ beat: Math.max(0, beat), name: name.slice(0, 40) || 'Mark' })
+    this.project.markers.sort((a, b) => a.beat - b.beat)
+    this.emit('project')
+  }
+
+  removeMarker(index: number): void {
+    if (index < 0 || index >= this.project.markers.length) return
+    this.checkpoint('remove marker')
+    this.project.markers.splice(index, 1)
+    this.emit('project')
+  }
+
   // ---------- tracks ----------
 
   track(id: string): TrackData | undefined {

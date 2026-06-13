@@ -1,7 +1,7 @@
 // P1 v2 features: v1→v2 migration, undo/redo history, clip operations.
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { DawApp } from './daw-app'
-import { migrateProject, type Clip } from './project'
+import { beatsPerBar, migrateProject, type Clip } from './project'
 
 vi.stubGlobal('performance', { now: () => Date.now() })
 
@@ -74,6 +74,22 @@ describe('v1 → v2 migration', () => {
     expect(eq).toHaveLength(3)
     expect(eq.map(b => b.gain)).toEqual([4, -3, 6])
     expect(eq.map(b => b.type)).toEqual(['lowshelf', 'peaking', 'highshelf'])
+  })
+
+  it('migrates time signature and markers, defaulting when absent', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      timeSig: { num: 6, den: 8 },
+      markers: [{ beat: 16, name: 'Chorus' }, { beat: 0, name: 'Intro' }],
+      tracks: [{ kind: 'synth' }],
+    })
+    expect(p.timeSig).toEqual({ num: 6, den: 8 })
+    expect(beatsPerBar(p.timeSig)).toBe(3) // 6/8 = three quarter-note beats
+    expect(p.markers.map(m => m.name)).toEqual(['Intro', 'Chorus']) // sorted by beat
+    const legacy = migrateProject({ v: 2, bpm: 120, tracks: [{ kind: 'synth' }] })
+    expect(legacy.timeSig).toEqual({ num: 4, den: 4 })
+    expect(legacy.markers).toEqual([])
   })
 
   it('accepts a soundfont track and its patch', () => {

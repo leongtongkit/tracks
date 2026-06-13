@@ -183,14 +183,30 @@ export interface KeySig {
   scale: ScaleName
 }
 
+// a named point on the timeline (verse / chorus / drop …)
+export interface Marker {
+  beat: number
+  name: string
+}
+
 export interface Project {
   v: typeof PROJECT_VERSION
   name: string
   bpm: number
   key: KeySig
+  // display time signature: beats here are quarter notes, so a bar spans
+  // num * 4/den quarter-note beats (4/4 = 4, 3/4 = 3, 6/8 = 3). Affects the
+  // ruler/grid only — clip timing stays in quarter-note beats.
+  timeSig: { num: number; den: number }
+  markers: Marker[]
   loop: { on: boolean; start: number; end: number } // beats
   tracks: TrackData[]
   samples: Record<string, SampleMeta>
+}
+
+// quarter-note beats per bar for a time signature
+export function beatsPerBar(timeSig: { num: number; den: number }): number {
+  return (timeSig.num * 4) / timeSig.den
 }
 
 export function newId(): string {
@@ -257,6 +273,8 @@ export function defaultProject(): Project {
     name: 'Untitled',
     bpm: 120,
     key: { root: 0, scale: 'chromatic' },
+    timeSig: { num: 4, den: 4 },
+    markers: [],
     loop: { on: false, start: 0, end: 16 },
     tracks: [
       newTrack('Bass', { preset: 'Fat Saw' }),
@@ -333,6 +351,22 @@ export function migrateProject(raw: unknown): Project {
       root: Math.round(clamp(key.root, 0, 11, 0)),
       scale: SCALES.includes(key.scale as ScaleName) ? (key.scale as ScaleName) : 'chromatic',
     },
+    timeSig: (() => {
+      const ts = (typeof p.timeSig === 'object' && p.timeSig !== null ? p.timeSig : {}) as Record<string, unknown>
+      const den = Number(ts.den)
+      return {
+        num: Math.round(clamp(ts.num, 1, 32, 4)),
+        den: [1, 2, 4, 8, 16].includes(den) ? den : 4,
+      }
+    })(),
+    markers: (Array.isArray(p.markers) ? p.markers : [])
+      .slice(0, 256)
+      .map(m => {
+        const o = (typeof m === 'object' && m !== null ? m : {}) as Record<string, unknown>
+        return { beat: clamp(o.beat, 0, 1e5, 0), name: typeof o.name === 'string' ? o.name.slice(0, 40) : 'Mark' }
+      })
+      .filter(m => Number.isFinite(m.beat))
+      .sort((a, b) => a.beat - b.beat),
     loop: {
       on: Boolean(loop.on),
       start: clamp(loop.start, 0, 1e5, 0),
