@@ -252,6 +252,32 @@
   filter: brightness(1.1);
 }
 
+.ruler-tempo {
+  position: absolute;
+  top: 0;
+  transform: translateX(-1px);
+  font-family: var(--font-mono);
+  font-size: 0.52rem;
+  line-height: 1;
+  color: #cfeaff;
+  background: #2a4d63;
+  padding: 1px 4px;
+  border-left: 2px solid #4a86ad;
+  border-bottom-right-radius: 3px;
+  white-space: nowrap;
+  cursor: pointer;
+  z-index: 4;
+}
+
+.ruler-tempo::before {
+  content: '♩ ';
+  opacity: 0.7;
+}
+
+.ruler-tempo:hover {
+  filter: brightness(1.15);
+}
+
 .loop-region {
   position: absolute;
   top: 0;

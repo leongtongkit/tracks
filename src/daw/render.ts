@@ -3,36 +3,48 @@
 
 import { encodeWav } from '../record/wav'
 import { scheduleAutomation } from './automation'
-import { projectEndBeat, warpRate, type AutoTarget, type Project } from './project'
+import { projectEndBeat, TempoMap, warpRate, type AutoTarget, type Project } from './project'
 import { SongEngine } from './song-engine'
 import { collectEvents, scheduledAudioClips } from './transport'
 
 const TAIL_S = 2.5 // let releases/delays/reverbs ring out
 
 export async function renderProject(project: Project, sampleRate = 44100, opts: { neutralMaster?: boolean } = {}): Promise<AudioBuffer> {
-  const spb = 60 / project.bpm
+  const map = new TempoMap(project.bpm, project.tempoMap)
   const endBeat = projectEndBeat(project)
-  const duration = endBeat * spb + TAIL_S
+  const duration = map.secAtBeat(endBeat) + TAIL_S
   const ctx = new OfflineAudioContext(2, Math.ceil(duration * sampleRate), sampleRate)
 
   const song = new SongEngine(ctx, undefined, undefined, opts)
   await song.syncTracks(project)
 
   const startAt = 0.05
+  const at = (beat: number): number => startAt + map.secAtBeat(beat)
+  const wall = (b0: number, b1: number): number => map.secAtBeat(b1) - map.secAtBeat(b0)
   for (const ev of collectEvents(project.tracks, 0, endBeat)) {
-    const tOn = startAt + ev.startBeat * spb
+    const tOn = at(ev.startBeat)
     song.noteOn(ev.trackId, ev.pitch, ev.vel, tOn)
-    song.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
+    song.noteOff(ev.trackId, ev.pitch, Math.max(tOn + 0.02, at(ev.startBeat + ev.durBeats) - 0.01))
   }
   for (const track of project.tracks) {
     for (const clip of scheduledAudioClips(track)) {
       if (!clip.audio) continue
       const rate = warpRate(clip.audio, project.bpm)
-      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb * rate, rate, clip.audio.fadeIn * spb, clip.audio.fadeOut * spb)
+      const end = clip.start + clip.length
+      song.playClip(
+        track.id,
+        clip.audio,
+        at(clip.start),
+        clip.audio.offsetSec,
+        wall(clip.start, end) * rate,
+        rate,
+        wall(clip.start, clip.start + clip.audio.fadeIn),
+        wall(end - clip.audio.fadeOut, end),
+      )
     }
   }
   // automation curves, booked over the whole song in one pass
-  const beatToTime = (beat: number): number => startAt + beat * spb
+  const beatToTime = (beat: number): number => at(beat)
   for (const track of project.tracks) {
     for (const target of Object.keys(track.auto) as AutoTarget[]) {
       const points = track.auto[target]

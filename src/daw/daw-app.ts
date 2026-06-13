@@ -185,6 +185,31 @@ export class DawApp {
     this.emit('project')
   }
 
+  // ---------- tempo map ----------
+
+  addTempo(beat: number, bpm: number): void {
+    if (beat <= 0) {
+      this.setBpm(bpm)
+      return
+    }
+    this.checkpoint('add tempo')
+    const b = Math.max(0.001, beat)
+    const existing = this.project.tempoMap.find(e => Math.abs(e.beat - b) < 0.01)
+    if (existing) existing.bpm = Math.min(240, Math.max(20, Math.round(bpm)))
+    else this.project.tempoMap.push({ beat: b, bpm: Math.min(240, Math.max(20, Math.round(bpm))) })
+    this.project.tempoMap.sort((a, c) => a.beat - c.beat)
+    this.transport.reanchor()
+    this.emit('project')
+  }
+
+  removeTempo(index: number): void {
+    if (index < 0 || index >= this.project.tempoMap.length) return
+    this.checkpoint('remove tempo')
+    this.project.tempoMap.splice(index, 1)
+    this.transport.reanchor()
+    this.emit('project')
+  }
+
   // ---------- markers ----------
 
   addMarker(beat: number, name: string): void {

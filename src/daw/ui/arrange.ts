@@ -264,12 +264,19 @@ export class ArrangeView {
     }
     this.ruler.addEventListener('pointerup', up)
     this.ruler.addEventListener('pointercancel', () => (dragStart = null))
-    // double-click an empty spot on the ruler to drop a named marker
+    // double-click the ruler to drop a marker; Shift+double-click for a tempo change
     this.ruler.addEventListener('dblclick', e => {
-      if ((e.target as HTMLElement).classList.contains('ruler-marker')) return
+      const tgt = e.target as HTMLElement
+      if (tgt.classList.contains('ruler-marker') || tgt.classList.contains('ruler-tempo')) return
       const beat = Math.round(this.beatAt(e) * 4) / 4
-      const name = prompt('Marker name', `Section ${this.app.project.markers.length + 1}`)
-      if (name?.trim()) this.app.addMarker(beat, name.trim())
+      if (e.shiftKey) {
+        const next = prompt('Tempo (BPM) from this point', String(Math.round(this.app.project.bpm)))
+        const bpm = Number(next)
+        if (next && Number.isFinite(bpm) && bpm > 0) this.app.addTempo(beat, bpm)
+      } else {
+        const name = prompt('Marker name', `Section ${this.app.project.markers.length + 1}`)
+        if (name?.trim()) this.app.addMarker(beat, name.trim())
+      }
     })
   }
 
@@ -451,6 +458,25 @@ export class ArrangeView {
       tick.textContent = String(bar++)
       this.ruler.appendChild(tick)
     }
+    // tempo events — click to edit bpm, alt-click to delete
+    this.app.project.tempoMap.forEach((ev, i) => {
+      const flag = document.createElement('span')
+      flag.className = 'ruler-tempo'
+      flag.style.left = `${ev.beat * this.ppb}px`
+      flag.textContent = `${Math.round(ev.bpm)}`
+      flag.title = `Tempo ${Math.round(ev.bpm)} BPM — click to change, ${altKey()}-click to delete`
+      flag.addEventListener('pointerdown', e => {
+        e.stopPropagation()
+        if (e.altKey) {
+          this.app.removeTempo(i)
+        } else {
+          const next = prompt('Tempo (BPM) at this point', String(Math.round(ev.bpm)))
+          const bpm = Number(next)
+          if (next && Number.isFinite(bpm) && bpm > 0) this.app.addTempo(ev.beat, bpm)
+        }
+      })
+      this.ruler.appendChild(flag)
+    })
     // section markers — click to jump, alt-click to delete
     this.app.project.markers.forEach((m, i) => {
       const flag = document.createElement('span')

@@ -198,6 +198,7 @@ export interface Project {
   // num * 4/den quarter-note beats (4/4 = 4, 3/4 = 3, 6/8 = 3). Affects the
   // ruler/grid only — clip timing stays in quarter-note beats.
   timeSig: { num: number; den: number }
+  tempoMap: TempoEvent[] // tempo changes after beat 0 (beat 0 = bpm); empty = constant tempo
   markers: Marker[]
   loop: { on: boolean; start: number; end: number } // beats
   tracks: TrackData[]
@@ -207,6 +208,64 @@ export interface Project {
 // quarter-note beats per bar for a time signature
 export function beatsPerBar(timeSig: { num: number; den: number }): number {
   return (timeSig.num * 4) / timeSig.den
+}
+
+// a tempo change at a beat (beat 0 is always the project's base bpm)
+export interface TempoEvent {
+  beat: number
+  bpm: number
+}
+
+// Piecewise-constant tempo → beat↔time conversion. With no events it is exactly
+// the old constant-tempo math (secAtBeat(b) = b * 60/bpm), so existing projects
+// are byte-identical. Build once per tempo change; cheap to query.
+export class TempoMap {
+  private readonly segs: { beat: number; bpm: number; sec: number }[]
+
+  constructor(baseBpm: number, events: TempoEvent[] = []) {
+    const base = Math.min(240, Math.max(20, baseBpm)) || 120
+    const pts = [{ beat: 0, bpm: base }, ...events.filter(e => e.beat > 0 && e.bpm > 0).sort((a, b) => a.beat - b.beat)]
+    const segs: { beat: number; bpm: number; sec: number }[] = []
+    let sec = 0
+    for (let i = 0; i < pts.length; i++) {
+      if (segs.length && pts[i].beat === segs[segs.length - 1].beat) {
+        segs[segs.length - 1].bpm = pts[i].bpm // same beat → last wins
+        continue
+      }
+      if (i > 0) sec += (pts[i].beat - segs[segs.length - 1].beat) * (60 / segs[segs.length - 1].bpm)
+      segs.push({ beat: pts[i].beat, bpm: pts[i].bpm, sec })
+    }
+    this.segs = segs
+  }
+
+  private segAtBeat(beat: number): { beat: number; bpm: number; sec: number } {
+    let s = this.segs[0]
+    for (const seg of this.segs) {
+      if (seg.beat <= beat + 1e-9) s = seg
+      else break
+    }
+    return s
+  }
+
+  bpmAtBeat(beat: number): number {
+    return this.segAtBeat(beat).bpm
+  }
+
+  // seconds from song start (beat 0) to `beat`
+  secAtBeat(beat: number): number {
+    const s = this.segAtBeat(beat)
+    return s.sec + (beat - s.beat) * (60 / s.bpm)
+  }
+
+  // inverse: the beat reached at `sec` seconds from song start
+  beatAtSec(sec: number): number {
+    let s = this.segs[0]
+    for (const seg of this.segs) {
+      if (seg.sec <= sec + 1e-12) s = seg
+      else break
+    }
+    return s.beat + (sec - s.sec) * (s.bpm / 60)
+  }
 }
 
 export function newId(): string {
@@ -274,6 +333,7 @@ export function defaultProject(): Project {
     bpm: 120,
     key: { root: 0, scale: 'chromatic' },
     timeSig: { num: 4, den: 4 },
+    tempoMap: [],
     markers: [],
     loop: { on: false, start: 0, end: 16 },
     tracks: [
@@ -359,6 +419,14 @@ export function migrateProject(raw: unknown): Project {
         den: [1, 2, 4, 8, 16].includes(den) ? den : 4,
       }
     })(),
+    tempoMap: (Array.isArray(p.tempoMap) ? p.tempoMap : [])
+      .slice(0, 256)
+      .map(e => {
+        const o = (typeof e === 'object' && e !== null ? e : {}) as Record<string, unknown>
+        return { beat: clamp(o.beat, 0, 1e5, 0), bpm: clamp(o.bpm, 20, 240, 120) }
+      })
+      .filter(e => e.beat > 0 && Number.isFinite(e.bpm))
+      .sort((a, b) => a.beat - b.beat),
     markers: (Array.isArray(p.markers) ? p.markers : [])
       .slice(0, 256)
       .map(m => {

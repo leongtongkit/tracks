@@ -387,6 +387,7 @@ declare global {
     __tracksRoutingTest: () => Promise<unknown>
     __tracksFreezeTest: () => Promise<unknown>
     __tracksSf2Test: () => Promise<unknown>
+    __tracksTempoTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -736,6 +737,36 @@ window.__tracksSf2Test = async () => {
     pitchOct,
     rootPitchOk: Math.abs(pitchRoot - 220.5) < 12,
     octavePitchOk: Math.abs(pitchOct - 441) < 24,
+  }
+}
+
+// tempo map: a note at beat 4 must land later when a tempo change slows the
+// song before it — and the constant-tempo case must be unchanged.
+window.__tracksTempoTest = async () => {
+  const mk = (tempoMap: { beat: number; bpm: number }[]): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    p.bpm = 120
+    p.tempoMap = tempoMap
+    const t = newTrack('Hit', { kind: 'drums' })
+    t.clips = [{ id: 't1', start: 0, length: 8, notes: [{ start: 4, dur: 0.5, pitch: 36, vel: 1 }] }]
+    p.tracks = [t]
+    return p
+  }
+  // onset time (s): first sample above threshold
+  const onset = (b: AudioBuffer): number => {
+    const d = b.getChannelData(0)
+    for (let i = 0; i < d.length; i++) if (Math.abs(d[i]) > 0.03) return i / b.sampleRate
+    return -1
+  }
+  const constant = await renderProject(mk([])) // beat 4 @120 → 2.0s (+0.05 lead)
+  const slowed = await renderProject(mk([{ beat: 2, bpm: 60 }])) // 2b@120 + 2b@60 = 3.0s
+  const onsetConst = onset(constant)
+  const onsetSlow = onset(slowed)
+  return {
+    onsetConstant: onsetConst,
+    onsetSlowed: onsetSlow,
+    constantUnchanged: Math.abs(onsetConst - 2.05) < 0.06, // regression: old constant-tempo math
+    tempoDelaysTheNote: onsetSlow > onsetConst + 0.8 && Math.abs(onsetSlow - 3.05) < 0.08,
   }
 }
 

@@ -2,7 +2,7 @@
 // interval books sample-accurate events a small window ahead. Loop wraps
 // re-anchor the beat→time mapping so timing stays exact across passes.
 
-import { warpRate, type AudioRegion, type Clip, type Project, type TrackData } from './project'
+import { TempoMap, warpRate, type AudioRegion, type Clip, type Project, type TrackData } from './project'
 
 // the leading silence renderProject prepends to every bounce (see render.ts
 // startAt); a frozen clip skips it so the bounce sits flush on the timeline.
@@ -135,7 +135,7 @@ export class Transport {
   private anchorBeat = 0
   private scanBeat = 0
   private stoppedAt = 0
-  private spbCached = 0.5
+  private map = new TempoMap(120, []) // beat↔time map, rebuilt on tempo change
   private timer: ReturnType<typeof setInterval> | null = null
   private readonly getNow: () => number
   private readonly getProject: () => Project
@@ -147,19 +147,29 @@ export class Transport {
     this.events = opts.events
   }
 
+  private rebuildMap(): void {
+    const p = this.getProject()
+    this.map = new TempoMap(p.bpm, p.tempoMap)
+  }
+
+  // wall-clock seconds spanned by the beat range [b0, b1] under the tempo map
+  private wallBetween(b0: number, b1: number): number {
+    return this.map.secAtBeat(b1) - this.map.secAtBeat(b0)
+  }
+
   beatToTime(beat: number): number {
-    return this.anchorTime + (beat - this.anchorBeat) * this.spbCached
+    return this.anchorTime + (this.map.secAtBeat(beat) - this.map.secAtBeat(this.anchorBeat))
   }
 
   positionBeat(now = this.getNow()): number {
     if (!this.playing) return this.stoppedAt
-    return this.anchorBeat + (now - this.anchorTime) / this.spbCached
+    return this.map.beatAtSec(this.map.secAtBeat(this.anchorBeat) + (now - this.anchorTime))
   }
 
   start(fromBeat = this.stoppedAt): void {
     if (this.playing) return
     this.playing = true
-    this.spbCached = 60 / this.getProject().bpm
+    this.rebuildMap()
     this.anchorBeat = fromBeat
     this.scanBeat = fromBeat
     this.anchorTime = this.getNow() + 0.06
@@ -181,14 +191,18 @@ export class Transport {
   // restart audio clips that should already be sounding at `beat`
   private scheduleStraddlingAudio(beat: number, t: number): void {
     if (!this.events.audio) return
-    const spb = this.spbCached
     const project = this.getProject()
     const loop = project.loop
     const cutBeat = loop.on && loop.end > beat ? loop.end : Infinity
     for (const s of straddlingAudio(project.tracks, beat)) {
       const remain = Math.min(s.remainBeats, cutBeat - beat)
       const rate = warpRate(s.region, project.bpm)
-      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb * rate, remain * spb * rate, rate, 0, s.region.fadeOut * spb)
+      const clipStart = beat - s.intoBeats
+      const clipEnd = beat + s.remainBeats
+      const intoSec = this.wallBetween(clipStart, beat) * rate
+      const remainSec = this.wallBetween(beat, beat + remain) * rate
+      const fadeOutSec = this.wallBetween(clipEnd - s.region.fadeOut, clipEnd)
+      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + intoSec, remainSec, rate, 0, fadeOutSec)
     }
   }
 
@@ -214,13 +228,13 @@ export class Transport {
   // position is computed with the OLD tempo, then the mapping switches over.
   reanchor(): void {
     if (!this.playing) {
-      this.spbCached = 60 / this.getProject().bpm
+      this.rebuildMap()
       return
     }
-    const now = this.getNow()
-    this.anchorBeat = this.anchorBeat + (now - this.anchorTime) / this.spbCached
-    this.anchorTime = now
-    this.spbCached = 60 / this.getProject().bpm
+    const beatNow = this.positionBeat() // computed with the OLD map
+    this.rebuildMap()
+    this.anchorBeat = beatNow
+    this.anchorTime = this.getNow()
   }
 
   // Books all events due inside the lookahead window. Public for tests.
@@ -238,11 +252,10 @@ export class Transport {
       if (loopActive && this.scanBeat < loop.end) sliceEnd = Math.min(sliceEnd, loop.end)
 
       const events = collectEvents(project.tracks, this.scanBeat, sliceEnd)
-      const spb = this.spbCached
       for (const ev of events) {
         const tOn = this.beatToTime(ev.startBeat)
         this.events.noteOn(ev.trackId, ev.pitch, ev.vel, tOn)
-        this.events.noteOff(ev.trackId, ev.pitch, tOn + Math.max(0.02, ev.durBeats * spb - 0.01))
+        this.events.noteOff(ev.trackId, ev.pitch, Math.max(tOn + 0.02, this.beatToTime(ev.startBeat + ev.durBeats) - 0.01))
         booked.push(ev)
       }
       this.events.slice?.(this.scanBeat, sliceEnd, b => this.beatToTime(b))
@@ -252,7 +265,17 @@ export class Transport {
           let durBeats = ev.durBeats
           if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat
           const rate = warpRate(ev.region, project.bpm)
-          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb * rate, rate, ev.region.fadeIn * spb, ev.region.fadeOut * spb)
+          const end = ev.startBeat + durBeats
+          this.events.audio(
+            ev.trackId,
+            ev.region,
+            this.beatToTime(ev.startBeat),
+            ev.region.offsetSec,
+            this.wallBetween(ev.startBeat, end) * rate,
+            rate,
+            this.wallBetween(ev.startBeat, ev.startBeat + ev.region.fadeIn),
+            this.wallBetween(end - ev.region.fadeOut, end),
+          )
         }
       }
       if (this.metronome && this.events.click) {
