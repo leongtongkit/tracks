@@ -10,12 +10,14 @@ export class MicRecorder {
   private chunks: [Float32Array, Float32Array][] = []
   private ctx: AudioContext | null = null
 
-  // resolves once audio is actually flowing; throws if the mic is denied
-  async start(ctx: AudioContext): Promise<void> {
+  // resolves once audio is actually flowing; throws if the mic is denied.
+  // processing=true enables echo cancellation/noise suppression (voice memos);
+  // false records raw (music).
+  async start(ctx: AudioContext, processing = false): Promise<void> {
     if (this.recording) return
     this.ctx = ctx
     this.stream = await navigator.mediaDevices.getUserMedia({
-      audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false },
+      audio: { echoCancellation: processing, noiseSuppression: processing, autoGainControl: processing },
     })
     await ctx.audioWorklet.addModule('/worklets/recorder.js')
     this.chunks = []

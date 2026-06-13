@@ -1,12 +1,5 @@
 name = "tracks-jfound"
-main = "tracks-worker.js"
 compatibility_date = "2026-06-01"
 
 [assets]
 directory = "./dist"
-binding = "ASSETS"
-run_worker_first = ["/api/*"]
-
-[[kv_namespaces]]
-binding = "SHARES"
-id = "f528fe224f0b4fbdbea37ce564c609e7"

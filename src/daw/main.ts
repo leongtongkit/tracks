@@ -9,7 +9,6 @@ import { analyzeBuffer } from '../test/offline'
 import { KeyboardInput } from '../input/keyboard'
 import { buildInstrumentEditor, fxRack } from '../ui/panels'
 import { PresetBrowser } from '../ui/preset-browser'
-import { toast } from '../ui/toast'
 import { DawApp } from './daw-app'
 import { exportMidi, importMidi } from './midi'
 import { encodeMp3 } from './mp3'
@@ -18,13 +17,11 @@ import {
   downloadBlob,
   downloadProjectJson,
   importProjectJson,
-  importProjectText,
   loadSession,
   saveSession,
-  serializeProjectWithSamples,
 } from './persist'
-import { fetchShare, shareIdFromHash, uploadShare } from './share'
 import { defaultProject, newId, newTrack } from './project'
+import { settings } from './settings'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
 import { buildDrumEditor } from './ui/drum-editor'
@@ -35,6 +32,7 @@ import { renderProject } from './render'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
 import { buildHelpOverlay } from './ui/help'
+import { buildSettingsPanel } from './ui/settings-panel'
 
 const app = new DawApp()
 // recover persisted samples (recordings/imports) before anything plays
@@ -42,23 +40,6 @@ void sampleStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
 app.project = loadSession() ?? demoSong()
 
-// a share link (#s=...) replaces the workspace once it arrives
-const shareId = shareIdFromHash(location.hash)
-if (shareId) {
-  void fetchShare(shareId)
-    .then(text => {
-      app.transport.stop()
-      app.song?.allNotesOff()
-      app.history.clear()
-      app.project = importProjectText(text)
-      app.selectedClip = null
-      app.armedTrackId = app.project.tracks[0]?.id ?? null
-      void app.song?.syncTracks(app.project)
-      app.emit('tracks', 'clips', 'project', 'selection')
-      toast(`Loaded shared project "${app.project.name}"`)
-    })
-    .catch(() => toast('That share link was not found (links expire after 90 days)'))
-}
 app.armedTrackId = app.project.tracks[0]?.id ?? null
 const root = document.getElementById('app')!
 const daw = document.createElement('div')
@@ -71,6 +52,7 @@ const bottom = new BottomPanel(app)
 daw.appendChild(bottom.el)
 
 const help = buildHelpOverlay()
+const settingsPanel = buildSettingsPanel(app)
 
 // synth editors are cached: knob subscriptions live on the track's store, so
 // rebuilding each render would leak listeners. Drum/sampler editors hold no
@@ -152,10 +134,14 @@ let saveTimer: ReturnType<typeof setTimeout> | undefined
 for (const ev of ['project', 'tracks', 'clips', 'mixer'] as const) {
   app.on(ev, () => {
     clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => saveSession(app), 900)
+    saveTimer = setTimeout(() => {
+      if (settings.autosave) saveSession(app)
+    }, 900)
   })
 }
-window.addEventListener('beforeunload', () => saveSession(app))
+window.addEventListener('beforeunload', () => {
+  if (settings.autosave) saveSession(app)
+})
 
 // file actions live on the transport bar's right side
 const fileBar = document.querySelector('.bar-space')!
@@ -170,7 +156,7 @@ wavBtn.addEventListener('click', () => {
     wavBtn.textContent = 'Rendering...'
     try {
       app.song?.collectPatches(app.project)
-      const blob = await renderProjectToWav(app.project)
+      const blob = await renderProjectToWav(app.project, settings.exportRate)
       downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.wav`)
     } finally {
       wavBtn.disabled = false
@@ -182,47 +168,21 @@ const mp3Btn = document.createElement('button')
 mp3Btn.type = 'button'
 mp3Btn.className = 'seg-btn'
 mp3Btn.textContent = 'MP3'
-mp3Btn.title = 'Render the song to a small, shareable MP3 (192 kbps)'
+mp3Btn.title = 'Render the song to a small MP3 (bitrate in Settings)'
 mp3Btn.addEventListener('click', () => {
   void (async () => {
     mp3Btn.disabled = true
     mp3Btn.textContent = 'Rendering...'
     try {
       app.song?.collectPatches(app.project)
-      const buf = await renderProject(app.project)
+      const buf = await renderProject(app.project, settings.exportRate)
       mp3Btn.textContent = 'Encoding...'
       await new Promise(r => setTimeout(r, 30)) // let the label paint
-      const blob = encodeMp3(buf)
+      const blob = encodeMp3(buf, settings.mp3Kbps)
       downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mp3`)
     } finally {
       mp3Btn.disabled = false
       mp3Btn.textContent = 'MP3'
-    }
-  })()
-})
-const shareBtn = document.createElement('button')
-shareBtn.type = 'button'
-shareBtn.className = 'seg-btn'
-shareBtn.textContent = 'Share'
-shareBtn.title = 'Upload this project and copy a link — anyone can listen and remix it in their browser'
-shareBtn.addEventListener('click', () => {
-  void (async () => {
-    shareBtn.disabled = true
-    shareBtn.textContent = 'Uploading...'
-    try {
-      const id = await uploadShare(serializeProjectWithSamples(app))
-      const link = `${location.origin}/#s=${id}`
-      try {
-        await navigator.clipboard.writeText(link)
-        toast('Share link copied — valid for 90 days')
-      } catch {
-        prompt('Share link (copy it):', link)
-      }
-    } catch (err) {
-      toast(err instanceof Error ? err.message : 'Sharing failed')
-    } finally {
-      shareBtn.disabled = false
-      shareBtn.textContent = 'Share'
     }
   })()
 })
@@ -254,7 +214,7 @@ stemsBtn.addEventListener('click', () => {
           t.mixer.mute = t.id !== tracks[i].id
           t.mixer.solo = false
         }
-        const blob = await renderProjectToWav(solo)
+        const blob = await renderProjectToWav(solo, settings.exportRate)
         downloadBlob(blob, `${base}-${tracks[i].name.replaceAll(/\W+/g, '-')}.wav`)
         await new Promise(r => setTimeout(r, 400)) // keep the browser's download UI happy
       }
@@ -307,7 +267,13 @@ helpBtn.textContent = '?'
 helpBtn.title = 'Keyboard shortcuts'
 helpBtn.addEventListener('click', () => help.toggle())
 fileBar.appendChild(helpBtn)
-fileBar.appendChild(shareBtn)
+const settingsBtn = document.createElement('button')
+settingsBtn.type = 'button'
+settingsBtn.className = 'seg-btn'
+settingsBtn.textContent = 'Settings'
+settingsBtn.title = 'App settings (sound, recording, editing, export)'
+settingsBtn.addEventListener('click', () => settingsPanel.toggle())
+fileBar.appendChild(settingsBtn)
 fileBar.appendChild(wavBtn)
 fileBar.appendChild(mp3Btn)
 fileBar.appendChild(stemsBtn)

@@ -48,8 +48,8 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
   return ctx.startRendering()
 }
 
-export async function renderProjectToWav(project: Project): Promise<Blob> {
-  const buf = await renderProject(project)
+export async function renderProjectToWav(project: Project, sampleRate = 44100): Promise<Blob> {
+  const buf = await renderProject(project, sampleRate)
   const left = buf.getChannelData(0)
   const right = buf.numberOfChannels > 1 ? buf.getChannelData(1) : left
   return new Blob([encodeWav(left, right, buf.sampleRate)], { type: 'audio/wav' })

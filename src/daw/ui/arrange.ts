@@ -4,11 +4,13 @@
 import type { DawApp } from '../daw-app'
 import { projectEndBeat, warpRate, type Clip, type TrackData } from '../project'
 import { sampleStore } from '../samples'
+import { settings } from '../settings'
 import { miniDial } from './mini-dial'
 
 const ROW_H = 56
 const AUTO_H = 44
-const SNAP = 1 // beats
+// clip drag/resize + ruler snap comes from app settings (Settings panel)
+const SNAP = (): number => settings.arrangeSnap
 const AUTO_SNAP = 0.25
 
 export class ArrangeView {
@@ -206,7 +208,7 @@ export class ArrangeView {
     this.ruler.addEventListener('pointermove', e => {
       if (dragStart === null) return
       const beat = this.beatAt(e)
-      if (Math.abs(beat - dragStart) >= SNAP / 2) {
+      if (Math.abs(beat - dragStart) >= SNAP() / 2) {
         if (!dragged) this.app.checkpoint('loop region')
         dragged = true
         const loop = this.app.project.loop
@@ -233,7 +235,7 @@ export class ArrangeView {
   private beatAt(e: PointerEvent): number {
     const rect = this.lanes.getBoundingClientRect()
     const beat = (e.clientX - rect.left) / this.ppb
-    return Math.max(0, Math.round(beat / SNAP) * SNAP)
+    return Math.max(0, Math.round(beat / SNAP()) * SNAP())
   }
 
   // ---------- rendering ----------
@@ -410,7 +412,7 @@ export class ArrangeView {
       lane.dataset.trackId = track.id
       lane.addEventListener('dblclick', e => {
         const rect = this.lanes.getBoundingClientRect()
-        const beat = Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP
+        const beat = Math.floor((e.clientX - rect.left) / this.ppb / SNAP()) * SNAP()
         if (track.kind !== 'audio') this.app.addClip(track.id, beat)
       })
       if (track.kind === 'audio' || track.kind === 'sampler' || track.kind === 'pads') {
@@ -427,7 +429,7 @@ export class ArrangeView {
           const fail = (): void => alert('Could not decode that audio file.')
           if (track.kind === 'audio') {
             const rect = this.lanes.getBoundingClientRect()
-            const beat = Math.max(0, Math.floor((e.clientX - rect.left) / this.ppb / SNAP) * SNAP)
+            const beat = Math.max(0, Math.floor((e.clientX - rect.left) / this.ppb / SNAP()) * SNAP())
             void this.app.importAudioFile(file, track.id, beat).catch(fail)
           } else if (track.kind === 'sampler') {
             void this.app.loadSamplerFile(track.id, file).catch(fail)
@@ -501,7 +503,7 @@ export class ArrangeView {
     })
     el.addEventListener('pointermove', e => {
       if (!mode) return
-      const dBeats = Math.round((e.clientX - startX) / this.ppb / SNAP) * SNAP
+      const dBeats = Math.round((e.clientX - startX) / this.ppb / SNAP()) * SNAP()
       if (dBeats !== 0 && !moved) {
         moved = true
         this.app.checkpoint(`${mode} clip ${clip.id}`)

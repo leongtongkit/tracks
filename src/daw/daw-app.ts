@@ -17,6 +17,7 @@ import {
   type TrackKind,
 } from './project'
 import { sampleStore } from './samples'
+import { settings } from './settings'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
 
@@ -98,8 +99,8 @@ export class DawApp {
       this.song = new SongEngine(this.ctx)
       void this.song.syncTracks(this.project)
       this.clickGain = this.ctx.createGain()
-      this.clickGain.gain.value = 0.4
       this.clickGain.connect(this.ctx.destination)
+      this.applyAudioSettings()
       document.addEventListener('visibilitychange', () => {
         if (document.visibilityState === 'visible' && this.ctx && this.ctx.state !== 'running') {
           this.ctx.resume().catch(() => {})
@@ -112,6 +113,14 @@ export class DawApp {
 
   audioCtx(): AudioContext | null {
     return this.ctx
+  }
+
+  // live monitoring levels from settings (exports are unaffected — the
+  // offline render builds its own graph at full level)
+  applyAudioSettings(): void {
+    const t = this.ctx?.currentTime ?? 0
+    this.song?.masterGain.gain.setTargetAtTime(0.9 * settings.outputVolume, t, 0.02)
+    this.clickGain?.gain.setTargetAtTime(settings.clickVolume, t, 0.02)
   }
 
   private click(t: number, accent: boolean): void {
@@ -419,8 +428,11 @@ export class DawApp {
     if (this.recording) {
       if (this.transport.playing) {
         if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
+      } else if (settings.countInBars > 0) {
+        this.startWithCountIn()
       } else {
-        this.startWithCountIn() // one bar of clicks, then roll
+        this.transport.start()
+        if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
       }
     } else {
       if (this.countInTimer !== null) {
@@ -433,14 +445,15 @@ export class DawApp {
     this.emit('transport')
   }
 
-  // one bar of metronome before recording starts
+  // a bar or two of metronome before recording starts
   private startWithCountIn(): void {
     this.ensureAudio()
     const ctx = this.audioCtx()
     if (!ctx) return
+    const beats = settings.countInBars * 4
     const spb = 60 / this.project.bpm
     const t0 = ctx.currentTime + 0.08
-    for (let i = 0; i < 4; i++) this.click(t0 + i * spb, i === 0)
+    for (let i = 0; i < beats; i++) this.click(t0 + i * spb, i % 4 === 0)
     this.countingIn = true
     this.countInTimer = setTimeout(() => {
       this.countInTimer = null
@@ -451,7 +464,7 @@ export class DawApp {
         if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
         this.emit('transport')
       }
-    }, (4 * spb - 0.02) * 1000)
+    }, (beats * spb - 0.02) * 1000)
   }
 
   private async startMic(): Promise<void> {
@@ -462,7 +475,7 @@ export class DawApp {
     this.mic = new MicRecorder()
     this.micError = null
     try {
-      await this.mic.start(ctx)
+      await this.mic.start(ctx, settings.micProcessing)
       this.micStartBeat = this.transport.positionBeat()
     } catch {
       this.micError = 'Microphone unavailable or denied.'
