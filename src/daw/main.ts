@@ -78,6 +78,14 @@ const help = buildHelpOverlay()
 const instrumentCache = new Map<string, HTMLElement>()
 // FX racks hold knob subscriptions on the track store → cache them too
 const fxCache = new Map<string, HTMLElement>()
+// evict editors for deleted tracks so their stores (and knob subscriptions) die
+app.on('tracks', () => {
+  for (const cache of [instrumentCache, fxCache]) {
+    for (const id of cache.keys()) {
+      if (!app.track(id)) cache.delete(id)
+    }
+  }
+})
 const trackFxRack = (trackId: string): HTMLElement | null => {
   const store = app.song?.store(trackId)
   if (!store) return null

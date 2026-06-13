@@ -3,7 +3,7 @@
 // (persisted to IndexedDB) and its metadata in project.samples.
 
 import type { DawApp } from '../daw-app'
-import { newId } from '../project'
+
 import { sampleStore } from '../samples'
 import { miniDial } from './mini-dial'
 
@@ -46,18 +46,9 @@ export function buildSamplerEditor(app: DawApp, trackId: string): HTMLElement {
   file.addEventListener('change', () => {
     const f = file.files?.[0]
     if (!f) return
-    app.ensureAudio()
-    const ctx = app.audioCtx()
-    if (!ctx) return
-    void f
-      .arrayBuffer()
-      .then(data => ctx.decodeAudioData(data))
-      .then(buffer => {
-        app.checkpoint('load sample')
-        const id = newId()
-        sampleStore.put(id, f.name, buffer)
-        sp.sampleId = id
-        app.project.samples[id] = { name: f.name, duration: buffer.duration }
+    void app
+      .loadSamplerFile(trackId, f)
+      .then(() => {
         renderInfo()
         app.ensureAudio().noteOn(trackId, sp.root, 0.9)
         setTimeout(() => app.song?.noteOff(trackId, sp.root), 400)

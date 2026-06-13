@@ -309,7 +309,6 @@ export class SongEngine {
   private readonly buses: SendBuses
   private readonly masterAnalyser: AnalyserNode
   private readonly masterMeterBuf: Float32Array<ArrayBuffer>
-  private readyList: Promise<void>[] = []
 
   constructor(ctx: BaseAudioContext, dest?: AudioNode, samples: SampleStore = sampleStore) {
     this.ctx = ctx
@@ -386,7 +385,6 @@ export class SongEngine {
         existing?.dispose()
         const ch = new TrackChannel(this.ctx, data, this.limiterIn, this.samples, this.buses)
         this.channels.set(data.id, ch)
-        this.readyList.push(ch.ready)
       }
     }
     for (const [id, ch] of this.channels) {
@@ -396,7 +394,9 @@ export class SongEngine {
       }
     }
     this.applyMixers(project)
-    return Promise.all(this.readyList).then(() => {})
+    // only live channels' readiness matters; collecting per call keeps this
+    // from accumulating promises across repeated syncs (undo/redo)
+    return Promise.all([...this.channels.values()].map(ch => ch.ready)).then(() => {})
   }
 
   applyMixers(project: Project): void {

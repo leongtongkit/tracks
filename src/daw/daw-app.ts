@@ -445,8 +445,9 @@ export class DawApp {
     this.countInTimer = setTimeout(() => {
       this.countInTimer = null
       this.countingIn = false
-      if (this.recording && !this.transport.playing) {
-        this.transport.start()
+      if (this.recording) {
+        // the user may have hit play themselves during the count-in
+        if (!this.transport.playing) this.transport.start()
         if (this.track(this.armedTrackId ?? '')?.kind === 'audio') void this.startMic()
         this.emit('transport')
       }
@@ -495,7 +496,8 @@ export class DawApp {
     this.emit('clips')
   }
 
-  // decode any audio file into the sample store + project metadata
+  // decode any audio file into the sample store; callers register the project
+  // metadata AFTER their checkpoint so undo snapshots stay clean
   async decodeAudioFile(file: File): Promise<{ id: string; buffer: AudioBuffer }> {
     this.ensureAudio()
     const ctx = this.audioCtx()
@@ -503,16 +505,20 @@ export class DawApp {
     const buffer = await ctx.decodeAudioData(await file.arrayBuffer())
     const id = newId()
     sampleStore.put(id, file.name, buffer)
-    this.project.samples[id] = { name: file.name, duration: buffer.duration }
     return { id, buffer }
+  }
+
+  private registerSample(id: string, name: string, buffer: AudioBuffer): void {
+    this.project.samples[id] = { name, duration: buffer.duration }
   }
 
   // load an uploaded file as the sampler's sample
   async loadSamplerFile(trackId: string, file: File): Promise<void> {
     const track = this.track(trackId)
     if (!track) return
-    const { id } = await this.decodeAudioFile(file)
+    const { id, buffer } = await this.decodeAudioFile(file)
     this.checkpoint('load sample')
+    this.registerSample(id, file.name, buffer)
     track.sampler.sampleId = id
     this.emit('tracks')
   }
@@ -522,8 +528,9 @@ export class DawApp {
     const track = this.track(trackId)
     const pad = track?.pads.pads[padIndex]
     if (!pad) return
-    const { id } = await this.decodeAudioFile(file)
+    const { id, buffer } = await this.decodeAudioFile(file)
     this.checkpoint('load pad')
+    this.registerSample(id, file.name, buffer)
     pad.sampleId = id
     this.emit('tracks')
   }
@@ -534,6 +541,7 @@ export class DawApp {
     if (!track) return null
     const { id, buffer } = await this.decodeAudioFile(file)
     this.checkpoint('import audio')
+    this.registerSample(id, file.name, buffer)
     const spb = 60 / this.project.bpm
     const clip: Clip = {
       id: newId(),
