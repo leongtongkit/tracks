@@ -28,7 +28,7 @@ export async function renderProject(project: Project, sampleRate = 44100): Promi
     for (const clip of track.clips) {
       if (!clip.audio) continue
       const rate = warpRate(clip.audio, project.bpm)
-      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb * rate, rate)
+      song.playClip(track.id, clip.audio, startAt + clip.start * spb, clip.audio.offsetSec, clip.length * spb * rate, rate, clip.audio.fadeIn * spb, clip.audio.fadeOut * spb)
     }
   }
   // automation curves, booked over the whole song in one pass

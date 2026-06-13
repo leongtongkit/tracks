@@ -477,7 +477,7 @@ export class SongEngine {
   // offset/dur arrive in SOURCE seconds with `rate` = source-sec per wall-sec.
   // repitch plays the source at playbackRate=rate (pitch moves); stretch plays
   // a pre-stretched buffer at rate 1 (pitch preserved).
-  playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate = 1): void {
+  playClip(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate = 1, fadeInSec = 0, fadeOutSec = 0): void {
     const ch = this.channels.get(trackId)
     if (!ch || durSec <= 0.001) return
 
@@ -505,7 +505,20 @@ export class SongEngine {
     src.buffer = buffer
     if (playbackRate !== 1) src.playbackRate.value = playbackRate
     const g = this.ctx.createGain()
-    g.gain.value = region.gain
+    // fade envelope in wall-clock time (fades are defined in song beats)
+    const wall = dur / playbackRate
+    const fi = Math.min(fadeInSec, wall / 2)
+    const fo = Math.min(fadeOutSec, wall / 2)
+    if (fi > 0) {
+      g.gain.setValueAtTime(0, t)
+      g.gain.linearRampToValueAtTime(region.gain, t + fi)
+    } else {
+      g.gain.setValueAtTime(region.gain, t)
+    }
+    if (fo > 0) {
+      g.gain.setValueAtTime(region.gain, t + wall - fo)
+      g.gain.linearRampToValueAtTime(0, t + wall)
+    }
     src.connect(g)
     g.connect(ch.input)
     src.start(t, off, dur)

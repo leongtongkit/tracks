@@ -47,7 +47,7 @@ export class DawApp {
       events: {
         noteOn: (trackId, pitch, vel, t) => this.song?.noteOn(trackId, pitch, vel, t),
         noteOff: (trackId, pitch, t) => this.song?.noteOff(trackId, pitch, t),
-        audio: (trackId, region, t, offsetSec, durSec, rate) => this.song?.playClip(trackId, region, t, offsetSec, durSec, rate),
+        audio: (trackId, region, t, offsetSec, durSec, rate, fadeInSec, fadeOutSec) => this.song?.playClip(trackId, region, t, offsetSec, durSec, rate, fadeInSec, fadeOutSec),
         audioStopAll: at => this.song?.stopAudioClips(at),
         slice: (from, to, beatToTime) => this.scheduleAutomationSlice(from, to, beatToTime),
         discontinuity: at => {
@@ -551,7 +551,7 @@ export class DawApp {
       start: Math.max(0, this.micStartBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm, fadeIn: 0, fadeOut: 0 },
     }
     track.clips.push(clip)
     this.selectClip(track.id, clip.id)
@@ -610,7 +610,7 @@ export class DawApp {
       start: Math.max(0, atBeat),
       length: Math.max(0.25, buffer.duration / spb),
       notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm },
+      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm, fadeIn: 0, fadeOut: 0 },
     }
     track.clips.push(clip)
     this.selectClip(trackId, clip.id)

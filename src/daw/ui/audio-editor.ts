@@ -149,6 +149,36 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
   row.appendChild(warpWrap)
   row.appendChild(
     miniDial({
+      label: 'Fade in',
+      get: () => region.fadeIn,
+      set: v => {
+        app.checkpoint('fade in')
+        region.fadeIn = v
+        app.emit('clips')
+      },
+      min: 0,
+      max: 8,
+      reset: 0,
+      fmt: v => `${v.toFixed(2)} b`,
+    }),
+  )
+  row.appendChild(
+    miniDial({
+      label: 'Fade out',
+      get: () => region.fadeOut,
+      set: v => {
+        app.checkpoint('fade out')
+        region.fadeOut = v
+        app.emit('clips')
+      },
+      min: 0,
+      max: 8,
+      reset: 0,
+      fmt: v => `${v.toFixed(2)} b`,
+    }),
+  )
+  row.appendChild(
+    miniDial({
       label: 'Orig BPM',
       get: () => region.origBpm,
       set: v => {
@@ -283,7 +313,7 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
           app.project.samples[id] = { name, duration: out.duration }
           const trackName = stem.name[0].toUpperCase() + stem.name.slice(1)
           const t = newTrack(trackName, { kind: 'audio' })
-          t.clips = [{ id: newId(), start: clip.start, length: clip.length, notes: [], audio: { sampleId: id, offsetSec: 0, gain: 1, warp: region.warp, origBpm: region.origBpm } }]
+          t.clips = [{ id: newId(), start: clip.start, length: clip.length, notes: [], audio: { sampleId: id, offsetSec: 0, gain: 1, warp: region.warp, origBpm: region.origBpm, fadeIn: 0, fadeOut: 0 } }]
           app.project.tracks.push(t)
           made++
         }

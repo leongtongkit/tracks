@@ -24,7 +24,7 @@ export interface TransportEvents {
   noteOff(trackId: string, pitch: number, t: number): void
   // schedule an audio region: start playing at ctx-time t, from offsetSec into
   // the sample (source seconds), for at most durSec (source seconds), at `rate`
-  audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate: number): void
+  audio?(trackId: string, region: AudioRegion, t: number, offsetSec: number, durSec: number, rate: number, fadeInSec?: number, fadeOutSec?: number): void
   audioStopAll?(at?: number): void
   // every booked slice, for time-scheduled things beyond notes (automation)
   slice?(fromBeat: number, toBeat: number, beatToTime: (beat: number) => number): void
@@ -160,7 +160,7 @@ export class Transport {
     for (const s of straddlingAudio(project.tracks, beat)) {
       const remain = Math.min(s.remainBeats, cutBeat - beat)
       const rate = warpRate(s.region, project.bpm)
-      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb * rate, remain * spb * rate, rate)
+      this.events.audio(s.trackId, s.region, t, s.region.offsetSec + s.intoBeats * spb * rate, remain * spb * rate, rate, 0, s.region.fadeOut * spb)
     }
   }
 
@@ -224,7 +224,7 @@ export class Transport {
           let durBeats = ev.durBeats
           if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat
           const rate = warpRate(ev.region, project.bpm)
-          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb * rate, rate)
+          this.events.audio(ev.trackId, ev.region, this.beatToTime(ev.startBeat), ev.region.offsetSec, durBeats * spb * rate, rate, ev.region.fadeIn * spb, ev.region.fadeOut * spb)
         }
       }
       if (this.metronome && this.events.click) {

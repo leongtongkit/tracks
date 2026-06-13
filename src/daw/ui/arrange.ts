@@ -488,19 +488,26 @@ export class ArrangeView {
     grip.className = 'clip-grip'
     el.appendChild(grip)
 
-    // body drag = move; right grip = resize; click = select
-    let mode: 'move' | 'size' | null = null
+    // audio clips also get a left grip to trim the start (moves the content)
+    const lgrip = document.createElement('div')
+    lgrip.className = 'clip-grip clip-grip-left'
+    if (clip.audio) el.appendChild(lgrip)
+
+    // body drag = move; right grip = resize; left grip = trim start; click = select
+    let mode: 'move' | 'size' | 'trim' | null = null
     let startX = 0
     let origStart = 0
     let origLen = 0
+    let origOffset = 0
     let moved = false
     el.addEventListener('pointerdown', e => {
       e.stopPropagation()
       e.preventDefault()
-      mode = e.target === grip ? 'size' : 'move'
+      mode = e.target === grip ? 'size' : e.target === lgrip ? 'trim' : 'move'
       startX = e.clientX
       origStart = clip.start
       origLen = clip.length
+      origOffset = clip.audio?.offsetSec ?? 0
       moved = false
       try {
         el.setPointerCapture(e.pointerId)
@@ -518,8 +525,20 @@ export class ArrangeView {
       if (mode === 'move') {
         clip.start = Math.max(0, origStart + dBeats)
         el.style.left = `${clip.start * this.ppb}px`
-      } else {
+      } else if (mode === 'size') {
         clip.length = Math.max(1, origLen + dBeats)
+        el.style.width = `${clip.length * this.ppb}px`
+      } else {
+        // trim start: move start right, shorten, and advance the source offset
+        // so the audio under the cursor stays put
+        const d = Math.min(Math.max(dBeats, -origStart), origLen - 1)
+        clip.start = origStart + d
+        clip.length = origLen - d
+        if (clip.audio) {
+          const rate = warpRate(clip.audio, this.app.project.bpm)
+          clip.audio.offsetSec = Math.max(0, origOffset + d * (60 / this.app.project.bpm) * rate)
+        }
+        el.style.left = `${clip.start * this.ppb}px`
         el.style.width = `${clip.length * this.ppb}px`
       }
     })

@@ -11,7 +11,7 @@ function audioTrack(clips: Partial<Clip>[]): ReturnType<typeof newTrack> {
     start: 0,
     length: 4,
     notes: [],
-    audio: { sampleId: 's1', offsetSec: 0, gain: 1, warp: 'off' as const, origBpm: 120 },
+    audio: { sampleId: 's1', offsetSec: 0, gain: 1, warp: 'off' as const, origBpm: 120, fadeIn: 0, fadeOut: 0 },
     ...c,
   }))
   return t
@@ -44,7 +44,7 @@ describe('audio clip scheduling', () => {
 
 describe('tempo warp', () => {
   it('rate follows project bpm only when warp is on', () => {
-    const region = { sampleId: 's', offsetSec: 0, gain: 1, warp: 'off' as 'off' | 'repitch' | 'stretch', origBpm: 100 }
+    const region = { sampleId: 's', offsetSec: 0, gain: 1, warp: 'off' as 'off' | 'repitch' | 'stretch', origBpm: 100, fadeIn: 0, fadeOut: 0 }
     expect(warpRate(region, 150)).toBe(1)
     region.warp = 'repitch'
     expect(warpRate(region, 150)).toBeCloseTo(1.5)

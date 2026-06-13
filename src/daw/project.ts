@@ -32,6 +32,8 @@ export interface AudioRegion {
   gain: number // 0..2 linear
   warp: WarpMode
   origBpm: number // the tempo this audio "is in"
+  fadeIn: number // beats; gain ramps up over the clip's first fadeIn beats
+  fadeOut: number // beats; gain ramps down over the clip's last fadeOut beats
 }
 
 // source-seconds per wall-clock-second when following tempo (same magnitude for
@@ -447,6 +449,8 @@ function migrateClip(raw: unknown): Clip | null {
           gain: clamp(audioRaw.gain, 0, 2, 1),
           warp: migrateWarp(audioRaw.warp),
           origBpm: clamp(audioRaw.origBpm, 40, 240, 120),
+          fadeIn: clamp(audioRaw.fadeIn, 0, 1024, 0),
+          fadeOut: clamp(audioRaw.fadeOut, 0, 1024, 0),
         }
       : undefined
   return {

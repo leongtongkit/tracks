@@ -1204,3 +1204,9 @@
 .auto-dot-exp {
   background: var(--led);
 }
+
+/* left trim handle on audio clips */
+.clip-grip-left {
+  left: 0;
+  right: auto;
+}
