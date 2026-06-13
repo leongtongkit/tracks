@@ -99,6 +99,16 @@ export function buildSessionGrid(app: DawApp): { toggle(): void } {
           play.title = playing ? 'Stop' : 'Launch this clip'
           play.addEventListener('click', () => (playing ? app.stopSlot(t.id) : app.launchSlot(t.id, s)))
           slot.appendChild(play)
+          const edit = document.createElement('button')
+          edit.type = 'button'
+          edit.className = 'session-edit'
+          edit.textContent = '✎'
+          edit.title = 'Edit this clip in the piano roll'
+          edit.addEventListener('click', () => {
+            app.editSessionSlot(t.id, s)
+            hide() // reveal the editor underneath
+          })
+          slot.appendChild(edit)
           const clr = document.createElement('button')
           clr.type = 'button'
           clr.className = 'session-clear'

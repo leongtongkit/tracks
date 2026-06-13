@@ -1533,6 +1533,7 @@
 }
 
 .session-clear,
+.session-edit,
 .session-add {
   flex: 0 0 auto;
   width: 20px;
@@ -1542,6 +1543,10 @@
   color: var(--ink-soft);
   cursor: pointer;
   font-size: 0.7rem;
+}
+
+.session-edit:hover {
+  color: var(--accent);
 }
 
 .session-add {

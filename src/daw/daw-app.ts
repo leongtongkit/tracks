@@ -266,6 +266,23 @@ export class DawApp {
     this.emit('tracks')
   }
 
+  // open a session slot in the piano roll for editing (creates a blank clip if
+  // the slot is empty). Edits mutate the clip in place — a launched copy hears
+  // them on its next loop.
+  editSessionSlot(trackId: string, sceneIndex: number): void {
+    const track = this.track(trackId)
+    if (!track) return
+    let clip = track.session[sceneIndex]
+    if (!clip) {
+      this.checkpoint('new session clip')
+      clip = { id: newId(), start: 0, length: 4, notes: [] }
+      while (track.session.length <= sceneIndex) track.session.push(null)
+      track.session[sceneIndex] = clip
+      if (sceneIndex >= this.project.scenes.length) this.project.scenes.push({ name: `Scene ${sceneIndex + 1}` })
+    }
+    this.selectClip(trackId, clip.id)
+  }
+
   clearSlot(trackId: string, sceneIndex: number): void {
     const track = this.track(trackId)
     if (!track || !track.session[sceneIndex]) return
@@ -441,7 +458,9 @@ export class DawApp {
 
   clip(ref: { trackId: string; clipId: string } | null): Clip | null {
     if (!ref) return null
-    return this.track(ref.trackId)?.clips.find(c => c.id === ref.clipId) ?? null
+    const track = this.track(ref.trackId)
+    if (!track) return null
+    return track.clips.find(c => c.id === ref.clipId) ?? track.session.find((c): c is Clip => c?.id === ref.clipId) ?? null
   }
 
   addClip(trackId: string, startBeat: number, length = 4): Clip | null {
