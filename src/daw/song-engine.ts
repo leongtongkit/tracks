@@ -99,6 +99,7 @@ export class TrackChannel {
   private readonly sendB: GainNode
   private readonly analyser: AnalyserNode
   private readonly meterBuf: Float32Array<ArrayBuffer>
+  private outDest: AudioNode // where muteGain currently routes (master or a bus input)
   private data: TrackData
 
   constructor(ctx: BaseAudioContext, data: TrackData, master: AudioNode, samples: SampleStore, buses: SendBuses) {
@@ -201,6 +202,7 @@ export class TrackChannel {
     this.pan.connect(this.volume)
     this.volume.connect(this.muteGain)
     this.muteGain.connect(master)
+    this.outDest = master
     this.muteGain.connect(this.sendA)
     this.muteGain.connect(this.sendB)
     this.sendA.connect(buses.a)
@@ -212,6 +214,19 @@ export class TrackChannel {
   // point the channel at the current TrackData object (undo/redo replaces it)
   rebind(data: TrackData): void {
     this.data = data
+  }
+
+  // re-route this channel's post-fader output to a new destination (master bus
+  // or a group bus's input). Sends/meter taps are untouched.
+  routeTo(dest: AudioNode): void {
+    if (dest === this.outDest) return
+    try {
+      this.muteGain.disconnect(this.outDest)
+    } catch {
+      // edge already gone (e.g. previous dest was disposed)
+    }
+    this.muteGain.connect(dest)
+    this.outDest = dest
   }
 
   trackData(): TrackData {
@@ -642,6 +657,33 @@ export class SongEngine {
       const srcCh = srcId && srcId !== data.id ? this.channels.get(srcId) : undefined
       ch.setDuck(srcCh ? srcCh.input : null, data.mixer.duck.amount)
     }
+    this.applyRouting(project)
+  }
+
+  // Route each channel's output to master or its target group bus. A routing
+  // that would form a cycle (bus feeding back into itself) falls back to master.
+  private applyRouting(project: Project): void {
+    const byId = new Map(project.tracks.map(t => [t.id, t]))
+    for (const data of project.tracks) {
+      const ch = this.channels.get(data.id)
+      if (ch) ch.routeTo(this.resolveOutput(data, byId))
+    }
+  }
+
+  private resolveOutput(data: TrackData, byId: Map<string, TrackData>): AudioNode {
+    const targetId = data.mixer.output
+    if (!targetId || targetId === 'master') return this.limiterIn
+    const targetCh = this.channels.get(targetId)
+    if (!targetCh || targetCh.kind !== 'bus') return this.limiterIn
+    // walk the bus chain; if it returns to this track, it's a cycle → master
+    const visited = new Set<string>([data.id])
+    let cur: string | undefined = targetId
+    while (cur && cur !== 'master') {
+      if (visited.has(cur)) return this.limiterIn
+      visited.add(cur)
+      cur = byId.get(cur)?.mixer.output
+    }
+    return targetCh.input
   }
 
   channel(trackId: string): TrackChannel | undefined {

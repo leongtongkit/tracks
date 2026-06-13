@@ -274,6 +274,7 @@ export class ArrangeView {
       ['+ Sampler', 'sampler', 'Add a sampler track (load any audio, play it across the keys)'],
       ['+ Pads', 'pads', 'Add a 16-pad sample bank (drop audio on pads, finger-drum them)'],
       ['+ Audio', 'audio', 'Add an audio track (record mic / import files)'],
+      ['+ Group', 'bus', 'Add a group bus — route other tracks into it for shared EQ/comp/FX and one fader'],
     ] as const) {
       const b = btn(label, title)
       b.addEventListener('click', () => this.app.addTrack(kind))
@@ -420,7 +421,7 @@ export class ArrangeView {
       lane.addEventListener('dblclick', e => {
         const rect = this.lanes.getBoundingClientRect()
         const beat = Math.floor((e.clientX - rect.left) / this.ppb / SNAP()) * SNAP()
-        if (track.kind !== 'audio') this.app.addClip(track.id, beat)
+        if (track.kind !== 'audio' && track.kind !== 'bus') this.app.addClip(track.id, beat)
       })
       if (track.kind === 'audio' || track.kind === 'sampler' || track.kind === 'pads') {
         lane.addEventListener('dragover', e => {

@@ -76,6 +76,22 @@ describe('v1 → v2 migration', () => {
     expect(eq.map(b => b.type)).toEqual(['lowshelf', 'peaking', 'highshelf'])
   })
 
+  it('accepts a bus track kind and output routing', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      tracks: [
+        { kind: 'synth', mixer: { output: 'busX' } },
+        { id: 'busX', kind: 'bus' },
+      ],
+    })
+    expect(p.tracks[0].mixer.output).toBe('busX')
+    expect(p.tracks[1].kind).toBe('bus')
+    // a project with no output field defaults to master
+    const legacy = migrateProject({ v: 2, bpm: 120, tracks: [{ kind: 'synth' }] })
+    expect(legacy.tracks[0].mixer.output).toBe('master')
+  })
+
   it('round-trips a parametric EQ band array', () => {
     const p = migrateProject({
       v: 2,

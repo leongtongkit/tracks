@@ -12,7 +12,9 @@ import { defaultPatch, migrate, type Patch } from '../patch/schema'
 
 export const PROJECT_VERSION = 2
 
-export type TrackKind = 'synth' | 'drums' | 'sampler' | 'pads' | 'audio'
+// 'bus' = a group/summing track: no instrument or clips, just a channel strip
+// other tracks route their output into.
+export type TrackKind = 'synth' | 'drums' | 'sampler' | 'pads' | 'audio' | 'bus'
 
 export interface Note {
   start: number // beats, relative to clip start
@@ -103,6 +105,7 @@ export interface MixerState {
   deEss: { on: boolean; amount: number; freq: number } // de-esser: dynamic high-shelf cut driven by sibilance level
   sendA: number // 0..1 to the reverb bus
   sendB: number // 0..1 to the delay bus
+  output: string // routing destination: 'master' or a bus track id
   duck: { source: string | null; amount: number } // sidechain: dip this track when `source` plays
 }
 
@@ -195,6 +198,7 @@ export function defaultMixer(): MixerState {
     deEss: { on: false, amount: 0.5, freq: 6500 },
     sendA: 0,
     sendB: 0,
+    output: 'master',
     duck: { source: null, amount: 0 },
   }
 }
@@ -279,7 +283,7 @@ const clamp = (v: unknown, min: number, max: number, fallback: number): number =
   return Number.isFinite(n) ? Math.min(max, Math.max(min, n)) : fallback
 }
 
-const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'pads', 'audio']
+const KINDS: TrackKind[] = ['synth', 'drums', 'sampler', 'pads', 'audio', 'bus']
 const SCALES: ScaleName[] = ['chromatic', 'major', 'minor']
 
 // Accepts parsed JSON (v1 or v2); returns a valid v2 Project or throws.
@@ -364,6 +368,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
       })(),
       sendA: clamp(mixer.sendA, 0, 1, 0),
       sendB: clamp(mixer.sendB, 0, 1, 0),
+      output: typeof mixer.output === 'string' && mixer.output ? mixer.output : 'master',
       duck: (() => {
         const d = (typeof mixer.duck === 'object' && mixer.duck !== null ? mixer.duck : {}) as Record<string, unknown>
         return {

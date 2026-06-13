@@ -90,6 +90,15 @@ bottom.setInstrumentMount((host, trackId) => {
   const track = app.track(trackId)
   if (!track) return
   app.ensureAudio()
+  if (track.kind === 'bus') {
+    const note = document.createElement('p')
+    note.className = 'bottom-hint'
+    note.textContent = 'Group bus — route other tracks into it (their mixer “Out” menu). Shape the whole group with this strip’s EQ, dynamics, and insert FX, then ride one fader.'
+    host.appendChild(note)
+    const rack = trackFxRack(trackId)
+    if (rack) host.appendChild(rack)
+    return
+  }
   if (track.kind !== 'synth') {
     const editor =
       track.kind === 'drums'
@@ -367,6 +376,7 @@ declare global {
     __tracksKitTest: () => Promise<unknown>
     __tracksMixTest: () => Promise<unknown>
     __tracksEqTest: () => Promise<unknown>
+    __tracksRoutingTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -561,6 +571,51 @@ window.__tracksEqTest = async () => {
     deEssOffHf: hf(deEssOffBuf),
     deEssOnHf: hf(deEssBuf),
     deEssTamesHarshHighs: hf(deEssBuf) < hf(deEssOffBuf) * 0.9,
+  }
+}
+
+// group/bus routing: a track routed into a bus is processed by that bus's strip;
+// a routing cycle must fall back to master (no feedback loop, finite output).
+window.__tracksRoutingTest = async () => {
+  const mk = (configure: (a: ReturnType<typeof newTrack>, bus: ReturnType<typeof newTrack>) => void): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    const a = newTrack('Saw', { preset: 'Fat Saw', kind: 'synth' })
+    a.clips = [{ id: 'r1', start: 0, length: 4, notes: [0, 1, 2, 3].map(i => ({ start: i, dur: 0.6, pitch: 50, vel: 0.95 })) }]
+    const bus = newTrack('Group', { kind: 'bus' })
+    configure(a, bus)
+    p.tracks = [a, bus]
+    return p
+  }
+  const rms = (b: AudioBuffer): number => {
+    const d = b.getChannelData(0)
+    let s = 0
+    for (let i = 0; i < d.length; i++) s += d[i] * d[i]
+    return Math.sqrt(s / d.length)
+  }
+  const hf = (b: AudioBuffer): number => {
+    const d = b.getChannelData(0)
+    let s = 0
+    for (let i = 1; i < d.length; i++) s += (d[i] - d[i - 1]) * (d[i] - d[i - 1])
+    return s / d.length
+  }
+  const finite = (b: AudioBuffer): boolean => {
+    const d = b.getChannelData(0)
+    for (let i = 0; i < d.length; i++) if (!Number.isFinite(d[i])) return false
+    return true
+  }
+
+  const toMaster = await renderProject(mk(a => { a.mixer.output = 'master' }))
+  const busSilent = await renderProject(mk((a, bus) => { a.mixer.output = bus.id; bus.mixer.volume = 0 }))
+  const busLp = await renderProject(mk((a, bus) => { a.mixer.output = bus.id; bus.mixer.eq = [{ type: 'lowpass', freq: 350, gain: 0, q: 0.7, on: true }] }))
+  const cycle = await renderProject(mk((a, bus) => { a.mixer.output = bus.id; bus.mixer.output = a.id }))
+
+  return {
+    masterRms: rms(toMaster),
+    busSilentRms: rms(busSilent),
+    busFaderControlsRoutedTrack: rms(busSilent) < rms(toMaster) * 0.05,
+    busLpCutsHighs: hf(busLp) < hf(toMaster) * 0.6,
+    cycleRms: rms(cycle),
+    cycleStaysFiniteAndAudible: finite(cycle) && rms(cycle) > rms(toMaster) * 0.5,
   }
 }
 

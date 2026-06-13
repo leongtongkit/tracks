@@ -209,6 +209,32 @@ export class MixerView {
     sends.appendChild(this.dial('Dly', track, { min: 0, max: 1, reset: 0, fmt: x100 }, () => m.sendB, v => ({ sendB: v })))
     col.appendChild(sends)
 
+    // output routing: master or any group bus (a bus can't route to itself)
+    const buses = this.app.project.tracks.filter(t => t.kind === 'bus' && t.id !== track.id)
+    if (buses.length > 0) {
+      const route = document.createElement('div')
+      route.className = 'mix-section'
+      route.appendChild(sectionTag('Out'))
+      const sel = document.createElement('select')
+      sel.className = 'seg-select'
+      sel.title = 'Route this track to the master bus or into a group bus'
+      const masterOpt = document.createElement('option')
+      masterOpt.value = 'master'
+      masterOpt.textContent = 'Master'
+      if (m.output === 'master') masterOpt.selected = true
+      sel.appendChild(masterOpt)
+      for (const bus of buses) {
+        const o = document.createElement('option')
+        o.value = bus.id
+        o.textContent = bus.name
+        if (m.output === bus.id) o.selected = true
+        sel.appendChild(o)
+      }
+      sel.addEventListener('change', () => this.app.setMixer(track.id, { output: sel.value }))
+      route.appendChild(sel)
+      col.appendChild(route)
+    }
+
     const duck = document.createElement('div')
     duck.className = 'mix-section'
     duck.appendChild(sectionTag('Duck'))

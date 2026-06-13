@@ -188,7 +188,7 @@ export class DawApp {
       const preset = TRACK_PRESETS[this.project.tracks.length % TRACK_PRESETS.length]
       track = newTrack(preset, { preset })
     } else {
-      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio' }
+      const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio', bus: 'Group' }
       track = newTrack(names[kind], { kind })
     }
     this.project.tracks.push(track)
