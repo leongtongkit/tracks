@@ -93,6 +93,36 @@ export function buildAudioClipEditor(app: DawApp, _trackId: string, clip: Clip):
     : 'Sample missing (it was not embedded in this project file).'
   root.appendChild(info)
 
+  // comping: take selector (only when this clip has more than one recorded take)
+  if (clip.takes && clip.takes.length > 1) {
+    const takes = document.createElement('div')
+    takes.className = 'sampler-row take-row'
+    const tag = document.createElement('span')
+    tag.className = 'mix-tag'
+    tag.textContent = 'Takes'
+    takes.appendChild(tag)
+    clip.takes.forEach((_, i) => {
+      const wrap = document.createElement('span')
+      wrap.className = 'take-chip' + (i === clip.activeTake ? ' take-active' : '')
+      const pick = document.createElement('button')
+      pick.type = 'button'
+      pick.className = 'take-pick'
+      pick.textContent = `Take ${i + 1}`
+      pick.title = 'Play this take'
+      pick.addEventListener('click', () => app.setActiveTake(_trackId, clip.id, i))
+      wrap.appendChild(pick)
+      const del = document.createElement('button')
+      del.type = 'button'
+      del.className = 'take-del'
+      del.textContent = '×'
+      del.title = 'Delete this take'
+      del.addEventListener('click', () => app.removeTake(_trackId, clip.id, i))
+      wrap.appendChild(del)
+      takes.appendChild(wrap)
+    })
+    root.appendChild(takes)
+  }
+
   const row = document.createElement('div')
   row.className = 'sampler-row'
   row.appendChild(

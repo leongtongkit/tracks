@@ -768,15 +768,49 @@ export class DawApp {
     sampleStore.put(id, `Recording ${n}`, buffer)
     this.project.samples[id] = { name: `Recording ${n}`, duration: buffer.duration }
     const spb = 60 / this.project.bpm
-    const clip: Clip = {
-      id: newId(),
-      start: Math.max(0, this.micStartBeat),
-      length: Math.max(0.25, buffer.duration / spb),
-      notes: [],
-      audio: { sampleId: id, offsetSec: 0, gain: 1, warp: 'off', origBpm: this.project.bpm, fadeIn: 0, fadeOut: 0 },
+    const start = Math.max(0, this.micStartBeat)
+    const region = { sampleId: id, offsetSec: 0, gain: 1, warp: 'off' as const, origBpm: this.project.bpm, fadeIn: 0, fadeOut: 0 }
+    // comping: if a take already covers the punch-in point, stack onto it
+    const host = track.clips.find(c => c.audio && start >= c.start - 1e-6 && start < c.start + c.length)
+    if (host) {
+      host.takes = host.takes ?? (host.audio ? [host.audio] : [])
+      host.takes.push(region)
+      host.activeTake = host.takes.length - 1
+      host.audio = region
+      this.selectClip(track.id, host.id)
+    } else {
+      const clip: Clip = {
+        id: newId(),
+        start,
+        length: Math.max(0.25, buffer.duration / spb),
+        notes: [],
+        audio: region,
+        takes: [region],
+        activeTake: 0,
+      }
+      track.clips.push(clip)
+      this.selectClip(track.id, clip.id)
     }
-    track.clips.push(clip)
-    this.selectClip(track.id, clip.id)
+    this.emit('clips')
+  }
+
+  // comping: switch which recorded take an audio clip plays
+  setActiveTake(trackId: string, clipId: string, index: number): void {
+    const clip = this.clip({ trackId, clipId })
+    if (!clip?.takes || index < 0 || index >= clip.takes.length) return
+    this.checkpoint('select take')
+    clip.activeTake = index
+    clip.audio = clip.takes[index]
+    this.emit('clips')
+  }
+
+  removeTake(trackId: string, clipId: string, index: number): void {
+    const clip = this.clip({ trackId, clipId })
+    if (!clip?.takes || clip.takes.length <= 1 || index < 0 || index >= clip.takes.length) return
+    this.checkpoint('delete take')
+    clip.takes.splice(index, 1)
+    clip.activeTake = Math.min(clip.activeTake ?? 0, clip.takes.length - 1)
+    clip.audio = clip.takes[clip.activeTake]
     this.emit('clips')
   }
 

@@ -1561,3 +1561,52 @@
 .session-add:hover {
   color: var(--accent);
 }
+
+/* ---------- comping take selector ---------- */
+.take-row {
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.take-chip {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid var(--edge);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.take-chip.take-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.take-pick {
+  border: none;
+  background: var(--panel-grey);
+  color: var(--ink-soft);
+  font-size: 0.6rem;
+  padding: 3px 8px;
+  cursor: pointer;
+}
+
+.take-active .take-pick {
+  background: var(--accent);
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+.take-del {
+  border: none;
+  border-left: 1px solid var(--edge);
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 0.62rem;
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.take-del:hover {
+  color: #c8503a;
+}

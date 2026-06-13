@@ -105,6 +105,32 @@ describe('v1 → v2 migration', () => {
     expect(legacy.tracks[0].soundfont).toEqual({ id: null, name: '', presetIndex: 0 })
   })
 
+  it('normalises a single-take audio clip and round-trips multi-take comping', () => {
+    const p = migrateProject({
+      v: 2,
+      bpm: 120,
+      samples: { a: { name: 'a', duration: 1 }, b: { name: 'b', duration: 1 } },
+      tracks: [
+        {
+          kind: 'audio',
+          clips: [
+            { start: 0, length: 4, notes: [], audio: { sampleId: 'a' } },
+            { start: 4, length: 4, notes: [], activeTake: 1, takes: [{ sampleId: 'a' }, { sampleId: 'b' }], audio: { sampleId: 'a' } },
+          ],
+        },
+      ],
+    })
+    const [single, comp] = p.tracks[0].clips
+    // a plain audio clip gains a one-element takes list
+    expect(single.takes).toHaveLength(1)
+    expect(single.takes?.[0].sampleId).toBe('a')
+    expect(single.activeTake).toBe(0)
+    // multi-take clip keeps both takes and active=1 → audio mirrors takes[1]
+    expect(comp.takes?.map(t => t.sampleId)).toEqual(['a', 'b'])
+    expect(comp.activeTake).toBe(1)
+    expect(comp.audio?.sampleId).toBe('b')
+  })
+
   it('accepts a bus track kind and output routing', () => {
     const p = migrateProject({
       v: 2,

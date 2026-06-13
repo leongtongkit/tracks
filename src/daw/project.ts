@@ -50,6 +50,10 @@ export interface Clip {
   length: number // beats
   notes: Note[]
   audio?: AudioRegion
+  // comping: alternative audio takes for this clip. `audio` mirrors the active
+  // take (takes[activeTake]); present only on audio clips that have ≥1 take.
+  takes?: AudioRegion[]
+  activeTake?: number
 }
 
 export type CurveShape = 'linear' | 'hold' | 'exp'
@@ -651,25 +655,36 @@ function migrateWarp(raw: unknown): WarpMode {
   return raw === true ? 'repitch' : 'off' // v3 boolean → mode
 }
 
+function migrateRegion(raw: unknown): AudioRegion | null {
+  const r = (typeof raw === 'object' && raw !== null ? raw : null) as Record<string, unknown> | null
+  if (!r || typeof r.sampleId !== 'string' || !r.sampleId) return null
+  return {
+    sampleId: r.sampleId,
+    offsetSec: clamp(r.offsetSec, 0, 3600, 0),
+    gain: clamp(r.gain, 0, 2, 1),
+    warp: migrateWarp(r.warp),
+    origBpm: clamp(r.origBpm, 40, 240, 120),
+    fadeIn: clamp(r.fadeIn, 0, 1024, 0),
+    fadeOut: clamp(r.fadeOut, 0, 1024, 0),
+  }
+}
+
 function migrateClip(raw: unknown): Clip | null {
   const c = (typeof raw === 'object' && raw !== null ? raw : {}) as Record<string, unknown>
   const rawLength = Number(c.length)
   if (!Number.isFinite(rawLength) || rawLength <= 0) return null
   const length = clamp(rawLength, 0.25, 1024, 1)
   const notes = Array.isArray(c.notes) ? c.notes : []
-  const audioRaw = (typeof c.audio === 'object' && c.audio !== null ? c.audio : null) as Record<string, unknown> | null
-  const audio: AudioRegion | undefined =
-    audioRaw && typeof audioRaw.sampleId === 'string' && audioRaw.sampleId
-      ? {
-          sampleId: audioRaw.sampleId,
-          offsetSec: clamp(audioRaw.offsetSec, 0, 3600, 0),
-          gain: clamp(audioRaw.gain, 0, 2, 1),
-          warp: migrateWarp(audioRaw.warp),
-          origBpm: clamp(audioRaw.origBpm, 40, 240, 120),
-          fadeIn: clamp(audioRaw.fadeIn, 0, 1024, 0),
-          fadeOut: clamp(audioRaw.fadeOut, 0, 1024, 0),
-        }
-      : undefined
+  const audio = migrateRegion(c.audio) ?? undefined
+  // comping takes: an audio clip always carries at least its active take
+  let takes: AudioRegion[] | undefined
+  let activeTake: number | undefined
+  if (audio) {
+    const raws = Array.isArray(c.takes) ? c.takes : []
+    takes = raws.slice(0, 64).map(migrateRegion).filter((r): r is AudioRegion => r !== null)
+    if (takes.length === 0) takes = [audio]
+    activeTake = Math.round(clamp(c.activeTake, 0, takes.length - 1, 0))
+  }
   return {
     id: typeof c.id === 'string' && c.id ? c.id : newId(),
     start: clamp(c.start, 0, 1e5, 0),
@@ -683,6 +698,7 @@ function migrateClip(raw: unknown): Clip | null {
         vel: clamp(note.vel, 0.01, 1, 0.8),
       }
     }),
-    ...(audio ? { audio } : {}),
+    // keep the active take and `audio` in sync after migration
+    ...(audio && takes ? { audio: takes[activeTake ?? 0], takes, activeTake } : {}),
   }
 }

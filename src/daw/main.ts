@@ -388,6 +388,7 @@ declare global {
     __tracksFreezeTest: () => Promise<unknown>
     __tracksSf2Test: () => Promise<unknown>
     __tracksTempoTest: () => Promise<unknown>
+    __tracksCompTest: () => Promise<unknown>
     __tracksAudioTest: () => Promise<unknown>
     __tracksAutoTest: () => Promise<unknown>
     __tracksApp: DawApp
@@ -767,6 +768,45 @@ window.__tracksTempoTest = async () => {
     onsetSlowed: onsetSlow,
     constantUnchanged: Math.abs(onsetConst - 2.05) < 0.06, // regression: old constant-tempo math
     tempoDelaysTheNote: onsetSlow > onsetConst + 0.8 && Math.abs(onsetSlow - 3.05) < 0.08,
+  }
+}
+
+// comping: switching the active take changes which sample the clip plays
+window.__tracksCompTest = async () => {
+  const rate = 44100
+  const tone = (hz: number): string => {
+    const buf = new AudioBuffer({ length: rate, numberOfChannels: 1, sampleRate: rate })
+    const d = buf.getChannelData(0)
+    for (let i = 0; i < d.length; i++) d[i] = Math.sin((i / rate) * hz * 2 * Math.PI) * 0.6
+    const id = newId()
+    sampleStore.put(id, `tone${hz}`, buf)
+    return id
+  }
+  const idA = tone(220)
+  const idB = tone(440)
+  const region = (sampleId: string): { sampleId: string; offsetSec: number; gain: number; warp: 'off'; origBpm: number; fadeIn: number; fadeOut: number } =>
+    ({ sampleId, offsetSec: 0, gain: 1, warp: 'off', origBpm: 120, fadeIn: 0, fadeOut: 0 })
+  const mk = (active: number): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    const t = newTrack('Comp', { kind: 'audio' })
+    const takes = [region(idA), region(idB)]
+    t.clips = [{ id: 'c', start: 0, length: 4, notes: [], takes, activeTake: active, audio: takes[active] }]
+    p.tracks = [t]
+    return p
+  }
+  const pitchOf = async (active: number): Promise<number> => {
+    const buf = await renderProject(mk(active))
+    // sample ~0.35s in — within the 1s tone (the clip starts at the 0.05s lead)
+    return detectPitch(buf.getChannelData(0), Math.floor(0.35 * buf.sampleRate), 4096, buf.sampleRate)
+  }
+  const take0 = await pitchOf(0)
+  const take1 = await pitchOf(1)
+  return {
+    take0Pitch: take0,
+    take1Pitch: take1,
+    take0Is220: Math.abs(take0 - 220) < 12,
+    take1Is440: Math.abs(take1 - 440) < 20,
+    switchingChangesTake: Math.abs(take1 - take0) > 100,
   }
 }
 
