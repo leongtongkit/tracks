@@ -2,7 +2,7 @@
 // interval books sample-accurate events a small window ahead. Loop wraps
 // re-anchor the beat→time mapping so timing stays exact across passes.
 
-import { TempoMap, warpRate, type AudioRegion, type Clip, type Project, type TrackData } from './project'
+import { beatsPerBar, TempoMap, warpRate, type AudioRegion, type Clip, type Project, type TrackData } from './project'
 
 // the leading silence renderProject prepends to every bounce (see render.ts
 // startAt); a frozen clip skips it so the bounce sits flush on the timeline.
@@ -287,8 +287,9 @@ export class Transport {
         }
       }
       if (this.metronome && this.events.click) {
+        const bpb = beatsPerBar(project.timeSig)
         for (let b = Math.ceil(this.scanBeat - 1e-9); b < sliceEnd; b++) {
-          this.events.click(this.beatToTime(b), b % 4 === 0)
+          this.events.click(this.beatToTime(b), Math.abs(b % bpb) < 1e-6) // accent on the downbeat of each bar
         }
       }
 

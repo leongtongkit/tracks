@@ -555,12 +555,17 @@ export class DawApp {
     return right
   }
 
-  quantizeClip(trackId: string, clipId: string, grid: number): void {
-    const clip = this.track(trackId)?.clips.find(c => c.id === clipId)
+  // Snap note starts to `grid`. swing (0..1) delays every off-beat grid cell
+  // toward the triplet feel (0 = straight = byte-identical to before).
+  quantizeClip(trackId: string, clipId: string, grid: number, swing = 0): void {
+    const clip = this.clip({ trackId, clipId })
     if (!clip || grid <= 0) return
     this.checkpoint('quantize')
+    const offbeatDelay = grid * Math.max(0, Math.min(1, swing)) * 0.5
     for (const n of clip.notes) {
-      n.start = Math.min(clip.length - 1 / 32, Math.round(n.start / grid) * grid)
+      const k = Math.round(n.start / grid)
+      const pos = k * grid + (k % 2 === 1 ? offbeatDelay : 0)
+      n.start = Math.min(clip.length - 1 / 32, Math.max(0, pos))
     }
     this.emit('clips')
   }

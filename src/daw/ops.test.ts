@@ -216,6 +216,21 @@ describe('clip operations', () => {
     expect(clip.notes.every(n => Math.abs(n.start / 0.25 - Math.round(n.start / 0.25)) < 1e-9)).toBe(true)
   })
 
+  it('swings off-beat grid cells on quantize', () => {
+    clip.notes = [
+      { start: 0.05, dur: 0.5, pitch: 60, vel: 0.8 },
+      { start: 1.1, dur: 0.5, pitch: 62, vel: 0.8 },
+      { start: 2.05, dur: 0.5, pitch: 64, vel: 0.8 },
+      { start: 2.95, dur: 0.5, pitch: 65, vel: 0.8 },
+    ]
+    app.quantizeClip(trackId, clip.id, 1, 0.5) // off-beat delay = 1 * 0.5 * 0.5 = 0.25
+    expect(clip.notes.map(n => n.start)).toEqual([0, 1.25, 2, 3.25]) // odd cells (1,3) pushed late
+    // straight quantize (swing 0) lands exactly on the grid
+    clip.notes = [{ start: 1.1, dur: 0.5, pitch: 60, vel: 0.8 }]
+    app.quantizeClip(trackId, clip.id, 1, 0)
+    expect(clip.notes[0].start).toBe(1)
+  })
+
   it('transposes and clamps pitch', () => {
     app.transposeClip(trackId, clip.id, 12)
     expect(clip.notes.map(n => n.pitch)).toEqual([72, 76, 79])

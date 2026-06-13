@@ -44,6 +44,7 @@ export class PianoRoll {
   private velViewport!: HTMLElement
   private lastDur = 1
   private gridBeats = 0.25
+  private swing = 0 // 0..1 swing applied on quantize
   private readonly selection = new Set<Note>()
   private readonly noteEls = new Map<Note, HTMLElement>()
 
@@ -193,10 +194,25 @@ export class PianoRoll {
       this.gridBeats = Number(grid.value)
     })
 
+    const swing = document.createElement('select')
+    swing.className = 'seg-select'
+    swing.title = 'Swing: delay off-beats toward a triplet groove when you quantize'
+    for (const [text, val] of [['Straight', '0'], ['Swing 25%', '0.25'], ['Swing 50%', '0.5'], ['Swing 75%', '0.75']] as const) {
+      const o = document.createElement('option')
+      o.value = val
+      o.textContent = text
+      if (Number(val) === this.swing) o.selected = true
+      swing.appendChild(o)
+    }
+    swing.addEventListener('change', () => {
+      this.swing = Number(swing.value)
+    })
+
     bar.appendChild(label)
     bar.appendChild(grid)
-    bar.appendChild(mk('Quantize', 'Snap every note start to the grid', () => {
-      if (this.clip) this.app.quantizeClip(this.trackId, this.clip.id, this.gridBeats)
+    bar.appendChild(swing)
+    bar.appendChild(mk('Quantize', 'Snap every note start to the grid (with the chosen swing)', () => {
+      if (this.clip) this.app.quantizeClip(this.trackId, this.clip.id, this.gridBeats, this.swing)
     }))
     bar.appendChild(mk('Humanize', 'Add subtle timing and velocity variation', () => {
       if (this.clip) this.app.humanizeClip(this.trackId, this.clip.id)
