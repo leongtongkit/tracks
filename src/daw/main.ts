@@ -519,6 +519,35 @@ window.__tracksEqTest = async () => {
   flat.tracks[0].mixer.eq = defaultEqBands() // all 0 dB → transparent
   const flatBuf = await renderProject(flat)
 
+  // gate fully closed (threshold above any envelope) → near silence;
+  // gate wide open (threshold below the envelope) → ~unchanged
+  const gateClosed = mk()
+  gateClosed.tracks[0].mixer.gate = { on: true, threshold: 0.5, floor: 0 }
+  const gateClosedBuf = await renderProject(gateClosed)
+  const gateOpen = mk()
+  gateOpen.tracks[0].mixer.gate = { on: true, threshold: 0.001, floor: 0 }
+  const gateOpenBuf = await renderProject(gateOpen)
+
+  // de-esser tames sibilance: on a noise-rich (sibilant) source, engaging it
+  // should pull high-frequency energy down versus de-ess off. Audio clip of
+  // white noise = a faithful stand-in for harsh "sss" content.
+  const noiseProject = (deEssOn: boolean): ReturnType<typeof defaultProject> => {
+    const p = defaultProject()
+    const fs = 44100
+    const nb = new AudioBuffer({ length: fs * 2, numberOfChannels: 1, sampleRate: fs })
+    const nd = nb.getChannelData(0)
+    for (let i = 0; i < nd.length; i++) nd[i] = (Math.random() * 2 - 1) * 0.4
+    const nid = newId()
+    sampleStore.put(nid, 'sibilance', nb)
+    const at = newTrack('Noise', { kind: 'audio' })
+    at.clips = [{ id: 'nz', start: 0, length: 4, notes: [], audio: { sampleId: nid, offsetSec: 0, gain: 1, warp: 'off', origBpm: 120, fadeIn: 0, fadeOut: 0 } }]
+    if (deEssOn) at.mixer.deEss = { on: true, amount: 1, freq: 6000 }
+    p.tracks = [at]
+    return p
+  }
+  const deEssOffBuf = await renderProject(noiseProject(false))
+  const deEssBuf = await renderProject(noiseProject(true))
+
   return {
     dryHf: hf(dry),
     lpHf: hf(lpBuf),
@@ -526,6 +555,12 @@ window.__tracksEqTest = async () => {
     hiHf: hf(hiBuf),
     band6BoostsHighs: hf(hiBuf) > hf(dry) * 1.15,
     flatTransparent: Math.abs(rms(flatBuf) - rms(dry)) / rms(dry) < 0.02,
+    gateClosedRms: rms(gateClosedBuf),
+    gateClosesWhenBelowThreshold: rms(gateClosedBuf) < rms(dry) * 0.2,
+    gateOpenPasses: rms(gateOpenBuf) > rms(dry) * 0.8,
+    deEssOffHf: hf(deEssOffBuf),
+    deEssOnHf: hf(deEssBuf),
+    deEssTamesHarshHighs: hf(deEssBuf) < hf(deEssOffBuf) * 0.9,
   }
 }
 

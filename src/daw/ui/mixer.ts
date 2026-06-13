@@ -166,6 +166,42 @@ export class MixerView {
     comp.appendChild(compDials)
     col.appendChild(comp)
 
+    const gate = document.createElement('div')
+    gate.className = 'mix-section'
+    const gateBtn = segBtn('Gate', 'Noise gate: silence the track below a threshold')
+    gateBtn.classList.toggle('seg-on', m.gate.on)
+    const gateDials = document.createElement('div')
+    gateDials.className = 'mix-subrow'
+    gateDials.classList.toggle('mix-dim', !m.gate.on)
+    gateBtn.addEventListener('click', () => {
+      this.app.setMixer(track.id, { gate: { ...m.gate, on: !m.gate.on } })
+      gateBtn.classList.toggle('seg-on', m.gate.on)
+      gateDials.classList.toggle('mix-dim', !m.gate.on)
+    })
+    gate.appendChild(gateBtn)
+    gateDials.appendChild(this.dial('Thr', track, { min: 0, max: 0.3, reset: 0.04, fmt: x100 }, () => m.gate.threshold, v => ({ gate: { ...m.gate, threshold: v } })))
+    gateDials.appendChild(this.dial('Flr', track, { min: 0, max: 1, reset: 0, fmt: x100 }, () => m.gate.floor, v => ({ gate: { ...m.gate, floor: v } })))
+    gate.appendChild(gateDials)
+    col.appendChild(gate)
+
+    const deEss = document.createElement('div')
+    deEss.className = 'mix-section'
+    const deEssBtn = segBtn('De-ess', 'De-esser: tame harsh sibilance (s/sh sounds)')
+    deEssBtn.classList.toggle('seg-on', m.deEss.on)
+    const deEssDials = document.createElement('div')
+    deEssDials.className = 'mix-subrow'
+    deEssDials.classList.toggle('mix-dim', !m.deEss.on)
+    deEssBtn.addEventListener('click', () => {
+      this.app.setMixer(track.id, { deEss: { ...m.deEss, on: !m.deEss.on } })
+      deEssBtn.classList.toggle('seg-on', m.deEss.on)
+      deEssDials.classList.toggle('mix-dim', !m.deEss.on)
+    })
+    deEss.appendChild(deEssBtn)
+    deEssDials.appendChild(this.dial('Amt', track, { min: 0, max: 1, reset: 0.5, fmt: x100 }, () => m.deEss.amount, v => ({ deEss: { ...m.deEss, amount: v } })))
+    deEssDials.appendChild(this.dial('Frq', track, { min: 2000, max: 12000, reset: 6500, fmt: v => `${(v / 1000).toFixed(1)}k` }, () => m.deEss.freq, v => ({ deEss: { ...m.deEss, freq: v } })))
+    deEss.appendChild(deEssDials)
+    col.appendChild(deEss)
+
     const sends = document.createElement('div')
     sends.className = 'mix-section'
     sends.appendChild(sectionTag('Send'))

@@ -99,6 +99,8 @@ export interface MixerState {
   solo: boolean
   eq: EqBand[] // 1..MAX_EQ_BANDS parametric bands, in series
   comp: { on: boolean; threshold: number; ratio: number; attack: number; release: number; makeup: number }
+  gate: { on: boolean; threshold: number; floor: number } // noise gate: close below threshold (linear env 0..0.3) down to floor gain
+  deEss: { on: boolean; amount: number; freq: number } // de-esser: dynamic high-shelf cut driven by sibilance level
   sendA: number // 0..1 to the reverb bus
   sendB: number // 0..1 to the delay bus
   duck: { source: string | null; amount: number } // sidechain: dip this track when `source` plays
@@ -189,6 +191,8 @@ export function defaultMixer(): MixerState {
     solo: false,
     eq: defaultEqBands(),
     comp: { on: false, threshold: -18, ratio: 3, attack: 0.01, release: 0.18, makeup: 1 },
+    gate: { on: false, threshold: 0.04, floor: 0 },
+    deEss: { on: false, amount: 0.5, freq: 6500 },
     sendA: 0,
     sendB: 0,
     duck: { source: null, amount: 0 },
@@ -350,6 +354,14 @@ function migrateTrack(raw: unknown, index: number): TrackData {
         release: clamp(comp.release, 0.02, 1, 0.18),
         makeup: clamp(comp.makeup, 0.25, 4, 1),
       },
+      gate: (() => {
+        const g = (typeof mixer.gate === 'object' && mixer.gate !== null ? mixer.gate : {}) as Record<string, unknown>
+        return { on: Boolean(g.on), threshold: clamp(g.threshold, 0, 0.3, 0.04), floor: clamp(g.floor, 0, 1, 0) }
+      })(),
+      deEss: (() => {
+        const d = (typeof mixer.deEss === 'object' && mixer.deEss !== null ? mixer.deEss : {}) as Record<string, unknown>
+        return { on: Boolean(d.on), amount: clamp(d.amount, 0, 1, 0.5), freq: clamp(d.freq, 2000, 12000, 6500) }
+      })(),
       sendA: clamp(mixer.sendA, 0, 1, 0),
       sendB: clamp(mixer.sendB, 0, 1, 0),
       duck: (() => {

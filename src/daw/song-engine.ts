@@ -28,6 +28,45 @@ const AUTOMATABLE: AutoTarget[] = ['volume', 'pan', 'sendA', 'sendB', 'eqLow', '
 // automation targets that map to EQ band gains, by slot index
 const EQ_SLOT_TARGETS: AutoTarget[] = ['eqLow', 'eqMid', 'eqHigh']
 
+// Maps a (non-negative) envelope level → gate gain: ~floor below threshold,
+// ramping smoothly to 1 above it. Used as a WaveShaper curve on the control path.
+function gateCurve(threshold: number, floor: number): Float32Array<ArrayBuffer> {
+  const N = 1024
+  const c = new Float32Array(N)
+  const w = Math.max(0.006, threshold * 0.6) // soft knee half-width
+  for (let i = 0; i < N; i++) {
+    const x = (i / (N - 1)) * 2 - 1 // waveshaper input domain
+    if (x <= 0) {
+      c[i] = floor
+      continue
+    }
+    const tt = Math.min(1, Math.max(0, (x - (threshold - w)) / (2 * w)))
+    c[i] = floor + (1 - floor) * (tt * tt * (3 - 2 * tt)) // smoothstep
+  }
+  return c
+}
+
+// Maps the high-band envelope → a bounded high-shelf cut (dB). Engages above a
+// low threshold and caps at -amount*18 dB so loud sibilance is tamed without
+// the cut running away on louder material.
+function deEssCurve(amount: number): Float32Array<ArrayBuffer> {
+  const N = 1024
+  const c = new Float32Array(N)
+  const maxCut = amount * 18
+  const lo = 0.012
+  const hi = 0.08
+  for (let i = 0; i < N; i++) {
+    const x = (i / (N - 1)) * 2 - 1 // envelope domain (non-negative in practice)
+    if (x <= lo) {
+      c[i] = 0
+      continue
+    }
+    const tt = Math.min(1, Math.max(0, (x - lo) / (hi - lo)))
+    c[i] = -maxCut * (tt * tt * (3 - 2 * tt))
+  }
+  return c
+}
+
 export interface SendBuses {
   a: AudioNode
   b: AudioNode
@@ -42,7 +81,13 @@ export class TrackChannel {
   private readonly instr: Instrument | null
   private readonly fxChain: FxChain | null
   private readonly ctx: BaseAudioContext
+  private readonly gateGain: GainNode // noise gate (control-driven), pre-EQ
+  private gateNodes: { abs: WaveShaperNode; lp: BiquadFilterNode; shaper: WaveShaperNode } | null = null
   private readonly eqBands: BiquadFilterNode[] // fixed MAX_EQ_BANDS slots, in series
+  private readonly deEss: BiquadFilterNode // dynamic high-shelf cut (de-esser), post-EQ
+  private deEssNodes: { hp: BiquadFilterNode; abs: WaveShaperNode; lp: BiquadFilterNode; shaper: WaveShaperNode } | null = null
+  private readonly gateSource!: AudioNode // signal feeding the gate (for detection)
+  private readonly deEssSource!: AudioNode // signal feeding the de-esser (for detection)
   private readonly comp: DynamicsCompressorNode
   private readonly makeup: GainNode
   private readonly duckGain: GainNode
@@ -62,6 +107,8 @@ export class TrackChannel {
     this.kind = data.kind
     this.input = ctx.createGain()
 
+    this.gateGain = ctx.createGain()
+    this.gateGain.gain.value = 1
     // fixed pool of biquads; unused slots run transparent (peaking, 0 dB)
     this.eqBands = Array.from({ length: MAX_EQ_BANDS }, () => {
       const b = ctx.createBiquadFilter()
@@ -71,6 +118,10 @@ export class TrackChannel {
       b.Q.value = 1
       return b
     })
+    this.deEss = ctx.createBiquadFilter()
+    this.deEss.type = 'highshelf'
+    this.deEss.frequency.value = 6500
+    this.deEss.gain.value = 0
 
     this.comp = ctx.createDynamicsCompressor()
     this.comp.knee.value = 8
@@ -133,12 +184,17 @@ export class TrackChannel {
 
     if (this.fxChain) {
       this.input.connect(this.fxChain.input)
-      this.fxChain.output.connect(this.eqBands[0])
+      this.fxChain.output.connect(this.gateGain)
     } else {
-      this.input.connect(this.eqBands[0])
+      this.input.connect(this.gateGain)
     }
+    this.gateSource = this.fxChain ? this.fxChain.output : this.input
+    this.gateGain.connect(this.eqBands[0])
     for (let i = 0; i < this.eqBands.length - 1; i++) this.eqBands[i].connect(this.eqBands[i + 1])
-    this.eqBands[this.eqBands.length - 1].connect(this.comp)
+    const lastEq = this.eqBands[this.eqBands.length - 1]
+    this.deEssSource = lastEq
+    lastEq.connect(this.deEss)
+    this.deEss.connect(this.comp)
     this.comp.connect(this.makeup)
     this.makeup.connect(this.duckGain)
     this.duckGain.connect(this.pan)
@@ -284,6 +340,93 @@ export class TrackChannel {
     this.duckNodes = { source, abs, lp, scale }
   }
 
+  // Noise gate: an envelope follower on the pre-EQ signal drives gateGain.gain
+  // through a threshold-shaping curve (closed below threshold, open above).
+  setGate(gate: TrackData['mixer']['gate']): void {
+    const t = this.ctx.currentTime
+    if (!gate.on) {
+      if (this.gateNodes) {
+        this.gateNodes.shaper.disconnect()
+        this.gateNodes.lp.disconnect()
+        this.gateNodes.abs.disconnect()
+        try {
+          this.gateSource.disconnect(this.gateNodes.abs)
+        } catch {
+          // already disconnected
+        }
+        this.gateNodes = null
+      }
+      this.gateGain.gain.cancelScheduledValues(t)
+      this.gateGain.gain.setTargetAtTime(1, t, 0.01)
+      return
+    }
+    if (!this.gateNodes) {
+      const abs = this.ctx.createWaveShaper()
+      const curve = new Float32Array(257)
+      for (let i = 0; i < 257; i++) curve[i] = Math.abs(i / 128 - 1)
+      abs.curve = curve
+      const lp = this.ctx.createBiquadFilter()
+      lp.type = 'lowpass'
+      lp.frequency.value = 40 // gate attack/release speed
+      const shaper = this.ctx.createWaveShaper()
+      this.gateSource.connect(abs)
+      abs.connect(lp)
+      lp.connect(shaper)
+      this.gateGain.gain.setValueAtTime(0, t) // gain is fully control-driven
+      shaper.connect(this.gateGain.gain)
+      this.gateNodes = { abs, lp, shaper }
+    }
+    this.gateNodes.shaper.curve = gateCurve(gate.threshold, gate.floor)
+    this.gateGain.gain.setValueAtTime(0, t)
+  }
+
+  // De-esser: an envelope follower on the high band pushes the de-ess high-shelf
+  // gain negative when sibilance is loud (a dynamic high cut).
+  setDeEss(de: TrackData['mixer']['deEss']): void {
+    const t = this.ctx.currentTime
+    if (!de.on || de.amount <= 0.001) {
+      if (this.deEssNodes) {
+        this.deEssNodes.shaper.disconnect()
+        this.deEssNodes.lp.disconnect()
+        this.deEssNodes.abs.disconnect()
+        this.deEssNodes.hp.disconnect()
+        try {
+          this.deEssSource.disconnect(this.deEssNodes.hp)
+        } catch {
+          // already disconnected
+        }
+        this.deEssNodes = null
+      }
+      this.deEss.gain.cancelScheduledValues(t)
+      this.deEss.gain.setTargetAtTime(0, t, 0.02)
+      return
+    }
+    if (!this.deEssNodes) {
+      const hp = this.ctx.createBiquadFilter()
+      hp.type = 'highpass'
+      hp.Q.value = 0.9
+      const abs = this.ctx.createWaveShaper()
+      const curve = new Float32Array(257)
+      for (let i = 0; i < 257; i++) curve[i] = Math.abs(i / 128 - 1)
+      abs.curve = curve
+      const lp = this.ctx.createBiquadFilter()
+      lp.type = 'lowpass'
+      lp.frequency.value = 30
+      // maps high-band envelope → a bounded shelf cut in dB (calibrated, capped)
+      const shaper = this.ctx.createWaveShaper()
+      this.deEssSource.connect(hp)
+      hp.connect(abs)
+      abs.connect(lp)
+      lp.connect(shaper)
+      this.deEss.gain.setValueAtTime(0, t)
+      shaper.connect(this.deEss.gain)
+      this.deEssNodes = { hp, abs, lp, shaper }
+    }
+    this.deEssNodes.hp.frequency.setTargetAtTime(de.freq, t, 0.02)
+    this.deEss.frequency.setTargetAtTime(de.freq, t, 0.02)
+    this.deEssNodes.shaper.curve = deEssCurve(de.amount)
+  }
+
   // is this target currently owned by automation? (then applyMixer leaves it)
   private automated(target: AutoTarget): boolean {
     const pts = this.data.auto[target]
@@ -334,6 +477,8 @@ export class TrackChannel {
       this.makeup.gain.setTargetAtTime(1, t, 0.02)
     }
     if (mixer.comp.on) this.comp.knee.setTargetAtTime(8, t, 0.02)
+    this.setGate(mixer.gate)
+    this.setDeEss(mixer.deEss)
     if (!this.automated('sendA')) this.sendA.gain.setTargetAtTime(mixer.sendA, t, 0.02)
     if (!this.automated('sendB')) this.sendB.gain.setTargetAtTime(mixer.sendB, t, 0.02)
     const audible = !mixer.mute && (!soloElsewhere || mixer.solo)
@@ -346,7 +491,9 @@ export class TrackChannel {
     this.engine?.masterGain.disconnect()
     this.instr?.dispose()
     this.setDuck(null, 0)
-    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, ...this.eqBands, this.comp, this.makeup, this.duckGain, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]
+    this.setGate({ on: false, threshold: 0, floor: 0 })
+    this.setDeEss({ on: false, amount: 0, freq: 6500 })
+    const nodes: (AudioNode | null)[] = [this.input, this.fxChain?.input ?? null, this.fxChain?.output ?? null, this.gateGain, ...this.eqBands, this.deEss, this.comp, this.makeup, this.duckGain, this.pan, this.volume, this.muteGain, this.sendA, this.sendB, this.analyser]
     for (const n of nodes) n?.disconnect()
   }
 }
