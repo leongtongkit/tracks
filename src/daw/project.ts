@@ -165,6 +165,9 @@ export interface TrackData {
   mixer: MixerState
   auto: Automation
   clips: Clip[]
+  // session-view slots (one per scene row); null = empty. Launching a slot loops
+  // that clip on this track, overriding the arrangement.
+  session: (Clip | null)[]
   // when set, the track's instrument is bounced to this sample (rendered with a
   // neutral strip) and played back through the live strip instead of synthesised
   // live — saves CPU. lengthBeats is the bounce length on the song timeline.
@@ -199,6 +202,7 @@ export interface Project {
   // ruler/grid only — clip timing stays in quarter-note beats.
   timeSig: { num: number; den: number }
   tempoMap: TempoEvent[] // tempo changes after beat 0 (beat 0 = bpm); empty = constant tempo
+  scenes: { name: string }[] // session-view rows
   markers: Marker[]
   loop: { on: boolean; start: number; end: number } // beats
   tracks: TrackData[]
@@ -323,6 +327,7 @@ export function newTrack(name: string, opts: { preset?: string; kind?: TrackKind
     mixer: defaultMixer(),
     auto: {},
     clips: [],
+    session: [],
   }
 }
 
@@ -334,6 +339,7 @@ export function defaultProject(): Project {
     key: { root: 0, scale: 'chromatic' },
     timeSig: { num: 4, den: 4 },
     tempoMap: [],
+    scenes: [],
     markers: [],
     loop: { on: false, start: 0, end: 16 },
     tracks: [
@@ -427,6 +433,12 @@ export function migrateProject(raw: unknown): Project {
       })
       .filter(e => e.beat > 0 && Number.isFinite(e.bpm))
       .sort((a, b) => a.beat - b.beat),
+    scenes: (Array.isArray(p.scenes) ? p.scenes : [])
+      .slice(0, 64)
+      .map((s, i) => {
+        const o = (typeof s === 'object' && s !== null ? s : {}) as Record<string, unknown>
+        return { name: typeof o.name === 'string' ? o.name.slice(0, 40) : `Scene ${i + 1}` }
+      }),
     markers: (Array.isArray(p.markers) ? p.markers : [])
       .slice(0, 256)
       .map(m => {
@@ -501,6 +513,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
     },
     auto: migrateAuto(auto),
     clips: clips.slice(0, 256).map(migrateClip).filter((c): c is Clip => c !== null),
+    session: (Array.isArray(t.session) ? t.session : []).slice(0, 64).map(s => (s === null ? null : migrateClip(s))),
     ...(() => {
       const f = (typeof t.frozen === 'object' && t.frozen !== null ? t.frozen : null) as Record<string, unknown> | null
       return f && typeof f.sampleId === 'string' && f.sampleId

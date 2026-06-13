@@ -1421,3 +1421,138 @@
 .track-frozen {
   box-shadow: inset 3px 0 0 #4a86ad;
 }
+
+/* ---------- session view ---------- */
+.session-card {
+  min-width: 640px;
+  max-width: 92vw;
+  cursor: default;
+  display: grid;
+  gap: 12px;
+}
+
+.session-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.session-head h2 {
+  margin: 0;
+  margin-right: auto;
+}
+
+.session-grid {
+  display: grid;
+  gap: 4px;
+  max-height: 62vh;
+  overflow: auto;
+}
+
+.session-corner,
+.session-track-head {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ink-soft);
+  padding: 4px 6px;
+  border-bottom: 1px solid var(--edge);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.session-scene {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.66rem;
+  color: var(--ink);
+  padding: 0 4px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.session-scene-launch {
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--edge);
+  border-radius: 3px;
+  background: var(--panel-grey);
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 0.6rem;
+}
+
+.session-scene-launch:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.session-slot {
+  display: flex;
+  align-items: stretch;
+  gap: 2px;
+  min-height: 30px;
+  border: 1px solid var(--well-edge);
+  border-radius: 4px;
+  background: var(--well, #1c1c1e);
+  padding: 2px;
+}
+
+.session-empty {
+  background: #161618;
+}
+
+.session-clip {
+  flex: 1 1 auto;
+  border: none;
+  border-radius: 3px;
+  background: #2c2c30;
+  color: var(--bone, #e2e1dc);
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  cursor: pointer;
+  text-align: left;
+  padding: 2px 6px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.session-clip:hover {
+  background: #3a3a40;
+}
+
+.session-playing .session-clip {
+  background: var(--accent);
+  color: #0b0b0c;
+  font-weight: 600;
+}
+
+.session-clear,
+.session-add {
+  flex: 0 0 auto;
+  width: 20px;
+  border: none;
+  border-radius: 3px;
+  background: transparent;
+  color: var(--ink-soft);
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+.session-add {
+  width: 100%;
+  color: #55555c;
+}
+
+.session-clear:hover {
+  color: #c8503a;
+}
+
+.session-add:hover {
+  color: var(--accent);
+}

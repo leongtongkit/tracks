@@ -59,6 +59,10 @@ export interface TransportEvents {
   discontinuity?(at?: number): void
   click?(t: number, accent: boolean): void
   onWrap?(): void
+  // session view: tracks with a launched session clip are skipped by the
+  // arrangement, and their looped clips are booked by sessionSlice instead
+  sessionActiveTrack?(trackId: string): boolean
+  sessionSlice?(fromBeat: number, toBeat: number, beatToTime: (beat: number) => number): void
 }
 
 const LOOKAHEAD_S = 0.12
@@ -251,7 +255,10 @@ export class Transport {
       let sliceEnd = this.scanBeat + CHUNK_BEATS
       if (loopActive && this.scanBeat < loop.end) sliceEnd = Math.min(sliceEnd, loop.end)
 
-      const events = collectEvents(project.tracks, this.scanBeat, sliceEnd)
+      const sessionOn = this.events.sessionActiveTrack
+      const events = collectEvents(project.tracks, this.scanBeat, sliceEnd).filter(ev => !sessionOn?.(ev.trackId))
+      // session-view looped clips override the arrangement on their tracks
+      this.events.sessionSlice?.(this.scanBeat, sliceEnd, b => this.beatToTime(b))
       for (const ev of events) {
         const tOn = this.beatToTime(ev.startBeat)
         this.events.noteOn(ev.trackId, ev.pitch, ev.vel, tOn)
@@ -261,6 +268,7 @@ export class Transport {
       this.events.slice?.(this.scanBeat, sliceEnd, b => this.beatToTime(b))
       if (this.events.audio) {
         for (const ev of collectAudioEvents(project.tracks, this.scanBeat, sliceEnd)) {
+          if (sessionOn?.(ev.trackId)) continue
           // a clip crossing the loop end gets cut there, exactly at the wrap
           let durBeats = ev.durBeats
           if (loopActive && ev.startBeat + durBeats > loop.end) durBeats = loop.end - ev.startBeat

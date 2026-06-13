@@ -6,6 +6,7 @@ import { scheduleAutomation } from './automation'
 import { History } from './history'
 import { MicRecorder } from './mic'
 import {
+  beatsPerBar,
   defaultMixer,
   defaultProject,
   newId,
@@ -22,6 +23,7 @@ import {
 } from './project'
 import { renderProject } from './render'
 import { sampleStore } from './samples'
+import { quantizeLaunch, sessionAudioEvents, sessionNoteEvents } from './session'
 import { settings } from './settings'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
@@ -59,6 +61,8 @@ export class DawApp {
           if (!this.transport.playing) this.song?.applyAutomationStatic(this.transport.positionBeat())
         },
         click: (t, accent) => this.click(t, accent),
+        sessionActiveTrack: trackId => this.sessionActiveTrack(trackId),
+        sessionSlice: (from, to, beatToTime) => this.bookSessionSlice(from, to, beatToTime),
       },
     })
     this.history = new History(this)
@@ -224,6 +228,103 @@ export class DawApp {
     this.checkpoint('remove marker')
     this.project.markers.splice(index, 1)
     this.emit('project')
+  }
+
+  // ---------- session view (clip launch) ----------
+
+  // tracks with a launched session clip → { clip, launchBeat (quantised) }
+  private readonly sessionActive = new Map<string, { clip: Clip; launchBeat: number }>()
+
+  isSlotPlaying(trackId: string, sceneIndex: number): boolean {
+    const a = this.sessionActive.get(trackId)
+    return !!a && this.track(trackId)?.session[sceneIndex] === a.clip
+  }
+
+  sessionActiveTrack(trackId: string): boolean {
+    return this.sessionActive.has(trackId)
+  }
+
+  addScene(): void {
+    this.checkpoint('add scene')
+    this.project.scenes.push({ name: `Scene ${this.project.scenes.length + 1}` })
+    this.emit('tracks')
+  }
+
+  // put a copy of the currently-selected clip (or a new empty one) into a slot
+  captureToSlot(trackId: string, sceneIndex: number): void {
+    const track = this.track(trackId)
+    if (!track) return
+    const sel = this.selectedClip ? this.clip(this.selectedClip) : null
+    const src = sel && this.selectedClip?.trackId === trackId ? sel : null
+    const clip: Clip = src
+      ? { ...structuredClone(src), id: newId(), start: 0 }
+      : { id: newId(), start: 0, length: 4, notes: [] }
+    this.checkpoint('capture session clip')
+    while (track.session.length <= sceneIndex) track.session.push(null)
+    track.session[sceneIndex] = clip
+    if (sceneIndex >= this.project.scenes.length) this.project.scenes.push({ name: `Scene ${sceneIndex + 1}` })
+    this.emit('tracks')
+  }
+
+  clearSlot(trackId: string, sceneIndex: number): void {
+    const track = this.track(trackId)
+    if (!track || !track.session[sceneIndex]) return
+    this.checkpoint('clear session clip')
+    if (this.isSlotPlaying(trackId, sceneIndex)) this.stopSlot(trackId)
+    track.session[sceneIndex] = null
+    this.emit('tracks')
+  }
+
+  // launch a slot: it loops on its track from the next bar, overriding the arrangement
+  launchSlot(trackId: string, sceneIndex: number): void {
+    const clip = this.track(trackId)?.session[sceneIndex]
+    if (!clip) {
+      this.stopSlot(trackId)
+      return
+    }
+    this.ensureAudio()
+    // register the override BEFORE (re)starting the transport, so the first
+    // pump books the session clip instead of the arrangement on this track
+    const bar = beatsPerBar(this.project.timeSig)
+    const launchBeat = quantizeLaunch(this.transport.positionBeat(), bar)
+    this.sessionActive.set(trackId, { clip, launchBeat })
+    if (!this.transport.playing) this.transport.start()
+    this.emit('tracks', 'transport')
+  }
+
+  stopSlot(trackId: string): void {
+    if (!this.sessionActive.delete(trackId)) return
+    this.song?.channel(trackId)?.allNotesOff()
+    this.emit('tracks', 'transport')
+  }
+
+  launchScene(sceneIndex: number): void {
+    for (const track of this.project.tracks) {
+      if (track.session[sceneIndex]) this.launchSlot(track.id, sceneIndex)
+      else this.stopSlot(track.id)
+    }
+  }
+
+  stopAllSession(): void {
+    for (const id of [...this.sessionActive.keys()]) this.stopSlot(id)
+  }
+
+  // book the looped session clips due in [from, to) (called from the transport pump)
+  private bookSessionSlice(from: number, to: number, beatToTime: (b: number) => number): void {
+    if (!this.song) return
+    for (const [trackId, a] of this.sessionActive) {
+      for (const ev of sessionNoteEvents(a.clip, trackId, a.launchBeat, from, to)) {
+        const tOn = beatToTime(ev.startBeat)
+        this.song.noteOn(trackId, ev.pitch, ev.vel, tOn)
+        this.song.noteOff(trackId, ev.pitch, Math.max(tOn + 0.02, beatToTime(ev.startBeat + ev.durBeats) - 0.01))
+      }
+      for (const ev of sessionAudioEvents(a.clip, trackId, a.launchBeat, from, to)) {
+        const rate = warpRate(ev.region, this.project.bpm)
+        const end = ev.startBeat + ev.durBeats
+        const wall = beatToTime(end) - beatToTime(ev.startBeat)
+        this.song.playClip(trackId, ev.region, beatToTime(ev.startBeat), ev.region.offsetSec, wall * rate, rate, 0, 0)
+      }
+    }
   }
 
   // ---------- tracks ----------

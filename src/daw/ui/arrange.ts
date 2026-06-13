@@ -4,6 +4,7 @@
 import { AUTO_TARGETS, autoTargetMeta } from '../automation-targets'
 import type { DawApp } from '../daw-app'
 import { beatsPerBar, projectEndBeat, warpRate, type AutoTarget, type Clip, type TrackData } from '../project'
+import { buildSessionGrid } from './session-grid'
 import { sampleStore } from '../samples'
 import { settings } from '../settings'
 import { miniDial } from './mini-dial'
@@ -30,9 +31,11 @@ export class ArrangeView {
   private loopBtn!: HTMLButtonElement
   private metroBtn!: HTMLButtonElement
   private writeBtn!: HTMLButtonElement
+  private readonly sessionGrid: { toggle(): void }
 
   constructor(app: DawApp) {
     this.app = app
+    this.sessionGrid = buildSessionGrid(app)
     this.el = document.createElement('div')
     this.el.className = 'arrange'
     this.el.appendChild(this.buildTransportBar())
@@ -157,6 +160,9 @@ export class ArrangeView {
     sig.appendChild(sigLabel)
     sig.appendChild(sigSel)
 
+    const session = btn('Session', 'Session view — launch looping clips in a scenes × tracks grid')
+    session.addEventListener('click', () => this.sessionGrid.toggle())
+
     const zoomOut = btn('-', 'Zoom out')
     zoomOut.addEventListener('click', () => this.setZoom(this.ppb / 1.4))
     const zoomIn = btn('+', 'Zoom in')
@@ -177,6 +183,7 @@ export class ArrangeView {
     bar.appendChild(sig)
     bar.appendChild(key)
     bar.appendChild(spacer)
+    bar.appendChild(session)
     bar.appendChild(zoomOut)
     bar.appendChild(zoomIn)
     return bar
