@@ -4,6 +4,15 @@
    Tokens mirror src/style.css :root (kept in sync by hand — this file is
    static and served by Workers Static Assets, outside the Vite graph). */
 
+/* Brand typography — Indian Type Foundry, self-hosted (Fontshare), woff2 only.
+   Array = branding/display, Satoshi = body + labels. Array ships one weight, so
+   its @font-face claims the full weight range to avoid faux-bold synthesis. */
+@font-face { font-family: 'Array'; src: url('/fonts/array-400.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-900.woff2') format('woff2'); font-weight: 900; font-style: normal; font-display: swap; }
+
 :root {
   --desk: #141415;
   --desk-dot: #232325;
@@ -24,9 +33,11 @@
   --radius-lg: 10px;
   --radius-md: 6px;
   --radius-sm: 3px;
-  --font-display: 'IBM Plex Sans Condensed', 'Arial Narrow', system-ui, sans-serif;
-  --font-text: 'IBM Plex Sans', system-ui, sans-serif;
-  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+  --font-display: 'Array', 'Arial Narrow', system-ui, sans-serif; /* branding */
+  --font-text: 'Satoshi', system-ui, sans-serif; /* body */
+  /* the small uppercase technical labels now ride the body font (kept tracked
+     uppercase in CSS) so the marketing site is a clean two-font system */
+  --font-mono: 'Satoshi', system-ui, sans-serif;
   --ease-snap: cubic-bezier(0.2, 0.9, 0.3, 1);
   --maxw: 1080px;
 }

@@ -1,7 +1,6 @@
-// self-hosted fonts: Google Fonts is unreliable for visitors in China
-import '@fontsource/ibm-plex-sans-condensed/500.css'
-import '@fontsource/ibm-plex-sans-condensed/600.css'
-import '@fontsource/ibm-plex-sans-condensed/700.css'
+// self-hosted fonts: Google Fonts is unreliable for visitors in China.
+// Array (branding) + Satoshi (body) load via @font-face in style.css; only the
+// functional mono readout face comes from @fontsource here.
 import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
 import { Engine } from './engine/engine'

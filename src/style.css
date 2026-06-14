@@ -1,6 +1,16 @@
 /* synth.jfound.net — "TE industrial": grey aluminum, hairline structure,
    one orange accent reserved for live state, LED-orange readouts */
 
+/* Brand typography — Indian Type Foundry, self-hosted (Fontshare), woff2 only.
+   Array = branding/display (the wordmark); Satoshi = body/UI text. IBM Plex Mono
+   stays for the dense functional readouts/labels (digit alignment). Array ships
+   one weight, so its @font-face claims the full range to avoid faux-bold. */
+@font-face { font-family: 'Array'; src: url('/fonts/array-400.woff2') format('woff2'); font-weight: 100 900; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-400.woff2') format('woff2'); font-weight: 400; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-500.woff2') format('woff2'); font-weight: 500; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-700.woff2') format('woff2'); font-weight: 700; font-style: normal; font-display: swap; }
+@font-face { font-family: 'Satoshi'; src: url('/fonts/satoshi-900.woff2') format('woff2'); font-weight: 900; font-style: normal; font-display: swap; }
+
 :root {
   /* surfaces */
   --desk: #141415;
@@ -28,8 +38,9 @@
   --radius-md: 6px;
   --radius-sm: 3px;
 
-  --font-display: 'IBM Plex Sans Condensed', sans-serif;
-  --font-mono: 'IBM Plex Mono', monospace;
+  --font-display: 'Array', 'Arial Narrow', sans-serif; /* branding (wordmark) */
+  --font-text: 'Satoshi', system-ui, sans-serif; /* body / UI text */
+  --font-mono: 'IBM Plex Mono', monospace; /* functional readouts/labels */
 
   --ease-snap: cubic-bezier(0.2, 0.9, 0.3, 1);
 }
@@ -50,7 +61,7 @@ body {
   background-image: radial-gradient(var(--desk-dot) 1px, transparent 1px);
   background-size: 24px 24px;
   color: var(--bone);
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   user-select: none;
   -webkit-user-select: none;
 }
@@ -70,6 +81,7 @@ body {
 }
 
 #scrim h1 {
+  font-family: var(--font-display);
   font-size: clamp(2.4rem, 7vw, 3.8rem);
   font-weight: 700;
   letter-spacing: 0.3em;
@@ -297,7 +309,7 @@ body {
 }
 
 .seg-btn {
-  font-family: var(--font-display);
+  font-family: var(--font-text);
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.08em;

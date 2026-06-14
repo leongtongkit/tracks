@@ -1,7 +1,6 @@
 // Tracks DAW entry: arrangement view + transport + bottom editor panel.
-import '@fontsource/ibm-plex-sans-condensed/500.css'
-import '@fontsource/ibm-plex-sans-condensed/600.css'
-import '@fontsource/ibm-plex-sans-condensed/700.css'
+// Array (branding) + Satoshi (body) load via @font-face in style.css; mono
+// readout face from @fontsource.
 import '@fontsource/ibm-plex-mono/400.css'
 import '@fontsource/ibm-plex-mono/500.css'
 
