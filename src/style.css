@@ -104,6 +104,67 @@ body {
   display: none;
 }
 
+/* ---------- phone block (studio/synth need a bigger screen) ---------- */
+
+.mobile-block {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  padding: 1.6rem;
+  background: var(--desk);
+  background-image: radial-gradient(var(--desk-dot) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.mobile-block .mb-card {
+  max-width: 22rem;
+}
+.mobile-block h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 13vw, 2.6rem);
+  letter-spacing: 0.16em;
+  margin-right: -0.16em;
+  color: var(--accent);
+  margin-bottom: 1.3rem;
+}
+.mobile-block .mb-lead {
+  font-family: var(--font-text);
+  color: var(--bone);
+  font-size: 1.08rem;
+  margin-bottom: 0.6rem;
+}
+.mobile-block .mb-sub {
+  font-family: var(--font-text);
+  color: var(--bone-dim);
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+.mobile-block .mb-sub strong {
+  color: var(--bone);
+}
+.mobile-block .mb-links {
+  display: flex;
+  gap: 0.7rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 1.6rem;
+}
+.mobile-block .mb-links a {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--well-edge);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem 0.95rem;
+}
+.mobile-block .mb-links a:hover {
+  border-color: var(--accent);
+}
+
 /* ---------- device shell ---------- */
 
 #app {
