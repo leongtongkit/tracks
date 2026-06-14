@@ -333,6 +333,10 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
    color (--led) would otherwise tint button text orange-on-orange */
 .article a.btn-primary, .help-content a.btn-primary, .cta-card a.btn-primary { color: #1a0c04; }
 .article a.btn-ghost, .help-content a.btn-ghost { color: var(--bone); }
+/* the light .article/.help-content h3+p rules reach into the cta-card (a light
+   panel) and wash the text out — restore the card's dark text everywhere */
+.article .cta-card h3, .help-content .cta-card h3 { color: var(--ink); }
+.article .cta-card p, .help-content .cta-card p { color: #4a4943; }
 
 /* ---------- community ---------- */
 
