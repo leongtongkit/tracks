@@ -46,8 +46,10 @@
     <main>
       <div class="help-layout">
         <aside class="help-toc">
-          <p class="toc-title">On this page</p>
-          <nav>
+          <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="help-toc-nav">
+            <span>On this page</span><span class="toc-caret" aria-hidden="true">▾</span>
+          </button>
+          <nav id="help-toc-nav">
             <a href="#start">Getting started</a>
             <a href="#transport">The transport bar</a>
             <a href="#tracks">Tracks</a>
@@ -68,7 +70,7 @@
 
         <article class="help-content">
           <h1>Help &amp; support</h1>
-          <p class="help-intro">Everything you can do in the <a href="/studio">Tracks studio</a>, explained — start with the tutorial, then use the list on the left to jump to any feature. Tracks is free, runs entirely in your browser, and never uploads your music.</p>
+          <p class="help-intro">Everything you can do in the <a href="/studio">Tracks studio</a>, explained — start with the tutorial, then use the contents menu to jump to any feature. Tracks is free, runs entirely in your browser, and never uploads your music.</p>
 
           <section id="start">
             <h2>Getting started</h2>
@@ -332,5 +334,24 @@
       </div>
       <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
     </footer>
+
+    <script>
+      (function () {
+        var toc = document.querySelector('.help-toc');
+        if (!toc) return;
+        var btn = toc.querySelector('.toc-toggle');
+        var nav = toc.querySelector('#help-toc-nav');
+        btn.addEventListener('click', function () {
+          var open = toc.classList.toggle('open');
+          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        nav.addEventListener('click', function (e) {
+          if (e.target.tagName === 'A') {
+            toc.classList.remove('open');
+            btn.setAttribute('aria-expanded', 'false');
+          }
+        });
+      })();
+    </script>
   </body>
 </html>
