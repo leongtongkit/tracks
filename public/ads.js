@@ -23,7 +23,7 @@
   'use strict';
 
   // ---- configuration (empty = ads disabled, placeholders only) ----
-  var ADSENSE_CLIENT = ''; // e.g. 'ca-pub-XXXXXXXXXXXXXXXX'
+  var ADSENSE_CLIENT = 'ca-pub-4201800488909351';
   var SLOT_IDS = {
     'landing-mid': '',   // leaderboard on the landing page
     'blog-top': '',      // top of an article
@@ -47,6 +47,7 @@
 
   // Inject the dismissible in-studio unit if not already present.
   function ensureStudioSlot() {
+    if (!SLOT_IDS.studio) return; // no in-studio ad unit configured yet
     if (!onStudio() || document.getElementById('ad-studio')) return;
     if (localStorage.getItem('tracks.ad-studio.dismissed') === '1') return;
     var box = document.createElement('div');
@@ -65,6 +66,9 @@
   var adsenseLoaded = false;
   function loadAdsense() {
     if (adsenseLoaded || !ADSENSE_CLIENT) return;
+    // Auto ads are loaded by the <script> in each content page's <head>; if it's
+    // already on the page, don't add a second copy (that throws in adsbygoogle).
+    if (document.querySelector('script[src*="adsbygoogle.js"]')) { adsenseLoaded = true; return; }
     adsenseLoaded = true;
     var s = document.createElement('script');
     s.async = true;

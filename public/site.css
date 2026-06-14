@@ -376,6 +376,9 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
 .ad-slot::before { content: 'ADVERTISEMENT'; }
 .ad-slot.is-filled::before { content: none; }
 .ad-leaderboard { width: 100%; }
+/* AdSense Auto ads place units automatically; keep the manual placeholder
+   boxes hidden unless a manual ad unit actually fills one. */
+.ad-slot:not(.is-filled) { display: none; }
 
 /* in-studio dismissible ad unit (injected by ads.js on /studio) */
 #ad-studio {
