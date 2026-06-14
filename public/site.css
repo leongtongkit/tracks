@@ -412,8 +412,92 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
 
 /* ---------- responsive ---------- */
 
+/* ---------- community hub ---------- */
+
+.board-cta { display: inline-block; margin: 0.4rem 0 2rem; }
+.cat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+  padding-bottom: 1rem;
+}
+.cat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: var(--panel-grey);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-md);
+  padding: 1.3rem;
+  text-decoration: none;
+  transition: transform 0.14s var(--ease-snap), border-color 0.16s;
+}
+.cat-card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.cat-card .cat-name { font-family: var(--font-display); font-weight: 700; font-size: 1.2rem; }
+.cat-card .cat-desc { font-size: 0.92rem; color: #4a4943; flex: 1; }
+.cat-card .cat-go { font-family: var(--font-mono); font-size: 0.72rem; color: var(--accent-deep); letter-spacing: 0.04em; }
+.cat-card-alt { background: var(--well); color: var(--bone); border-color: var(--well-edge); }
+.cat-card-alt .cat-desc { color: var(--bone-dim); }
+.cat-card-alt .cat-go { color: var(--led); }
+
+/* ---------- help / support page ---------- */
+
+.help-layout {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 2.5rem;
+  padding: clamp(2rem, 6vw, 3.5rem) 0 4rem;
+  align-items: start;
+}
+.help-toc { position: sticky; top: 72px; }
+.help-toc .toc-title { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.16em; color: var(--bone-dim); margin-bottom: 0.6rem; }
+.help-toc nav { display: flex; flex-direction: column; border-left: 1px solid var(--well-edge); }
+.help-toc a {
+  font-size: 0.86rem;
+  color: var(--bone-dim);
+  text-decoration: none;
+  padding: 0.28rem 0 0.28rem 0.9rem;
+  margin-left: -1px;
+  border-left: 2px solid transparent;
+  transition: color 0.14s, border-color 0.14s;
+}
+.help-toc a:hover { color: var(--bone); border-left-color: var(--accent); }
+.help-content { max-width: 48rem; min-width: 0; }
+.help-content h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(2rem, 5vw, 2.8rem); color: var(--bone); margin-bottom: 0.8rem; }
+.help-intro { font-size: 1.1rem; color: var(--body-grey); margin-bottom: 1rem; }
+.help-content section { padding-top: 1.2rem; scroll-margin-top: 72px; }
+.help-content h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; color: var(--bone); margin: 1.6rem 0 0.7rem; padding-bottom: 0.4rem; border-bottom: 1px solid var(--well-edge); }
+.help-content h3 { font-family: var(--font-display); font-weight: 600; font-size: 1.16rem; color: var(--bone); margin: 1.4rem 0 0.5rem; }
+.help-content p { color: var(--body-grey); margin-bottom: 0.9rem; }
+.help-content li { color: var(--body-grey); margin-bottom: 0.4rem; }
+.help-content a { color: var(--led); }
+.help-content strong { color: var(--bone); }
+.help-content code { font-family: var(--font-mono); font-size: 0.85em; background: var(--well); border: 1px solid var(--well-edge); border-radius: 3px; padding: 0.05em 0.35em; color: var(--bone); }
+.help-content ul, .help-content ol { padding-left: 1.4rem; margin-bottom: 1rem; }
+.help-steps li { margin-bottom: 0.7rem; }
+dl.kv { display: grid; grid-template-columns: minmax(120px, 220px) 1fr; gap: 0 1.2rem; margin: 0.6rem 0 1.2rem; }
+dl.kv dt { font-family: var(--font-display); font-weight: 600; color: var(--bone); padding: 0.5rem 0; border-top: 1px solid var(--well-edge); }
+dl.kv dd { color: var(--body-grey); font-size: 0.95rem; padding: 0.5rem 0; border-top: 1px solid var(--well-edge); }
+.callout { background: var(--well); border: 1px solid var(--well-edge); border-left: 3px solid var(--accent); border-radius: var(--radius-sm); padding: 0.9rem 1.1rem; margin: 1.2rem 0; color: var(--body-grey); font-size: 0.95rem; }
+.shortcut-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+.shortcut-table td { padding: 0.5rem 0.8rem; border-bottom: 1px solid var(--well-edge); color: var(--body-grey); vertical-align: top; }
+.shortcut-table td:first-child { white-space: nowrap; color: var(--bone); width: 38%; }
+kbd { font-family: var(--font-mono); font-size: 0.8em; background: var(--well); border: 1px solid var(--well-edge); border-bottom-width: 2px; border-radius: 4px; padding: 0.1em 0.4em; color: var(--bone); }
+
+/* ---------- responsive ---------- */
+
+@media (max-width: 820px) {
+  .help-layout { grid-template-columns: 1fr; gap: 1rem; }
+  .help-toc { position: static; border: 1px solid var(--well-edge); border-radius: var(--radius-md); padding: 1rem; }
+  .help-toc nav { border-left: none; flex-flow: row wrap; gap: 0.3rem 0.9rem; }
+  .help-toc a { border-left: none; padding: 0.1rem 0; }
+  dl.kv { grid-template-columns: 1fr; }
+  dl.kv dd { border-top: none; padding-top: 0; }
+}
+
 @media (max-width: 560px) {
-  .nav-links a:not(.nav-cta) { display: none; }
-  .nav-links a[href="/blog/"], .nav-links a[href="/community/"] { display: inline; }
+  .nav-links { gap: 0.7rem; }
+  .nav-links a:not(.nav-cta):not([href="/help/"]):not([href="/blog/"]):not([href="/community/"]) { display: none; }
   .foot-cols { flex-direction: column; }
 }

@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Community — share tracks &amp; get help | Tracks</title>
-    <meta name="description" content="The Tracks community: share what you've made, ask for help, request features, and trade tips with other people making music in the browser." />
+    <meta name="description" content="The Tracks community on GitHub Discussions: share what you've made, ask for help, request features, and trade tips with other people making music in the browser." />
     <link rel="canonical" href="https://tracks.jfound.net/community/" />
     <meta property="og:title" content="Tracks Community" />
     <meta property="og:description" content="Share tracks, ask for help, and request features." />
@@ -20,6 +20,7 @@
     <header class="site-nav">
       <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
       <nav class="nav-links">
+        <a href="/help/">Help</a>
         <a href="/blog/">Guides</a>
         <a href="/community/">Community</a>
         <a href="https://synth.jfound.net/">Synth</a>
@@ -30,19 +31,41 @@
     <main>
       <section class="community">
         <h1 class="section-h" style="margin-top:0">Community</h1>
-        <p>Share what you've made, ask for help, request a feature, or trade tips with other people making music in the browser. The board below is powered by GitHub Discussions — sign in with a GitHub account to post. No separate account, and nothing is stored on our servers.</p>
+        <p>Share what you've made, ask for help, request a feature, or trade tips with other people making music in the browser. The community runs on <strong>GitHub Discussions</strong> — pick a category below to read and post. You sign in with a GitHub account; there's no separate sign-up, and nothing is stored on our servers.</p>
 
-        <div class="giscus-wrap">
-          <div class="giscus"></div>
-          <div id="community-fallback" class="community-setup" hidden>
-            Discussions are being set up — check back soon. In the meantime, the
-            studio is live at <a href="/studio">tracks.jfound.net/studio</a>.
-          </div>
-        </div>
+        <a class="board-cta btn-primary" href="https://github.com/leongtongkit/tracks/discussions" target="_blank" rel="noopener">Open the discussion board →</a>
 
-        <div class="community-links">
-          <a class="btn-ghost" href="/blog/">Read the guides</a>
-          <a class="btn-primary" href="/studio">Open the studio →</a>
+        <div class="cat-grid">
+          <a class="cat-card" href="https://github.com/leongtongkit/tracks/discussions/categories/general" target="_blank" rel="noopener">
+            <span class="cat-name">General</span>
+            <span class="cat-desc">Say hello, share feedback, and talk music — anything that doesn't fit the other categories.</span>
+            <span class="cat-go">Browse →</span>
+          </a>
+          <a class="cat-card" href="https://github.com/leongtongkit/tracks/discussions/categories/q-a" target="_blank" rel="noopener">
+            <span class="cat-name">Q&amp;A</span>
+            <span class="cat-desc">Stuck on something? Ask a question and get answers from the community.</span>
+            <span class="cat-go">Ask a question →</span>
+          </a>
+          <a class="cat-card" href="https://github.com/leongtongkit/tracks/discussions/categories/ideas" target="_blank" rel="noopener">
+            <span class="cat-name">Ideas</span>
+            <span class="cat-desc">Suggest features and improvements, and upvote the ones you want most.</span>
+            <span class="cat-go">Suggest an idea →</span>
+          </a>
+          <a class="cat-card" href="https://github.com/leongtongkit/tracks/discussions/categories/show-and-tell" target="_blank" rel="noopener">
+            <span class="cat-name">Show and tell</span>
+            <span class="cat-desc">Share beats, songs, and projects you've made with Tracks.</span>
+            <span class="cat-go">Share your work →</span>
+          </a>
+          <a class="cat-card" href="https://github.com/leongtongkit/tracks/discussions/categories/announcements" target="_blank" rel="noopener">
+            <span class="cat-name">Announcements</span>
+            <span class="cat-desc">New features, releases, and important updates from the team.</span>
+            <span class="cat-go">Read updates →</span>
+          </a>
+          <a class="cat-card cat-card-alt" href="/help/">
+            <span class="cat-name">Help &amp; support</span>
+            <span class="cat-desc">Prefer a manual? Every feature, shortcut, and a getting-started tutorial.</span>
+            <span class="cat-go">Open the help page →</span>
+          </a>
         </div>
       </section>
     </main>
@@ -52,6 +75,7 @@
         <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
         <nav>
           <a href="/studio">Studio</a>
+          <a href="/help/">Help</a>
           <a href="/blog/">Guides</a>
           <a href="/community/">Community</a>
           <a href="https://synth.jfound.net/">Synth</a>
@@ -59,53 +83,5 @@
       </div>
       <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
     </footer>
-
-    <!--
-      ============================================================
-      GISCUS SETUP (Jay — one time, ~5 minutes):
-      1. Create a PUBLIC GitHub repo for discussions, e.g.
-         leongtongkit/tracks-community  (creating a public repo is a
-         Red-tier action, so it's left to you).
-      2. In that repo: Settings → General → Features → enable "Discussions".
-      3. Install the giscus app on it: https://github.com/apps/giscus
-      4. Go to https://giscus.app, enter the repo, pick a Discussions
-         category (e.g. "General" or make an "Announcements"-style one),
-         and copy the four values it gives you into GISCUS below.
-      Once GISCUS.repo is no longer 'OWNER/REPO', the board activates
-      automatically and the fallback message disappears.
-      ============================================================
-    -->
-    <script>
-      (function () {
-        var GISCUS = {
-          repo: 'leongtongkit/tracks',
-          repoId: 'R_kgDOS3e09Q',
-          category: 'General',
-          categoryId: 'DIC_kwDOS3e09c4C_HWe',
-        };
-        var mount = document.querySelector('.giscus');
-        var fallback = document.getElementById('community-fallback');
-        if (!GISCUS.repo || GISCUS.repo === 'OWNER/REPO' || !GISCUS.repoId || !GISCUS.categoryId) {
-          if (fallback) fallback.hidden = false;
-          return;
-        }
-        var s = document.createElement('script');
-        s.src = 'https://giscus.app/client.js';
-        s.setAttribute('data-repo', GISCUS.repo);
-        s.setAttribute('data-repo-id', GISCUS.repoId);
-        s.setAttribute('data-category', GISCUS.category);
-        s.setAttribute('data-category-id', GISCUS.categoryId);
-        s.setAttribute('data-mapping', 'pathname');
-        s.setAttribute('data-strict', '0');
-        s.setAttribute('data-reactions-enabled', '1');
-        s.setAttribute('data-emit-metadata', '0');
-        s.setAttribute('data-input-position', 'top');
-        s.setAttribute('data-theme', 'dark');
-        s.setAttribute('data-lang', 'en');
-        s.crossOrigin = 'anonymous';
-        s.async = true;
-        mount.appendChild(s);
-      })();
-    </script>
   </body>
 </html>

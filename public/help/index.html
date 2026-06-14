@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Help &amp; support — every feature explained | Tracks</title>
+    <meta name="description" content="The complete Tracks manual: a getting-started tutorial plus every feature explained — transport, instruments, piano roll, recording, mixer, automation, exporting, settings, and keyboard shortcuts." />
+    <link rel="canonical" href="https://tracks.jfound.net/help/" />
+    <meta property="og:title" content="Tracks — Help &amp; support" />
+    <meta property="og:description" content="A getting-started tutorial and a full reference for every feature in the Tracks browser music studio." />
+    <meta property="og:url" content="https://tracks.jfound.net/help/" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "TechArticle",
+        "headline": "Tracks — Help & support",
+        "description": "A getting-started tutorial and a complete reference for every feature in the Tracks browser music studio.",
+        "author": { "@type": "Organization", "name": "JFound" },
+        "datePublished": "2026-06-14",
+        "dateModified": "2026-06-14",
+        "mainEntityOfPage": "https://tracks.jfound.net/help/"
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a href="https://synth.jfound.net/">Synth</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <div class="help-layout">
+        <aside class="help-toc">
+          <p class="toc-title">On this page</p>
+          <nav>
+            <a href="#start">Getting started</a>
+            <a href="#transport">The transport bar</a>
+            <a href="#tracks">Tracks</a>
+            <a href="#instruments">Instruments</a>
+            <a href="#piano-roll">The piano roll</a>
+            <a href="#recording">Recording</a>
+            <a href="#audio">Audio clips &amp; editing</a>
+            <a href="#mixer">The mixer</a>
+            <a href="#automation">Automation</a>
+            <a href="#session">Session view</a>
+            <a href="#export">Saving &amp; exporting</a>
+            <a href="#settings">Settings</a>
+            <a href="#shortcuts">Keyboard shortcuts</a>
+            <a href="#privacy">Your data &amp; privacy</a>
+            <a href="#trouble">Troubleshooting</a>
+          </nav>
+        </aside>
+
+        <article class="help-content">
+          <h1>Help &amp; support</h1>
+          <p class="help-intro">Everything you can do in the <a href="/studio">Tracks studio</a>, explained — start with the tutorial, then use the list on the left to jump to any feature. Tracks is free, runs entirely in your browser, and never uploads your music.</p>
+
+          <section id="start">
+            <h2>Getting started</h2>
+            <p>Make your first piece of music in about two minutes.</p>
+            <ol class="help-steps">
+              <li><strong>Open the studio.</strong> Go to <a href="/studio">tracks.jfound.net/studio</a> and click once (or press any key) to start audio — browsers require one click before they play sound.</li>
+              <li><strong>Pick the armed track.</strong> A new project opens with a few tracks and a short demo. Click a track's name on the left to <em>arm</em> it — your computer keyboard now plays that track.</li>
+              <li><strong>Make a clip.</strong> Double-click an empty spot on a track's lane to create a clip, then double-click the clip to open it in the piano roll below. Click in the grid to draw notes.</li>
+              <li><strong>Play it.</strong> Press <strong>Space</strong> to play and stop. Press <strong>Enter</strong> to jump back to the start. Drag across the ruler at the top to set a loop region.</li>
+              <li><strong>Export it.</strong> When it sounds good, click <strong>Export WAV</strong> (or <strong>MP3</strong>) in the top bar to download your track. That's it — the file saves straight to your device.</li>
+            </ol>
+            <p>From here, add more tracks, record a vocal, mix it, and automate anything. The rest of this page covers every control in detail.</p>
+            <div class="callout"><strong>Tip:</strong> press <strong>?</strong> at any time inside the studio to pop up the keyboard-shortcut sheet.</div>
+          </section>
+
+          <section id="transport">
+            <h2>The transport bar</h2>
+            <p>The strip across the top controls playback and the whole-song settings.</p>
+            <dl class="kv">
+              <dt>Play / Stop</dt><dd>Starts and stops playback. Keyboard: <strong>Space</strong>.</dd>
+              <dt>Back to start</dt><dd>Returns the playhead to the beginning. Keyboard: <strong>Enter</strong>.</dd>
+              <dt>Loop</dt><dd>When on, playback repeats the loop region. Set the region by dragging across the ruler; drag its edges to resize.</dd>
+              <dt>Metronome (click)</dt><dd>Toggles the click track. It accents the first beat of each bar. The click is for monitoring only and is never included in exports. Set its volume in Settings.</dd>
+              <dt>BPM</dt><dd>The tempo in beats per minute — drag the value or type it. You can also create tempo changes across the song (see Tempo map under the ruler).</dd>
+              <dt>Key</dt><dd>The project key and scale (for example A minor). It drives note snapping in the piano roll and the target for autotune.</dd>
+              <dt>Sig</dt><dd>The time signature (for example 4/4). It sets how many beats are in a bar for the ruler and grid.</dd>
+              <dt>Session</dt><dd>Switches to the session / clip-launch view (see <a href="#session">Session view</a>).</dd>
+              <dt>Settings</dt><dd>Opens the app settings panel (see <a href="#settings">Settings</a>).</dd>
+              <dt>Open / Save</dt><dd>Open a saved <code>.tracks.json</code> project, or save the current one to your device.</dd>
+              <dt>Export WAV / MP3 / Stems / MIDI</dt><dd>Render your song (see <a href="#export">Saving &amp; exporting</a>).</dd>
+            </dl>
+            <h3>The ruler, markers, and tempo map</h3>
+            <ul>
+              <li><strong>Loop region</strong> — drag across the ruler to set it.</li>
+              <li><strong>Markers</strong> — double-click the ruler to drop a named marker; click a flag to jump to it; Alt-click a flag to delete it.</li>
+              <li><strong>Tempo changes</strong> — Shift + double-click the ruler to add a tempo flag; click it to edit the BPM; Alt-click to delete. The tempo can ramp across the song.</li>
+            </ul>
+          </section>
+
+          <section id="tracks">
+            <h2>Tracks</h2>
+            <p>Each track holds one instrument (or audio) and its clips. Add tracks with the <strong>+</strong> buttons.</p>
+            <dl class="kv">
+              <dt>+ Synth</dt><dd>A subtractive + FM synthesizer track.</dd>
+              <dt>+ Drums</dt><dd>An 808/909 drum machine track.</dd>
+              <dt>+ Sampler</dt><dd>A chromatic sampler — play one audio sample across the keyboard.</dd>
+              <dt>+ SoundFont</dt><dd>Load a <code>.sf2</code> instrument and play its presets.</dd>
+              <dt>+ Pads</dt><dd>A 16-pad sampler bank for one-shots and chops.</dd>
+              <dt>+ Audio</dt><dd>A track for recorded or imported audio (vocals, loops, stems).</dd>
+              <dt>+ Group</dt><dd>A group / bus track that other tracks can route into for shared processing.</dd>
+            </dl>
+            <h3>Track controls</h3>
+            <dl class="kv">
+              <dt>Arm / select</dt><dd>Click a track's header to select it and open its instrument; the armed track is the one your computer keyboard plays.</dd>
+              <dt>Rename</dt><dd>Double-click the track name.</dd>
+              <dt>Delete</dt><dd>Use the delete control in the track header.</dd>
+              <dt>Freeze</dt><dd>Bounces the track to audio to save CPU while keeping the sound (see <a href="#mixer">the mixer</a>).</dd>
+            </dl>
+          </section>
+
+          <section id="instruments">
+            <h2>Instruments</h2>
+            <p>Select a track to open its instrument in the <strong>Instrument</strong> tab. On-screen, the keyboard shows which computer keys play which notes ("Keyboard — your computer keys play these notes").</p>
+            <h3>Synth</h3>
+            <p>A full subtractive + FM engine: oscillators, filter, envelopes, and LFOs, with a large library of presets across bass, lead, pad, keys, bells, and more. Pick a preset from the dropdown, or open the sound editor to design your own. An insert FX rack is available per track (see <a href="#mixer">Insert FX</a>).</p>
+            <h3>Drums</h3>
+            <p>A synthesized drum machine with <strong>808</strong> and <strong>909</strong> kits and 14 voices (kick, snare, hats, toms, and more). Each voice has <strong>Level</strong>, <strong>Tune</strong>, and <strong>Decay</strong> dials. Tap a pad to play it; each pad shows the computer key that triggers it. On a drum track the piano roll rows are labeled with drum names.</p>
+            <h3>Sampler</h3>
+            <p>Load one audio sample and play it chromatically across the keyboard (it repitches per note). Controls include root note, gain, attack/release, and loop.</p>
+            <h3>SoundFont</h3>
+            <p>Load a <code>.sf2</code> SoundFont file and choose one of its presets. SoundFont files stay on your device and are never included in shared exports.</p>
+            <h3>Pads</h3>
+            <p>A 4×4 grid of 16 sample pads. Drop an audio file onto a pad (or select one and use <strong>Load sample</strong>). Per pad: <strong>Gain</strong>, <strong>Tune</strong>, and a <strong>One-shot / Gate</strong> mode (one-shot plays the whole sample; gate stops on release). Pads sit on piano-roll rows P1–P16 so you can sequence them. Each pad shows its trigger key.</p>
+          </section>
+
+          <section id="piano-roll">
+            <h2>The piano roll</h2>
+            <p>Double-click a clip to edit it. The piano roll is where you draw and edit notes.</p>
+            <dl class="kv">
+              <dt>Add a note</dt><dd>Click in the grid. Drag the right edge to change length.</dd>
+              <dt>Move / delete</dt><dd>Drag a note to move it; delete selected notes with <strong>Delete</strong>.</dd>
+              <dt>Select multiple</dt><dd>Shift + drag a box around notes (marquee). Shift + click a note adds or removes it from the selection.</dd>
+              <dt>Velocity (VEL)</dt><dd>The velocity lane below sets how hard each note hits. Vary it so parts sound human.</dd>
+              <dt>Quantize</dt><dd>Snaps notes to the grid. Choose the grid value in the toolbar.</dd>
+              <dt>Swing</dt><dd>Delays the off-beats for groove (0 = straight). Set the amount in the roll toolbar.</dd>
+              <dt>Humanize</dt><dd>Adds subtle timing/velocity variation.</dd>
+              <dt>Transpose</dt><dd>Moves selected notes (or the whole clip) up or down in pitch.</dd>
+            </dl>
+            <h3>Working with clips</h3>
+            <dl class="kv">
+              <dt>New clip</dt><dd>Double-click an empty lane.</dd>
+              <dt>Copy / paste</dt><dd><strong>Cmd C</strong> / <strong>Cmd V</strong> — paste lands at the playhead.</dd>
+              <dt>Duplicate</dt><dd><strong>Cmd D</strong>.</dd>
+              <dt>Split at playhead</dt><dd><strong>Cmd E</strong>.</dd>
+              <dt>Delete</dt><dd><strong>Delete</strong> removes the selected clip.</dd>
+              <dt>Undo / redo</dt><dd><strong>Cmd Z</strong> / <strong>Shift Cmd Z</strong>.</dd>
+            </dl>
+          </section>
+
+          <section id="recording">
+            <h2>Recording</h2>
+            <h3>Microphone</h3>
+            <p>Add an <strong>Audio</strong> track, arm it, and press record. The first time, your browser asks for microphone permission — allow it. Use headphones so the backing track doesn't bleed into the recording. A <strong>count-in</strong> (set in Settings) gives you a bar or two of clicks before recording starts.</p>
+            <h3>MIDI keyboard</h3>
+            <p>Connect a MIDI keyboard and pick it under <strong>MIDI in</strong> in Settings (Chrome/Edge support Web MIDI). It plays and records the armed track with velocity, pitch-bend, and sustain.</p>
+            <h3>Takes &amp; comping</h3>
+            <p>Recording over an existing audio clip stacks as a new <strong>take</strong>. In the audio clip editor you can <strong>Play this take</strong>, <strong>Delete this take</strong>, or assemble the best parts:</p>
+            <dl class="kv">
+              <dt>Comp</dt><dd>Choose which take plays across each part of the clip — swipe across the comp lanes to build one strong performance.</dd>
+              <dt>Clear comp</dt><dd>Resets to a single take across the whole clip.</dd>
+            </dl>
+          </section>
+
+          <section id="audio">
+            <h2>Audio clips &amp; editing</h2>
+            <p>Drag an audio file onto a track (or use <strong>Import audio</strong>) to add it. Clips show a waveform. Open an audio clip to access editing tools.</p>
+            <dl class="kv">
+              <dt>Fades</dt><dd>Set fade-in and fade-out lengths; overlapping faded clips crossfade automatically.</dd>
+              <dt>Trim</dt><dd>Drag a clip's left edge to trim its start.</dd>
+              <dt>Warp</dt><dd>Match a clip to the song tempo — <em>repitch</em> (speed changes pitch, like vinyl) or <em>stretch</em> (tempo changes, pitch stays).</dd>
+              <dt>Autotune</dt><dd>Snaps a vocal to the project key. Set <strong>speed</strong> and <strong>amount</strong>, then <strong>Apply Autotune</strong>. Slower/lower = natural; fast/full = the hard "tuned" effect.</dd>
+              <dt>Normalize / Reverse</dt><dd>Maximize the level, or play the audio backwards.</dd>
+              <dt>Slice to pads</dt><dd>Detects transients and chops the clip onto a new Pads track, with a clip that replays it in the original rhythm.</dd>
+              <dt>Extract stems</dt><dd>Splits a mix into drums, bass, vocals, and other on separate tracks, all in your browser.</dd>
+            </dl>
+            <p>All edits bake into a new copy, so undo always restores the original.</p>
+          </section>
+
+          <section id="mixer">
+            <h2>The mixer</h2>
+            <p>Open the <strong>Mixer</strong> tab for a channel strip per track plus the master. Each strip runs: input → EQ → dynamics → sends → pan → volume → mute.</p>
+            <dl class="kv">
+              <dt>Volume / Pan / Mute</dt><dd>Level (drag the fader, double-click to reset), stereo position, and mute per track.</dd>
+              <dt>Equalizer (EQ)</dt><dd>A parametric EQ with up to 8 bands. Open the editor to drag bands on the response curve over a live spectrum; scroll a band to change its Q; click empty space to add a band. Each band has a type, frequency, gain, and an enable/bypass toggle.</dd>
+              <dt>Compressor</dt><dd>Evens out the level. Transparent when off.</dd>
+              <dt>Gate</dt><dd>Silences audio below a threshold — set <strong>Thr</strong> (threshold) and <strong>Floor</strong>.</dd>
+              <dt>De-esser</dt><dd>Tames harsh "s" sounds — set <strong>Amt</strong> (amount) and <strong>Freq</strong>.</dd>
+              <dt>Sends</dt><dd>Post-fader sends to two shared buses: <strong>A</strong> (plate reverb) and <strong>B</strong> (feedback delay).</dd>
+              <dt>Group / output routing</dt><dd>Route a track's output to a Group bus instead of the master for shared processing (the "Out" selector). The master strip shows a <strong>LUFS-M</strong> loudness meter.</dd>
+              <dt>Sidechain duck</dt><dd>Make one track dip when another plays (the classic kick-ducks-bass "pump") — set the source track and amount.</dd>
+              <dt>Freeze</dt><dd>Bounces a track to audio so its instrument and effects stop using CPU, while sounding identical. Toggle Freeze/Frozen in the track header; frozen tracks can be un-frozen to edit again.</dd>
+              <dt>Insert FX</dt><dd>Every track has an insert effects rack (the <strong>Insert FX</strong> button) for per-track effects ahead of the channel EQ.</dd>
+            </dl>
+          </section>
+
+          <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+          <section id="automation">
+            <h2>Automation</h2>
+            <p>Automate almost any channel parameter — volume, pan, sends, and EQ bands — so it moves over time.</p>
+            <dl class="kv">
+              <dt>Automation lane</dt><dd>Open a track's automation ("A" in the header), pick a parameter, then click to add breakpoints, drag dots to move them, and double-click to delete.</dd>
+              <dt>Curve shapes</dt><dd>Alt-click a breakpoint to cycle linear / hold / exponential.</dd>
+              <dt>Write mode</dt><dd>Turn on <strong>W</strong> (write), press play, and move a mixer knob — your moves are recorded as breakpoints at the playhead.</dd>
+            </dl>
+          </section>
+
+          <section id="session">
+            <h2>Session view</h2>
+            <p>Click <strong>Session</strong> in the transport bar for a clip-launch grid of scenes × tracks — great for jamming and building arrangements live.</p>
+            <dl class="kv">
+              <dt>Fill a slot</dt><dd>Capture the selected arrangement clip into a session slot.</dd>
+              <dt>Launch a clip</dt><dd>Click a slot to loop that clip; it overrides the arrangement for that track until you stop it. Launches quantize to the next bar.</dd>
+              <dt>Launch a scene</dt><dd>Trigger every clip in a row at once ("Launch every clip in this scene").</dd>
+              <dt>+ Scene</dt><dd>Add another scene (row).</dd>
+              <dt>Edit / clear a slot</dt><dd>Edit a session clip in the piano roll, or clear the slot.</dd>
+            </dl>
+          </section>
+
+          <section id="export">
+            <h2>Saving &amp; exporting</h2>
+            <dl class="kv">
+              <dt>Save / Open project</dt><dd><strong>Save</strong> downloads a <code>.tracks.json</code> project file (with your samples embedded); <strong>Open</strong> loads one back. This is how you keep and move your work.</dd>
+              <dt>Export WAV</dt><dd>Renders the whole song to a high-quality WAV file.</dd>
+              <dt>MP3</dt><dd>Renders a smaller MP3 (set the bitrate in Settings).</dd>
+              <dt>Stems</dt><dd>Renders each track to its own WAV file.</dd>
+              <dt>MIDI</dt><dd>Exports all note tracks as a standard MIDI file.</dd>
+            </dl>
+            <div class="callout"><strong>Remember:</strong> your work lives in your browser only. Export or save a project file to keep it — clearing site data or switching browsers will not carry it over.</div>
+          </section>
+
+          <section id="settings">
+            <h2>Settings</h2>
+            <p>Open <strong>Settings</strong> from the transport bar. Everything here is saved in your browser.</p>
+            <dl class="kv">
+              <dt>Output volume</dt><dd>Overall monitoring level (does not affect exports).</dd>
+              <dt>Click volume</dt><dd>Metronome level.</dd>
+              <dt>Count-in</dt><dd>How many bars of clicks play before recording starts (0, 1, or 2).</dd>
+              <dt>Voice cleanup</dt><dd>Microphone mode: raw input, or browser voice processing (echo cancellation + noise suppression). Raw usually sounds best for singing.</dd>
+              <dt>Clip snap / Grid</dt><dd>Whether clips and edits snap to the grid.</dd>
+              <dt>Autosave</dt><dd>Automatically keeps your current session in the browser between visits.</dd>
+              <dt>MP3 bitrate</dt><dd>Quality for MP3 export (128 / 192 / 320 kbps).</dd>
+              <dt>WAV/MP3/stem sample rate</dt><dd>Export sample rate (44.1 or 48 kHz).</dd>
+              <dt>MIDI in</dt><dd>Choose your connected MIDI input device.</dd>
+            </dl>
+          </section>
+
+          <section id="shortcuts">
+            <h2>Keyboard shortcuts</h2>
+            <p>Press <strong>?</strong> inside the studio to see this list any time.</p>
+            <table class="shortcut-table">
+              <tbody>
+                <tr><td><kbd>Space</kbd></td><td>Play / stop</td></tr>
+                <tr><td><kbd>Enter</kbd></td><td>Back to start</td></tr>
+                <tr><td>Letter rows</td><td>Play the armed track (two-manual keyboard)</td></tr>
+                <tr><td><kbd>↑</kbd> / <kbd>↓</kbd></td><td>Octave up / down</td></tr>
+                <tr><td><kbd>Tab</kbd> / <kbd>Left Shift</kbd></td><td>Pitch bend up / down</td></tr>
+                <tr><td><kbd>Cmd Z</kbd> / <kbd>Shift Cmd Z</kbd></td><td>Undo / redo</td></tr>
+                <tr><td><kbd>Cmd C</kbd> / <kbd>Cmd V</kbd></td><td>Copy / paste clip (lands at the playhead)</td></tr>
+                <tr><td><kbd>Cmd D</kbd></td><td>Duplicate clip</td></tr>
+                <tr><td><kbd>Cmd E</kbd></td><td>Split clip at the playhead</td></tr>
+                <tr><td><kbd>Delete</kbd></td><td>Delete selected clip (or selected notes)</td></tr>
+                <tr><td>Shift drag (roll)</td><td>Select multiple notes</td></tr>
+                <tr><td>Shift click (note)</td><td>Add / remove a note from the selection</td></tr>
+                <tr><td>Double-click (lane)</td><td>New clip</td></tr>
+                <tr><td>Double-click (dial)</td><td>Reset to default</td></tr>
+                <tr><td>Drag ruler</td><td>Set the loop region</td></tr>
+                <tr><td><kbd>?</kbd></td><td>Toggle the shortcut sheet</td></tr>
+              </tbody>
+            </table>
+          </section>
+
+          <section id="privacy">
+            <h2>Your data &amp; privacy</h2>
+            <p>Tracks is local-only by design. Your projects, recordings, samples, and SoundFonts stay in your browser and on your device — nothing about your music is uploaded to any server. To keep or move a project, use <strong>Save</strong> to download a project file, or export audio. If you clear your browser's site data, switch browsers, or use private browsing, your in-browser session will not carry over, so save anything you want to keep.</p>
+          </section>
+
+          <section id="trouble">
+            <h2>Troubleshooting</h2>
+            <dl class="kv">
+              <dt>No sound</dt><dd>Click once on the page first (browsers block audio until you interact). Check the output volume in Settings and your system volume. Make sure the track isn't muted.</dd>
+              <dt>Microphone won't record</dt><dd>Allow microphone access when the browser asks. If you denied it, re-enable it in your browser's site settings for tracks.jfound.net, then reload.</dd>
+              <dt>Stuck or hanging notes</dt><dd>Press <strong>Escape</strong> to stop all notes. Some laptop keyboards can't register many keys at once (hardware limit) — an on-screen keyboard or MIDI controller avoids this.</dd>
+              <dt>My project disappeared</dt><dd>Projects live in the browser only. If you cleared site data or switched browsers, it won't be there. Save a project file to keep work safely.</dd>
+              <dt>MIDI keyboard not detected</dt><dd>Web MIDI works in Chrome and Edge. Connect the device, then select it under MIDI in, in Settings.</dd>
+              <dt>Best browser</dt><dd>Use a current Chrome, Edge, Firefox, or Safari on a desktop or laptop for the full experience.</dd>
+            </dl>
+          </section>
+
+          <div class="cta-card">
+            <div>
+              <h3>Still stuck?</h3>
+              <p>Ask the community — someone has probably hit the same thing.</p>
+            </div>
+            <a class="btn-primary" href="/community/">Go to the community →</a>
+          </div>
+        </article>
+      </div>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/help/">Help</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
