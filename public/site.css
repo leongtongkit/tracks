@@ -502,15 +502,15 @@ kbd { font-family: var(--font-mono); font-size: 0.8em; background: var(--well); 
 /* ---------- responsive ---------- */
 
 @media (max-width: 820px) {
-  .help-layout { grid-template-columns: 1fr; gap: 1rem; padding-top: 3.6rem; }
+  .help-layout { grid-template-columns: 1fr; gap: 1rem; padding-top: 4.4rem; }
 
-  /* hamburger (3-dash) at top-left, below the sticky nav */
+  /* hamburger (3-dash) at top-left, clear of the sticky nav */
   .toc-fab {
     display: flex;
     align-items: center;
     justify-content: center;
     position: fixed;
-    top: 56px;
+    top: 66px;
     left: 12px;
     z-index: 46;
     width: 42px;
