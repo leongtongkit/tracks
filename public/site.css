@@ -327,7 +327,7 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
   justify-content: space-between;
   gap: 1rem;
 }
-.cta-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; }
+.cta-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--ink); }
 .cta-card p { color: #4a4943; font-size: 0.92rem; }
 
 /* ---------- community ---------- */
