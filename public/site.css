@@ -329,6 +329,10 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
 }
 .cta-card h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.3rem; color: var(--ink); }
 .cta-card p { color: #4a4943; font-size: 0.92rem; }
+/* keep brand buttons readable inside article/help content — the generic link
+   color (--led) would otherwise tint button text orange-on-orange */
+.article a.btn-primary, .help-content a.btn-primary, .cta-card a.btn-primary { color: #1a0c04; }
+.article a.btn-ghost, .help-content a.btn-ghost { color: var(--bone); }
 
 /* ---------- community ---------- */
 
