@@ -45,10 +45,13 @@
 
     <main>
       <div class="help-layout">
+        <button class="toc-fab" type="button" aria-label="Contents" aria-expanded="false" aria-controls="help-toc-nav"><span class="hb"></span></button>
+        <div class="toc-scrim" hidden></div>
         <aside class="help-toc">
-          <button class="toc-toggle" type="button" aria-expanded="false" aria-controls="help-toc-nav">
-            <span>On this page</span><span class="toc-caret" aria-hidden="true">▾</span>
-          </button>
+          <div class="toc-head">
+            <span class="toc-title">On this page</span>
+            <button class="toc-close" type="button" aria-label="Close contents">×</button>
+          </div>
           <nav id="help-toc-nav">
             <a href="#start">Getting started</a>
             <a href="#transport">The transport bar</a>
@@ -339,18 +342,20 @@
       (function () {
         var toc = document.querySelector('.help-toc');
         if (!toc) return;
-        var btn = toc.querySelector('.toc-toggle');
+        var fab = document.querySelector('.toc-fab');
+        var scrim = document.querySelector('.toc-scrim');
+        var closeBtn = toc.querySelector('.toc-close');
         var nav = toc.querySelector('#help-toc-nav');
-        btn.addEventListener('click', function () {
-          var open = toc.classList.toggle('open');
-          btn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        });
-        nav.addEventListener('click', function (e) {
-          if (e.target.tagName === 'A') {
-            toc.classList.remove('open');
-            btn.setAttribute('aria-expanded', 'false');
-          }
-        });
+        function setOpen(open) {
+          toc.classList.toggle('open', open);
+          if (scrim) scrim.hidden = !open;
+          if (fab) fab.setAttribute('aria-expanded', open ? 'true' : 'false');
+        }
+        if (fab) fab.addEventListener('click', function () { setOpen(!toc.classList.contains('open')); });
+        if (closeBtn) closeBtn.addEventListener('click', function () { setOpen(false); });
+        if (scrim) scrim.addEventListener('click', function () { setOpen(false); });
+        nav.addEventListener('click', function (e) { if (e.target.tagName === 'A') setOpen(false); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
       })();
     </script>
   </body>

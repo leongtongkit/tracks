@@ -462,22 +462,10 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
   align-items: start;
 }
 .help-toc { position: sticky; top: 72px; }
-.help-toc .toc-toggle {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  background: none;
-  border: none;
-  padding: 0;
-  margin-bottom: 0.6rem;
-  cursor: default;
-  font-family: var(--font-mono);
-  font-size: 0.66rem;
-  letter-spacing: 0.16em;
-  color: var(--bone-dim);
-}
-.help-toc .toc-caret { display: none; }
+/* desktop: hamburger/scrim/close are hidden; the aside is the sticky sidebar */
+.toc-fab, .toc-scrim, .help-toc .toc-close { display: none; }
+.help-toc .toc-head { margin-bottom: 0.6rem; }
+.help-toc .toc-title { font-family: var(--font-mono); font-size: 0.66rem; letter-spacing: 0.16em; color: var(--bone-dim); }
 .help-toc nav { display: flex; flex-direction: column; border-left: 1px solid var(--well-edge); }
 .help-toc a {
   font-size: 0.86rem;
@@ -514,52 +502,83 @@ kbd { font-family: var(--font-mono); font-size: 0.8em; background: var(--well); 
 /* ---------- responsive ---------- */
 
 @media (max-width: 820px) {
-  .help-layout { grid-template-columns: 1fr; gap: 1rem; }
-  /* collapsible "On this page" drawer — folded by default, sticky under the nav */
-  .help-toc {
-    position: sticky;
-    top: 46px;
-    z-index: 40;
-    border: 1px solid var(--well-edge);
-    border-radius: var(--radius-md);
-    background: rgba(20, 20, 21, 0.96);
-    backdrop-filter: blur(8px);
-    padding: 0;
-    overflow: hidden;
-  }
-  .help-toc .toc-toggle {
-    margin-bottom: 0;
-    padding: 0.85rem 1rem;
-    cursor: pointer;
-    font-size: 0.72rem;
-    color: var(--bone);
-  }
-  .help-toc .toc-caret {
-    display: inline-block;
-    color: var(--accent);
-    font-size: 0.7rem;
-    transition: transform 0.2s var(--ease-snap);
-  }
-  .help-toc.open .toc-caret { transform: rotate(180deg); }
-  .help-toc nav {
+  .help-layout { grid-template-columns: 1fr; gap: 1rem; padding-top: 3.6rem; }
+
+  /* hamburger (3-dash) at top-left, below the sticky nav */
+  .toc-fab {
     display: flex;
-    flex-direction: column;
-    border-left: none;
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.28s ease;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 56px;
+    left: 12px;
+    z-index: 46;
+    width: 42px;
+    height: 42px;
+    background: rgba(20, 20, 21, 0.92);
+    backdrop-filter: blur(8px);
+    border: 1px solid var(--well-edge);
+    border-radius: 9px;
+    cursor: pointer;
   }
-  .help-toc.open nav {
-    max-height: 72vh;
+  .toc-fab .hb, .toc-fab .hb::before, .toc-fab .hb::after {
+    content: '';
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--bone);
+    border-radius: 2px;
+  }
+  .toc-fab .hb { position: relative; }
+  .toc-fab .hb::before { position: absolute; top: -6px; left: 0; }
+  .toc-fab .hb::after { position: absolute; top: 6px; left: 0; }
+
+  /* dim backdrop behind the open pane */
+  .toc-scrim { position: fixed; inset: 0; z-index: 55; background: rgba(0, 0, 0, 0.5); }
+
+  /* the off-canvas LEFT pane — slid out by default, slides in when open */
+  .help-toc {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    z-index: 60;
+    width: 80%;
+    max-width: 320px;
+    transform: translateX(-100%);
+    transition: transform 0.28s var(--ease-snap);
+    background: var(--desk);
+    border-right: 1px solid var(--well-edge);
+    border-radius: 0;
+    padding: 0;
     overflow-y: auto;
-    border-top: 1px solid var(--well-edge);
   }
-  .help-toc nav a {
-    border-left: none;
-    padding: 0.7rem 1rem;
+  .help-toc.open { transform: translateX(0); box-shadow: 0 0 40px rgba(0, 0, 0, 0.5); }
+  .help-toc .toc-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem;
+    margin: 0;
     border-bottom: 1px solid var(--well-edge);
   }
-  .help-toc nav a:last-child { border-bottom: none; }
+  .help-toc .toc-title { color: var(--bone); font-size: 0.7rem; }
+  .help-toc .toc-close {
+    display: block;
+    background: none;
+    border: none;
+    color: var(--bone-dim);
+    font-size: 1.6rem;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 0.2rem;
+  }
+  .help-toc nav { display: flex; flex-direction: column; border-left: none; }
+  .help-toc nav a {
+    border-left: none;
+    padding: 0.85rem 1rem;
+    border-bottom: 1px solid var(--well-edge);
+  }
   dl.kv { grid-template-columns: 1fr; }
   dl.kv dd { border-top: none; padding-top: 0; }
 }
