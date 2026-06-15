@@ -36,6 +36,11 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://tracks.jfound.net/blog/make-a-song-beginners</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tracks.jfound.net/help/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
