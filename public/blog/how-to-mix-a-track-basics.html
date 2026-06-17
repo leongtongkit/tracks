@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to mix a track: EQ, compression, and reverb basics | Tracks</title>
+    <meta name="description" content="Learn the fundamentals of mixing — EQ to shape tone, compression to control dynamics, and reverb to add space — using the free Tracks browser studio. No plugins, no downloads." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/how-to-mix-a-track-basics" />
+    <meta property="og:title" content="How to mix a track: EQ, compression, and reverb basics" />
+    <meta property="og:description" content="EQ, compression, and reverb explained clearly — with practical settings for each instrument — using the free Tracks browser studio." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/how-to-mix-a-track-basics" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to mix a track: EQ, compression, and reverb basics",
+        "description": "Mix a track in your browser using the Tracks studio — set levels, apply EQ to shape tone, use compression to control dynamics, and add reverb for space — then export to WAV or MP3.",
+        "step": [
+          { "@type": "HowToStep", "name": "Balance levels before touching effects", "text": "Set fader levels in the mixer so the kick and snare sit loudest, bass just below, and melodic elements behind the rhythm section. No EQ or compression yet." },
+          { "@type": "HowToStep", "name": "EQ each track", "text": "Open the per-track parametric EQ. High-pass filter everything except kick and bass. Cut problem frequencies before boosting anything. Add presence only where needed." },
+          { "@type": "HowToStep", "name": "Apply compression", "text": "Add the compressor on dynamic tracks — kick, snare, bass, vocals. Set a medium attack to let the transient through, a fast release, and bring the threshold down until you hear 4–6 dB of gain reduction." },
+          { "@type": "HowToStep", "name": "Add reverb on a send", "text": "Create a reverb send in the mixer. Route chords, pads, and melody to the send at low levels. Keep kick, snare, and bass dry so they punch through." },
+          { "@type": "HowToStep", "name": "Check and export", "text": "Listen on headphones and speakers. Compare the loudest moment to a reference track. When the balance holds up, export to WAV for quality or MP3 to share." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to mix a track: EQ, compression, and reverb basics", "item": "https://tracks.jfound.net/blog/how-to-mix-a-track-basics" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to mix a track: EQ, compression, and reverb basics</h1>
+        <p class="art-meta">By Tongkit Leong · June 17, 2026 · 7 min read</p>
+
+        <p class="lede">To mix a track: balance your fader levels first, then use EQ to cut problem frequencies and shape each instrument's tone, add compression to control the loudest peaks, and route melodic elements to a reverb send — all of this is available for free in the <a href="/studio">Tracks browser studio</a> with no download or account required.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why mixing matters — even for a quick browser project</h2>
+        <p>A good mix makes the same sounds you already have feel more professional. It is not about gear or plugins. It is about giving every instrument its own space in the frequency spectrum and in the stereo field, so nothing clashes and nothing gets buried. The same principles apply whether you are working in a professional studio or in a browser tab.</p>
+        <p>Tracks gives you a per-track parametric EQ, a compressor, a gate, reverb and delay sends, group buses, and full parameter automation — everything you need to do a real mix. Your project stays in your browser and never leaves your device.</p>
+
+        <h2>Step 1: Set levels before you touch anything else</h2>
+        <p>The most common mixing mistake is reaching for EQ or compression before the faders are balanced. Do not do this. Start by pressing play and pulling every fader to unity (0 dB), then adjust levels by ear:</p>
+        <ul>
+          <li><strong>Kick and snare</strong> — loudest elements in the mix. They anchor the energy.</li>
+          <li><strong>Bass</strong> — just below the drums. You should feel it as much as hear it.</li>
+          <li><strong>Chords, pads, synths</strong> — fill in behind the rhythm section. They set the mood but should not overpower the drums.</li>
+          <li><strong>Lead melody or vocals</strong> — just forward of everything else so the listener's ear follows it.</li>
+        </ul>
+        <p>A rough level balance right now will save you from chasing problems with EQ later. If something sounds too loud, lower its fader first. Only reach for EQ if the problem is tonal, not volume.</p>
+
+        <h2>Step 2: EQ basics — cut first, boost second</h2>
+        <p>Open the per-track parametric EQ in Tracks by clicking the EQ slot in any track's effects chain. You get several bands you can use as high-pass filters, shelves, or bell curves. Here is how to approach each track type.</p>
+
+        <h3>High-pass filter everything except kick and bass</h3>
+        <p>Every instrument except the kick drum and bass guitar or synth bass has useless low-end energy that muddies the mix. Apply a high-pass filter (HPF) to cut everything below a set frequency:</p>
+        <ul>
+          <li><strong>Hi-hats and cymbals:</strong> HPF at 200–300 Hz.</li>
+          <li><strong>Snare:</strong> HPF at 80–100 Hz.</li>
+          <li><strong>Guitar or piano chords:</strong> HPF at 150–200 Hz.</li>
+          <li><strong>Vocals:</strong> HPF at 80–100 Hz (higher if the voice sounds boomy).</li>
+          <li><strong>Pads and synth leads:</strong> HPF at 100–150 Hz.</li>
+        </ul>
+        <p>After applying those filters, listen again. The low end will be cleaner already, and the kick and bass will have room to breathe.</p>
+
+        <h3>Cut problem frequencies by ear</h3>
+        <p>Set an EQ band to a narrow Q (high resonance) and sweep it slowly through the frequency range while the track plays. When you hit a frequency that sounds harsh, nasal, or boxy, cut it by 3–6 dB. Common problem spots:</p>
+        <ul>
+          <li><strong>Kick drum:</strong> boxiness around 200–400 Hz; cut there if it sounds hollow.</li>
+          <li><strong>Snare:</strong> a harsh ring often lives at 1–2 kHz; notch it out.</li>
+          <li><strong>Bass:</strong> mud around 200–300 Hz; cut to let the kick's attack come through.</li>
+          <li><strong>Vocals:</strong> a nasal quality around 800 Hz–1 kHz; cut slightly to clean it up.</li>
+        </ul>
+
+        <h3>Boost with a wide curve, sparingly</h3>
+        <p>Once the cuts are in, you can add character with gentle boosts. Use a wide Q (low resonance) bell curve so it sounds musical rather than harsh. A few useful boosts:</p>
+        <ul>
+          <li>Kick drum: +2–3 dB at 60–80 Hz for sub weight; +2–3 dB at 3–5 kHz for attack click.</li>
+          <li>Snare: +2–3 dB at 200 Hz for body; +3 dB at 5–8 kHz for snap and air.</li>
+          <li>Vocals: +2 dB at 10–12 kHz for air and presence.</li>
+          <li>Pads and chords: +2 dB at 10 kHz for shimmer.</li>
+        </ul>
+        <p>The goal is not to make each track sound perfect in isolation. It is to make the tracks fit together. Cuts are almost always more useful than boosts.</p>
+
+        <h2>Step 3: Compression — controlling dynamic range</h2>
+        <p>A compressor turns down the loudest peaks of a signal automatically, which makes the track feel more consistent and punchy. In Tracks, click the compressor slot in a track's effects chain to open it. The key controls are threshold, ratio, attack, and release.</p>
+
+        <h3>What each control does</h3>
+        <ul>
+          <li><strong>Threshold:</strong> the level above which compression kicks in. Lower the threshold to compress more of the signal.</li>
+          <li><strong>Ratio:</strong> how much compression is applied. 4:1 is a good starting point for most tracks. Vocals and snare often sound good at 4:1–6:1. Limiters use ratios of 10:1 or higher.</li>
+          <li><strong>Attack:</strong> how quickly the compressor clamps down after the signal exceeds the threshold. A slower attack (30–50 ms) lets the initial transient through, which keeps the punch on drums. A faster attack (1–5 ms) smooths out vocals.</li>
+          <li><strong>Release:</strong> how quickly the compressor lets go after the signal drops below the threshold. Set it so the gain reduction meter bounces roughly in time with the music. Too fast creates distortion; too slow makes everything feel squashed.</li>
+        </ul>
+
+        <h3>Practical settings by instrument</h3>
+        <ul>
+          <li><strong>Kick drum:</strong> ratio 4:1, attack 30 ms, release 100–150 ms. Aim for 4–6 dB of gain reduction.</li>
+          <li><strong>Snare:</strong> ratio 4:1–6:1, attack 10–20 ms, release 80 ms. A touch of gain reduction (3–4 dB) adds snap.</li>
+          <li><strong>Bass:</strong> ratio 4:1, attack 20–40 ms, release 200–300 ms. Keeps the level steady so it does not jump out on certain notes.</li>
+          <li><strong>Vocals:</strong> ratio 4:1–6:1, attack 5–10 ms, release 150 ms. Vocals have a wide dynamic range; 6–8 dB of gain reduction is not unusual.</li>
+          <li><strong>Full mix (master bus):</strong> use a gentle 2:1 ratio with a fast attack and medium release, targeting 1–2 dB of gain reduction. This glues the mix together without squashing it.</li>
+        </ul>
+        <p>After compressing, raise the track's output gain (make-up gain) to match the pre-compression level. You are not trying to make things louder — you are making the dynamics more even so the mix translates well on different playback systems.</p>
+
+        <h2>Step 4: Reverb — placing sounds in space</h2>
+        <p>Reverb simulates the acoustic reflection of a room. Used well, it makes your mix feel three-dimensional. Used poorly, it turns everything into mush. The key rule: use sends, not inserts, for reverb.</p>
+
+        <h3>Set up a reverb send</h3>
+        <p>In the Tracks mixer, you can route any track to a reverb/delay send. Create one reverb send and one delay send. Set the reverb channel itself to 100% wet (all reverb, no dry signal), and use the send level on each track to control how much of that track gets sent to the reverb. This way, all your instruments share the same reverb space, which makes the mix sound cohesive rather than like every sound is in a different room.</p>
+
+        <h3>What to send to reverb and what to keep dry</h3>
+        <ul>
+          <li><strong>Keep dry:</strong> kick, snare, bass. Reverb on low-frequency sources smears the low end and makes the mix muddy and unfocused.</li>
+          <li><strong>Light reverb:</strong> hi-hats and percussion (short, bright room reverb); lead vocals (just enough to take the edge off the dryness).</li>
+          <li><strong>More reverb:</strong> pads, chord synths, backing vocals, atmospheric leads. These can sit deeper in the reverb and fill out the stereo image.</li>
+        </ul>
+
+        <h3>Reverb settings to try</h3>
+        <p>For a general-purpose mix reverb, start with a medium room: pre-delay of 20–30 ms (this separates the dry sound from the reverb tail so the instrument stays clear), decay time of 1.5–2.5 seconds, and high-frequency damping so the reverb tail sounds warm rather than bright and splashy. For a delay on the lead melody or vocals, try a quarter-note or eighth-note delay time synced to your project tempo, with 1–2 repeats and the feedback turned down so the echoes fade quickly.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Step 5: Final checks before you export</h2>
+        <p>Before exporting, do a few quick checks:</p>
+        <ul>
+          <li><strong>Listen on headphones and speakers.</strong> A mix that sounds balanced only on one playback system is not done yet. Check it on both if you can.</li>
+          <li><strong>Compare to a reference track.</strong> Open a song you like in a separate browser tab and compare the low end, loudness, and width. Your mix does not need to match it exactly — just use it as a sanity check.</li>
+          <li><strong>Check for clipping.</strong> The master bus meter in Tracks should not be hitting the red. If it is, lower the master fader slightly or reduce levels across the board.</li>
+          <li><strong>Check mono compatibility.</strong> Pan your stereo image to the center and listen. If the bass or lead disappears, you may have a phase issue on those tracks. Check that you have not applied wide stereo effects to low-frequency sources.</li>
+        </ul>
+        <p>When the mix holds up on both headphones and speakers, click the export button and choose WAV for a lossless master file. If you need to share it quickly, MP3 at 320 kbps sounds nearly identical to WAV on most consumer playback. See <a href="/blog/make-a-song-beginners">How to make a song in your browser</a> for the full step-by-step from scratch, including arrangement and export.</p>
+
+        <h2>Common mixing mistakes and how to fix them</h2>
+        <ul>
+          <li><strong>Muddy low end:</strong> too much energy below 200 Hz on non-bass instruments. Apply high-pass filters to all tracks except kick and bass.</li>
+          <li><strong>Harsh upper mids:</strong> multiple tracks boosted around 2–4 kHz compete with each other. Cut rather than boost in this range, and reserve 3–5 kHz presence for the most important element (usually the vocals or lead).</li>
+          <li><strong>Everything sounds wet and distant:</strong> too much reverb, or reverb applied to bass and kick. Pull the reverb send levels down on low-frequency tracks and shorten the decay time.</li>
+          <li><strong>Mix sounds flat on headphones but has too much bass on speakers:</strong> you mixed with too much low end because headphones exaggerate it. Use a reference track and cut below 60 Hz with a gentle shelf on the master bus.</li>
+          <li><strong>Vocals disappear in the mix:</strong> vocals and guitars compete in the 1–4 kHz presence range. Duck the instruments slightly with a gentle cut at the frequency where the vocal sits. This is sometimes called a "frequency carve-out."</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>In what order should I do EQ and compression?</h3>
+        <p>It depends on what you are trying to do. EQ before compression means the compressor responds to the EQ'd signal — useful for removing a boomy low end before the compressor reacts to it. Compression before EQ means you shape the tone of the compressed signal — good for adding clarity or air after the dynamics are controlled. Most engineers do EQ first, then compression. When in doubt, try it both ways and use your ears.</p>
+
+        <h3>How much compression is too much?</h3>
+        <p>If the track sounds like it is pumping or breathing unnaturally, or if transients feel sluggish and the track loses punch, you have over-compressed. A gain reduction meter showing more than 10 dB of reduction on most material is usually too much unless you are going for a deliberate effect like sidechain pumping. For most tracks, 3–6 dB of gain reduction is enough.</p>
+
+        <h3>Why does my mix sound bad on phone speakers?</h3>
+        <p>Phone speakers cannot reproduce bass below around 200 Hz and have a narrow stereo image. If your mix sounds empty on a phone, the mid-range and upper-bass frequencies (200–600 Hz) are not carrying enough energy to fill out the sound on small speakers. Try boosting that range slightly on the kick and bass, and make sure the chord synths have some content in the 300–500 Hz range.</p>
+
+        <h3>Do I need a master bus compressor?</h3>
+        <p>Not strictly, but a gentle one helps. A 2:1 compressor on the master bus with 1–2 dB of gain reduction glues all the separate compressed and EQ'd tracks into a single coherent sound. It makes a noticeable difference on dense arrangements. Keep it gentle — the master bus is not the place for heavy limiting unless you are doing your own mastering.</p>
+
+        <h3>Can I do all of this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks has a per-track parametric EQ, a compressor, a gate, a de-esser, reverb and delay sends, group buses, and automation on every parameter. Open the <a href="/studio">studio</a>, load your project, and follow the steps above. Nothing is uploaded — your project stays on your device the whole time. For making beats to mix, see <a href="/blog/how-to-make-beats-in-browser">How to make beats in your browser</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Mix your track for free</h3>
+            <p>EQ, compression, reverb, and export — all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
