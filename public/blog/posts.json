@@ -1,5 +1,13 @@
 [
   {
+    "slug": "what-is-a-daw",
+    "title": "What is a DAW, and do you need an expensive one?",
+    "dek": "A DAW (digital audio workstation) is software for recording, arranging, and mixing music. Here is what the core tools do, what the difference between free and paid options really is, and why a browser DAW can do the job for most producers.",
+    "date": "2026-06-18",
+    "tags": ["DAW", "free", "getting started", "comparison"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "how-to-mix-a-track-basics",
     "title": "How to mix a track: EQ, compression, and reverb basics",
     "dek": "Learn the fundamentals of mixing a track in your browser — EQ to shape tone, compression to control dynamics, and reverb to add space — with no plugins and no downloads.",
