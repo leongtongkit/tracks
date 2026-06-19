@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to export your song to MP3 or WAV | Tracks</title>
+    <meta name="description" content="Learn how to export your finished track to MP3 or WAV from the Tracks browser studio — including when to use each format, what sample rate and bit depth to choose, and how to export individual stems." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/export-song-mp3-wav" />
+    <meta property="og:title" content="How to export your song to MP3 or WAV" />
+    <meta property="og:description" content="WAV is lossless; MP3 is smaller. Here is how to export either from Tracks in two clicks, and which format to use for streaming, sharing, or mastering." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/export-song-mp3-wav" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to export your song to MP3 or WAV",
+        "description": "Export a finished track from the Tracks browser studio to MP3 or WAV — including choosing the right format, sample rate, and bit depth, and how to bounce individual stems.",
+        "step": [
+          { "@type": "HowToStep", "name": "Finish and check your mix", "text": "Before exporting, check that your master bus is not clipping. The level meter should peak at or below 0 dBFS. If it clips, lower the master fader or individual track levels." },
+          { "@type": "HowToStep", "name": "Open the export dialog", "text": "In the Tracks studio, click the export button (the down-arrow icon in the top toolbar). The export dialog opens with format, sample rate, and bit-depth options." },
+          { "@type": "HowToStep", "name": "Choose WAV or MP3", "text": "Choose WAV for a lossless file you plan to master, upload to a distributor, or archive. Choose MP3 at 320 kbps when you need a smaller file to share or stream." },
+          { "@type": "HowToStep", "name": "Set sample rate and bit depth (WAV only)", "text": "For most projects, 44100 Hz / 16-bit is the CD standard and plays everywhere. Use 48000 Hz if your track will be used in video. 24-bit gives more headroom during mixing but produces a larger file." },
+          { "@type": "HowToStep", "name": "Export the mix or individual stems", "text": "Click 'Export mix' to bounce the full stereo mixdown. To export stems, enable the per-track stem export option and click Export — Tracks renders each track separately to its own file." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to export your song to MP3 or WAV", "item": "https://tracks.jfound.net/blog/export-song-mp3-wav" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to export your song to MP3 or WAV</h1>
+        <p class="art-meta">By Tongkit Leong · June 19, 2026 · 6 min read</p>
+
+        <p class="lede">To export your song from <a href="/studio">Tracks</a>: click the export button in the top toolbar, choose WAV for a lossless archive or mastering file, or MP3 at 320 kbps when you need a smaller file to share — the export runs entirely in your browser and the resulting file downloads straight to your device without being uploaded anywhere.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>WAV vs MP3: what is actually different</h2>
+        <p>Both formats store audio, but they store it differently, and the difference matters depending on what you plan to do with the file.</p>
+
+        <p><strong>WAV</strong> is an uncompressed, lossless format. Every sample that went into the mix comes back out of the file exactly as it was. The file is large — a three-minute stereo track at 44100 Hz / 16-bit is around 30 MB — but the audio quality is as good as it can be. WAV is what you use when you are sending a track to a mastering engineer, uploading to a distributor like DistroKid or TuneCore, or archiving a finished project.</p>
+
+        <p><strong>MP3</strong> is a compressed, lossy format. It analyzes the audio and discards frequency information that most listeners cannot easily hear, then stores the rest at a lower file size. At 320 kbps (the highest standard MP3 quality), the difference from WAV is inaudible to most people on most playback systems. At lower bitrates — 128 kbps or 192 kbps — you start to hear compression artifacts: smeared high frequencies, pre-ringing on transients, and a slight loss of low-end punch. MP3 is what you use when you want to share a preview, post to SoundCloud, or send a file by email or message.</p>
+
+        <p>The short rule: export WAV to keep, export MP3 to share.</p>
+
+        <h2>Before you export: check for clipping</h2>
+        <p>An exported WAV or MP3 file will contain any clipping that happened on the master bus. Clipping sounds like hard digital distortion — a crackling, splintering quality — and it cannot be removed after the fact. Before you click export, check that the master level meter in Tracks is not hitting the red.</p>
+        <ul>
+          <li>Play through the loudest section of your track.</li>
+          <li>Watch the master bus meter. It should peak at or below 0 dBFS. Some engineers aim for -1 dBFS true peak to leave headroom for MP3 encoding.</li>
+          <li>If the meter clips, lower the master fader by 1–2 dB or reduce the loudest individual tracks slightly.</li>
+        </ul>
+        <p>You do not need the mix to be loud at export time. Loudness maximization happens in the mastering stage, either in a separate mastering session or by the streaming platform's normalization algorithm. Exporting at a healthy level with headroom is always better than exporting a clipped mix.</p>
+
+        <h2>How to export from Tracks</h2>
+        <p>Open your project in the <a href="/studio">Tracks studio</a>. When your mix is ready, click the export icon in the top toolbar — it looks like a downward arrow. The export dialog gives you the following options.</p>
+
+        <h3>Format</h3>
+        <p>Select either <strong>WAV</strong> or <strong>MP3</strong>. If you select MP3, a bitrate selector appears. Choose 320 kbps for maximum quality. 192 kbps is acceptable for casual sharing where file size matters. Avoid 128 kbps for anything you care about.</p>
+
+        <h3>Sample rate</h3>
+        <p>This setting only applies to WAV exports. Your options are typically 44100 Hz and 48000 Hz.</p>
+        <ul>
+          <li><strong>44100 Hz</strong> is the CD standard. It is what streaming platforms expect and what most distribution services require. Use this for standalone music.</li>
+          <li><strong>48000 Hz</strong> is the video standard. If your track is going into a film, YouTube video, or podcast, use 48000 Hz to avoid a sample-rate mismatch when the video editor imports the file.</li>
+        </ul>
+        <p>Unless you have a specific reason to use 48000 Hz, 44100 Hz is the right choice for music releases.</p>
+
+        <h3>Bit depth</h3>
+        <p>Bit depth, also WAV-only, determines how precisely each audio sample is stored.</p>
+        <ul>
+          <li><strong>16-bit</strong> is the CD standard and gives 96 dB of dynamic range. It is what streaming platforms and most distribution services want. This is the right setting for final deliverables.</li>
+          <li><strong>24-bit</strong> gives 144 dB of dynamic range and is what professional studios use during recording and mixing because it leaves more room to work before hitting noise. If you plan to continue mixing or mastering the exported file in another application, use 24-bit. If the file is the final product, 16-bit is fine.</li>
+        </ul>
+
+        <h3>Export the mix</h3>
+        <p>Click <strong>Export mix</strong>. Tracks renders the entire arrangement from start to finish in your browser and downloads the resulting file to your device. Rendering happens faster than real time on most modern computers. The file is never uploaded anywhere — the whole process runs locally.</p>
+
+        <h2>Exporting stems</h2>
+        <p>Tracks can also export individual stems — one audio file per track. This is useful if you want to hand the project off to someone else to mix, send an acapella to another producer, or get individual instrument files to use in a different application.</p>
+        <p>In the export dialog, enable the <strong>per-track stem export</strong> option. When you click Export, Tracks renders each track to its own WAV file and downloads them as a zip archive. Each file is the same length as the full mix, so the stems line up when imported into any other DAW or editor at the same sample rate.</p>
+        <p>Stems are also useful for troubleshooting a mix. If something sounds wrong in the final export but you cannot identify it in the session, exporting stems lets you import them into a fresh session and hear each track in isolation.</p>
+
+        <h2>Exporting a MIDI file</h2>
+        <p>If you want to take your piano roll sequences into another DAW or MIDI editor, Tracks can also export a standard MIDI file. This is different from audio export — a MIDI file contains note data, not audio. It does not include the sound of the instruments, only the timing and pitch of each note. Most DAWs can import it and trigger their own instruments from it.</p>
+
+        <h2>What to do with your exported file</h2>
+        <p>Once you have a WAV or MP3 file on your device, here are the most common next steps:</p>
+        <ul>
+          <li><strong>Upload to SoundCloud or YouTube:</strong> both platforms accept MP3 at 320 kbps or WAV. WAV gives the platform better source material to encode from.</li>
+          <li><strong>Distribute on streaming platforms:</strong> services like DistroKid, TuneCore, and CD Baby accept WAV files. They encode to the streaming format themselves. Always upload WAV, not MP3, to distributors.</li>
+          <li><strong>Send to a mastering engineer:</strong> send your WAV at 24-bit if you exported at that depth. Include a note about your target loudness (e.g., -14 LUFS for Spotify) and which streaming platforms you are targeting.</li>
+          <li><strong>Archive the project:</strong> alongside the audio export, save your Tracks project file (.tracks.json from the File menu) so you can go back and adjust the mix later. The project file stores all your arrangement data, instruments, effects settings, and automation.</li>
+        </ul>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Should I export WAV or MP3 for Spotify?</h3>
+        <p>Export WAV and upload that to your distributor. Spotify, Apple Music, and other streaming platforms re-encode your file to their own format (Ogg Vorbis, AAC, or others depending on the platform). If you upload an MP3, the platform is encoding a lossy file a second time, which compounds the quality loss. Always give the distributor the best quality source you have, which means WAV at 16-bit or 24-bit, 44100 Hz.</p>
+
+        <h3>What bitrate MP3 should I use?</h3>
+        <p>320 kbps for anything you care about. 192 kbps is acceptable for a quick share where someone just wants to hear the vibe. Avoid 128 kbps — at that rate the high frequencies start to sound washy and the overall stereo image narrows noticeably.</p>
+
+        <h3>My exported WAV sounds different from what I heard in the studio. Why?</h3>
+        <p>The most common reason is a sample-rate mismatch. If your project was set to 48000 Hz but your playback system expects 44100 Hz, or vice versa, the file will play back at the wrong pitch and speed. Check your project sample rate in the studio settings and make sure the export sample rate matches. A second reason is clipping: if the master bus clipped during export, the distortion is now baked into the file.</p>
+
+        <h3>Can I export just part of the song, not the whole thing?</h3>
+        <p>Yes. In the Tracks studio, set the loop region or export range markers around the section you want — for example, just the chorus or a 30-second preview clip — and Tracks will export only that region when you click Export mix.</p>
+
+        <h3>How do I get the project file back if I exported audio and now want to edit?</h3>
+        <p>Audio exports are final renders — you cannot re-import an MP3 or WAV back into the original project and recover the tracks. Always save the <code>.tracks.json</code> project file from the File menu before closing a session. The project file stores everything: tracks, MIDI sequences, samples, effects, and automation. The audio export is a delivery artifact; the project file is your working file.</p>
+
+        <h3>Does Tracks upload my audio to a server during export?</h3>
+        <p>No. Export runs entirely in your browser using the Web Audio API. The rendered audio never leaves your device. The file downloads directly from your browser's memory to your local drive. See <a href="/blog/what-is-a-daw">What is a DAW</a> for more on how browser-based studios handle data differently from cloud-hosted tools.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Export your track for free</h3>
+            <p>WAV, MP3, and per-track stems — all rendered in your browser, no upload, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
