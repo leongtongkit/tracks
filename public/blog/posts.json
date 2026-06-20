@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-lofi-hip-hop",
+    "title": "Make lo-fi hip-hop in your browser",
+    "dek": "Lo-fi hip-hop is built from slow, swinging drums, a warm bass line, a dusty chord loop, and a vinyl-style texture — and you can make all of it inside Tracks with no downloads.",
+    "date": "2026-06-20",
+    "tags": ["lofi", "hip-hop", "beats", "browser DAW"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "export-song-mp3-wav",
     "title": "How to export your song to MP3 or WAV",
     "dek": "Exporting your finished track from Tracks takes two clicks — here is how to choose between MP3 and WAV, what the settings mean, and how to get the best quality file for streaming, sharing, or sending to a mastering engineer.",
