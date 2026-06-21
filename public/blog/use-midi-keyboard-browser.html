@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use a MIDI keyboard in a browser DAW (Web MIDI) | Tracks</title>
+    <meta name="description" content="Plug your MIDI keyboard into a USB port, open Chrome or Edge, allow MIDI access, and record live performances directly into Tracks — no drivers, no software install." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/use-midi-keyboard-browser" />
+    <meta property="og:title" content="How to use a MIDI keyboard in a browser DAW (Web MIDI)" />
+    <meta property="og:description" content="Connect a USB MIDI keyboard to your browser, grant Web MIDI permission, and start recording and editing performances in the Tracks piano roll — no install required." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/use-midi-keyboard-browser" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use a MIDI keyboard in a browser DAW (Web MIDI)",
+        "description": "Connect a USB MIDI keyboard to your computer, grant Web MIDI permission in Chrome or Edge, select the device in Tracks, and record live performances directly into the piano roll — no software install needed.",
+        "step": [
+          { "@type": "HowToStep", "name": "Connect the keyboard and open Chrome or Edge", "text": "Plug your MIDI keyboard into a free USB port. Open Chrome or Edge — these are the two browsers that support the Web MIDI API natively. Navigate to tracks.jfound.net." },
+          { "@type": "HowToStep", "name": "Allow MIDI access in the browser", "text": "When Tracks loads, the browser will prompt you to allow MIDI device access. Click Allow. If you missed the prompt, click the lock or tune icon in the address bar and change MIDI devices from Block to Allow, then reload the page." },
+          { "@type": "HowToStep", "name": "Select your MIDI device in Tracks", "text": "In the Tracks studio, open the MIDI settings panel and choose your keyboard from the input device list. The device name usually matches the keyboard's model name as shown in your operating system." },
+          { "@type": "HowToStep", "name": "Play an instrument track live", "text": "Add an instrument track — subtractive synth, FM synth, or a SoundFont. With the track selected and MIDI input active, play a key on your keyboard. You should hear the synth respond in real time." },
+          { "@type": "HowToStep", "name": "Record your performance", "text": "Enable the record button on the instrument track. Press the main Record button in the transport bar, play through the count-in, then perform your part. Tracks captures every note, velocity, and timing into a MIDI clip on the timeline." },
+          { "@type": "HowToStep", "name": "Edit the recording in the piano roll", "text": "Double-click the recorded MIDI clip to open the piano roll. Correct any wrong notes, adjust note lengths, nudge timing, and fine-tune velocities. Changes are non-destructive — you can undo and redo freely." },
+          { "@type": "HowToStep", "name": "Record multiple takes and comp the best", "text": "If you want to try the part again, keep take comping enabled in the transport. Each pass is stored as a separate take. After several passes, choose the best notes from each take in the piano roll to build a composite performance." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to use a MIDI keyboard in a browser DAW (Web MIDI)", "item": "https://tracks.jfound.net/blog/use-midi-keyboard-browser" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to use a MIDI keyboard in a browser DAW (Web MIDI)</h1>
+        <p class="art-meta">By Tongkit Leong · June 21, 2026 · 7 min read</p>
+
+        <p class="lede">To record a MIDI keyboard in your browser, plug it in via USB, open Chrome or Edge, allow MIDI access when the browser asks, and select the device in <a href="/studio">Tracks</a> — the Web MIDI API handles the connection without any drivers or software install on your end.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What the Web MIDI API actually does</h2>
+        <p>The Web MIDI API is a browser feature that lets a web page read MIDI data from connected hardware — keyboards, drum pads, controllers, interfaces — directly through a USB connection. It works the same way a desktop DAW reads MIDI, except the permission gate is the browser rather than a driver installer.</p>
+        <p>Chrome and Edge support Web MIDI natively as of their current versions. Firefox and Safari do not include it by default. If you are using Firefox or Safari, you will need to switch to Chrome or Edge for MIDI recording to work.</p>
+        <p>On the hardware side, any keyboard or controller with a standard USB MIDI connection works. Bluetooth MIDI is not yet covered by the Web MIDI API in most browsers, so a physical USB cable is the reliable option.</p>
+
+        <h2>What you need</h2>
+        <ul>
+          <li>A MIDI keyboard or controller with a USB output (most modern keyboards have one)</li>
+          <li>A USB cable connecting the keyboard to your computer</li>
+          <li>Google Chrome or Microsoft Edge (any reasonably recent version)</li>
+          <li>The <a href="/studio">Tracks studio</a> open in a browser tab</li>
+        </ul>
+        <p>You do not need to install any drivers on Windows or Mac for class-compliant USB MIDI devices — operating systems handle them automatically. If your keyboard requires its own driver, install that first, then connect.</p>
+
+        <h2>Step 1: Connect the keyboard and open the studio</h2>
+        <p>Plug the keyboard into a free USB port. Most keyboards power on automatically when connected to a computer via USB; check your keyboard's manual if it does not. Open Chrome or Edge and navigate to the <a href="/studio">Tracks studio</a>.</p>
+        <p>It does not matter whether you connect the keyboard before or after opening the browser tab, but connecting before the page loads makes device detection slightly more reliable across different operating systems.</p>
+
+        <h2>Step 2: Allow MIDI access</h2>
+        <p>The first time Tracks tries to read from a MIDI device, Chrome or Edge will show a permission prompt in the browser toolbar asking whether to allow MIDI device access. Click <strong>Allow</strong>.</p>
+        <p>If the prompt disappeared before you responded, or if you previously clicked Block, fix it this way:</p>
+        <ol>
+          <li>Click the lock icon (or the tune icon in some Chrome versions) to the left of the address bar.</li>
+          <li>Find <strong>MIDI devices</strong> in the permissions list.</li>
+          <li>Change the setting from Block to Allow.</li>
+          <li>Reload the page.</li>
+        </ol>
+        <p>You only need to do this once per browser profile. Chrome and Edge remember the permission for the site.</p>
+
+        <h2>Step 3: Select your MIDI device in Tracks</h2>
+        <p>Inside the Tracks studio, open the MIDI settings panel. Your connected keyboard should appear in the input device list by its model name — for example, "Arturia KeyStep 37" or "KORG microKEY2". Select it.</p>
+        <p>If the device does not appear, try these steps in order:</p>
+        <ul>
+          <li>Unplug and re-plug the USB cable, then reload the page.</li>
+          <li>Confirm that Chrome or Edge has MIDI access permission (Step 2 above).</li>
+          <li>On Windows, open Device Manager and check that the keyboard appears under Sound, video and game controllers without an error icon.</li>
+          <li>On Mac, open the Audio MIDI Setup app (found in /Applications/Utilities/) and confirm the keyboard appears in the MIDI Studio view.</li>
+        </ul>
+
+        <h2>Step 4: Play an instrument live</h2>
+        <p>Add an instrument track in the Tracks timeline. You can choose from the subtractive synth, the FM synth, the 808 or 909 drum machine, or a SoundFont (.sf2) player. With the track selected and MIDI input routed to it, play a key on your keyboard — the instrument should respond in real time through your computer's audio output.</p>
+        <p>If you hear a delay between pressing a key and hearing the sound, that is MIDI or audio latency. Lower the audio buffer size in Tracks' audio settings if the option is available, and close other browser tabs or applications consuming CPU. Most setups get latency below 20 ms, which is imperceptible for most players.</p>
+
+        <h2>Step 5: Record your performance</h2>
+        <p>Enable the record arm button on the instrument track you want to record onto. Then press the main Record button in the transport bar. Tracks plays a count-in bar — one full bar at the project tempo — before recording starts, so you have time to get ready. Perform your part, then press Stop.</p>
+        <p>The recorded notes appear as a MIDI clip on the timeline. Every note's pitch, velocity (how hard you pressed the key), and duration is captured exactly. Velocity matters for expressive playing: lighter touches produce quieter, softer notes on most instruments, while harder presses produce more aggressive, louder attacks.</p>
+        <p>Your project data — including the MIDI recording — stays entirely in your browser and is never uploaded anywhere. See the <a href="/blog/make-a-song-beginners">beginner's guide to making a song</a> for more detail on how the arrangement view and transport controls work together.</p>
+
+        <h2>Step 6: Edit in the piano roll</h2>
+        <p>Double-click the recorded MIDI clip to open it in the piano roll. This is where you fix mistakes, adjust timing, and shape the feel of the part without re-recording anything.</p>
+
+        <h3>Correcting notes</h3>
+        <p>If you hit the wrong key at any point, click the incorrect note to select it and delete it with the Delete key, then draw the correct note in its place with the pencil tool. To move a note to a different pitch, drag it up or down. To move it in time, drag it left or right.</p>
+
+        <h3>Quantizing timing</h3>
+        <p>If your timing was slightly off, select all notes (Ctrl+A or Cmd+A) and apply quantize. Choose the quantize resolution — 1/8 note is common for melodic lines, 1/16 for faster passages. Quantize snaps each note's start to the nearest grid line at that resolution. For a more human feel, use swing quantize rather than straight quantize, which nudges off-beat notes slightly later rather than aligning them to a rigid grid.</p>
+
+        <h3>Adjusting velocities</h3>
+        <p>The piano roll in Tracks shows note velocity as bar height at the bottom of the editor. Click and drag individual velocity bars up or down to make specific notes louder or quieter. This is useful for accenting certain beats or calming down notes that came out too aggressive. Selecting multiple notes and dragging scales all of them proportionally.</p>
+
+        <h2>Step 7: Record multiple takes</h2>
+        <p>Tracks supports take comping — recording multiple passes of the same section and then choosing the best notes from each pass to build a final composite performance. Enable take comping in the transport, then record the section as many times as you want. Each pass is stored as a separate take within the same clip.</p>
+        <p>After recording, open the clip and switch between takes to hear each one in context. You can then cut between takes in the piano roll, keeping the best bar from take 1, the best run from take 2, and so on. The result sounds like one smooth performance.</p>
+        <p>This workflow works particularly well for solos, melodic leads, and anything where feel and expression matter more than technical precision. Record five or six passes without stopping, then spend a few minutes in the piano roll assembling the best version. It is faster than trying to nail everything in a single take.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Using your MIDI keyboard for more than melodic parts</h2>
+        <p>A MIDI keyboard connected to Tracks can play any instrument — not just melodic synths. Route it to the 808 or 909 drum machine and each key triggers a different drum sound. Route it to the 16-pad sampler and each key plays a different sample. This makes the keyboard a versatile performance tool for building beats and layering sounds, not just writing melodies.</p>
+        <p>You can also use the keyboard while mixing. A MIDI controller with knobs or faders can control track volumes, EQ parameters, and send levels if you map its controls to those parameters in Tracks. Keyboard keys map to notes in the piano roll by default, but knobs and faders on the same device can control almost any mixer parameter when MIDI learn is active.</p>
+        <p>For tips on shaping your recorded parts with EQ and compression after the performance is in, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does Web MIDI work in Safari or Firefox?</h3>
+        <p>Not by default. Safari does not include Web MIDI support. Firefox does not support it natively either, though a third-party browser extension exists that adds partial support. For reliable MIDI recording with no extra steps, use Chrome or Edge.</p>
+
+        <h3>Do I need to install drivers for my MIDI keyboard?</h3>
+        <p>Usually not. Most USB MIDI keyboards are class-compliant, meaning Windows and macOS recognize and connect to them automatically with no additional software. Some keyboards — particularly those with advanced audio features or proprietary firmware — require the manufacturer's driver. Check your keyboard's documentation; if a driver is needed, install it before connecting the keyboard and opening the browser.</p>
+
+        <h3>Can I use a MIDI controller (not a keyboard) with Tracks?</h3>
+        <p>Yes. Drum pads, pad controllers, breath controllers, and any other MIDI-over-USB device that sends standard MIDI messages work the same way. Drum pads send note-on and note-off messages just like keyboard keys do. The note number determines which pitch or drum sound is triggered, and the velocity determines the volume.</p>
+
+        <h3>Can I record MIDI from a keyboard on one track while other tracks play back?</h3>
+        <p>Yes. Arm only the track you want to record onto, then start recording. All other tracks in the Tracks timeline play back normally during the recording pass, so you can hear your drums, bass, and chord tracks while you perform the new part on top of them.</p>
+
+        <h3>Does my MIDI recording stay saved if I close the browser tab?</h3>
+        <p>Your project is saved in your browser's local storage and is not uploaded to any server. It will still be there when you reopen the tab in the same browser on the same device. However, local browser storage can be cleared by certain browser settings or privacy tools. To be safe, export your project as a .tracks.json file to your downloads folder after any session you want to keep. You can reload it by importing it back into the studio.</p>
+
+        <h3>What if my keyboard is connected but Tracks shows no MIDI input?</h3>
+        <p>First confirm that Chrome or Edge has MIDI device permission for the site (check the lock icon in the address bar). Then unplug and re-plug the keyboard and reload the page. On Windows, check Device Manager to confirm the keyboard appears without errors. On Mac, open Audio MIDI Setup and verify the keyboard shows up in the MIDI Studio view. If it appears there but not in Tracks, a page reload after the device is recognized usually resolves it.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Connect your keyboard and start recording</h3>
+            <p>Plug in via USB, open the studio, and your keyboard is ready to play any instrument in Tracks — free, in your browser.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
