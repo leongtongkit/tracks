@@ -1,5 +1,13 @@
 [
   {
+    "slug": "music-maker-chromebook-students",
+    "title": "Free online music maker for students and Chromebooks",
+    "dek": "Chromebooks block software installs, but tracks.jfound.net runs in any browser tab — here is how students can record, arrange, and export a full song with no account and no download.",
+    "date": "2026-06-22",
+    "tags": ["Chromebook", "students", "free", "browser DAW"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "use-midi-keyboard-browser",
     "title": "How to use a MIDI keyboard in a browser DAW (Web MIDI)",
     "dek": "Connect your MIDI keyboard to your browser and play, record, and sequence with it in Tracks — no drivers, no software install, just the Web MIDI API and a USB cable.",
