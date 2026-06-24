@@ -1,5 +1,13 @@
 [
   {
+    "slug": "sidechain-compression-explained",
+    "title": "Sidechain compression explained (the \"pumping\" effect)",
+    "dek": "Sidechain compression makes a track duck in volume whenever another track hits — it's the pumping effect you hear in dance music, and you can dial it in with Tracks' built-in sidechain ducking in minutes.",
+    "date": "2026-06-24",
+    "tags": ["sidechain", "compression", "mixing", "pumping"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-a-melody-no-theory",
     "title": "How to make a melody if you don't know music theory",
     "dek": "You don't need to read music to write a melody that works — here is a practical method for building a memorable tune in the Tracks piano roll using shapes, repetition, and your ear alone.",

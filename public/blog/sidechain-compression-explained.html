@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sidechain compression explained (the "pumping" effect) | Tracks</title>
+    <meta name="description" content="Sidechain compression makes a track duck in volume every time another track hits — it's the pumping effect in dance music and the reason a kick always cuts through a dense mix. Here is how it works and how to set it up in Tracks." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/sidechain-compression-explained" />
+    <meta property="og:title" content="Sidechain compression explained (the &quot;pumping&quot; effect)" />
+    <meta property="og:description" content="Sidechain compression ducks one track whenever another hits — creating the classic pumping feel in dance music. Here is what it is, why producers use it, and how to dial it in with Tracks' built-in sidechain ducking." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/sidechain-compression-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Sidechain compression explained (the \"pumping\" effect)",
+        "description": "Set up sidechain ducking in the Tracks browser studio so your bass, pads, or chords duck in volume every time the kick drum hits — creating the pumping effect used in dance, house, and pop production.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open the mixer and select your target track", "text": "In Tracks, open the mixer and click on the track you want to duck — typically the bass synth or a chord pad. This is the track whose volume will be pulled down by the sidechain." },
+          { "@type": "HowToStep", "name": "Enable sidechain ducking and choose the trigger", "text": "In the track's compressor or sidechain ducking slot, set the sidechain source to the kick drum track. The compressor will now react to the kick's signal rather than the target track's own signal." },
+          { "@type": "HowToStep", "name": "Set threshold and ratio", "text": "Lower the threshold until the compressor activates on every kick hit. Set the ratio to 4:1 or higher — 8:1 gives a more pronounced duck. The gain reduction meter should show 6–12 dB of compression on each kick transient." },
+          { "@type": "HowToStep", "name": "Adjust attack and release for the pumping feel", "text": "Set attack to 1–5 ms so the duck happens immediately on the kick hit. Adjust the release to match the gap between kicks — a release of 100–200 ms on a four-on-the-floor pattern at 128 BPM gives a natural pump that breathes in time with the groove." },
+          { "@type": "HowToStep", "name": "Set make-up gain and check the full mix", "text": "Raise make-up gain on the ducked track so it sits at the right level between kicks. Play the full mix and listen for the pumping motion — reduce the ratio or raise the threshold if the effect is too aggressive." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Sidechain compression explained (the \"pumping\" effect)", "item": "https://tracks.jfound.net/blog/sidechain-compression-explained" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Sidechain compression explained (the "pumping" effect)</h1>
+        <p class="art-meta">By Tongkit Leong · June 24, 2026 · 7 min read</p>
+
+        <p class="lede">Sidechain compression makes one track automatically duck in volume every time a different track hits — the technique behind the pumping, breathing rhythm you hear in house, dance, and pop music. You can set it up in the <a href="/studio">Tracks browser studio</a> using the built-in sidechain ducking control in the mixer, with no plugins and no download required.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What is sidechain compression?</h2>
+        <p>A standard compressor listens to the signal it is processing and turns down the volume when that signal gets too loud. A sidechain compressor does something different: it listens to a separate "trigger" signal and uses that signal to control the gain of a different track.</p>
+        <p>The most common setup is kick drum as the trigger, bass synth or chord pad as the target. Every time the kick hits, the compressor on the bass briefly ducks the bass's volume — then lets it back up before the next kick. The result is a rhythmic push-and-pull that makes the kick feel punchy and present even in a dense mix, because the bass is literally stepping aside every time the kick lands.</p>
+        <p>When the effect is exaggerated — with a lot of gain reduction and a slow release — the whole mix seems to "breathe" in time with the kick. That is the pumping effect. In subtler doses it simply creates space for the kick to punch through without the bass and kick clashing in the low end.</p>
+
+        <h2>Why producers use sidechain compression</h2>
+        <p>The low end of a mix only has so much room. A kick drum and a bass synth both live in the 60–200 Hz range. If they both play at full volume simultaneously, they compete: the kick loses its attack, the bass sounds unsteady, and the whole mix feels thick and undefined on small speakers.</p>
+        <p>Sidechain compression solves this without you having to choose between the kick and the bass. The bass plays at full volume most of the time. The moment the kick hits, the bass ducks just enough to let the kick's transient cut through cleanly. When the kick is done, the bass comes back up. Done right, the listener does not notice the duck consciously — they just feel that the kick is big and the bass is solid.</p>
+        <p>A second reason is groove. When the sidechain release is tuned to the tempo, the rhythmic swelling of the sidechained track adds forward motion to the track. This is especially common in house and techno, where the pumping feel is a deliberate aesthetic choice rather than just a mixing fix.</p>
+        <p>Third, sidechain is used for vocal ducking in broadcast and podcasting — background music automatically lowers when someone starts talking, then rises again during silence. The principle is identical.</p>
+
+        <h2>How to set up sidechain ducking in Tracks</h2>
+        <p>Tracks has sidechain ducking built directly into the mixer. Here is how to wire it up step by step.</p>
+
+        <h3>Step 1: Open the mixer and find the target track</h3>
+        <p>Press the mixer button to open the full channel strip view. Identify the track you want to duck — this is usually your bass synth or a chord pad. Click that track's compressor slot to open the compressor controls. This is the compressor that will do the ducking.</p>
+
+        <h3>Step 2: Set the sidechain source to the kick drum</h3>
+        <p>In the compressor panel, look for the sidechain input selector. Change it from "self" (the track's own signal) to the kick drum track. The compressor will now listen to the kick's audio to decide when to clamp down, but it will apply that gain reduction to the bass (or pad) track — not to the kick itself.</p>
+        <p>The kick drum track's own fader and output are not affected by this routing. You are only borrowing the kick's signal as a trigger. The kick plays at its own level; the bass simply responds to it.</p>
+
+        <h3>Step 3: Set threshold and ratio</h3>
+        <p>Lower the threshold until the compressor's gain reduction meter moves on every kick hit. If the meter only moves on some kicks, the threshold is too high — lower it. A ratio of 4:1 gives a moderate duck that works well for functional sidechain (kick vs bass). A ratio of 8:1 or higher produces a more exaggerated pump. Start at 4:1 and go higher if you want the effect to be more audible.</p>
+        <p>Target 6–10 dB of gain reduction on each kick transient for a noticeable but musical result. More than 12 dB and the bass will seem to disappear on every beat, which is usually too much unless the pumping effect is the point of the track.</p>
+
+        <h3>Step 4: Set attack and release — this is where the feel comes from</h3>
+        <p>The attack controls how quickly the compressor ducks the target when the kick hits. Set it to 1–5 ms. A very fast attack means the duck happens at the exact moment the kick lands, which maximizes the space for the kick's initial transient. A slower attack (10–30 ms) lets a little of the bass's own transient through before the duck kicks in, which can feel more natural on bass-heavy material.</p>
+        <p>The release is the most important control for sidechain. It determines how long the duck lasts — and therefore how the pumping groove feels. A general starting rule: set the release so the bass comes back up right before the next kick hits.</p>
+        <ul>
+          <li><strong>Four-on-the-floor at 128 BPM</strong> — kicks fall every 469 ms. A release of 150–250 ms gives the bass time to swell back up before the next hit, creating a smooth pump.</li>
+          <li><strong>Slower tempo or half-time feel</strong> — with kicks further apart, you can use a longer release (300–400 ms) for a more dramatic swell without the bass feeling like it is constantly ducking.</li>
+          <li><strong>Exaggerated pumping (dance/EDM)</strong> — try a release of 400–600 ms on a 128 BPM four-on-the-floor track. The bass does not fully recover before the next kick, which gives the classic breathless pump of classic house records.</li>
+        </ul>
+        <p>Adjust the release by ear while the full track plays. The right setting feels rhythmic and intentional, not like the volume is randomly stuttering.</p>
+
+        <h3>Step 5: Make-up gain and final balance</h3>
+        <p>After adding gain reduction, raise the compressor's make-up gain on the target track to bring its average level back to where it was before. You are not trying to increase overall loudness — you are restoring the between-kicks level so the bass sits at the right place in the mix, and only steps aside on the kick transients.</p>
+        <p>Play the full mix and compare the kick-bass interaction with the sidechain active and bypassed. The kick should feel more distinct and punchy with sidechain on. If the duck is obvious enough to distract, lower the ratio or raise the threshold slightly. If you cannot hear any improvement, lower the threshold more or check that the sidechain source is set correctly.</p>
+
+        <h2>Common sidechain setups</h2>
+
+        <h3>Kick into bass (functional sidechain)</h3>
+        <p>The most common and useful setup. Use a ratio of 4:1, attack 2–5 ms, release tuned to your tempo. The goal is a cleaner low end — the pumping feel is a side effect, not the point. This works on every genre.</p>
+
+        <h3>Kick into chord pads (dance music pump)</h3>
+        <p>Route the kick into a compressor on your chord pad or synth pad. Use a higher ratio (6:1–10:1), fast attack, and a slower release (300–500 ms). This is the classic house music pumping effect. The pads visibly swell and duck with the kick pattern, which gives the track its rhythmic energy even in sections with no melody changes.</p>
+
+        <h3>Kick into the full mix bus (advanced)</h3>
+        <p>Applying subtle sidechain ducking on the master bus with the kick as the trigger glues the whole mix together rhythmically. Use a very low ratio (2:1), a threshold set so only 2–4 dB of gain reduction occurs, and a fast release. This technique requires care — too much and everything sounds like it is pumping in an uncontrolled way. Used lightly, it makes the kick feel enormous without boosting it at all.</p>
+
+        <h3>Vocal ducking (music under speech)</h3>
+        <p>Set the vocal track as the sidechain trigger and route it into the compressor on the music or background track. The music will lower automatically whenever the vocal is present and rise during vocal gaps. This is standard practice in podcasts and video backgrounds. Use a longer attack (10–20 ms) so the duck is smooth rather than abrupt, and a release of 200–400 ms so the music fades back up gradually.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Common sidechain mistakes</h2>
+        <ul>
+          <li><strong>Wrong sidechain source:</strong> if the sidechain input is set to the wrong track, the compressor will not trigger on the kick at all, or will trigger erratically on whatever track it is pointed at. Double-check the sidechain input selector before adjusting any other controls.</li>
+          <li><strong>Release too short:</strong> a very short release (under 50 ms) causes the bass to snap back up too quickly after each kick, which makes the sidechain feel jumpy rather than musical. Lengthen the release until the pump has a smooth arc.</li>
+          <li><strong>Release too long:</strong> if the release exceeds the gap between kicks, the bass never fully recovers and sits quietly for long stretches. This can work as a stylistic choice, but if you just want a clean low end, shorten the release so the bass is back at full level well before the next kick lands.</li>
+          <li><strong>Too much gain reduction:</strong> more than 12 dB of duck makes the bass sound like it is turning off. Unless you are making a genre where that is the sound, pull the threshold back up until you get a more subtle 6–8 dB of gain reduction.</li>
+          <li><strong>Forgetting make-up gain:</strong> after setting sidechain compression, the average volume of the target track drops. Add make-up gain to compensate, or raise the track's fader so it sits at the same level in the mix as before.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What is the difference between sidechain compression and volume automation?</h3>
+        <p>Volume automation draws a static curve that lowers the volume at fixed points in time. Sidechain compression responds dynamically to whatever the trigger track is doing — so if the kick pattern changes (for example, in a breakdown), the ducking changes automatically. Volume automation gives you precise manual control; sidechain compression tracks the music in real time. Both can achieve a similar sound, but sidechain is faster to set up and adapts to tempo changes or variation in the kick pattern.</p>
+
+        <h3>Can I sidechain to something other than a kick drum?</h3>
+        <p>Yes. You can use any track as the trigger. A common setup is to sidechain a reverb return channel to the lead vocal — the reverb ducks whenever the dry vocal plays, so the reverb tail does not muddy the vocal's articulation, but it swells out in the gaps. Another option is to sidechain background pads to a hi-hat for a subtle rhythmic texture. The trigger can be any audio signal.</p>
+
+        <h3>Does sidechain compression affect what I hear from the kick?</h3>
+        <p>No. The kick drum track plays at its own fader level and is not processed by the sidechain compressor you set up on the bass or pad track. Only the target track (the one the compressor is applied to) is affected. The kick's signal is read as a trigger but is not modified.</p>
+
+        <h3>What is "ghost sidechain" or "invisible sidechain"?</h3>
+        <p>Ghost sidechain means routing a kick drum pattern to the sidechain input but muting the kick track so it never plays in the mix — only the ducking effect remains. This lets you get the rhythmic pumping feel without an audible kick, which some producers use to add movement to pads or synths in a non-percussive track. In Tracks, you can set this up by muting the kick track while keeping the sidechain routing active.</p>
+
+        <h3>Is sidechain the same as ducking?</h3>
+        <p>"Ducking" is the general term for one track lowering in response to another. Sidechain compression is the most common way to achieve it. Some DAWs also call the feature "sidechain ducking" directly, which is the term used in Tracks. The effect is the same: a target track automatically reduces its volume whenever the trigger track plays.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks has sidechain ducking built into the mixer — you can select any track as the sidechain trigger in the compressor controls of any other track. No plugins needed. Open the <a href="/studio">studio</a>, set up your kick and bass, and follow the steps above. For more on using compression generally, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>. If you need a kick pattern to trigger the sidechain, see <a href="/blog/free-online-drum-machine">Free online drum machine: program beats with no software</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try sidechain ducking for free</h3>
+            <p>Set up kick-triggered sidechain compression in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
