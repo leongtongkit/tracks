@@ -1,5 +1,13 @@
 [
   {
+    "slug": "split-song-into-stems",
+    "title": "How to split a song into stems (vocals, drums, bass)",
+    "dek": "Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and other — so you can remix, sample, or study any element. Tracks runs this extraction entirely in your browser with no upload and no account.",
+    "date": "2026-06-25",
+    "tags": ["stems", "stem extraction", "vocals", "remixing", "audio"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "sidechain-compression-explained",
     "title": "Sidechain compression explained (the \"pumping\" effect)",
     "dek": "Sidechain compression makes a track duck in volume whenever another track hits — it's the pumping effect you hear in dance music, and you can dial it in with Tracks' built-in sidechain ducking in minutes.",

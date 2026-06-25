@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to split a song into stems (vocals, drums, bass) | Tracks</title>
+    <meta name="description" content="Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and other — so you can remix, sample, or study any element. Tracks runs this extraction entirely in your browser with no upload and no account." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/split-song-into-stems" />
+    <meta property="og:title" content="How to split a song into stems (vocals, drums, bass)" />
+    <meta property="og:description" content="Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and other — so you can remix, sample, or study any element. Tracks runs this extraction entirely in your browser with no upload." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/split-song-into-stems" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to split a song into stems (vocals, drums, bass)",
+        "description": "Use Tracks' built-in stem extraction to separate any audio file into vocals, drums, bass, and other parts — directly in your browser, with no upload and no account required.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open the studio and import your audio file", "text": "Go to tracks.jfound.net/studio and open the studio. Use the import button or drag and drop your audio file — MP3 or WAV — directly onto the timeline. The file loads into a new audio track." },
+          { "@type": "HowToStep", "name": "Select the clip and open Stem Extraction", "text": "Click the audio clip you imported to select it. In the clip toolbar or track menu, choose Extract Stems. A panel opens that shows the four output stems: Vocals, Drums, Bass, and Other." },
+          { "@type": "HowToStep", "name": "Run the extraction", "text": "Click Extract. The source separation model processes the audio locally in your browser using the Web Audio API. Processing time depends on the length of the file and your device's CPU — a three-minute track typically takes one to three minutes to separate." },
+          { "@type": "HowToStep", "name": "Review and play back each stem", "text": "When extraction finishes, each stem appears as a separate audio track in the timeline. Solo each one to hear it in isolation — vocals only, drums only, bass only, or everything else. You can adjust levels, mute stems you do not need, and play them back together." },
+          { "@type": "HowToStep", "name": "Export the stems you want", "text": "To save individual stems, use the Export function on each track — select the stem track, choose Export Track, and download it as a WAV or MP3. Alternatively, use the full mix export to bounce a custom combination of stems to a single file." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to split a song into stems (vocals, drums, bass)", "item": "https://tracks.jfound.net/blog/split-song-into-stems" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to split a song into stems (vocals, drums, bass)</h1>
+        <p class="art-meta">By Tongkit Leong · June 25, 2026 · 7 min read</p>
+
+        <p class="lede">Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and everything else — using AI source separation. <a href="/studio">Tracks</a> runs this extraction directly in your browser: import any audio file, run Extract Stems, and you get four separate tracks with no file upload, no account, and nothing stored anywhere but your own device.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What are stems?</h2>
+        <p>In music production, a "stem" is an isolated layer of a finished mix. A full song has all the instruments and vocals combined into a single stereo file. Splitting it into stems means separating those elements so you can hear — and work with — each part on its own.</p>
+        <p>The four categories that stem extraction tools typically produce are:</p>
+        <ul>
+          <li><strong>Vocals</strong> — all sung or spoken material</li>
+          <li><strong>Drums</strong> — kick, snare, hi-hats, and percussion</li>
+          <li><strong>Bass</strong> — bass guitar, 808s, bass synths</li>
+          <li><strong>Other</strong> — guitars, keys, strings, synth pads, and anything that does not fit cleanly into the other three categories</li>
+        </ul>
+        <p>These are not necessarily clean separations — a bass guitar's harmonics overlap with a guitar's low end, and a melodic synth line might bleed between vocals and other — but modern source separation is good enough to be useful for most production and sampling tasks.</p>
+
+        <h2>What people use stem splitting for</h2>
+        <p>Stem splitting has practical uses at every skill level, from beginners learning songs to experienced producers building new tracks.</p>
+
+        <h3>Remixing and sampling</h3>
+        <p>The most common use is extracting elements from an existing track to build something new. You might pull the vocal from a song and set it over a different beat, or lift a drum loop from a record and repitch it. Having the isolated stem gives you a clean element to work with rather than a full mix where the drums are tangled with the bass and guitars.</p>
+        <p>Be aware that extracting stems from commercially released music does not grant you any rights to use those elements — stem splitting is a tool, not a licence. For original work or properly cleared samples it is entirely appropriate.</p>
+
+        <h3>Removing vocals for practice or karaoke</h3>
+        <p>If you want to sing or play along to a track, extracting and muting the vocal stem gives you an instrumental version. This is not perfect — some vocal frequencies will remain in the other stems — but it works well enough for practising against a familiar recording or creating a backing track.</p>
+
+        <h3>Studying a mix</h3>
+        <p>Isolating each stem lets you hear exactly what the original producer did with each element. How much reverb is on the snare alone? What does the bass actually sound like without the kick masking it? How is the lead vocal processed? Stem separation makes these details audible that are otherwise hidden in the full mix.</p>
+
+        <h3>Fixing a bad export</h3>
+        <p>If you finished a song but lost the project file, stem splitting your own export is sometimes the fastest route back to an editable state. The stems will not be as clean as your original tracks, but they give you something to work with rather than starting from scratch.</p>
+
+        <h2>How stem extraction works</h2>
+        <p>Source separation uses machine learning models trained on large sets of music with known stem labels. The model learns the statistical patterns of what drums sound like versus what vocals sound like, and at inference time it applies those learned patterns to separate a new audio file it has never seen before.</p>
+        <p>This happens entirely on your device in Tracks. The audio never leaves your browser — there is no server-side processing, no upload, and no account needed. Processing runs in the Web Audio API using your CPU, which is why it takes a few minutes for a full-length track rather than happening instantly.</p>
+        <p>The quality depends on the complexity of the original recording. Tracks with very clear separation between instruments (sparse electronic music, a solo vocal over piano) tend to separate cleanly. Dense mixes with many overlapping elements in the same frequency range (full-band recordings with lots of reverb) produce results with more bleed between stems.</p>
+
+        <h2>How to split a song into stems in Tracks</h2>
+        <p>The whole process takes five steps. Open the <a href="/studio">Tracks browser studio</a> before you begin — no download or sign-in required.</p>
+
+        <h3>Step 1: Import your audio file</h3>
+        <p>Drag your audio file — MP3 or WAV — directly onto the timeline, or use the Import button at the top of the studio. The file will appear as a waveform clip on a new audio track. Press play to confirm it sounds correct before starting extraction.</p>
+        <p>If your file is very long (more than five minutes), consider trimming it to the section you actually need before extracting — extraction time scales with the length of the audio, and shorter files process faster.</p>
+
+        <h3>Step 2: Select the clip and open Extract Stems</h3>
+        <p>Click the clip to select it. In the clip's right-click menu or the track toolbar, choose Extract Stems. A panel will open showing the four output categories: Vocals, Drums, Bass, and Other.</p>
+
+        <h3>Step 3: Run the extraction</h3>
+        <p>Click Extract to start the separation. Tracks processes the audio locally — you will see a progress bar while the model works through the file. For a typical three-minute track, expect one to three minutes of processing time, depending on your device's CPU speed. Keep the browser tab active during processing; putting the tab in the background may slow it down on some devices.</p>
+
+        <h3>Step 4: Review the stems in the timeline</h3>
+        <p>When extraction finishes, four new audio tracks appear in the timeline — one for each stem. Use the Solo button on each track to listen to it in isolation. Check the vocal stem for bleed from instruments, and the drum stem for bass frequencies that may have leaked through. The Other stem often contains the widest range of elements, so give it a careful listen to hear what ended up there.</p>
+        <p>You can process each stem like any other audio track in Tracks — add EQ to clean up frequencies, apply compression, or use reverb sends. This is a good place to reduce low-end bleed on the vocal stem with a high-pass filter, or to tighten transients on the drum stem with gentle compression.</p>
+
+        <h3>Step 5: Export the stems you want</h3>
+        <p>To save a stem as a separate file, select its track and use Export Track to download it as a WAV or MP3. If you want to export a custom combination — for example, the drums and bass together without vocals — mute the tracks you do not want and use the full-project export. See <a href="/blog/export-song-mp3-wav">How to export your song to MP3 or WAV</a> for the full export workflow.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Getting the most from your stems</h2>
+
+        <h3>Clean up bleed with EQ</h3>
+        <p>Even good source separation leaves some bleed. A high-pass filter at 100–150 Hz on the vocal stem removes low-end rumble that leaked through from the kick and bass. A low-pass filter at 8–10 kHz on the bass stem removes upper-frequency bleed from guitars or cymbals. These simple EQ cuts can make the stems feel much more separated than the raw output.</p>
+
+        <h3>Use the stems as arrangement reference</h3>
+        <p>If you are making a lo-fi remix or beat, bring the drum stem into Tracks and chop it into loops — select the segment you want, export it as a short clip, and import it as a sample. See <a href="/blog/make-lofi-hip-hop">Make lo-fi hip-hop in your browser</a> for a walkthrough of building a track from chopped samples and recorded elements.</p>
+
+        <h3>Time-stretch without re-extracting</h3>
+        <p>If the stem is at a different tempo from your project, use Tracks' time-stretch and repitch controls on the audio clip to fit it to your grid. Select the clip, enable time-stretch mode, and drag the clip's edge to the new length. Tracks will stretch the audio to match without changing the pitch.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does my audio file get uploaded to a server?</h3>
+        <p>No. Stem extraction in Tracks runs entirely on your device using the Web Audio API. The audio file never leaves your browser — there is no upload, no cloud processing, and nothing stored on an external server. Your projects and imported audio stay local only.</p>
+
+        <h3>What audio file formats can I import for stem extraction?</h3>
+        <p>Tracks accepts MP3 and WAV files for import. Both work with stem extraction. WAV files give the extraction model the cleanest signal to work with, since MP3 compression introduces artefacts that can affect separation quality slightly — though in practice the difference is usually small.</p>
+
+        <h3>How good is the output quality?</h3>
+        <p>Quality varies with the source material. Tracks with clear tonal separation — a vocal over sparse accompaniment, a simple drum machine pattern, a clean bass without distortion — separate well. Dense, reverb-heavy mixes with many layers in the same frequency range produce more bleed between stems. Treat the output as a useful starting point rather than a perfect separation, and apply EQ to refine it.</p>
+
+        <h3>Can I extract stems from a track I recorded in Tracks?</h3>
+        <p>Yes, but for your own Tracks projects, you do not need to. Export each track individually using Export Track rather than running stem extraction on a full mix — per-track export gives you a perfectly clean stem with no separation artefacts. Stem extraction is designed for audio files where you do not have the original multi-track project.</p>
+
+        <h3>How long does extraction take?</h3>
+        <p>Processing time depends on the length of the audio and your device's CPU. A three-minute track typically takes one to three minutes on a modern laptop. A seven-minute track may take four to six minutes. Keeping the browser tab active and foreground during processing speeds things up on most devices.</p>
+
+        <h3>What is the "Other" stem?</h3>
+        <p>The Other stem captures everything that the model does not classify as vocals, drums, or bass — typically guitars, keyboards, strings, synth pads, and other melodic or harmonic instruments. If you are extracting a guitar riff from a full-band recording, it will most likely appear in the Other stem.</p>
+
+        <h3>Can I use the extracted stems in a new Tracks project?</h3>
+        <p>Yes. After extraction, each stem is a regular audio track in the timeline. You can drag the clips, trim them, apply effects, or export them and import them into a new project. The <a href="/studio">studio</a> treats extracted stems exactly like any other imported audio.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Split stems for free in your browser</h3>
+            <p>Import any audio file and separate it into vocals, drums, bass, and other — no upload, no account, nothing leaving your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
