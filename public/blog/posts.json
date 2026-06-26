@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-a-rap-beat",
+    "title": "How to make a beat for a rap song",
+    "dek": "Making a rap beat starts with a kick-snare pattern, a sample or synth hook, and the right tempo — here is how to program all three in the Tracks browser studio with no downloads or software install.",
+    "date": "2026-06-26",
+    "tags": ["rap", "beats", "hip-hop", "drum machine", "808"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "split-song-into-stems",
     "title": "How to split a song into stems (vocals, drums, bass)",
     "dek": "Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and other — so you can remix, sample, or study any element. Tracks runs this extraction entirely in your browser with no upload and no account.",
