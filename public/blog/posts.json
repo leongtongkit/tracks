@@ -1,5 +1,13 @@
 [
   {
+    "slug": "free-instruments-in-browser",
+    "title": "Best free VST alternative instruments in the browser",
+    "dek": "You don't need paid VST plugins to get good sounds — Tracks ships a subtractive synth, an FM synth, 808/909 drum machines, a 16-pad sampler, and SoundFont playback built into the browser, free.",
+    "date": "2026-07-01",
+    "tags": ["instruments", "synth", "VST", "SoundFont", "free"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "bandlab-soundtrap-tracks-compared",
     "title": "BandLab vs Soundtrap vs Tracks: free browser studios compared",
     "dek": "BandLab, Soundtrap, and Tracks are the three free browser DAWs most people encounter — here is a plain comparison of instruments, collaboration, export formats, and data privacy so you can pick the right studio for your workflow.",
