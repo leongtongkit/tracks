@@ -1,5 +1,13 @@
 [
   {
+    "slug": "automation-in-your-mix",
+    "title": "How to use automation to make your mix move",
+    "dek": "Static volume and effect settings make a mix feel flat. Here is how to draw automation curves for volume, pan, and effect sends in Tracks so your track builds, breathes, and changes over time.",
+    "date": "2026-07-02",
+    "tags": ["automation", "mixing", "volume", "browser DAW"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "free-instruments-in-browser",
     "title": "Best free VST alternative instruments in the browser",
     "dek": "You don't need paid VST plugins to get good sounds — Tracks ships a subtractive synth, an FM synth, 808/909 drum machines, a 16-pad sampler, and SoundFont playback built into the browser, free.",

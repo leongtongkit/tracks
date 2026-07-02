@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use automation to make your mix move | Tracks</title>
+    <meta name="description" content="Static volume and effect settings make a mix feel flat. Here is how to draw automation curves for volume, pan, and effect sends in Tracks so your track builds, breathes, and changes over time — no plugins, no download." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/automation-in-your-mix" />
+    <meta property="og:title" content="How to use automation to make your mix move" />
+    <meta property="og:description" content="Automation lets any mixer knob change over time instead of sitting still. Here is how to draw volume, pan, and send automation in the Tracks browser studio, plus where it makes the biggest difference." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/automation-in-your-mix" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use automation to make your mix move",
+        "description": "Draw automation curves for volume, pan, and effect sends in the Tracks browser studio so a mix changes shape over the course of a song instead of sitting at fixed settings.",
+        "step": [
+          { "@type": "HowToStep", "name": "Pick a parameter to automate", "text": "Open a track in Tracks and choose a parameter to automate — volume, pan, or a send level are the most common starting points. Almost any mixer or effect parameter can be automated." },
+          { "@type": "HowToStep", "name": "Open the automation lane", "text": "Reveal the track's automation lane underneath its clips. This shows the chosen parameter as a flat line at its current value." },
+          { "@type": "HowToStep", "name": "Add breakpoints and draw the curve", "text": "Click on the automation lane to add breakpoints, then drag them up or down to set the value at that point in time. The line between two breakpoints ramps smoothly from one value to the next." },
+          { "@type": "HowToStep", "name": "Shape transitions with breakpoint spacing", "text": "Place two breakpoints close together for a fast, obvious change, or far apart for a slow, gradual one. Use this to build risers, fades, and section-to-section transitions." },
+          { "@type": "HowToStep", "name": "Play back and refine", "text": "Play the track and listen to how the automated parameter moves against the music. Nudge breakpoints until the change lands exactly on the beat or section boundary you intended." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to use automation to make your mix move", "item": "https://tracks.jfound.net/blog/automation-in-your-mix" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to use automation to make your mix move</h1>
+        <p class="art-meta">By Tongkit Leong · July 2, 2026 · 7 min read</p>
+
+        <p class="lede">Automation lets you draw a curve that changes any mixer or effect parameter over the course of a song, instead of leaving it at one fixed setting. In the <a href="/studio">Tracks browser studio</a>, you automate a parameter by opening its automation lane, adding breakpoints, and dragging them to the values you want at each point in time — no plugins, no download.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What automation actually does</h2>
+        <p>Every fader, knob, and send in a mix has a value — a volume level, a pan position, how much reverb is applied. Without automation, that value is fixed: you set it once and it stays there for the whole song. Automation replaces that fixed value with a curve, so the parameter can rise, fall, or jump at specific moments instead of sitting still.</p>
+        <p>This is different from just setting a good static mix. A static mix answers the question "what level should this track sit at." Automation answers a different question: "how should this track change as the song moves from one section to the next." A verse and a chorus rarely need identical settings — the chorus often wants a louder vocal, a wider stereo image, more reverb, or a brighter EQ. Automation is how you make those section-to-section differences happen automatically during playback, instead of riding a fader by hand every time you play the track back.</p>
+        <p>Almost any parameter in Tracks can be automated — track volume and pan, EQ bands, compressor threshold, reverb and delay send levels, filter cutoff on a synth, and more. The mechanism is the same regardless of which parameter you pick.</p>
+
+        <h2>How to add automation in Tracks</h2>
+        <p>Tracks lets you automate any mixer or effect parameter directly on the timeline, underneath the track it belongs to. Here is the basic workflow.</p>
+
+        <h3>Step 1: Pick a parameter</h3>
+        <p>Decide what you want to change over time. The three most useful starting points are:</p>
+        <ul>
+          <li><strong>Volume</strong> — for fades, swells, and level differences between sections.</li>
+          <li><strong>Pan</strong> — for movement across the stereo field, like a synth that drifts left to right.</li>
+          <li><strong>Send level</strong> — for effects that increase or decrease in intensity, like reverb building into a chorus.</li>
+        </ul>
+        <p>Click the track and select the parameter you want to automate from its automation menu. Any parameter exposed on that track's mixer strip or effect chain is available.</p>
+
+        <h3>Step 2: Open the automation lane</h3>
+        <p>Once a parameter is selected, an automation lane appears underneath the track's clips, showing the current value as a flat horizontal line. This lane sits in the same timeline as your audio and MIDI clips, so you can see exactly which bar or beat you are automating against.</p>
+
+        <h3>Step 3: Add breakpoints and draw the curve</h3>
+        <p>Click on the automation lane at a point in time to add a breakpoint — a single point that pins the parameter to a specific value at that exact moment. Add a second breakpoint further along the timeline and drag it to a different value. The line connecting the two breakpoints ramps smoothly from the first value to the second, so the parameter glides between them during playback rather than jumping.</p>
+        <p>Add as many breakpoints as you need to shape the curve. A simple fade-in only needs two breakpoints — low at the start, full volume a few bars later. A more complex build might use four or five breakpoints to create a stepped or curved rise.</p>
+
+        <h3>Step 4: Control the speed of the change with breakpoint spacing</h3>
+        <p>The distance between two breakpoints determines how fast the change happens. Place them close together and the parameter jumps quickly — useful for a hard cut into a drop, or a quick duck before a vocal line. Space them further apart and the change becomes gradual — useful for a slow reverb build across an eight-bar section, or a volume fade that spans an entire outro.</p>
+
+        <h3>Step 5: Play back and refine</h3>
+        <p>Play the section back and listen to how the automated parameter tracks against the music. Automation is most convincing when the breakpoints land exactly on musical boundaries — the first beat of a chorus, the last bar of a bridge. Nudge breakpoints left or right until the change feels timed to the music rather than arbitrary.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Where automation makes the biggest difference</h2>
+
+        <h3>Volume automation for arrangement contrast</h3>
+        <p>Instead of relying only on adding or muting tracks to build a song's energy, automate the volume of key elements — bring a pad up 2–3 dB going into a chorus, or pull a hi-hat down slightly during a verse so it does not compete with the vocal. Small, consistent volume moves across a song do more for the sense of build than one big change.</p>
+
+        <h3>Pan automation for movement and interest</h3>
+        <p>A synth or delay tail that slowly pans from center to one side over a few bars adds a sense of motion without changing anything about the sound itself. This works especially well on decorative elements — arpeggios, ear-candy risers, delay throws — where the goal is texture rather than a stable position in the stereo field.</p>
+
+        <h3>Send automation for building intensity</h3>
+        <p>Automating a reverb or delay send so it increases into a chorus or breakdown makes a section feel bigger and more spacious without touching the dry signal at all. A vocal with a low reverb send in the verse and a higher send in the chorus reads as more "open" in the chorus, even though nothing about the vocal's tone changed — only how much of the wet effect is blended in.</p>
+
+        <h3>Filter automation for risers and drops</h3>
+        <p>Automating a filter cutoff on a synth or full mix bus — sweeping it open over the last four or eight bars before a drop — is one of the most common moves in electronic music. The rising brightness builds tension, and the sudden return to a fully open filter at the drop reads as a release. This is a filter cutoff automation curve, not a special riser effect — the same technique works with any instrument that has a filter.</p>
+
+        <h2>Common automation mistakes</h2>
+        <ul>
+          <li><strong>Too many breakpoints:</strong> a curve with dozens of closely spaced breakpoints is hard to edit and often sounds jittery. Use the fewest breakpoints that get the shape you want — two or three is often enough for a simple fade or build.</li>
+          <li><strong>Automating instead of mixing:</strong> automation shapes change over time, but it is not a substitute for a good static mix. Get the base levels and tone right first, then use automation for the parts that genuinely need to move.</li>
+          <li><strong>Breakpoints that don't line up with the music:</strong> a volume swell that starts two beats early or late reads as sloppy rather than intentional. Zoom in on the timeline and place breakpoints precisely on bar or beat lines.</li>
+          <li><strong>Forgetting to check the automated value at the very start:</strong> if a curve starts partway through a value ramp because an earlier breakpoint was deleted, playback can jump unexpectedly at the beginning of a section. Play from the top after editing any automation lane.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What is the difference between automation and sidechain compression?</h3>
+        <p>Automation is a curve you draw by hand ahead of time — it plays back the same way every time. Sidechain compression reacts live to another track's signal, so it adapts automatically if that track's pattern changes. Automation gives you exact manual control over a specific moment; sidechain is faster to set up and stays in sync even if the triggering track's rhythm changes. See <a href="/blog/sidechain-compression-explained">sidechain compression explained</a> for more on that technique.</p>
+
+        <h3>Can I automate more than volume and pan?</h3>
+        <p>Yes. In Tracks, most parameters exposed on a track's mixer strip or effect chain can be automated, including EQ band gain, compressor threshold, and send levels to reverb or delay. If a knob has a value, it can usually be turned into an automation lane.</p>
+
+        <h3>Does automation work with MIDI tracks as well as audio?</h3>
+        <p>Yes. Automation lanes apply to the track's mixer and effect parameters regardless of whether the track contains audio clips or MIDI clips played through an instrument. You can automate a synth's filter cutoff on a MIDI track the same way you would automate a send level on an audio track.</p>
+
+        <h3>How is automation different from just riding the fader while recording?</h3>
+        <p>Riding a fader by hand during a live take captures whatever movement you happened to perform in that moment, and it is hard to repeat exactly. Drawn automation is precise and repeats identically every time you play the track back, and you can go back and adjust individual breakpoints without re-performing the whole pass.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks supports automation of any parameter directly on the timeline, with no plugins required. Open the <a href="/studio">studio</a>, load a track, and add an automation lane for volume, pan, or a send to try it. For the fundamentals of getting a good static mix before you start automating, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try automation for free</h3>
+            <p>Draw volume, pan, and send automation directly on the timeline in Tracks — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
