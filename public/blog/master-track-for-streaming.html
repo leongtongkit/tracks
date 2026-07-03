@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to master a track for streaming: loudness basics | Tracks</title>
+    <meta name="description" content="Mastering a track for streaming means gain-staging your mix, gluing it together on a bus, and watching a loudness meter instead of guessing. Here is how to do it in the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/master-track-for-streaming" />
+    <meta property="og:title" content="How to master a track for streaming: loudness basics" />
+    <meta property="og:description" content="Gain-stage your mix, glue it on a bus, and read the LUFS-M meter before you export — a plain guide to getting a track loud and clean for streaming, free in your browser." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/master-track-for-streaming" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to master a track for streaming: loudness basics",
+        "description": "Master a track for streaming in your browser using Tracks — finish the mix with headroom, glue the whole track on a bus, read the LUFS-M meter instead of guessing, and export a file that holds up on every platform.",
+        "step": [
+          { "@type": "HowToStep", "name": "Leave headroom before you master", "text": "Pull your master fader down so the loudest peak of the mix sits a few dB below 0 dB. Mastering can only shape a mix that isn't already slammed into the ceiling." },
+          { "@type": "HowToStep", "name": "Glue the mix on a bus", "text": "Create a bus track, route every track's output to it, and add a gentle EQ and a low-ratio compressor on that bus so the whole mix moves together instead of each track being processed alone." },
+          { "@type": "HowToStep", "name": "Watch the LUFS-M meter, not just the peak meter", "text": "Open the mixer and check the LUFS-M readout on the master strip while the track plays. It shows how loud the track actually sounds, which peak meters cannot tell you." },
+          { "@type": "HowToStep", "name": "Let the built-in limiter do its job", "text": "Tracks' master bus has a limiter that automatically catches peaks before they clip. Don't fight it by slamming the mix into it — give it a little headroom to work with." },
+          { "@type": "HowToStep", "name": "Export and reality-check the result", "text": "Bounce to WAV for the highest quality or MP3 to share quickly, then listen back on the platform or device your listeners will actually use." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to master a track for streaming: loudness basics", "item": "https://tracks.jfound.net/blog/master-track-for-streaming" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to master a track for streaming: loudness basics</h1>
+        <p class="art-meta">By Tongkit Leong · July 3, 2026 · 7 min read</p>
+
+        <p class="lede">To master a track for streaming: leave headroom on your mix bus, glue the whole track together with gentle EQ and compression on a bus, watch the LUFS-M loudness meter instead of just the peak meter, and let the built-in limiter catch the last few dB before you export — all free in the <a href="/studio">Tracks browser studio</a>, with no plugins to buy.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Mastering is not a mystery box — it's the last few decisions</h2>
+        <p>Mastering has a reputation as some secret final step that only specialists understand. In practice, for a track you made yourself and plan to upload to a streaming platform, it is a short list of practical decisions: make sure the mix has room to be processed, glue it together so it moves as one thing, check how loud it actually sounds, and stop it from clipping on the way out. You do not need a rack of outboard gear or an expensive plugin bundle to do this well.</p>
+        <p>Tracks does not have a separate "mastering suite," and this guide won't pretend it does. What it has is a master bus with a built-in limiter and a real-time LUFS-M (momentary loudness) meter, plus group buses you can use to process the whole mix at once. That is enough to take a finished mix and get it ready for Spotify, YouTube, SoundCloud, or anywhere else, without leaving your browser.</p>
+
+        <h2>Step 1: Leave headroom before you master anything</h2>
+        <p>The single most common mistake home producers make is finishing a mix with the master fader already brushing 0 dB, then wondering why mastering "does nothing" or makes things sound worse. A limiter or compressor can only shape a signal that has somewhere to go. If your mix is already at the ceiling, all a limiter can do is clip.</p>
+        <p>Before you touch anything else, check your master meter in the Tracks mixer while the loudest section of the track plays. If it is hitting the top of the meter, go back into the individual tracks and pull levels down — start with whichever track is fighting hardest for space, usually the kick, bass, or lead — until the master meter peaks a few dB below the top. That gap is the headroom your mastering step needs.</p>
+
+        <h2>Step 2: Glue the mix together on a bus</h2>
+        <p>A mix is a collection of separately processed tracks. Before it goes out the door, it helps to treat it as one signal for a moment. Tracks lets you create a bus track — a channel strip with no instrument of its own that other tracks route into — and that is the tool to use here.</p>
+        <h3>How to set it up</h3>
+        <ul>
+          <li>Add a new track and set its kind to <strong>bus</strong>. Name it something like "Master Bus."</li>
+          <li>In each track's mixer strip, set its output routing to send into that bus instead of straight to master.</li>
+          <li>On the bus itself, open the EQ and apply a very gentle, wide adjustment — for example a small dip around 300–400 Hz if the mix feels boxy, or a slight lift above 10 kHz for air. Small moves only; you already did the real EQ work on individual tracks.</li>
+          <li>Add the compressor on the bus with a low ratio (around 1.5:1–2:1), a fast attack, and a medium release. Aim for no more than 1–2 dB of gain reduction on the loudest parts. This is "glue," not squashing.</li>
+        </ul>
+        <p>The bus then routes to master like any other track. You have effectively built a simple mastering chain without leaving the mixer you already know.</p>
+
+        <h2>Step 3: Read the LUFS-M meter, not just the peak meter</h2>
+        <p>Open the mixer and look at the master strip. Alongside the peak meter, Tracks shows a <strong>LUFS-M</strong> readout — momentary loudness measured in LUFS (Loudness Units Full Scale). This matters because peak meters only tell you the single loudest instant in a signal, while LUFS approximates how loud a human actually perceives the track to be over a short window. Two tracks can hit the same peak level and sound very different in loudness — LUFS is the number that explains why.</p>
+        <p>Streaming platforms normalize loudness on playback, turning tracks up or down to a target level so a whole playlist feels consistent. That means chasing an extremely loud master no longer makes your track stand out — it just gets turned down more on playback, and if you got there by over-limiting, you're left with a squashed-sounding track for no benefit. Use the LUFS-M meter as a guide while your track plays through its loudest section: if it's reading well above what similar tracks in your genre sit at, you have room to back off the bus compressor or lower the gain slightly. If it's reading very quiet, you likely have too much headroom or too gentle a glue stage.</p>
+
+        <h3>Trust your ears alongside the number</h3>
+        <p>LUFS-M is a momentary reading, not an average over the whole song, so treat it as a rough gauge rather than a strict target. A verse and a drop will read differently even in a well-mastered track. Use it to catch obvious problems — a mix reading dramatically louder or quieter than a reference track you like — rather than trying to hit an exact figure to the decimal.</p>
+
+        <h2>Step 4: Let the built-in limiter do the last job</h2>
+        <p>The Tracks master bus has a limiter sitting at the very end of the signal chain, before the final output. It exists to catch any peaks that slip past your gain staging and stop them from clipping. It is not a user-adjustable "loudness maximizer" you crank up to make a track louder — it is a safety net.</p>
+        <p>This is exactly why Step 1 matters. If you leave sensible headroom and glue the mix gently on a bus, the limiter barely has to work, and your track keeps its dynamics and punch. If you slam the mix into it hoping for a louder master, you'll hear the transients flatten and the track lose its impact — the classic "brickwalled" sound. For most home-produced tracks aimed at streaming, less limiting produces a better result than more.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Step 5: Export and reality-check it</h2>
+        <p>Once the master bus is glued and the LUFS-M reading looks reasonable next to a reference track, export. Choose WAV if you're sending the file to a distributor or want the highest-quality archive copy, or MP3 at 320 kbps if you just need to share it quickly — see <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a> for the full walkthrough of Tracks' export options.</p>
+        <p>Then do the reality check that no meter can replace: listen to the exported file on the devices your listeners will actually use — phone speaker, earbuds, a car stereo, a laptop. A track that reads fine on a meter but disappears on a phone speaker usually needs more midrange presence on the kick and bass, not more loudness. If you haven't done a full mix pass yet, back up to <a href="/blog/how-to-mix-a-track-basics">EQ, compression, and reverb basics</a> before you master — mastering fixes small imbalances, not mixing problems.</p>
+
+        <h2>Common mastering mistakes and how to fix them</h2>
+        <ul>
+          <li><strong>No headroom left:</strong> the mix already peaks near 0 dB, so any bus processing just adds distortion. Turn individual tracks down before you touch the master bus.</li>
+          <li><strong>Over-compressing the bus:</strong> the bus compressor is doing 6–8 dB of gain reduction instead of 1–2. Raise the threshold or lower the ratio until the meter barely moves.</li>
+          <li><strong>Chasing a loudness number:</strong> since streaming platforms normalize playback volume, an aggressively loud master gets turned down anyway and just sounds worse for the effort. Aim for a clean, dynamic mix over a maximally loud one.</li>
+          <li><strong>Mastering to fix a mix problem:</strong> if a track sounds muddy or thin, gentle bus EQ won't rescue it. Fix the balance at the track level first.</li>
+          <li><strong>Only checking on one system:</strong> a master that sounds great on studio headphones can fall apart on a phone speaker. Check on at least two very different playback systems before calling it done.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What is LUFS and why does it matter for streaming?</h3>
+        <p>LUFS (Loudness Units Full Scale) is a measurement of perceived loudness rather than raw peak level. Streaming platforms use it to normalize playback volume across a catalog, which is why louder is no longer automatically better — it just means the platform turns your track down more. The LUFS-M meter on the Tracks master strip shows momentary loudness so you can compare your track's overall level to a reference rather than guessing from a peak meter alone.</p>
+
+        <h3>Do I need to hit an exact LUFS number?</h3>
+        <p>No. Different platforms target slightly different loudness levels, and Tracks' LUFS-M reading is a momentary value, not an integrated average over the full song. Treat it as a sanity check against a reference track you like rather than a number to hit precisely.</p>
+
+        <h3>Can I adjust the limiter's settings in Tracks?</h3>
+        <p>The limiter on the Tracks master bus is fixed — it's a safety net that catches peaks automatically, not a user-adjustable loudness maximizer. If you want more control over how the overall mix is shaped, do that upstream with a bus track carrying your own EQ and compressor, routed into master, as described above.</p>
+
+        <h3>Should I still use a paid mastering service for a final release?</h3>
+        <p>For a big release you're paying to distribute widely, a professional mastering engineer can still make a meaningful difference, especially on a very dense or difficult mix. For most tracks you're sharing online, uploading to a streaming platform, or using to build a portfolio, the gain-staging and bus-glue approach in this guide gets you a clean, competitive-sounding master for free.</p>
+
+        <h3>MP3 or WAV for my final master?</h3>
+        <p>Export WAV as your archive copy — it's lossless, and most distributors and streaming platforms want a WAV or FLAC upload. Export MP3 at 320 kbps only when you need a smaller file to share quickly by message or email. See <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a> for the full breakdown.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Master your track for free</h3>
+            <p>Bus glue, a loudness meter, and a built-in limiter — all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
