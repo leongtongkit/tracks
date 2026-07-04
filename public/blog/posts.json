@@ -1,5 +1,13 @@
 [
   {
+    "slug": "local-daw-storage-privacy",
+    "title": "Where does your project actually live? Local storage in a browser DAW",
+    "dek": "Tracks never uploads your project to a server. Here is how local, in-browser storage works, why it means no account and no cloud, and how to back up or move a project safely.",
+    "date": "2026-07-04",
+    "tags": ["local storage", "privacy", "browser DAW", "no account", "backup"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "master-track-for-streaming",
     "title": "How to master a track for streaming: loudness basics",
     "dek": "Mastering a track for streaming means gain-staging your mix, gluing it together on a bus, and watching a loudness meter instead of guessing. Here is how to do it in the free Tracks browser studio.",

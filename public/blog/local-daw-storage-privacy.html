@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Where does your project actually live? Local storage in a browser DAW | Tracks</title>
+    <meta name="description" content="Tracks never uploads your project to a server. Here is how local, in-browser storage works, why it means no account and no cloud, and how to back up or move a project safely." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/local-daw-storage-privacy" />
+    <meta property="og:title" content="Where does your project actually live? Local storage in a browser DAW" />
+    <meta property="og:description" content="No account, no cloud, no upload — here is exactly where a browser DAW keeps your project, what that means for privacy, and how to back it up so you never lose it." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/local-daw-storage-privacy" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Where does your project actually live? Local storage in a browser DAW",
+        "description": "Tracks autosaves your project to your browser's local storage and never uploads it to a server. This guide explains what's stored where, why that matters for privacy, and how to back up or move a project safely.",
+        "datePublished": "2026-07-04",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "Tracks", "url": "https://tracks.jfound.net" },
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://tracks.jfound.net/blog/local-daw-storage-privacy" }
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Where does your project actually live? Local storage in a browser DAW", "item": "https://tracks.jfound.net/blog/local-daw-storage-privacy" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Where does your project actually live? Local storage in a browser DAW</h1>
+        <p class="art-meta">By Tongkit Leong · July 4, 2026 · 7 min read</p>
+
+        <p class="lede">A browser DAW like <a href="/studio">Tracks</a> saves your project on your own device, not on a server — the project's track data autosaves to your browser's local storage, your samples and recordings autosave to IndexedDB, and nothing is uploaded unless you choose to export a file yourself. There is no account, because there is nothing on a server to log into.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>"Runs in your browser" and "saves to your browser" are two different claims</h2>
+        <p>Plenty of tools run in a browser tab but still ship every keystroke to a server the moment you make it. That is a reasonable way to build software — it's just not what Tracks does. Tracks is built so the entire audio engine, and the project you make with it, stay on your machine. The browser tab is not a thin client talking to a server; it's the whole studio.</p>
+        <p>That distinction matters more than it sounds. It means your unreleased track, your vocal takes, and your project name are not sitting in a database somewhere waiting for a breach, a policy change, or a shut-down service to expose or delete them. It also means the studio works the same whether your connection is fast, slow, or gone entirely after the page has loaded once.</p>
+
+        <h2>What autosaves, and where it actually goes</h2>
+        <p>Tracks autosaves continuously while you work, using two different browser storage mechanisms depending on what's being saved:</p>
+        <h3>Project data lives in local storage</h3>
+        <p>The structure of your song — tracks, clips, notes, tempo, mixer settings, automation — is fairly small as data goes, so it's kept in your browser's <strong>local storage</strong>, a key-value store every browser provides to every site. Tracks writes your current project to it as you edit, so if you close the tab and come back, your arrangement, instruments, and mix settings are exactly where you left them.</p>
+        <h3>Audio — samples and recordings — lives in IndexedDB</h3>
+        <p>Actual audio, like a sample you dropped into the sampler or a vocal take you recorded through your mic, is too large for local storage to handle well. That audio is kept in <strong>IndexedDB</strong>, a browser database built for larger binary data. Your project's metadata points to these audio entries by ID, so when the project reloads, it reassembles the full song — arrangement plus audio — from the two stores together.</p>
+        <p>Either way, the answer to "where did my file go" is the same: it went into your browser's own storage on your device, not to a server. You can check this yourself — turn off your Wi-Fi after loading <a href="/studio">the studio</a> once, and it keeps working, because there is nothing left to fetch.</p>
+
+        <h2>Why this is a privacy feature, not just a technical detail</h2>
+        <p>Local-only storage isn't a limitation Tracks is stuck with — it's the point. A rough vocal take, a beat you're not ready to share, or a client's unreleased stems never touch a network at all when you work this way. There's no account to create, which means there's no account to get compromised. There's no upload step you have to trust a company's servers to handle correctly. If you're comparing browser studios for exactly this reason, see how <a href="/blog/bandlab-soundtrap-tracks-compared">BandLab, Soundtrap, and Tracks</a> differ on collaboration and data handling — local-only is a trade-off, not a strictly better answer for every use case, and it's worth knowing which one you're choosing.</p>
+
+        <h2>The catch: local storage can be lost, and it's tied to one browser</h2>
+        <p>Keeping everything on your device is honest about where the risk moves to: your device, and specifically, one browser profile on it. A few things can wipe local storage and IndexedDB without warning:</p>
+        <ul>
+          <li><strong>Clearing browsing data.</strong> "Clear cache and cookies," "clear site data," or a privacy-cleanup extension will typically delete local storage and IndexedDB for a site along with everything else. Your Tracks project goes with it.</li>
+          <li><strong>Private or incognito windows.</strong> Anything you build in a private browsing window is usually wiped the moment you close that window, because that's what private mode is designed to do.</li>
+          <li><strong>Switching browsers or devices.</strong> Local storage is scoped to one browser on one device. A project you built in Chrome on your laptop will not appear if you open the studio in Safari, or on your phone, or on a different computer — that storage is simply somewhere else.</li>
+          <li><strong>Reinstalling your OS or browser, or running out of disk space.</strong> Less common, but any of these can also clear or corrupt browser storage.</li>
+        </ul>
+        <p>None of this is unique to Tracks — it's true of any app that relies on browser storage instead of a server account. The fix isn't to distrust local storage; it's to treat autosave as a working copy, not a backup.</p>
+
+        <h2>How to back up a project properly</h2>
+        <h3>Export a self-contained project file</h3>
+        <p>Tracks can export your entire project — arrangement, mixer settings, automation, and every sample or recording it uses, embedded as audio — into a single <code>.tracks.json</code> file you download to your computer. Unlike the autosave, this file is a plain download you control: put it in cloud storage, email it to yourself, or drop it in whatever backup system you already use for other documents. Because the audio is embedded rather than referenced, the file will reopen correctly even if the samples that made it are long gone from your browser's storage.</p>
+        <h3>When to export</h3>
+        <p>Autosave protects you against closing the tab by accident. It does not protect you against clearing your browser or losing the device. Get in the habit of exporting a <code>.tracks.json</code> file at natural checkpoints — after a session where you're happy with the arrangement, before you try something experimental you might want to undo later, and always once a track is finished. It takes a few seconds and it's the only copy that survives your browser being reset.</p>
+        <h3>Export the audio too</h3>
+        <p>A <code>.tracks.json</code> file preserves the editable project, but once a track is finished, also bounce a listening copy — see <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a>. A finished WAV or MP3 is the version you'll actually share, and it's worth having independent of the project file.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Moving a project to a new computer or browser</h2>
+        <p>Because a project lives in one browser's local storage, moving it anywhere else — a different browser, a different computer, a friend's laptop to keep working together — goes through the same export file. Export the <code>.tracks.json</code> from the browser where you built it, move that file however you'd move any file (a USB drive, cloud storage, a chat app), then open <a href="/studio">the studio</a> in the destination browser and import it. The project reloads with its full arrangement and audio, because the file carries everything with it rather than pointing back at storage that only exists on the original device.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Assuming autosave is a backup.</strong> Autosave protects against an accidental tab close. It does nothing if you clear site data or lose the device — export a file for that.</li>
+          <li><strong>Working in a private/incognito window for a real project.</strong> Fine for a quick experiment you don't need to keep; risky for anything you care about, since the storage is wiped when the window closes.</li>
+          <li><strong>Expecting a project to follow you across browsers automatically.</strong> It won't, because there's no account tying it together. Export and import to move it on purpose.</li>
+          <li><strong>Only keeping the exported audio file, not the project file.</strong> A finished WAV can't be un-mixed. Keep the <code>.tracks.json</code> too if there's any chance you'll want to change the arrangement or mix later.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does Tracks upload my project or audio to a server?</h3>
+        <p>No. Your project's arrangement autosaves to your browser's local storage, and your samples and recordings autosave to IndexedDB — both are storage mechanisms built into the browser on your own device. Nothing is sent to a server unless you take an explicit action, like exporting a file yourself.</p>
+
+        <h3>Why doesn't Tracks require an account?</h3>
+        <p>An account exists to identify you to a server so it can store your data for you. Since Tracks doesn't store your project on a server at all, there's nothing for an account to attach to — your browser's own storage does that job instead.</p>
+
+        <h3>What happens if I clear my browser's cache or site data?</h3>
+        <p>Local storage and IndexedDB are typically cleared along with the rest of a site's data, which deletes your autosaved project. This is exactly why exporting a <code>.tracks.json</code> file periodically matters — it's a copy that lives outside your browser's storage and survives a cache clear.</p>
+
+        <h3>Can I continue a project on my phone after starting it on my laptop?</h3>
+        <p>Not automatically — local storage is specific to one browser on one device. Export the project as a <code>.tracks.json</code> file on the laptop, transfer that file to your phone, and import it into the studio there to keep working.</p>
+
+        <h3>Does the exported project file include my samples and vocal recordings?</h3>
+        <p>Yes. The <code>.tracks.json</code> export embeds every referenced sample and recording as audio inside the file, so it reopens fully even on a browser or device that never had those files in its storage.</p>
+
+        <h3>Is my project visible to anyone else while I work on it?</h3>
+        <p>No. With nothing uploaded, there's nothing on a server for anyone else to view. The project exists only in your browser's local storage until you choose to export or share the file yourself.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Make music that stays on your device</h3>
+            <p>No account, no upload, no cloud storage — just a full studio in your browser, free.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
