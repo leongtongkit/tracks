@@ -1,5 +1,13 @@
 [
   {
+    "slug": "song-structure-arrangement",
+    "title": "How to arrange a song: verse, chorus, bridge structure",
+    "dek": "A song needs a structure before it needs polish. Here is how to block out verses, choruses, bridges, and transitions on the Tracks timeline so a pile of loops turns into a finished track.",
+    "date": "2026-07-05",
+    "tags": ["arrangement", "song structure", "verse chorus bridge", "timeline", "markers"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "local-daw-storage-privacy",
     "title": "Where does your project actually live? Local storage in a browser DAW",
     "dek": "Tracks never uploads your project to a server. Here is how local, in-browser storage works, why it means no account and no cloud, and how to back up or move a project safely.",
