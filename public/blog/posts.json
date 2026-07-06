@@ -1,5 +1,13 @@
 [
   {
+    "slug": "mix-group-buses-sends",
+    "title": "How to use group buses and sends to organize a mix",
+    "dek": "Group buses collect related tracks under one fader and one effect chain, and sends let multiple tracks share a single reverb or delay. Here is how to set both up in Tracks to keep a busy mix organized and controllable.",
+    "date": "2026-07-06",
+    "tags": ["group bus", "sends", "mixing", "reverb", "organization"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "song-structure-arrangement",
     "title": "How to arrange a song: verse, chorus, bridge structure",
     "dek": "A song needs a structure before it needs polish. Here is how to block out verses, choruses, bridges, and transitions on the Tracks timeline so a pile of loops turns into a finished track.",

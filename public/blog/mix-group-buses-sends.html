@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use group buses and sends to organize a mix | Tracks</title>
+    <meta name="description" content="Group buses collect related tracks under one fader and one effect chain, and sends let multiple tracks share a single reverb or delay. Here is how to set both up in the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/mix-group-buses-sends" />
+    <meta property="og:title" content="How to use group buses and sends to organize a mix" />
+    <meta property="og:description" content="A busy mix with twenty faders is hard to control. Group buses and sends collapse that down to a handful of moves — here is how to set both up in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/mix-group-buses-sends" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use group buses and sends to organize a mix",
+        "description": "Route related tracks to a group bus and shared effects to a send in the Tracks browser studio, so a busy mix collapses down to a handful of controls.",
+        "step": [
+          { "@type": "HowToStep", "name": "Group related tracks onto a bus", "text": "Create a bus for each section of the mix that moves together — drums, backing vocals, synths — and route those tracks' outputs to it instead of the master." },
+          { "@type": "HowToStep", "name": "Control the group with one fader", "text": "Use the bus fader to raise or lower the whole group at once, and add one compressor or EQ on the bus to glue the group together." },
+          { "@type": "HowToStep", "name": "Create a send for a shared effect", "text": "Add a reverb or delay send channel set to 100% wet, then route each track's send knob to it at whatever level suits that track." },
+          { "@type": "HowToStep", "name": "Balance bus levels against each other", "text": "With drums, vocals, and instruments each on their own bus, mix at the bus level first, then fine-tune individual tracks within each group." },
+          { "@type": "HowToStep", "name": "Automate or process the bus, not each track", "text": "Apply automation, compression, or effects to the bus itself when a change should affect the whole group at once, instead of repeating the same move on every track." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to use group buses and sends to organize a mix", "item": "https://tracks.jfound.net/blog/mix-group-buses-sends" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to use group buses and sends to organize a mix</h1>
+        <p class="art-meta">By Tongkit Leong · July 6, 2026 · 7 min read</p>
+
+        <p class="lede">A group bus collects several tracks — say, every drum track — and routes them through one shared fader and effect chain instead of the master output, so you can control a whole section of the mix with one move. A send does something similar for effects: it lets many tracks share a single reverb or delay instead of each carrying its own copy. In <a href="/studio">Tracks</a>, both are set up in the mixer with no extra plugins.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why a flat mix gets hard to control</h2>
+        <p>A song with twenty tracks — four drum sounds, three vocal takes, a bass, five synth layers, some percussion — is manageable at the individual-track level for a while. Then you need the whole drum section to come down 1 dB for the verse, or you want every backing vocal to share the exact same reverb, or you want one compressor gluing the rhythm section together. Doing any of that one track at a time is slow and easy to get inconsistent — you nudge one hi-hat fader, forget the shaker, and the balance you had is gone.</p>
+        <p>Group buses and sends solve two different problems, and it helps to keep them separate in your head:</p>
+        <ul>
+          <li><strong>A group bus</strong> is for tracks that should move together as a unit — turn the group up or down, or process the group with one EQ or compressor, and every track inside it follows.</li>
+          <li><strong>A send</strong> is for an effect that many tracks should share — one reverb, one delay — rather than each track running its own separate copy of that effect.</li>
+        </ul>
+        <p>Tracks supports both directly in the mixer, alongside per-track EQ, compression, gating, and full automation.</p>
+
+        <h2>Setting up a group bus</h2>
+
+        <h3>Step 1: Decide what belongs together</h3>
+        <p>Group tracks by function, not by instrument type alone. Common groupings:</p>
+        <ul>
+          <li><strong>Drums</strong> — kick, snare, hi-hat, percussion, drum loop layers.</li>
+          <li><strong>Bass</strong> — sub bass and mid bass layers, if you are running more than one.</li>
+          <li><strong>Vocals</strong> — lead vocal takes and doubles, kept separate from backing vocals if those need their own treatment.</li>
+          <li><strong>Backing vocals</strong> — harmonies and adlibs that should sit as one block behind the lead.</li>
+          <li><strong>Synths / music</strong> — pads, chords, arpeggios, and other harmonic layers that are not drums or vocals.</li>
+        </ul>
+        <p>You do not need a bus for every category on every project — a simple beat might only need a drum bus. A dense arrangement with a dozen synth layers benefits from splitting those into two or three buses of their own.</p>
+
+        <h3>Step 2: Create the bus and route tracks to it</h3>
+        <p>In the Tracks mixer, add a group bus channel and route the output of each track in that group to the bus instead of straight to the master. The bus then feeds the master output on its own. Once routed, muting, soloing, or moving the bus fader affects every track feeding into it at once.</p>
+
+        <h3>Step 3: Process and control the group as one</h3>
+        <p>With the group routed, you get several things for free:</p>
+        <ul>
+          <li><strong>One fader for the whole group.</strong> Pull the drum bus down 1–2 dB for a verse and every drum track drops together, in proportion — the balance between kick and snare stays exactly as you set it.</li>
+          <li><strong>One EQ or compressor for glue.</strong> A light compressor across the whole drum bus (a slow attack, fast release, 2–4 dB of gain reduction) makes the kit feel like one cohesive instrument instead of several separate hits. This is a different job from compressing each drum individually — bus compression glues, track compression shapes.</li>
+          <li><strong>Bus-level automation.</strong> If the backing vocal bus should duck slightly under the lead vocal in a busy chorus, automate the bus fader once instead of automating every backing vocal track that feeds it. See <a href="/blog/automation-in-your-mix">how to use automation to make your mix move</a> for the mechanics of drawing that curve.</li>
+        </ul>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Setting up a send</h2>
+
+        <h3>Step 1: Create a send channel for the effect</h3>
+        <p>Add a reverb or delay channel and set it to 100% wet — no dry signal at all. This channel exists purely to hold the effect; nothing plays through it directly. Instead, tracks route a portion of their signal to it using a send knob.</p>
+
+        <h3>Step 2: Send each track at its own level</h3>
+        <p>On any track, turn up its send knob to route some of that track's signal into the shared reverb or delay. Because the reverb itself is 100% wet, only the amount you dial in on the send actually reaches it — the track's own fader and dry signal are untouched. A vocal might send at a moderate level, a pad at a higher level, and the kick and bass at none at all.</p>
+        <p>The advantage over giving every track its own individual reverb: every instrument that shares the send sounds like it is sitting in the same physical space, because they are all going through the exact same reverb tail. That cohesion is hard to fake by matching settings across several separate reverb instances by hand.</p>
+
+        <h3>Step 3: Use more than one send for different effects</h3>
+        <p>Most mixes benefit from at least two sends — a reverb send for space and a delay send for rhythmic echo. Route the lead vocal and lead synth to the delay send at a musical subdivision (an eighth or quarter note synced to your project tempo), and route pads, backing vocals, and atmospheric layers to the reverb send. Keep the kick, snare, and bass out of both, or nearly out — low-frequency reverb and delay tend to smear the low end and make a mix feel washed out.</p>
+
+        <h2>Bus vs. send: which one do you need?</h2>
+        <p>They are not competing tools — most mixes use both at once. Use this as a quick check for which one applies:</p>
+        <ul>
+          <li>If the question is "how do I control the volume or tone of a whole section together," you want a <strong>bus</strong>.</li>
+          <li>If the question is "how do I get several tracks to share one reverb or delay," you want a <strong>send</strong>.</li>
+          <li>A bus can also feed a send — for example, routing the entire backing vocal bus to the reverb send at once, instead of setting an individual send level on each backing vocal track.</li>
+        </ul>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Routing everything to one bus.</strong> A single "everything" bus defeats the purpose — you lose the ability to move drums independently of vocals. Split buses along the lines of what actually needs to move or be processed together.</li>
+          <li><strong>Setting the send channel to anything less than 100% wet.</strong> If the send channel itself has dry signal mixed in, you lose independent control over how much dry vs. wet each track carries, and levels get harder to reason about.</li>
+          <li><strong>Forgetting a track is routed to a bus.</strong> If a track sounds unexpectedly quiet or loud, check whether its output is going to a bus you have since turned down or muted, rather than assuming the track's own fader is wrong.</li>
+          <li><strong>Over-compressing the bus.</strong> A bus compressor is for gentle glue, not heavy dynamic control. If it is pumping or you can hear it working, back off the ratio or raise the threshold.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Do I need buses and sends for a simple two-minute beat?</h3>
+        <p>Not necessarily. If you only have five or six tracks, individual control is often fast enough on its own. Buses and sends start paying off once a project grows past ten or so tracks, or once you find yourself repeating the same fader move or effect setting across several tracks.</p>
+
+        <h3>Can I automate a bus the same way I automate a single track?</h3>
+        <p>Yes. A bus fader, its EQ, and its compressor all expose the same automation lanes a regular track does. See <a href="/blog/automation-in-your-mix">how to use automation to make your mix move</a> for the step-by-step on drawing a curve.</p>
+
+        <h3>Is a send the same thing as sidechain compression?</h3>
+        <p>No. A send shares an effect like reverb or delay across tracks. Sidechain compression uses one track's signal to trigger volume ducking on another track, usually for the "pumping" effect heard in dance music. See <a href="/blog/sidechain-compression-explained">sidechain compression explained</a> for that separate technique.</p>
+
+        <h3>Should the master bus be treated like any other group bus?</h3>
+        <p>The master bus is the final stop before export, so treat it more carefully — light glue compression and gentle EQ are reasonable there, but heavy processing belongs on individual tracks or group buses upstream. See <a href="/blog/how-to-mix-a-track-basics">how to mix a track: EQ, compression, and reverb basics</a> for the fundamentals that should already be in place before you start grouping.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks supports group buses, reverb and delay sends, per-track and per-bus EQ and compression, and automation on any of it, directly in the browser with no plugins and no download. Open the <a href="/studio">studio</a> and route a few tracks to a bus or a shared send to try it. Nothing is uploaded — your project stays on your device.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Organize your mix for free</h3>
+            <p>Group buses, reverb and delay sends, and automation — all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
