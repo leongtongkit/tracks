@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to export a MIDI file from your browser DAW | Tracks</title>
+    <meta name="description" content="Exporting a standard MIDI file gets the notes out of Tracks and into any other instrument, notation app, or DAW. Here is how MIDI export works, what it captures, and what it leaves behind." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/export-midi-file-browser-daw" />
+    <meta property="og:title" content="How to export a MIDI file from your browser DAW" />
+    <meta property="og:description" content="A standard MIDI file carries your notes, not your sounds. Here is how to export one from Tracks and what to do with it once you have it." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/export-midi-file-browser-daw" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to export a MIDI file from your browser DAW",
+        "description": "Export a standard MIDI file from the Tracks browser studio so your notes, velocities, and timing can move into another DAW, a notation app, or a hardware synth.",
+        "step": [
+          { "@type": "HowToStep", "name": "Finish arranging the notes you want to export", "text": "MIDI export carries what is in your piano roll and clip lanes — finalize note timing, velocity, and quantize before exporting, since audio effects will not travel with the file." },
+          { "@type": "HowToStep", "name": "Choose MIDI export instead of WAV or MP3", "text": "Open the export menu in Tracks and select the standard MIDI file option instead of an audio bounce." },
+          { "@type": "HowToStep", "name": "Export the whole song or a single track", "text": "Export the full multi-track arrangement as one MIDI file, or export a single instrument track alone if you only need one part." },
+          { "@type": "HowToStep", "name": "Open the file in its destination", "text": "Import the .mid file into another DAW, a notation program, or send it to a hardware synth or MIDI controller that reads standard MIDI files." },
+          { "@type": "HowToStep", "name": "Re-assign sounds on the other end", "text": "Because MIDI carries notes and not audio, load or select an instrument sound in the destination program so the notes play back correctly." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to export a MIDI file from your browser DAW", "item": "https://tracks.jfound.net/blog/export-midi-file-browser-daw" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to export a MIDI file from your browser DAW</h1>
+        <p class="art-meta">By Tongkit Leong · July 7, 2026 · 6 min read</p>
+
+        <p class="lede">A standard MIDI file (.mid) stores the notes, velocities, and timing of your song — not the audio — so you can move an arrangement out of <a href="/studio">Tracks</a> and into another DAW, a notation app, or a piece of hardware. Open the export menu in Tracks, choose the MIDI option instead of WAV or MP3, and you get a file that any MIDI-compatible program can read.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What a MIDI export actually contains</h2>
+        <p>It helps to be clear about what MIDI is before exporting one. A MIDI file is a set of instructions — which note played, how hard it was hit, when it started, and when it ended — for every track in your project. It does not contain any audio at all. No synth tone, no drum sample, no EQ or compression you applied, no reverb tail. All of that lives in Tracks' engine and stays behind when you export MIDI.</p>
+        <p>That trade-off is exactly why MIDI export exists as a separate option from <a href="/blog/export-song-mp3-wav">exporting to MP3 or WAV</a>. A WAV or MP3 bounce is a finished recording — what you hear is what anyone gets. A MIDI file is closer to sheet music: it is a precise, editable record of what was played, ready to be reinterpreted by whatever instrument or software opens it next.</p>
+
+        <h2>When you want MIDI instead of audio</h2>
+        <p>Reach for MIDI export rather than an audio bounce when:</p>
+        <ul>
+          <li><strong>You are moving the project into a different DAW</strong> that has instruments or plugins Tracks does not, and you want to keep editing the notes rather than starting over.</li>
+          <li><strong>You want to print the arrangement as sheet music.</strong> Notation software reads MIDI natively and can turn a piano roll part into standard notation.</li>
+          <li><strong>You are sending the part to a hardware synth or another MIDI controller</strong> that can play back a standard MIDI file directly.</li>
+          <li><strong>You want a backup of the performance itself</strong> — the exact notes and timing — independent of whichever synth or sample happened to be assigned to the track at the time.</li>
+          <li><strong>You are collaborating with someone who works in a different program</strong> and needs the parts, not a locked-down recording of them.</li>
+        </ul>
+        <p>If your goal is instead to share a finished track for listening, upload to a streaming platform, or send to a mastering engineer, you want an audio bounce — see <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a> for that path.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to export a MIDI file in Tracks</h2>
+
+        <h3>Step 1: Finish the notes before you export</h3>
+        <p>MIDI export carries whatever is in your piano roll and clip lanes at the moment you export — note pitch, timing, velocity, and length. Anything you have not committed to notes will not appear in the file, so quantize, adjust velocities, and finalize your arrangement first. Audio-only elements — a recorded vocal take, a sampled drum loop, anything captured through a microphone — are not notes and will not be part of the MIDI export at all, since MIDI only describes performances, not recorded sound.</p>
+
+        <h3>Step 2: Open the export menu and choose MIDI</h3>
+        <p>In Tracks, the export menu offers a standard MIDI file alongside the WAV and MP3 audio bounce options. Select the MIDI option instead of an audio format.</p>
+
+        <h3>Step 3: Decide between the full song and a single track</h3>
+        <p>You can export the whole arrangement as one multi-track MIDI file, with each instrument on its own channel, or export a single track alone if you only need one part — for example, pulling out just the bassline to rework in another program while leaving the rest of the song in Tracks.</p>
+
+        <h3>Step 4: Bring the file into its destination</h3>
+        <p>Once you have the .mid file, import it wherever it is headed: another DAW's import dialog, a notation program, or a hardware synth's file loader. Because MIDI is a long-standing, universal format, virtually every music program and a great deal of hardware can read it without conversion.</p>
+
+        <h3>Step 5: Re-assign an instrument on the other end</h3>
+        <p>Since the file carries no audio, the destination program needs its own instrument sound loaded before the notes will make noise — a synth patch, a sampled piano, whatever fits. This is normal and not a sign anything went wrong with the export; it is simply how MIDI works everywhere, not something specific to Tracks.</p>
+
+        <h2>MIDI export vs. the other ways to save a Tracks project</h2>
+        <p>Tracks gives you a few different ways to get work out of the browser, and each does a different job:</p>
+        <ul>
+          <li><strong>WAV or MP3</strong> — a finished audio recording of the mix, for listening or releasing. See <a href="/blog/export-song-mp3-wav">exporting to MP3 or WAV</a>.</li>
+          <li><strong>Per-track stems</strong> — separate audio files for each track, useful for handing a mix to someone else without giving them the whole editable project.</li>
+          <li><strong>Standard MIDI file</strong> — the notes and timing only, with no audio, for moving performances into other software or hardware.</li>
+          <li><strong>A self-contained .tracks.json project file</strong> — the full editable project, including every track, effect setting, and arrangement decision, meant for opening back up in Tracks itself later or on another device.</li>
+        </ul>
+        <p>If you are not sure which one you need: choose audio to share a finished sound, choose MIDI to share the notes, and keep the .tracks.json file as your own working backup.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Will my drum machine patterns export as MIDI too?</h3>
+        <p>Yes. Drum machine patterns are note data the same way a synth or piano roll part is, so they export as MIDI notes on their own channel, ready to trigger a different drum kit or sampler in another program.</p>
+
+        <h3>Does MIDI export include my mixer settings — EQ, compression, reverb?</h3>
+        <p>No. Mixer processing shapes audio, and a MIDI file has no audio in it. If you need the processed sound itself, export audio instead — see <a href="/blog/how-to-mix-a-track-basics">how to mix a track: EQ, compression, and reverb basics</a> for what those settings do before you decide which export you need.</p>
+
+        <h3>Can I import a MIDI file I made elsewhere back into Tracks?</h3>
+        <p>Tracks' MIDI handling is built around getting your own performances out to other software; check the studio's import options directly for the current state of bringing outside MIDI files back in.</p>
+
+        <h3>I recorded with a MIDI keyboard — does that change anything about exporting?</h3>
+        <p>No — once a part is recorded into a track, it exports the same way whether it was played in on a MIDI keyboard or drawn by hand in the piano roll. See <a href="/blog/use-midi-keyboard-browser">how to use a MIDI keyboard in a browser DAW</a> if you have not connected a keyboard yet.</p>
+
+        <h3>Is any of this uploaded anywhere?</h3>
+        <p>No. Tracks runs entirely in your browser, and both MIDI and audio exports are generated and saved locally on your device — nothing is sent to a server at any point.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Export your notes, not just your audio</h3>
+            <p>Standard MIDI export, WAV/MP3 bounces, and per-track stems — all free, all in the browser.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

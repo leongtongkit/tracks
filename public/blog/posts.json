@@ -1,5 +1,13 @@
 [
   {
+    "slug": "export-midi-file-browser-daw",
+    "title": "How to export a MIDI file from your browser DAW",
+    "dek": "Exporting a standard MIDI file gets the notes out of Tracks and into any other instrument, notation app, or DAW. Here is how MIDI export works, what it captures, and what it leaves behind.",
+    "date": "2026-07-07",
+    "tags": ["MIDI export", "standard MIDI file", "browser DAW", "workflow"],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "mix-group-buses-sends",
     "title": "How to use group buses and sends to organize a mix",
     "dek": "Group buses collect related tracks under one fader and one effect chain, and sends let multiple tracks share a single reverb or delay. Here is how to set both up in Tracks to keep a busy mix organized and controllable.",
