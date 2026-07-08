@@ -1,5 +1,13 @@
 [
   {
+    "slug": "quantize-swing-groove-explained",
+    "title": "Quantize and swing explained: how to make a beat groove",
+    "dek": "Quantize snaps notes to the grid for tightness, and swing shifts alternating notes late for feel. Here is how to use both together in the Tracks piano roll and drum machine to make a beat sound programmed instead of robotic.",
+    "date": "2026-07-08",
+    "tags": ["quantize", "swing", "groove", "rhythm", "piano roll"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "export-midi-file-browser-daw",
     "title": "How to export a MIDI file from your browser DAW",
     "dek": "Exporting a standard MIDI file gets the notes out of Tracks and into any other instrument, notation app, or DAW. Here is how MIDI export works, what it captures, and what it leaves behind.",
