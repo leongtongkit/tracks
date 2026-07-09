@@ -1,5 +1,13 @@
 [
   {
+    "slug": "sample-chopping-flip",
+    "title": "How to chop and flip a sample into a beat",
+    "dek": "Sample chopping cuts a longer audio clip into short one-shots so you can play them in a new order, on a new grid, in a new key. Here is how to chop and flip a sample using the Tracks 16-pad sampler with no downloads.",
+    "date": "2026-07-09",
+    "tags": ["sampling", "sampler", "chopping", "beats", "production"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "quantize-swing-groove-explained",
     "title": "Quantize and swing explained: how to make a beat groove",
     "dek": "Quantize snaps notes to the grid for tightness, and swing shifts alternating notes late for feel. Here is how to use both together in the Tracks piano roll and drum machine to make a beat sound programmed instead of robotic.",

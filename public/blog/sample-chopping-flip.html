@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to chop and flip a sample into a beat | Tracks</title>
+    <meta name="description" content="Sample chopping cuts a longer audio clip into short one-shots you can trigger in a new order. Here is how to chop a sample at its transients and flip it into a beat using the free Tracks 16-pad sampler." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/sample-chopping-flip" />
+    <meta property="og:title" content="How to chop and flip a sample into a beat" />
+    <meta property="og:description" content="Sample chopping cuts a longer audio clip into short one-shots you can trigger in a new order. Here is how to chop a sample and flip it into a beat, free, in your browser." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/sample-chopping-flip" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to chop and flip a sample into a beat",
+        "description": "Chop an audio clip at its transients into one-shots on a 16-pad sampler track, then rearrange those pads to flip the sample into a new beat.",
+        "step": [
+          { "@type": "HowToStep", "name": "Import or record the source audio", "text": "Drop an audio file onto an audio track, or record a take, so you have a clip to chop." },
+          { "@type": "HowToStep", "name": "Trim the clip to the section you want", "text": "Drag the clip's edges so only the phrase or loop you actually want to chop is selected." },
+          { "@type": "HowToStep", "name": "Slice the clip to pads", "text": "Open the clip and use Slice to pads — Tracks detects the transients and splits the audio into one-shots, one per 16-pad sampler pad." },
+          { "@type": "HowToStep", "name": "Play back the original order, then rearrange", "text": "A new pads track appears with a clip that replays the chops in their original order — open the piano roll and move, delete, or repeat notes to flip the sample into a new pattern." },
+          { "@type": "HowToStep", "name": "Tune, layer, and mix the chops", "text": "Adjust gain and tune per pad, layer drums or bass under the chopped pattern, and mix it in with the rest of the track." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to chop and flip a sample into a beat", "item": "https://tracks.jfound.net/blog/sample-chopping-flip" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to chop and flip a sample into a beat</h1>
+        <p class="art-meta">By Tongkit Leong · July 9, 2026 · 7 min read</p>
+
+        <p class="lede">Sample chopping cuts a longer piece of audio — a vocal phrase, a drum loop, a vinyl rip — into short one-shots at its natural transients, so you can trigger each piece separately and rearrange them into something new. In <a href="/studio">Tracks</a>, one button does the chopping automatically: Slice to pads detects the transients in a clip and lays each piece onto a 16-pad sampler track, ready to flip.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What "chopping" and "flipping" actually mean</h2>
+        <p>Chopping is the cutting step: you take one continuous audio clip and split it into smaller pieces, usually at the transients — the sharp attack points where a drum hits, a word starts, or a note is plucked. Each piece becomes its own short sample, a "chop."</p>
+        <p>Flipping is what you do after: you take those chops and trigger them in a different order, at a different rhythm, or with some pieces looped, dropped, or repeated, so the result sounds like a new part rather than the original phrase played back. Most sample-based hip-hop, boom-bap, and lo-fi production is built this way — a horn stab, a piano lick, or a vocal ad-lib gets chopped into pieces and reassembled into a hook that never existed in the source material.</p>
+
+        <h2>Why chop instead of just looping the whole sample</h2>
+        <p>Looping a sample whole is the fastest way to build a beat around it, but it also means the sample sounds exactly like the sample — recognizable, static, and locked to its original phrasing. Chopping breaks that: once a phrase is cut into pieces, you control the order, the timing, and which pieces repeat. A four-bar vocal line can become a one-bar hook. A slow piano run can become a stuttering triplet fill. The source material is the same; the arrangement is entirely yours.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to chop and flip a sample in Tracks</h2>
+
+        <h3>Step 1: Import or record the source audio</h3>
+        <p>Add an audio track, then drop an audio file onto its lane or use the Import audio button to bring in a WAV, MP3, M4A, OGG, or FLAC file. You can also record a take directly through your mic if the source is something you're playing or singing yourself — see <a href="/blog/record-vocals-in-browser">recording and tuning vocals in your browser</a> for that workflow.</p>
+
+        <h3>Step 2: Trim the clip to the section you want</h3>
+        <p>Drag the clip's right edge to trim it down to just the phrase, loop, or hit you actually want to chop. Slicing works on whatever the clip currently covers, so a tighter clip means a cleaner set of chops — a four-bar clip with a long silent tail will waste pads on empty air.</p>
+
+        <h3>Step 3: Slice the clip to pads</h3>
+        <p>Select the clip and open its editor. The Slice to pads button analyzes the audio for transients — up to 16 of them — and cuts the clip at each one. Every resulting piece becomes a one-shot sample assigned to its own pad on a brand-new 16-pad sampler track, in order.</p>
+        <p>If the source is mostly flat with no sharp attacks — a pad or drone, for example — Tracks may find too few transients to chop meaningfully. Percussive or rhythmic material with clear hits (drum breaks, chopped vocals, plucked instruments) gives the cleanest slices.</p>
+
+        <h3>Step 4: Play back the original order, then rearrange</h3>
+        <p>Slicing also drops a clip onto the new pads track that replays all the chops in their original order and timing, so the sliced version sounds identical to the source clip the moment you're done — a safe starting point. From there, open the piano roll on that clip and start flipping: move a chop earlier or later, delete ones you don't need, repeat a chop across several beats, or drag chops onto a completely different rhythmic grid. Because each chop is its own note on its own pad, rearranging the flip is just moving notes, the same way you'd edit any piano roll pattern.</p>
+        <p>See <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a> for tightening or loosening the new pattern's timing once you've rearranged the chops, and <a href="/blog/free-online-drum-machine">the free online drum machine guide</a> for programming drums underneath the flip.</p>
+
+        <h3>Step 5: Tune, layer, and mix the chops</h3>
+        <p>Each pad on the new sampler track has its own gain and tune controls, so you can pitch individual chops up or down to fit a key, balance a quiet chop against a loud one, or set a pad to one-shot so it always plays through in full even if you retrigger it early. Layer a kick and bass underneath, then treat the pads track like any other in the mixer — EQ, compression, and sends all apply normally. See <a href="/blog/how-to-mix-a-track-basics">mixing basics</a> for that next step.</p>
+
+        <h2>Tips for better chops</h2>
+        <ul>
+          <li><strong>Start with rhythmic material.</strong> Drum breaks, chopped vocal ad-libs, and plucked or struck instruments produce clean transients. Sustained pads and drones don't chop well because there's nothing sharp for the detector to catch.</li>
+          <li><strong>Trim tight before you slice.</strong> A clip with only the audio you want to chop produces more useful pieces than a long clip with dead space at the start or end.</li>
+          <li><strong>Keep the untouched original.</strong> Slicing creates a new pads track rather than replacing the source clip, so the original audio track stays intact if you want to re-slice with a different trim or go back to the whole loop.</li>
+          <li><strong>Use one-shot mode for percussive chops.</strong> A drum hit or plucked note usually sounds better ringing out fully rather than cutting off, even if you retrigger the same pad quickly.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>How many pieces can a sample be chopped into?</h3>
+        <p>Up to 16, since each chop fills one pad on a 16-pad sampler track. If the source has more than 16 transients, Tracks keeps the strongest ones and the rest stay part of a neighboring chop.</p>
+
+        <h3>Does chopping work on a recorded vocal, not just an imported file?</h3>
+        <p>Yes — the source can be an imported audio file or anything recorded directly into Tracks through your mic. Once it's a clip on an audio track, it can be trimmed and sliced the same way.</p>
+
+        <h3>Can I chop a drum loop and use the pieces as individual drum hits?</h3>
+        <p>Yes, that's one of the most common uses — slicing a full drum loop at its transients typically separates out the kick, snare, and hi-hat hits (or close to it) as individual pads, which you can then reprogram into a new pattern instead of the original loop's rhythm.</p>
+
+        <h3>What if Tracks can't find any transients in my clip?</h3>
+        <p>The Slice to pads button will tell you if too few transients were found. Try a section of the audio with more obvious attacks — a rhythmic passage rather than a sustained chord or ambient texture — or trim the clip tighter around the part you want chopped.</p>
+
+        <h3>Does chopping upload my audio anywhere?</h3>
+        <p>No. Transient detection and slicing both run locally in your browser, and the chopped samples stay in your project on your device, the same as every other part of a Tracks project. See <a href="/blog/local-daw-storage-privacy">local storage and privacy in a browser DAW</a> for how that works.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Chop your first sample</h3>
+            <p>Import an audio file, hit Slice to pads, and start flipping — free, in your browser, no downloads.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
