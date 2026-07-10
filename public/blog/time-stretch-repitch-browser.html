@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Time-stretch and repitch explained: change tempo or key without ruining quality | Tracks</title>
+    <meta name="description" content="Time-stretch changes a clip's length without changing its pitch, and repitch changes its pitch without changing its length. Here is how both work in the Tracks browser studio and when to use each one." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/time-stretch-repitch-browser" />
+    <meta property="og:title" content="Time-stretch and repitch explained: change tempo or key without ruining quality" />
+    <meta property="og:description" content="Time-stretch changes a clip's length without changing its pitch, and repitch changes its pitch without changing its length. Here is how both work, free, in your browser." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/time-stretch-repitch-browser" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to time-stretch or repitch an audio clip to match your song's tempo",
+        "description": "Match an imported or recorded audio clip to your project's tempo using either repitch (vinyl-style, pitch follows speed) or stretch (tempo changes, pitch stays put).",
+        "step": [
+          { "@type": "HowToStep", "name": "Get the clip's original tempo", "text": "Find or estimate the BPM the source audio was recorded or produced at before you try to match it to your project." },
+          { "@type": "HowToStep", "name": "Set the clip's original BPM", "text": "Open the clip in the audio editor and enter its original BPM so Tracks knows how far off it is from the project tempo." },
+          { "@type": "HowToStep", "name": "Choose Repitch or Stretch", "text": "Pick Repitch for a vinyl-style speed change where pitch moves with tempo, or Stretch to change tempo while keeping the original pitch." },
+          { "@type": "HowToStep", "name": "Preview and fine-tune", "text": "Play the clip against the rest of the project, listen for artifacts, and adjust the original BPM value if the timing still feels off." },
+          { "@type": "HowToStep", "name": "Combine with the rest of the mix", "text": "Once the clip locks to tempo, treat it like any other track — EQ, compress, and send it the same way." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Time-stretch and repitch explained", "item": "https://tracks.jfound.net/blog/time-stretch-repitch-browser" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Time-stretch and repitch explained: change tempo or key without ruining quality</h1>
+        <p class="art-meta">By Tongkit Leong · July 10, 2026 · 7 min read</p>
+
+        <p class="lede">Repitch changes a clip's speed the way a vinyl record does — speed it up and the pitch rises with it. Stretch changes a clip's length to match your project's tempo while leaving the pitch alone. In <a href="/studio">Tracks</a>, both live behind one Warp control on any audio clip, so a loop, acapella, or one-shot recorded at a different tempo can lock to your song either way.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>The problem: your clip and your project don't agree on tempo</h2>
+        <p>Every audio clip you import or record was captured at some fixed tempo — the BPM the drum loop was played at, the speed the vocal was sung at, the tempo the sample pack producer used. Your project has its own tempo. The moment those two numbers don't match, the clip either drifts out of time with everything else or has to be manually chopped and repositioned bar by bar, which is slow and fragile the second you change the project tempo again.</p>
+        <p>Warp solves this by scaling the clip's playback to your project's tempo automatically, and it recalculates every time the tempo changes. The only decision left is <em>how</em> it should scale: repitch or stretch.</p>
+
+        <h2>Repitch vs. stretch: what's actually different</h2>
+        <h3>Repitch (vinyl-style)</h3>
+        <p>Repitch changes playback speed the way a turntable does — speed the audio up and the pitch rises with it; slow it down and the pitch drops. Nothing about the waveform itself is altered, so there's no processing artifact: it's the cleanest-sounding option, especially for large tempo jumps. The tradeoff is the pitch shift. Speed a clip up by a few BPM and the pitch change is barely noticeable; push a drum loop from 80 BPM to 140 BPM and it will sound audibly higher and thinner, the classic "chipmunked" sample effect.</p>
+        <h3>Stretch (pitch-preserving)</h3>
+        <p>Stretch keeps the original pitch fixed while changing how long the clip takes to play, using time-domain processing to add or remove tiny slices of audio rather than simply playing it faster or slower. This is what you want when the pitch matters — a vocal take, a melodic loop, a bassline — and the tempo doesn't. The tradeoff runs the other way from repitch: push a stretch too far in either direction and you'll start to hear artifacts — a slight graininess or warble, most noticeable on sustained vocals and cymbals, less noticeable on percussive material.</p>
+        <p>Neither option is universally "better." Repitch is the honest choice when a small pitch shift is acceptable or even desirable (it's how a lot of sampled breakbeats got their character). Stretch is the honest choice when the original key has to survive the tempo change.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to warp a clip in Tracks</h2>
+
+        <h3>Step 1: Get the clip's original tempo</h3>
+        <p>Before Tracks can scale a clip, it needs to know what tempo the clip was originally at. If you know the BPM — it came from a labeled sample pack, or you recorded it against a click at a known tempo — you already have what you need. If you don't, count the beats in a bar and time it, or tap along and read the tempo off a metronome app; getting within a BPM or two is close enough to sound right.</p>
+
+        <h3>Step 2: Set the clip's original BPM</h3>
+        <p>Select the audio clip and open its editor. Enter the clip's original BPM in the field next to Warp. Tracks compares that number against your project's tempo to work out the playback rate — the further apart the two numbers are, the more the clip gets stretched or repitched.</p>
+
+        <h3>Step 3: Choose Repitch or Stretch</h3>
+        <p>Switch the Warp dropdown from Off to Repitch or Stretch. Off plays the clip at its native speed regardless of project tempo — useful for one-shots and hits that shouldn't move. Repitch and Stretch both lock the clip to the project tempo, using the difference between the original BPM and the project BPM to set the playback rate.</p>
+
+        <h3>Step 4: Preview and fine-tune</h3>
+        <p>Play the clip against the rest of the project and listen. If the timing still feels slightly off, the original BPM value is probably a beat or two wrong — nudge it up or down until the clip's downbeats line up with your project's grid. If you hear more artifacts than expected on Stretch, try Repitch instead for that particular clip, especially if it's short or percussion-heavy where the pitch shift is less noticeable.</p>
+
+        <h3>Step 5: Combine with the rest of the mix</h3>
+        <p>Once a clip is locked to tempo, it behaves like any other clip on that track — trim it, fade it, loop it, and route it through the mixer normally. See <a href="/blog/how-to-mix-a-track-basics">mixing basics</a> for EQ, compression, and reverb once the warped clip is sitting in the arrangement, and <a href="/blog/sample-chopping-flip">chopping and flipping a sample</a> if you want to slice the same clip into pieces after it's tempo-matched.</p>
+
+        <h2>When to reach for each option</h2>
+        <ul>
+          <li><strong>Small tempo nudge (within a few BPM):</strong> either works cleanly — Repitch is simplest since there's nothing to process.</li>
+          <li><strong>Big tempo jump on a melodic or vocal loop:</strong> use Stretch so the key doesn't drift with the tempo.</li>
+          <li><strong>Big tempo jump on a drum break or noisy texture:</strong> Repitch often sounds more natural here than a heavily stretched version, and the pitch shift on unpitched percussion is barely audible.</li>
+          <li><strong>You want the classic sped-up or slowed-down sample sound:</strong> that's Repitch by definition — it's the same mechanism that gives sped-up remixes and chipmunk soul samples their character.</li>
+          <li><strong>A one-shot hit that should never move with tempo:</strong> leave Warp Off.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What's the difference between warping a clip and using autotune?</h3>
+        <p>Warp changes a clip's speed relative to your project tempo, moving or preserving pitch as a side effect of that speed change. Autotune corrects a vocal's pitch to match a musical key regardless of tempo. They solve different problems and can both be used on the same vocal clip — see <a href="/blog/record-vocals-in-browser">recording and tuning vocals in your browser</a> for the autotune workflow.</p>
+
+        <h3>Does stretching a clip too far always sound bad?</h3>
+        <p>Not always, but the risk goes up with distance. A stretch of a few percent is usually inaudible. Push a vocal or sustained pad by 30-40% and you'll likely hear grain or warble; percussive and noisy material tolerates bigger stretches before it becomes obviously artificial.</p>
+
+        <h3>Can I change my mind after setting Warp on a clip?</h3>
+        <p>Yes — switch the dropdown between Off, Repitch, and Stretch at any time, and adjust the original BPM value as often as needed. Nothing is baked into the audio file itself until you export.</p>
+
+        <h3>Does warping happen locally, or does the audio get uploaded anywhere?</h3>
+        <p>Warping runs entirely in your browser using the Web Audio API. The source file and the warped playback both stay on your device — see <a href="/blog/local-daw-storage-privacy">local storage and privacy in a browser DAW</a> for how Tracks handles project data.</p>
+
+        <h3>Does Warp affect MIDI or instrument tracks, or only audio?</h3>
+        <p>Warp is an audio-clip feature — it scales recorded or imported audio to your tempo. MIDI and instrument tracks already follow the project tempo directly, since their notes are positioned on the timeline rather than baked into a waveform.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Match a clip to your tempo</h3>
+            <p>Import a loop, set its original BPM, and pick Repitch or Stretch — free, in your browser, no downloads.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

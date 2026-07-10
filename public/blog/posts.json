@@ -1,5 +1,13 @@
 [
   {
+    "slug": "time-stretch-repitch-browser",
+    "title": "Time-stretch and repitch explained: change tempo or key without ruining quality",
+    "dek": "Time-stretch changes a clip's length without changing its pitch, and repitch changes its pitch without changing its length. Here is how both work in the Tracks browser studio and when to use each one.",
+    "date": "2026-07-10",
+    "tags": ["time-stretch", "repitch", "tempo", "pitch", "audio editing"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "sample-chopping-flip",
     "title": "How to chop and flip a sample into a beat",
     "dek": "Sample chopping cuts a longer audio clip into short one-shots so you can play them in a new order, on a new grid, in a new key. Here is how to chop and flip a sample using the Tracks 16-pad sampler with no downloads.",
