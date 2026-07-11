@@ -1,5 +1,13 @@
 [
   {
+    "slug": "chord-progressions-piano-roll",
+    "title": "How to write chord progressions in the piano roll",
+    "dek": "Chords give a song its emotional color and its harmonic backbone. Here is a practical, no-theory-degree way to build chord progressions in the Tracks piano roll, from picking a key to voicing and looping them.",
+    "date": "2026-07-11",
+    "tags": ["chords", "chord progressions", "piano roll", "harmony", "songwriting"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "time-stretch-repitch-browser",
     "title": "Time-stretch and repitch explained: change tempo or key without ruining quality",
     "dek": "Time-stretch changes a clip's length without changing its pitch, and repitch changes its pitch without changing its length. Here is how both work in the Tracks browser studio and when to use each one.",
