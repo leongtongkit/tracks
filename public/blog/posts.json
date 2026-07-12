@@ -1,5 +1,13 @@
 [
   {
+    "slug": "synth-sound-design-subtractive-fm",
+    "title": "Subtractive vs FM synthesis: how to design your own sounds",
+    "dek": "Subtractive synthesis carves a sound out of a raw waveform with a filter, and FM synthesis builds a tone by using one oscillator to modulate another. Here is how each works in the Tracks browser synth and how to program your own patch from scratch.",
+    "date": "2026-07-12",
+    "tags": ["synthesis", "subtractive synthesis", "FM synthesis", "sound design", "synth"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "chord-progressions-piano-roll",
     "title": "How to write chord progressions in the piano roll",
     "dek": "Chords give a song its emotional color and its harmonic backbone. Here is a practical, no-theory-degree way to build chord progressions in the Tracks piano roll, from picking a key to voicing and looping them.",

@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Subtractive vs FM synthesis: how to design your own sounds | Tracks</title>
+    <meta name="description" content="Subtractive synthesis carves a sound out of a raw waveform with a filter, and FM synthesis builds a tone by using one oscillator to modulate another. Here is how each works in the Tracks browser synth and how to program your own patch from scratch." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/synth-sound-design-subtractive-fm" />
+    <meta property="og:title" content="Subtractive vs FM synthesis: how to design your own sounds" />
+    <meta property="og:description" content="Two different ways to build a sound from scratch, and how to program both in a free browser synth with no plugins to install." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/synth-sound-design-subtractive-fm" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Subtractive vs FM synthesis: how to design your own sounds",
+        "datePublished": "2026-07-12",
+        "dateModified": "2026-07-12",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "JFound" },
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/synth-sound-design-subtractive-fm",
+        "image": "https://tracks.jfound.net/og.png",
+        "description": "Subtractive synthesis carves a sound out of a raw waveform with a filter, and FM synthesis builds a tone by using one oscillator to modulate another. How each works and how to program a patch from scratch in a free browser synth."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Subtractive vs FM synthesis", "item": "https://tracks.jfound.net/blog/synth-sound-design-subtractive-fm" }
+        ]
+      }
+    </script>
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4201800488909351" crossorigin="anonymous"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Subtractive vs FM synthesis: how to design your own sounds</h1>
+        <p class="art-meta">By Tongkit Leong · July 12, 2026 · 8 min read</p>
+
+        <p class="lede">Subtractive synthesis starts from a bright raw waveform and carves it down with a filter and envelope, while FM synthesis builds a tone from nothing by using one oscillator to rapidly modulate another. Tracks includes both engines built in, so you can program a patch from scratch instead of just picking a preset.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why program your own patch at all</h2>
+        <p>Presets are a fast start, but every producer using the same preset library ends up with the same handful of sounds. Learning to shape a patch yourself means you can push a bass, lead, or pad in a direction no preset will get you to, and it means you can fix a sound that's almost right instead of abandoning it for a different preset. The two synth engines in the <a href="/studio">Tracks studio</a> — a subtractive synth and an FM synth — cover almost everything you'd reach for a hardware or plugin synth to do, and both are built around a small number of controls that are worth actually understanding.</p>
+
+        <h2>Subtractive synthesis: start loud, cut away what you don't need</h2>
+        <p>Subtractive synthesis is named for its method: you start with a waveform that's harmonically rich — meaning it contains a lot of frequencies at once — and you subtract from it using a filter until what's left is the tone you want. It's the same basic signal path used by most classic analog synths, and it's intuitive because every control maps to something you can hear moving.</p>
+
+        <h3>Oscillator: pick your raw material</h3>
+        <p>The oscillator is the raw waveform the whole patch is built from. A sawtooth wave is bright and buzzy and contains the most harmonic content to filter later, making it the default choice for basses and leads. A square wave is hollower and reedier, useful for basses that need to sit under a mix without clutter. A sine wave contains only one frequency and no harmonics to subtract, so it stays clean and pure — good for sub-bass or a simple bell tone, but there's little for a filter to do to it.</p>
+
+        <h3>Filter: shape the tone by cutting frequencies</h3>
+        <p>The filter is where subtractive synthesis does its actual work. A low-pass filter — the one you'll use most — lets frequencies below a cutoff point through and rolls off everything above it, so turning the cutoff down makes a bright sawtooth progressively darker and rounder. Resonance boosts the frequencies right at the cutoff point before they roll off, adding a whistling or squelchy emphasis that's the signature sound of an acid bass or a filter sweep. Start with the cutoff wide open so you can hear the raw oscillator, then bring it down until the tone matches what the part needs.</p>
+
+        <h3>Envelope: control how the sound moves over time</h3>
+        <p>A sound isn't static — it changes shape from the moment a note starts to the moment it ends, and the amp envelope controls that shape with four stages: attack (how fast it reaches full volume), decay (how fast it settles from that peak), sustain (the level it holds at while a note is held), and release (how long it takes to fade after the note is released). A plucky bass wants a fast attack and a short decay and sustain so each note is a short pop. A pad wants a slow attack so notes swell in rather than snapping on, and a long release so chords blend into each other. Routing an envelope to the filter cutoff as well as the volume is what produces a classic filter sweep — the tone opening up as the note plays, not just the volume.</p>
+
+        <h2>FM synthesis: build a tone instead of carving one</h2>
+        <p>FM (frequency modulation) synthesis works the opposite way from subtractive: instead of starting bright and cutting away, it starts from simple sine waves and builds complexity by using one oscillator, called a modulator, to rapidly modulate the frequency of another, called a carrier. The carrier is the part you actually hear; the modulator never sounds on its own, it just distorts the carrier's waveform at audio-rate speed, and that distortion is what generates new harmonics that weren't in either sine wave to begin with.</p>
+
+        <h3>Operators and ratios</h3>
+        <p>Each sine wave generator in an FM patch is called an operator. The relationship between a modulator's frequency and the carrier's frequency — the ratio — determines the character of the harmonics that appear. Simple whole-number ratios like 1:1 or 2:1 produce harmonics that sound musical and bell-like or brassy. Non-whole-number ratios produce inharmonic, metallic, or bell-like clangor that a subtractive synth essentially can't reach, because subtractive synthesis only ever removes harmonics that were already in the oscillator rather than generating new ones.</p>
+
+        <h3>Modulation index: how much the sound distorts</h3>
+        <p>The modulation index (sometimes just called the amount) controls how strongly the modulator affects the carrier. At zero, the carrier is an unmodified sine wave — pure and simple. Turning the index up thickens the distortion and adds more of the ratio's harmonics, moving the tone from a plain sine toward something buzzier, brighter, or more metallic. Because this control interacts with the ratio, small changes can move a patch from "clean electric piano" to "aggressive bass" without touching anything else — this is also why FM patches are harder to predict by ear than a subtractive filter sweep, and why nudging one operator at a time is the reliable way to learn what each one contributes.</p>
+
+        <h3>Envelopes on operators</h3>
+        <p>Just like the subtractive synth's amp envelope, each operator in an FM patch can have its own envelope — meaning the modulation amount itself can rise and fall over the length of a note. A fast decay on the modulator's envelope, while the carrier's envelope sustains, is the classic recipe for an electric-piano tone: a bright, metallic attack that quickly settles into a warmer, simpler tone as the note holds. This kind of movement is something a single filter sweep on a subtractive synth can approximate but not fully replicate.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Which one to reach for</h2>
+        <table>
+          <thead>
+            <tr><th>Goal</th><th>Better starting point</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Warm analog-style bass or lead</td><td>Subtractive</td></tr>
+            <tr><td>Acid-style filter squelch</td><td>Subtractive (high resonance)</td></tr>
+            <tr><td>Soft, evolving pad</td><td>Subtractive (slow attack/release)</td></tr>
+            <tr><td>Electric piano or bell</td><td>FM</td></tr>
+            <tr><td>Glassy, metallic keys</td><td>FM</td></tr>
+            <tr><td>Aggressive, clangy bass</td><td>FM (high modulation index)</td></tr>
+          </tbody>
+        </table>
+        <p>Neither engine is strictly better — they're different tools for different starting points. A lot of finished tracks use both: a subtractive bass and pad handling the warm, familiar parts of the arrangement, and an FM lead or key part cutting through with a texture the subtractive synth can't produce on its own. See <a href="/blog/free-instruments-in-browser">the full instrument rundown</a> for how these two synths sit alongside the drum machines, sampler, and SoundFont playback in Tracks.</p>
+
+        <h2>A five-minute patch-building routine</h2>
+        <ol>
+          <li><strong>Pick the engine based on the goal.</strong> Warm and familiar → subtractive. Bright, metallic, or unusual → FM.</li>
+          <li><strong>Start from the plainest waveform.</strong> A sawtooth for subtractive, or a single carrier with the modulation index near zero for FM — you want to hear the raw material before you shape it.</li>
+          <li><strong>Shape the tone.</strong> Move the filter cutoff (subtractive) or the modulation index and ratio (FM) until the timbre matches what the part needs.</li>
+          <li><strong>Shape the movement.</strong> Set the envelope so the sound's shape over time — plucky, swelling, sustained — matches how the part is actually played.</li>
+          <li><strong>Play it against the rest of the track.</strong> A patch that sounds great solo can disappear or clash once drums and other parts are playing — tune it in context, not in isolation.</li>
+        </ol>
+
+        <h2>Frequently asked questions</h2>
+        <h3>Is FM synthesis harder to learn than subtractive?</h3>
+        <p>The individual controls are actually just as few, but FM is less predictable because changing the ratio or modulation index can move a sound in a direction that isn't obvious until you hear it, whereas a subtractive filter cutoff always makes a sound proportionally brighter or darker. The fix is the same for both: change one control at a time and listen before moving the next one.</p>
+        <h3>Can I get FM-style bell and metallic sounds from a subtractive synth?</h3>
+        <p>Not really. Subtractive synthesis only removes harmonics that already exist in the oscillator, so it can't generate the inharmonic overtones that give FM its bell-like and metallic character. That's the main reason it's worth having both engines rather than treating one as a strict upgrade over the other.</p>
+        <h3>Do I need to understand the math behind FM synthesis to use it?</h3>
+        <p>No. The ratio and modulation index controls do the math for you — you only need to know that ratio changes the character of the harmonics and modulation index changes how strong they are, then use your ears to find a setting you like.</p>
+        <h3>What's the fastest way to learn sound design?</h3>
+        <p>Start from a preset that's close to what you want, then change one control at a time — filter cutoff, then resonance, then envelope, or ratio, then modulation index, then operator envelope — and listen to what each one does in isolation before combining changes. Building from scratch instead of only tweaking presets is what makes the relationships between controls stick.</p>
+        <h3>Do these synths run entirely in the browser?</h3>
+        <p>Yes. Both the subtractive and FM synths in Tracks run on the Web Audio API with no plugin installs and no account — your patches and projects stay on your device and are never uploaded anywhere.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Build a patch from scratch</h3>
+            <p>Subtractive and FM synths, built in — free, in your browser, nothing leaves your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
