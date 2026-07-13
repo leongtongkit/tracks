@@ -7,6 +7,7 @@
 (function () {
   'use strict';
   var KEY = 'jfound_cookie_consent';
+  var EVENT = 'jfound:consent'; // ads.js listens for this in THIS tab (see writeChoice)
 
   function readChoice() {
     try {
@@ -18,6 +19,10 @@
     try {
       localStorage.setItem(KEY, JSON.stringify({ v: 2, essential: true, analytics: analytics, savedAt: new Date().toISOString() }));
     } catch (_) {}
+    // The 'storage' event fires only in OTHER same-origin tabs, never the one that
+    // wrote — so tell this tab explicitly, or ads.js won't act on ALLOW until the
+    // next navigation.
+    try { window.dispatchEvent(new CustomEvent(EVENT, { detail: { analytics: analytics } })); } catch (_) {}
     applyToZaraz(analytics);
   }
 

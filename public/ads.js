@@ -33,6 +33,7 @@
   };
 
   var CONSENT_KEY = 'jfound_cookie_consent';
+  var CONSENT_EVENT = 'jfound:consent'; // dispatched by consent.js in the writing tab
 
   function consented() {
     try {
@@ -66,8 +67,9 @@
   var adsenseLoaded = false;
   function loadAdsense() {
     if (adsenseLoaded || !ADSENSE_CLIENT) return;
-    // Auto ads are loaded by the <script> in each content page's <head>; if it's
-    // already on the page, don't add a second copy (that throws in adsbygoogle).
+    // Nothing may request adsbygoogle.js before this point: no page hardcodes the
+    // tag, so this consent-gated injection is the ONLY path to it. Guard anyway —
+    // a second copy on the page throws in adsbygoogle.
     if (document.querySelector('script[src*="adsbygoogle.js"]')) { adsenseLoaded = true; return; }
     adsenseLoaded = true;
     var s = document.createElement('script');
@@ -109,6 +111,11 @@
   } else {
     run();
   }
-  // Re-run if consent is granted after first paint (consent.js writes the key).
+  // Re-run if consent is granted after first paint.
+  //   • same tab: 'storage' does NOT fire in the document that called setItem, so
+  //     consent.js dispatches this custom event right after it writes the key —
+  //     without it, clicking ALLOW would show no ads until the next navigation.
+  //   • other tabs: 'storage' fires there, so they pick the choice up too.
+  window.addEventListener(CONSENT_EVENT, run);
   window.addEventListener('storage', function (e) { if (e.key === CONSENT_KEY) run(); });
 })();
