@@ -13,6 +13,10 @@ jobs:
         with:
           node-version: '22'
       - run: npm ci
+      # Gate the deploy: the daily blog routine pushes new HTML straight to main,
+      # so this is where a re-introduced ad script or an unescaped post field gets
+      # caught — before it reaches the live site.
+      - run: npm test
       - run: npm run build
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
