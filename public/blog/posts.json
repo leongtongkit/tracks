@@ -1,5 +1,13 @@
 [
   {
+    "slug": "session-view-clip-launch",
+    "title": "What is the session view? Loop-based songwriting in a browser DAW",
+    "dek": "The session view lets you launch and combine loop clips live instead of arranging on a fixed timeline. Here is what Tracks' clip-launch view does, when to use it instead of the timeline, and how to turn a jam into a finished arrangement.",
+    "date": "2026-07-13",
+    "tags": ["session view", "clip launch", "loop-based", "songwriting", "workflow"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "synth-sound-design-subtractive-fm",
     "title": "Subtractive vs FM synthesis: how to design your own sounds",
     "dek": "Subtractive synthesis carves a sound out of a raw waveform with a filter, and FM synthesis builds a tone by using one oscillator to modulate another. Here is how each works in the Tracks browser synth and how to program your own patch from scratch.",

@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What is the session view? Loop-based songwriting in a browser DAW | Tracks</title>
+    <meta name="description" content="The session view lets you launch and combine loop clips live instead of arranging on a fixed timeline. Here is what Tracks' clip-launch view does, when to use it instead of the timeline, and how to turn a jam into a finished arrangement." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/session-view-clip-launch" />
+    <meta property="og:title" content="What is the session view? Loop-based songwriting in a browser DAW" />
+    <meta property="og:description" content="A scenes × tracks grid of loop clips you launch live, instead of arranging on a fixed timeline. Here is how the session view works in Tracks and how to turn a jam into a finished song." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/session-view-clip-launch" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use the session view to write loop-based songs",
+        "description": "Open the session/clip-launch view in the Tracks browser studio, fill a grid of loop slots, launch clips live to jam out an idea, and capture the result into the arrangement timeline.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open the session view", "text": "Click the Session button in the transport bar to open the scenes × tracks grid of clip slots, laid over the arrangement." },
+          { "@type": "HowToStep", "name": "Fill a slot", "text": "Click an empty slot to drop in a copy of the clip currently selected in the arrangement, or a blank 4-beat clip to start from scratch." },
+          { "@type": "HowToStep", "name": "Launch a clip", "text": "Click a filled slot to launch it — it starts looping from the next bar and overrides whatever that track was playing in the arrangement." },
+          { "@type": "HowToStep", "name": "Launch a whole scene", "text": "Click the ▶ on a scene row to launch every filled slot in that row at once, and silence any track that has no clip in that scene." },
+          { "@type": "HowToStep", "name": "Edit a clip in place", "text": "Click the pencil icon on a slot to open that clip in the piano roll — changes apply on the clip's next loop, live." },
+          { "@type": "HowToStep", "name": "Commit the result to the timeline", "text": "Once a combination of loops feels right, drag the clips you kept into the arrangement timeline in that order to lock in a real song structure." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "What is the session view? Loop-based songwriting in a browser DAW", "item": "https://tracks.jfound.net/blog/session-view-clip-launch" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>What is the session view? Loop-based songwriting in a browser DAW</h1>
+        <p class="art-meta">By Tongkit Leong · July 13, 2026 · 7 min read</p>
+
+        <p class="lede">The session view is a grid of loop clips — scenes down the side, tracks across the top — that you click to launch live, instead of arranging everything ahead of time on a fixed timeline. In <a href="/studio">Tracks</a>, it sits behind a "Session" button in the transport bar, and any clip you launch loops on its track from the next bar until you stop it or launch something else.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Timeline vs. session: two ways to build a song</h2>
+        <p>Most of the time, writing a song in Tracks means working on the arrangement timeline: you place clips left to right in the order they play, the way you'd lay tape end to end. That's the right tool once you know your song's structure — intro, verse, chorus, bridge — because the timeline is literally that structure, laid out and visible.</p>
+        <p>But a lot of songs don't start with a known structure. They start with a drum loop and a bassline that sound good looping together, and the structure gets discovered by trying combinations live — muting a layer, bringing in a new one, hearing how a chord loop feels under a different beat. That's what the session view is for: a scenes × tracks grid of clip slots you can launch, stop, and swap on the fly, so you can jam out an idea before you commit it to a timeline.</p>
+        <p>Neither view is more "real" than the other — they're both looking at the same clips. A clip filled into a session slot and a clip placed on the timeline are the same kind of object underneath; the session view just gives you a second, live way to trigger them.</p>
+
+        <h2>How the session grid is laid out</h2>
+        <p>Open the session view from the Session button in the transport bar. You'll see a grid: each column is one of your project's tracks, each row is a "scene," and each cell is a slot that can hold a clip.</p>
+        <ul>
+          <li><strong>Scenes</strong> are rows. Think of a scene as a snapshot of what should be playing across all your tracks at once — "scene 1" might be a sparse intro loop on drums and bass only, "scene 2" might add a chord loop and lead melody for a chorus.</li>
+          <li><strong>Slots</strong> are cells. An empty slot on a track is open ground — fill it, or leave it silent when that scene launches.</li>
+          <li><strong>The scene launch button (▶)</strong> next to each row fires every filled slot in that row at once, and stops any track with no clip in that scene — so one click can jump your whole project from "sparse intro" to "full chorus."</li>
+        </ul>
+
+        <h2>Filling and launching a clip</h2>
+        <h3>Fill a slot</h3>
+        <p>Click an empty slot to fill it. If you have a clip selected in the arrangement, Tracks drops a copy of that clip into the slot; otherwise it creates a new blank 4-beat clip. Either way, the slot now holds a clip you can launch, edit, or clear independently of whatever is on the timeline for that track.</p>
+        <h3>Launch a clip</h3>
+        <p>Click a filled slot and it starts playing — but not instantly. It's quantized to launch on the next bar, so clips you trigger mid-phrase still land on the beat instead of stepping on the groove. Once launched, the clip loops on that track for as long as it's playing, and it overrides whatever the arrangement timeline had scheduled for that track. Click the same slot again to stop it.</p>
+        <h3>Edit a clip live</h3>
+        <p>Click the pencil icon on any filled slot to open that clip in the piano roll. Because the launched slot and the piano roll are editing the same clip, changes you make — a new note, a shifted beat — are heard the next time the loop comes around, without needing to stop and relaunch it. This is the fastest way to iteratively tweak a loop while it's actually playing against the rest of the mix.</p>
+        <h3>Clear a slot, stop everything</h3>
+        <p>The × on a slot clears it out. "Stop all," at the top of the session view, stops every currently launched clip across every track at once — useful when a jam has drifted somewhere you don't want and you'd rather reset than hunt down each track individually.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>A practical workflow: from jam to finished song</h2>
+        <p>The session view is a sketchpad, not the final destination — a finished export still comes from the arrangement timeline. Here's a workflow that uses both:</p>
+        <ol>
+          <li><strong>Sketch a beat and bassline as clips</strong> and drop them into two slots in scene 1. Launch both and let them loop while you listen.</li>
+          <li><strong>Add a chord loop or melody</strong> in a slot on scene 2, and use the scene launch button to bring the whole scene in at once — hear how the added layer sits against the beat that's already looping.</li>
+          <li><strong>Build a few scenes</strong> this way — a sparse intro scene, a fuller chorus scene, maybe a stripped-back breakdown scene — launching and editing clips until each one feels right on its own.</li>
+          <li><strong>Once you like a scene, drag its clips onto the arrangement timeline</strong> in the order you want them to play. This is the step that turns "clips I liked while jamming" into an actual song structure with a beginning, middle, and end. See <a href="/blog/song-structure-arrangement">how to arrange a song: verse, chorus, bridge structure</a> for how to think about that ordering.</li>
+          <li><strong>Keep using the session view for arrangement decisions you're unsure about</strong> — if you can't decide whether a bridge needs a new chord loop, launch a candidate live against the rest of the mix before committing it to the timeline.</li>
+        </ol>
+        <p>Because a session clip and a timeline clip are the same underlying object, nothing about this workflow requires re-recording or re-programming anything — you're just choosing where and how a clip gets triggered.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Forgetting a clip is still launched.</strong> A launched session clip keeps looping on its track and overriding the arrangement until you stop it — if a track sounds wrong when you switch back to the timeline, check whether a session slot is still active on it.</li>
+          <li><strong>Treating the session view as the finished song.</strong> It's a live performance and sketching surface. Export always renders from the arrangement timeline, so anything you want in the final file needs to end up placed there.</li>
+          <li><strong>Building too many scenes before committing anything.</strong> It's easy to keep jamming indefinitely. If a combination feels right, drag it to the timeline immediately rather than trusting yourself to remember which scene had the good version.</li>
+          <li><strong>Launching a clip off the beat and being surprised it doesn't cut in immediately.</strong> That delay is the quantize-to-next-bar behavior working as intended — it's what keeps loops landing in time instead of chopping in mid-phrase.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does a session clip play instantly when I click it?</h3>
+        <p>No — it's quantized to the next bar boundary, so it starts on time with whatever else is playing rather than the instant you click. This is deliberate: instant triggering would make loops drift out of phase with each other.</p>
+
+        <h3>Can I use audio clips in the session view, not just MIDI?</h3>
+        <p>Yes. A session slot can hold either a note clip or a recorded audio clip — whichever kind of clip you had selected in the arrangement when you filled the slot.</p>
+
+        <h3>What happens to the arrangement timeline while a session clip is playing?</h3>
+        <p>Launching a session clip on a track overrides that track's arrangement for as long as the clip is playing. Other tracks with no launched clip keep playing whatever the timeline has scheduled for them. Stop the session clip and the track's arrangement content plays again.</p>
+
+        <h3>Is this the same as full live-looping software?</h3>
+        <p>It covers the core of clip-launch songwriting — a scenes × tracks grid, quantized launch, per-clip and per-scene triggering, live editing in the piano roll — inside a browser tab, for free. It's built for sketching and arranging ideas, not for a live-performance rig with external controllers.</p>
+
+        <h3>Do I need the session view to finish a song in Tracks?</h3>
+        <p>No. Plenty of songs are built entirely on the arrangement timeline without ever opening the session view. It's an optional tool for when you want to discover a structure by playing with loops rather than planning it out in advance.</p>
+
+        <h2>Try it</h2>
+        <p>The session view is built into the free <a href="/studio">Tracks</a> studio — open a project, click Session in the transport bar, and drop a beat and a bassline into a scene to hear how it feels. Nothing is uploaded; your project stays on your device the whole time. If you're new to the studio overall, start with <a href="/blog/make-a-song-beginners">how to make a song in your browser for beginners</a> first.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Jam out your next song for free</h3>
+            <p>Launch loop clips live in the session view, then drag the parts you keep onto the timeline. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
