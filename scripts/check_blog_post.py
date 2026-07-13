@@ -7,10 +7,13 @@ using Jaccard similarity over title + dek + tags tokens. Stdlib-only.
 Usage:
     python3 scripts/check_blog_post.py <slug> [--title "..."] [--dek "..."] [--tags "a,b,c"]
 
-If the candidate is already listed in posts.json, its own fields are used.
+A slug that is already in posts.json (or already has an article on disk) is an
+exact duplicate and fails immediately — republishing it would overwrite the live
+article and add a second hub entry.
+
 Exit codes:
     0 = clear to publish (no near-duplicate found)
-    2 = near-duplicate detected (do NOT publish)
+    2 = duplicate: slug already published, or too similar to an existing post
     1 = usage / input error
 """
 import argparse
@@ -20,7 +23,8 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-POSTS = os.path.join(ROOT, "public", "blog", "posts.json")
+ARTICLES = os.path.join(ROOT, "public", "blog")
+POSTS = os.path.join(ARTICLES, "posts.json")
 THRESHOLD = 0.55  # Jaccard >= this against any existing post => duplicate
 
 STOP = set(
@@ -57,15 +61,18 @@ def main():
     args = ap.parse_args()
 
     posts = load_posts()
-    others = [p for p in posts if p.get("slug") != args.slug]
+
+    # Exact collision is the most literal duplicate there is, and it is the one a
+    # similarity score can never catch: re-publishing a live slug overwrites the
+    # article and prepends a second posts.json entry. Fail before comparing.
+    if any(p.get("slug") == args.slug for p in posts):
+        print(f"DUPLICATE: slug '{args.slug}' is already published in posts.json. Pick a new slug.")
+        return 2
+    if os.path.exists(os.path.join(ARTICLES, f"{args.slug}.html")):
+        print(f"DUPLICATE: public/blog/{args.slug}.html already exists. Pick a new slug.")
+        return 2
 
     title, dek, tags = args.title, args.dek, args.tags.split(",") if args.tags else []
-    # if the candidate is already in posts.json, prefer its declared fields
-    me = next((p for p in posts if p.get("slug") == args.slug), None)
-    if me:
-        title = title or me.get("title", "")
-        dek = dek or me.get("dek", "")
-        tags = tags or me.get("tags", [])
 
     if not (title or dek or tags):
         print(f"error: no fields to compare for slug '{args.slug}'", file=sys.stderr)
@@ -74,7 +81,7 @@ def main():
     cand = tokens(title, dek, " ".join(tags))
     worst = 0.0
     worst_slug = None
-    for p in others:
+    for p in posts:
         sim = jaccard(cand, tokens(p.get("title", ""), p.get("dek", ""), " ".join(p.get("tags", []))))
         if sim > worst:
             worst, worst_slug = sim, p.get("slug")

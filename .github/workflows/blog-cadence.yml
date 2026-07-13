@@ -1,0 +1,15 @@
+name: blog cadence
+
+# The blog publishes daily at ~03:07 UTC. Check a few hours later that a post
+# actually landed: a failed run here is the alert that the routine has stalled.
+on:
+  schedule:
+    - cron: '30 6 * * *'
+  workflow_dispatch:
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 scripts/check_blog_cadence.py
