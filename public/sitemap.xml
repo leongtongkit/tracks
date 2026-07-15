@@ -16,6 +16,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tracks.jfound.net/blog/bassline-locks-with-kick</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tracks.jfound.net/blog/session-view-clip-launch</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

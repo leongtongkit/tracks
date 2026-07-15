@@ -1,5 +1,13 @@
 [
   {
+    "slug": "bassline-locks-with-kick",
+    "title": "How to write a bassline that locks with the kick drum",
+    "dek": "A bassline that locks with the kick shares rhythmic space instead of colliding with it. Here is a practical method for placing bass notes around your kick drum in the Tracks piano roll so the low end stays tight instead of muddy.",
+    "date": "2026-07-15",
+    "tags": ["bassline", "bass", "kick drum", "arrangement", "mixing"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "session-view-clip-launch",
     "title": "What is the session view? Loop-based songwriting in a browser DAW",
     "dek": "The session view lets you launch and combine loop clips live instead of arranging on a fixed timeline. Here is what Tracks' clip-launch view does, when to use it instead of the timeline, and how to turn a jam into a finished arrangement.",
