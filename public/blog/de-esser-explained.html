@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>De-esser explained: how to fix harsh S and T sounds in vocals | Tracks</title>
+    <meta name="description" content="A de-esser is a frequency-specific compressor that tames harsh sibilant sounds in a vocal take without dulling the rest of the voice. Here is how sibilance happens and how to dial in Tracks' built-in de-esser." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/de-esser-explained" />
+    <meta property="og:title" content="De-esser explained: how to fix harsh S and T sounds in vocals" />
+    <meta property="og:description" content="A de-esser is a frequency-specific compressor that tames the harsh sibilant sounds in a vocal take without dulling the rest of the voice. Here is how it works and how to set it up in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/de-esser-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "De-esser explained: how to fix harsh S and T sounds in vocals",
+        "description": "Set up the built-in de-esser on a vocal track in the Tracks browser studio to tame harsh sibilance without dulling the rest of the voice.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open the mixer and find the vocal track", "text": "In Tracks, open the mixer and select the vocal track that has harsh S, SH, or T sounds. Find the De-ess section in that track's channel strip." },
+          { "@type": "HowToStep", "name": "Turn the de-esser on", "text": "Click the De-ess toggle to enable it. With no adjustment yet, listen for whether the harshness changes at all — this confirms the effect is active." },
+          { "@type": "HowToStep", "name": "Set the frequency to match the sibilance", "text": "Adjust the Frq dial, which ranges from 2 kHz to 12 kHz, so it lines up with where the hiss lives in this particular voice. Most vocals sibilate between 5 kHz and 8 kHz; sweep the dial while the vocalist says an S-heavy phrase until the hiss jumps out, then back off slightly." },
+          { "@type": "HowToStep", "name": "Set the amount", "text": "Raise the Amt dial from its 0.5 default until the S and T sounds stop jumping out of the mix. Keep it as low as possible — too much amount audibly dulls consonants and makes the vocal sound lispy or muffled." },
+          { "@type": "HowToStep", "name": "Solo and compare with de-ess bypassed", "text": "Toggle the De-ess button off and on while the vocal plays to confirm the sibilance is reduced but the rest of the voice sounds untouched. Adjust frequency and amount together until the fix is audible only on the harsh consonants." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "De-esser explained: how to fix harsh S and T sounds in vocals", "item": "https://tracks.jfound.net/blog/de-esser-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>De-esser explained: how to fix harsh S and T sounds in vocals</h1>
+        <p class="art-meta">By Tongkit Leong · July 17, 2026 · 7 min read</p>
+
+        <p class="lede">A de-esser is a frequency-specific compressor that clamps down only on the harsh high-frequency energy in S, SH, and T sounds, leaving the rest of the voice untouched. You can dial one in on any vocal track in the <a href="/studio">Tracks browser studio</a> using the built-in De-ess control in the mixer, with no plugins and no download required.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What is sibilance, and why does it happen?</h2>
+        <p>Sibilance is the harsh, hissy energy concentrated around 4–10 kHz that comes from consonants like S, SH, Z, and sometimes T. It is a normal part of speech and singing, but it becomes a mixing problem for a few reasons at once: close-mic recording picks up more high-frequency detail than the ear hears in a room, a bright condenser mic exaggerates it further, and any EQ boost you add to make a vocal sound "present" or "airy" usually lands in the same 5–8 kHz range where sibilance lives — making the S sounds even more piercing.</p>
+        <p>The problem is that sibilance is loud and narrow in frequency, but only for a few milliseconds at a time. Turning down the whole track fixes the S sounds but also dulls every other syllable. Cutting a static EQ notch at the sibilant frequency removes brightness from the entire vocal, even the parts that were never harsh. Neither approach solves the problem without a cost — which is exactly why a de-esser exists.</p>
+
+        <h2>How a de-esser actually works</h2>
+        <p>A de-esser is a compressor that only listens to a narrow high-frequency band instead of the whole signal. It works like this: the incoming vocal is split, one path is filtered to isolate just the high band above your chosen frequency, and an envelope follower tracks how loud that high band gets from moment to moment. Whenever that high band spikes — which happens exactly when an S or T lands — the de-esser applies a dynamic cut to the high end of the signal, but only for that instant. The rest of the word plays through completely unprocessed.</p>
+        <p>This is the key difference from a static EQ cut: a de-esser's gain reduction is triggered by the sibilance itself, so it only engages when sibilance is actually present. A vowel sitting in the same frequency range sails through untouched because it never triggers the high-band envelope the way a sharp S does.</p>
+        <p>In Tracks, the de-esser lives in each track's mixer channel strip, right below the gate and EQ. It has two controls: <strong>Frq</strong>, which sets where the high band starts (2 kHz to 12 kHz), and <strong>Amt</strong>, which sets how hard the cut bites once sibilance crosses that line. Turning the de-esser off removes it from the signal chain entirely, so it costs nothing when you don't need it.</p>
+
+        <h2>How to set up the de-esser in Tracks</h2>
+        <p>Here is the process for taming a harsh vocal take step by step.</p>
+
+        <h3>Step 1: Solo the vocal and find the sibilance</h3>
+        <p>Open the mixer and solo the vocal track. Play back a section with S-heavy lyrics — words with lots of S, SH, or T sounds are the easiest way to hear the problem clearly. Listen for a hissy, piercing edge on those consonants that stands out from the rest of the phrase.</p>
+
+        <h3>Step 2: Turn on De-ess</h3>
+        <p>In that track's channel strip, find the De-ess section and click the toggle to turn it on. At the default settings nothing dramatic will happen yet — the next two steps tune it to this specific voice and recording.</p>
+
+        <h3>Step 3: Set the frequency to match the voice</h3>
+        <p>The Frq dial ranges from 2 kHz to 12 kHz and decides where the de-esser starts listening for sibilance. Most vocals sibilate somewhere between 5 kHz and 8 kHz, but a bright condenser mic or a naturally sharp voice can push that higher, while a deeper voice or a large-diaphragm mic with a rolled-off top end can sit lower. Sweep the dial slowly while the S-heavy phrase loops. You'll feel a point where the hiss becomes noticeably tighter and more controlled — that's roughly the right frequency for this take.</p>
+
+        <h3>Step 4: Raise the amount until the harshness disappears — and no further</h3>
+        <p>The Amt dial defaults to 0.5. Raise it gradually while the same phrase loops. The goal is the minimum amount that makes the S and T sounds sit level with the rest of the vocal instead of jumping out. Stop as soon as that happens. If you push the amount too far, the vocal starts to sound lispy or muffled — like the singer has cotton in their mouth — because the de-esser is now cutting into legitimate consonant detail, not just the harsh peak.</p>
+
+        <h3>Step 5: A/B against bypass</h3>
+        <p>Toggle the De-ess button off and back on while the full phrase plays. With it on, the S sounds should sit quietly in the mix instead of stabbing through. With it off, you should hear the harshness return. If toggling it makes no audible difference, the frequency is probably set wrong — go back to Step 3 and sweep again. If the vocal sounds noticeably duller with de-ess on, back off the Amt dial.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>When to reach for a de-esser</h2>
+        <ul>
+          <li><strong>Close-mic vocal takes.</strong> The closer the mic, the more exaggerated the high-frequency detail, and the more likely sibilance becomes a problem. This is the single most common use case.</li>
+          <li><strong>After a bright EQ boost.</strong> If you've added a presence or air boost around 5–10 kHz to make a vocal cut through a mix, that same boost usually makes sibilance worse. Add the de-esser after the EQ boost in your chain so it can tame exactly what the boost exaggerated.</li>
+          <li><strong>Before compression, not instead of it.</strong> A de-esser handles a narrow frequency problem; a regular compressor handles overall dynamics. Use both — de-ess first to remove the harsh spikes, then compress the now-smoother signal for consistent level.</li>
+          <li><strong>Hi-hats and cymbals, occasionally.</strong> Sibilance-style harshness isn't unique to vocals — a de-esser set to a higher frequency can tame an overly bright hi-hat or cymbal bus the same way it tames an S.</li>
+        </ul>
+
+        <h2>Common de-esser mistakes</h2>
+        <ul>
+          <li><strong>Frequency set too low.</strong> If the Frq dial is set well below where the sibilance actually sits, the de-esser will react to body and warmth in the voice instead of the harsh consonants, dulling the wrong part of the sound.</li>
+          <li><strong>Amount pushed too high.</strong> Overdoing the Amt dial is the most common mistake — it trades a harsh S for a lisping, muffled vocal. If in doubt, back it off until the sibilance is merely under control rather than eliminated.</li>
+          <li><strong>Trying to fix sibilance with EQ alone.</strong> A static EQ cut cannot distinguish between a loud S and a vowel in the same frequency range, so it dulls both. Reach for the de-esser instead of a permanent EQ notch whenever the issue is specific to consonants.</li>
+          <li><strong>Not soloing while you tune it.</strong> The interaction between frequency and amount is easiest to hear on the solo'd vocal. Dial it in solo first, then check it again in the full mix — sibilance that's audible on its own can sometimes disappear once other instruments are playing, and vice versa.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Is a de-esser the same as an EQ cut?</h3>
+        <p>No. An EQ cut removes a frequency range constantly, whether sibilance is present or not, which dulls the whole vocal in that range. A de-esser only cuts when the high band spikes above a threshold — so it reacts to the actual S and T sounds and leaves the rest of the voice alone.</p>
+
+        <h3>What frequency should I use for de-essing vocals?</h3>
+        <p>Most voices sibilate between 5 kHz and 8 kHz, which is why the Frq dial in Tracks covers 2 kHz to 12 kHz. The exact spot depends on the singer and the microphone — sweep the dial while an S-heavy phrase plays and stop where the hiss tightens up the most.</p>
+
+        <h3>Can I use a de-esser on something other than vocals?</h3>
+        <p>Yes. Anything with harsh, narrow high-frequency energy can benefit — an overly bright acoustic guitar strum, a hi-hat, or a cymbal bus. Set the Frq dial to match where the harshness lives on that source rather than the typical vocal range.</p>
+
+        <h3>Why does my vocal sound muffled after de-essing?</h3>
+        <p>The Amt dial is set too high. A de-esser that's working correctly should be nearly invisible except on the harsh consonants themselves — if the whole vocal loses brightness, lower the amount until only the S and T peaks are being controlled.</p>
+
+        <h3>Do I need a de-esser if I already recorded carefully?</h3>
+        <p>Careful mic placement (off-axis, a bit further back, a pop filter) reduces sibilance at the source, but it rarely eliminates it completely — and any brightening EQ you add later can bring it back. Most vocal takes benefit from at least a light touch of de-essing before the final mix.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Every track's channel strip in the Tracks mixer has a built-in De-ess section with Frq and Amt controls — no plugins needed. Open the <a href="/studio">studio</a>, record or import a vocal, and follow the steps above. For the rest of the vocal chain, see <a href="/blog/record-vocals-in-browser">How to record and tune vocals in your browser</a>. For EQ and compression fundamentals, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try the built-in de-esser for free</h3>
+            <p>Tame harsh vocal sibilance in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

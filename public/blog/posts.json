@@ -1,5 +1,13 @@
 [
   {
+    "slug": "de-esser-explained",
+    "title": "De-esser explained: how to fix harsh S and T sounds in vocals",
+    "dek": "A de-esser is a frequency-specific compressor that tames the harsh sibilant sounds in a vocal take without dulling the rest of the voice. Here is how sibilance happens and how to dial in Tracks' built-in de-esser so vocals sit smoothly in a mix.",
+    "date": "2026-07-17",
+    "tags": ["de-esser", "vocals", "mixing", "sibilance", "recording"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "take-comping-best-vocal-take",
     "title": "How to comp the best take from multiple recordings",
     "dek": "Take comping means recording several passes of a vocal or instrument part and stitching the best sections of each into one final take. Here is how count-in recording and take comping work in Tracks so you never settle for a single imperfect performance.",
