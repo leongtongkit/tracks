@@ -1,5 +1,13 @@
 [
   {
+    "slug": "noise-gate-clean-recordings",
+    "title": "How to use a noise gate to clean up noisy recordings",
+    "dek": "A noise gate mutes a track whenever its signal drops below a threshold, cutting hiss, room noise, and bleed between the notes you actually played. Here is how Tracks' built-in gate works and how to set it up on a vocal or instrument track.",
+    "date": "2026-07-18",
+    "tags": ["noise gate", "gate", "recording", "mixing", "cleanup"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "de-esser-explained",
     "title": "De-esser explained: how to fix harsh S and T sounds in vocals",
     "dek": "A de-esser is a frequency-specific compressor that tames the harsh sibilant sounds in a vocal take without dulling the rest of the voice. Here is how sibilance happens and how to dial in Tracks' built-in de-esser so vocals sit smoothly in a mix.",

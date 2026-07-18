@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use a noise gate to clean up noisy recordings | Tracks</title>
+    <meta name="description" content="A noise gate mutes a track whenever its signal drops below a threshold, cutting hiss, room noise, and bleed between the notes you actually played. Here is how Tracks' built-in gate works and how to set it up." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/noise-gate-clean-recordings" />
+    <meta property="og:title" content="How to use a noise gate to clean up noisy recordings" />
+    <meta property="og:description" content="A noise gate mutes a track whenever its signal drops below a threshold, cutting hiss, room noise, and bleed between the notes you actually played. Here is how Tracks' built-in gate works and how to set it up on a vocal or instrument track." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/noise-gate-clean-recordings" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use a noise gate to clean up noisy recordings",
+        "description": "Set up the built-in noise gate on a track in the Tracks browser studio to silence hiss, room noise, and mic bleed between the notes and words you actually played.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open the mixer and find the noisy track", "text": "In Tracks, open the mixer and select the track that has audible hiss, room tone, or bleed between phrases — usually a mic recording. Find the Gate section at the top of that track's channel strip, above the EQ." },
+          { "@type": "HowToStep", "name": "Turn the gate on", "text": "Click the Gate toggle to enable it. At the default settings the gate will already start closing during silence, since it processes the raw signal before EQ, compression, or de-essing." },
+          { "@type": "HowToStep", "name": "Set the threshold above the noise floor", "text": "Raise the Thr dial, which ranges from 0% to 30%, until quiet room noise and hiss disappear between phrases but the vocal or instrument itself never gets cut off or clipped short." },
+          { "@type": "HowToStep", "name": "Choose how hard the gate closes with Flr", "text": "Leave the Flr dial at 0% for a fully silent gap when the track is below threshold, or raise it toward 100% to only turn the noise down instead of muting it completely — useful when a hard cutoff sounds unnatural." },
+          { "@type": "HowToStep", "name": "Play the full section and listen for chatter", "text": "Loop playback across a phrase with pauses. If the gate flickers open and shut on quiet sustain or breath noise, raise the threshold slightly. If it clips off the start or tail of a word, lower it." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to use a noise gate to clean up noisy recordings", "item": "https://tracks.jfound.net/blog/noise-gate-clean-recordings" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to use a noise gate to clean up noisy recordings</h1>
+        <p class="art-meta">By Tongkit Leong · July 18, 2026 · 7 min read</p>
+
+        <p class="lede">A noise gate mutes a track automatically whenever its signal drops below a threshold you set, so hiss, room tone, and mic bleed disappear in the gaps between the notes or words you actually played. You can turn one on for any track in the <a href="/studio">Tracks browser studio</a> using the built-in Gate section in the mixer, with no plugins and no download required.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What a noise gate actually fixes</h2>
+        <p>Every recording has a noise floor: the hum of a computer fan, the hiss of a mic preamp, traffic outside a window, or a drum kit bleeding into a vocal mic through the room. It's usually too quiet to notice while someone is singing or playing, but the moment they stop, that noise is the only thing left — and in a mix with dozens of tracks, a dozen noise floors playing at once adds up into an audible wash of hiss under the whole song.</p>
+        <p>A noise gate solves this by watching the level of a track and shutting it off (or turning it way down) whenever that level drops below a threshold. While the singer is holding a note or the guitar is ringing out, the signal sits above the threshold and passes through untouched. The instant they stop and only room noise is left, the gate closes and that noise vanishes from the mix. It's the opposite job of a compressor, which reacts to loud signal — a gate reacts to quiet signal, and only quiet signal.</p>
+
+        <h2>How the gate works in Tracks</h2>
+        <p>The gate lives at the very top of each track's channel strip in the mixer, before the EQ, compressor, and de-esser. That order matters: it means the gate is deciding whether the raw, unprocessed signal counts as "noise" or "signal," rather than reacting to a version that's already been reshaped by EQ boosts or compression makeup gain.</p>
+        <p>It has two controls. <strong>Thr</strong> (threshold) sets the level, from 0% to 30% of full signal, below which the gate starts closing — raise it to gate out louder noise, lower it to let quieter sounds through untouched. <strong>Flr</strong> (floor) sets how far the gate closes once it's below threshold, from 0% (completely silent) to 100% (no reduction at all). A low floor gives you a hard, clean cutoff; a higher floor just turns the noise down a few notches instead of killing it outright, which can sound more natural on a source where a dead-silent gap feels unnatural, like a room mic or a bus of overhead drum mics.</p>
+        <p>The transition between open and closed isn't instant — it has a soft knee and a short smoothing window built in, so the gate doesn't produce an audible click or a jarring on/off snap every time it triggers. You don't control that speed directly; it's tuned to work well across vocals, drums, and instruments without extra knobs to fight with.</p>
+
+        <h2>How to set up the gate step by step</h2>
+        <p>Here's the process for cleaning up a noisy track.</p>
+
+        <h3>Step 1: Solo the track and listen to the gaps</h3>
+        <p>Open the mixer and solo the track you want to clean up — a vocal take, a DI guitar, or a room mic are the most common cases. Loop a section that includes both performance and silence, like a verse with pauses between lines. Listen specifically to what's happening in the gaps: hiss, hum, breath, or bleed from other instruments in the room.</p>
+
+        <h3>Step 2: Turn on Gate</h3>
+        <p>In that track's channel strip, find the Gate section at the top and click the toggle to turn it on. Because the default threshold is low, you may not hear a dramatic change yet — the next step is where you actually tune it to this recording.</p>
+
+        <h3>Step 3: Raise the threshold until the noise disappears</h3>
+        <p>Slowly raise the Thr dial while the loop plays. Watch (and listen to) the gaps between phrases. As the threshold climbs past the level of the room noise, it should drop out cleanly during silence. Stop raising it the moment that happens — going further starts eating into the quiet start and tail of real notes, clipping breaths short or cutting off a note's natural decay.</p>
+
+        <h3>Step 4: Decide how hard the gate should close</h3>
+        <p>If a fully silent gap sounds unnatural or abrupt for this source, raise the Flr dial partway instead of leaving it at 0%. This turns the noise down significantly without slamming it to dead silence, which often sounds smoother on room mics, sustained pads, or anything meant to breathe a little between phrases.</p>
+
+        <h3>Step 5: Check the full mix, not just the solo</h3>
+        <p>Un-solo the track and play the section again with everything else running. A gate setting that sounded perfect in isolation can behave differently once other instruments are present — sympathetic vibration from a loud kick or bass can occasionally trip a gate open when you don't want it to. If that happens, nudge the threshold up slightly and recheck.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>When to reach for a gate</h2>
+        <ul>
+          <li><strong>Mic recordings with audible room noise.</strong> Any track recorded through a microphone rather than a direct line — vocals, acoustic guitar, room mics — picks up ambient noise that a gate can remove between phrases.</li>
+          <li><strong>Bleed between close mics.</strong> If you're recording a full kit or a band with multiple mics open at once, a gate on each track cuts down on other instruments leaking in through mics that aren't meant to be capturing them.</li>
+          <li><strong>Noisy DI or preamp hiss.</strong> A guitar DI or a preamp running with a lot of gain can add a constant hiss that's only noticeable when nothing is playing — a gate silences it in the gaps without touching the tone of the actual notes.</li>
+          <li><strong>Before compression, not instead of it.</strong> Gate first, in the signal path Tracks already uses, so the compressor and de-esser downstream are working on a source that isn't full of noise the compressor would otherwise make louder by pulling up its makeup gain.</li>
+        </ul>
+
+        <h2>Common gate mistakes</h2>
+        <ul>
+          <li><strong>Threshold set too high.</strong> Pushing Thr too far chops the start or end off real notes and words, especially soft consonants at the start of a sung phrase. If you hear clipped-off attacks, back the threshold down.</li>
+          <li><strong>Expecting it to fix noise that's happening during the performance.</strong> A gate can only act during gaps — it can't remove hum or hiss that's present underneath a note that's already playing above the threshold. For noise present throughout the whole track, you need to fix it at the source (better cables, mic placement, or a quieter room) rather than gating it out.</li>
+          <li><strong>Leaving Flr at 0% on a source that needs to breathe.</strong> A hard, silent cutoff can sound choppy on things like a sustained pad or a room mic meant to add natural ambience. Raise the floor a little instead of forcing total silence.</li>
+          <li><strong>Gating after EQ or compression instead of before.</strong> Tracks places the gate first in the chain specifically so it reacts to the true noise floor of the recording. If you were manually chaining effects in a different order elsewhere, boosted or compressed noise can trick a gate into staying open or closing unpredictably.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What's the difference between a gate and a compressor?</h3>
+        <p>A compressor turns loud signal down; a gate turns quiet signal down (or off) entirely. They solve opposite problems — a compressor controls dynamics in the signal you want to hear, while a gate removes signal you don't want to hear at all, like hiss and room noise between phrases.</p>
+
+        <h3>Will a gate remove background noise while I'm singing or playing?</h3>
+        <p>No. A gate can only act when the track's overall level drops below the threshold — it can't separate noise from performance when both are happening at the same time. It cleans up the silence between notes, not noise mixed in underneath a note that's already playing.</p>
+
+        <h3>What should I set the threshold to?</h3>
+        <p>There's no universal number — it depends on how loud your noise floor is relative to your performance. Start low, solo the track, and raise the Thr dial gradually while a section with pauses plays, stopping the moment the noise in the gaps disappears but before real notes start getting clipped.</p>
+
+        <h3>Why does my gated track sound choppy?</h3>
+        <p>Either the threshold is set too high, cutting into soft attacks or decays, or the floor is at 0% on a source where a hard, silent cutoff sounds unnatural. Lower the threshold slightly, or raise the Flr dial so the gate turns noise down instead of muting it outright.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Every track's channel strip in the Tracks mixer has a built-in Gate section with Thr and Flr controls, positioned before EQ, compression, and de-essing — no plugins needed. Open the <a href="/studio">studio</a>, record or import a noisy track, and follow the steps above. For EQ, compression, and reverb fundamentals, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>. For taming harsh vocal sibilance right after the gate, see <a href="/blog/de-esser-explained">De-esser explained</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try the built-in noise gate for free</h3>
+            <p>Clean up hiss, room noise, and mic bleed in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
