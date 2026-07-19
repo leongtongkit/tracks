@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chorus, phaser, distortion, and bitcrusher: creative effects explained | Tracks</title>
+    <meta name="description" content="Beyond EQ and compression, Tracks ships four creative effects that add movement, grit, and texture to a sound: chorus, phaser, distortion, and bitcrusher. Here is what each one does and when to reach for it." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/creative-fx-chorus-phaser-bitcrusher" />
+    <meta property="og:title" content="Chorus, phaser, distortion, and bitcrusher: creative effects explained" />
+    <meta property="og:description" content="Beyond EQ and compression, Tracks ships four creative effects that add movement, grit, and texture to a sound: chorus, phaser, distortion, and bitcrusher. Here is what each one does, how it works, and when to reach for it." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/creative-fx-chorus-phaser-bitcrusher" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use chorus, phaser, distortion, and bitcrusher in Tracks",
+        "description": "Add movement, grit, and lo-fi texture to any track in the Tracks browser studio using the built-in Insert FX rack: distortion (Drive), bitcrusher (Crush), chorus, and phaser.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open Insert FX on a track", "text": "In the mixer, select a track's channel strip and find the section labeled Insert FX. It holds six effect modules in a fixed order: Drive, Crush, Chorus, Phaser, Delay, and Reverb." },
+          { "@type": "HowToStep", "name": "Add grit with Drive", "text": "Turn on the Drive module and raise the Drive knob to push the signal into soft clipping, from a warm edge to a fully fuzzed-out tone. Use the Tone knob to tame or brighten the harmonics that clipping adds." },
+          { "@type": "HowToStep", "name": "Add lo-fi texture with Crush", "text": "Turn on the Crush module and lower the Bits knob to reduce resolution for a grainy, digital quality, or raise the Rate knob to reduce the sample rate for a harsher, aliased character." },
+          { "@type": "HowToStep", "name": "Add width and movement with Chorus", "text": "Turn on Chorus and set Rate for how fast the pitch wobble cycles and Depth for how far it swings, thickening a thin sound and widening its stereo image." },
+          { "@type": "HowToStep", "name": "Add a sweeping motion with Phaser", "text": "Turn on Phaser and set Rate and Depth to control the speed and width of a sweeping notch filter moving through the sound, from a slow shimmer to a fast, syrupy swirl." },
+          { "@type": "HowToStep", "name": "Balance with Mix and check in context", "text": "Use each module's Mix knob to blend the effect with the dry signal instead of running fully wet, then un-solo the track and listen against the full mix before committing to a setting." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Chorus, phaser, distortion, and bitcrusher: creative effects explained", "item": "https://tracks.jfound.net/blog/creative-fx-chorus-phaser-bitcrusher" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Chorus, phaser, distortion, and bitcrusher: creative effects explained</h1>
+        <p class="art-meta">By Tongkit Leong · July 19, 2026 · 8 min read</p>
+
+        <p class="lede">Chorus thickens and widens a sound, phaser sweeps a moving notch through it, distortion pushes it into grit and fuzz, and a bitcrusher strips its resolution down to a grainy, digital crunch. All four live in the Insert FX rack on every track in the <a href="/studio">Tracks browser studio</a>, free, with no plugins to install.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Not every effect is about fixing a sound</h2>
+        <p>EQ, compression, gating, and de-essing are corrective — they fix a level, tame a harsh frequency, or clean up noise. Reverb and delay place a sound in space. Chorus, phaser, distortion, and bitcrusher are different: they don't fix or place a sound, they change its character. Reach for them when a part sounds technically fine but needs more attitude, more width, or more texture to sit right in a track — a thin synth lead, a flat drum bus, a clean guitar that needs to sound broken on purpose.</p>
+        <p>These four also stack well with each other. A synth run through a little chorus and a touch of drive can sound like a completely different patch than the same synth dry, without ever touching its oscillators.</p>
+
+        <h2>Where they live in Tracks</h2>
+        <p>Every track's mixer channel strip has a section labeled <strong>Insert FX</strong>, containing six effect modules in a fixed signal order: Drive, Crush, Chorus, Phaser, Delay, and Reverb. This rack sits at the very front of the channel strip, before the gate, EQ, de-esser, and compressor — so whatever grit or movement you add here becomes the raw material that the rest of the strip cleans up and levels, not the other way around. Each module has its own on/off toggle, so you only pay for the ones you actually turn on.</p>
+        <p>This guide covers the first four modules. Delay and reverb are covered in <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a> and <a href="/blog/mix-group-buses-sends">group buses and sends</a>.</p>
+
+        <h3>Drive: distortion</h3>
+        <p>Drive is a saturation and distortion module built around a soft-clipping waveshaper. The <strong>Drive</strong> knob controls how hard the signal is pushed into that clipping curve, from a subtle warming at low settings to a fully fuzzed-out, compressed tone at the top. The <strong>Tone</strong> knob is a low-pass filter after the clipping stage, so you can roll off the harsh upper harmonics distortion adds if it gets too fizzy, or leave it open for a brighter, more aggressive edge. Drive is the effect to reach for on a bass that needs to cut through on small speakers, a drum bus that needs more punch, or a lead synth that needs to sound angrier than its raw waveform.</p>
+
+        <h3>Crush: bitcrusher</h3>
+        <p>Crush is a bitcrusher: it reduces the resolution of the audio itself rather than shaping its frequency content. The <strong>Bits</strong> knob lowers the bit depth, from a clean 16-bit signal down toward 1-bit, adding a grainy quantization noise that gets coarser as you lower it. The <strong>Rate</strong> knob reduces the effective sample rate, which introduces the harsher, more aliased character you hear in old samplers and lo-fi game consoles. Used gently, Crush adds a bit of lo-fi dust under a chord or a vocal. Pushed hard, it turns a clean tone into something that sounds broken in a very deliberate way — a common move in lo-fi hip-hop, glitch, and industrial production.</p>
+
+        <h3>Chorus</h3>
+        <p>Chorus splits the signal into two short, modulated delay lines and blends them back with the dry sound, which makes one voice sound like several slightly detuned voices playing in unison. The <strong>Rate</strong> knob sets how fast the underlying modulation cycles, and <strong>Depth</strong> sets how far the delay time swings, which controls how strong and obvious the thickening and detuning effect is. Chorus is the effect for a thin single-oscillator synth that needs to sound bigger, a rhythm guitar that needs more width in the stereo field, or a vocal double that needs to sound more like a real double-tracked take.</p>
+
+        <h3>Phaser</h3>
+        <p>Phaser runs the signal through a chain of all-pass filter stages whose center frequencies sweep together over time, which creates a moving series of notches that phase-cancel against the dry signal — the classic swirling, syrupy sweep you hear on funk keys and psychedelic guitar. Like Chorus, it has <strong>Rate</strong> and <strong>Depth</strong> knobs: Rate sets how fast the sweep cycles, and Depth sets how wide a frequency range it moves across. Phaser is subtler and more rhythmic-feeling than Chorus — reach for it on electric piano, pads, or a synth arpeggio that needs a slow, hypnotic motion instead of raw width.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to dial one in, step by step</h2>
+
+        <h3>Step 1: Open Insert FX on the track</h3>
+        <p>In the mixer, select the track's channel strip and find the Insert FX section. You'll see six modules in order: Drive, Crush, Chorus, Phaser, Delay, Reverb.</p>
+
+        <h3>Step 2: Turn on one module at a time</h3>
+        <p>Click a module's toggle to enable it, then loop the section of the song where that track plays. Adding one effect at a time makes it obvious what each one is actually doing to the sound, instead of guessing at a combined result.</p>
+
+        <h3>Step 3: Set the character knob before the mix knob</h3>
+        <p>For Drive, that's the Drive amount; for Crush, it's Bits and Rate; for Chorus and Phaser, it's Rate and Depth. Push these further than feels comfortable while soloed — you'll pull back once you hear it in context — so you actually know what the extreme end of the effect sounds like.</p>
+
+        <h3>Step 4: Blend with Mix</h3>
+        <p>Every module has its own Mix knob. Running an effect fully wet is rarely the goal; blending it with the dry signal keeps the original tone recognizable while layering the character on top. Start around 30–50% wet and adjust from there.</p>
+
+        <h3>Step 5: Un-solo and recheck</h3>
+        <p>An effect that sounds great alone can disappear, or become distracting, once the rest of the arrangement is playing. Always make the final call on Mix and Depth with the full mix running, not in isolation.</p>
+
+        <h2>When to reach for each one</h2>
+        <ul>
+          <li><strong>Drive.</strong> A bass or lead that's too polite for the track, a drum bus that needs more punch on small speakers, or any part that needs to sound more aggressive than its raw tone.</li>
+          <li><strong>Crush.</strong> Lo-fi hip-hop textures, glitch and telephone-style vocal effects, or an 8-bit game-console character on a synth or drum hit.</li>
+          <li><strong>Chorus.</strong> A single-oscillator synth or a clean guitar that needs to sound thicker and wider without duplicating the track.</li>
+          <li><strong>Phaser.</strong> Electric piano, pads, or arpeggios that need a slow, hypnotic motion rather than added width.</li>
+        </ul>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Running everything at 100% Mix.</strong> Fully wet settings tend to remove the character of the original sound instead of adding to it. Blend, don't replace.</li>
+          <li><strong>Stacking Chorus and Phaser on the same part without checking mono.</strong> Both effects rely on comb-filtering and delay tricks that can thin out or partially cancel when a mix is folded to mono, like on a phone speaker. Check how a heavily modulated sound holds up outside stereo headphones.</li>
+          <li><strong>Reaching for Drive when the real issue is level or EQ.</strong> If a part just sounds too quiet or too dull, that's a level or EQ problem the Insert FX rack won't fix on its own — Drive adds character, it doesn't correct balance.</li>
+          <li><strong>Judging a lo-fi Crush setting soloed.</strong> Heavy bitcrushing can sound harsh in isolation but sit fine once it's buried under a full arrangement, or vice versa. Always confirm in context.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What's the difference between chorus and phaser?</h3>
+        <p>Chorus blends the dry signal with modulated delay lines to create the effect of multiple detuned voices, which mainly adds thickness and stereo width. Phaser sweeps a series of notch filters through the sound, creating a swirling motion in the frequency content without doubling the voice. Chorus makes something sound bigger; phaser makes it sound like it's moving.</p>
+
+        <h3>Do these effects work on drum and vocal tracks, or only synths?</h3>
+        <p>The Insert FX rack is available on every track in Tracks, not just synth tracks — drums, samples, recorded vocals, and MIDI instruments all have the same six-module rack in their channel strip.</p>
+
+        <h3>Can I use more than one of these on the same track?</h3>
+        <p>Yes. All six Insert FX modules can run at once on a single track, in the fixed order Drive → Crush → Chorus → Phaser → Delay → Reverb. A little Drive followed by a little Chorus is a common combination for thickening a thin synth lead.</p>
+
+        <h3>Will a bitcrusher make my track sound bad?</h3>
+        <p>Only if you don't want it to. Bitcrushing is a deliberate lo-fi effect, not a mistake — it's the same family of sound design used in lo-fi hip-hop, chiptune, and glitch production. Keep Bits high and Rate low for a subtle dusting, or push both hard for an obviously broken, digital texture.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Every track's mixer channel strip has a built-in Insert FX rack with Drive, Crush, Chorus, and Phaser modules alongside Delay and Reverb — no plugins needed. Open the <a href="/studio">studio</a>, select a track, and follow the steps above. For the corrective side of the chain, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>. For designing the sound going into these effects, see <a href="/blog/synth-sound-design-subtractive-fm">Subtractive vs FM synthesis</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try the built-in Insert FX rack for free</h3>
+            <p>Add drive, crush, chorus, and phaser to any track in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

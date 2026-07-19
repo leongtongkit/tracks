@@ -1,5 +1,13 @@
 [
   {
+    "slug": "creative-fx-chorus-phaser-bitcrusher",
+    "title": "Chorus, phaser, distortion, and bitcrusher: creative effects explained",
+    "dek": "Beyond EQ and compression, Tracks ships four creative effects that add movement, grit, and texture to a sound: chorus, phaser, distortion, and bitcrusher. Here is what each one does, how it works, and when to reach for it.",
+    "date": "2026-07-19",
+    "tags": ["chorus", "phaser", "distortion", "bitcrusher", "effects"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "noise-gate-clean-recordings",
     "title": "How to use a noise gate to clean up noisy recordings",
     "dek": "A noise gate mutes a track whenever its signal drops below a threshold, cutting hiss, room noise, and bleed between the notes you actually played. Here is how Tracks' built-in gate works and how to set it up on a vocal or instrument track.",
