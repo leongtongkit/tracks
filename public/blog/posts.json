@@ -1,5 +1,13 @@
 [
   {
+    "slug": "audacity-vs-tracks-compared",
+    "title": "Audacity vs Tracks: free audio editor or free browser DAW?",
+    "dek": "Audacity is a free, open-source audio editor for recording and cleaning up sound. Tracks is a free browser-based DAW with a piano roll, synths, drum machines, and a full mixer. Here is how the two actually differ, and when you need one instead of the other.",
+    "date": "2026-07-20",
+    "tags": ["audacity", "comparison", "browser DAW", "free alternative", "audio editor"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "creative-fx-chorus-phaser-bitcrusher",
     "title": "Chorus, phaser, distortion, and bitcrusher: creative effects explained",
     "dek": "Beyond EQ and compression, Tracks ships four creative effects that add movement, grit, and texture to a sound: chorus, phaser, distortion, and bitcrusher. Here is what each one does, how it works, and when to reach for it.",
