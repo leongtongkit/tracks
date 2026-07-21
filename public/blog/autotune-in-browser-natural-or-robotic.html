@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to use autotune in your browser: natural correction or the robotic effect | Tracks</title>
+    <meta name="description" content="Tracks includes built-in autotune for pitch-correcting a vocal take. Here is how the Speed and Amount dials control the difference between a subtle, natural correction and the hard-tuned robotic effect." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/autotune-in-browser-natural-or-robotic" />
+    <meta property="og:title" content="How to use autotune in your browser: natural correction or the robotic effect" />
+    <meta property="og:description" content="One dial decides whether your vocal sounds subtly in-tune or fully robotic. Here is how autotune actually works and how to dial in either sound in the Tracks browser studio." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/autotune-in-browser-natural-or-robotic" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use autotune in your browser: natural correction or the robotic effect",
+        "description": "Apply built-in autotune to a vocal clip in the Tracks browser studio, and choose between a subtle, natural pitch correction and the hard-tuned robotic effect.",
+        "step": [
+          { "@type": "HowToStep", "name": "Set your song's key", "text": "In the transport bar, set the project's root note and scale (major or minor). Autotune snaps every note toward this key, so it has to be set correctly before you tune anything." },
+          { "@type": "HowToStep", "name": "Open the vocal clip's editor", "text": "Click the recorded vocal clip on the timeline to open its editor, and find the Autotune section." },
+          { "@type": "HowToStep", "name": "Choose a Speed", "text": "The Speed dial runs from 5ms to 250ms. Low values snap pitch almost instantly for the hard, robotic effect; high values glide toward the target note for a natural correction that preserves normal vocal slides." },
+          { "@type": "HowToStep", "name": "Choose an Amount", "text": "The Amount dial runs from 0% to 100% and sets how far the pitch actually moves toward the snapped note. Lower amounts leave some of the original pitch character; 100% fully commits to the target note." },
+          { "@type": "HowToStep", "name": "Apply and audition", "text": "Click Apply Autotune to render a new, tuned copy of the clip. Listen back, and undo if it needs another pass — the original recording is never overwritten." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to use autotune in your browser: natural correction or the robotic effect", "item": "https://tracks.jfound.net/blog/autotune-in-browser-natural-or-robotic" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to use autotune in your browser: natural correction or the robotic effect</h1>
+        <p class="art-meta">By Tongkit Leong · July 21, 2026 · 7 min read</p>
+
+        <p class="lede">One control decides whether autotune sounds natural or robotic: how fast it snaps to the target note. A slow retune speed glides into pitch and stays inaudible; a fast one snaps instantly and produces the hard, stair-stepped "T-Pain" effect. Tracks' built-in autotune puts that control directly in your hands, free, in the browser, on any recorded vocal clip.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What autotune is actually doing</h2>
+        <p>Autotune is pitch correction: software that listens to a vocal recording, figures out what note is being sung from moment to moment, and nudges that note toward the nearest pitch in your song's key. It doesn't know what note you meant to sing — it only knows the key you've told it to snap to, and it pulls every note it detects toward the closest one in that scale.</p>
+        <p>Under the hood, Tracks tracks the pitch of the recording in small windows, compares each detected pitch to the notes of your project's key and scale, and works out how far — and how fast — to shift it. That shift is then applied with a granular pitch shifter designed to stay phase-continuous, which is what keeps a natural-sounding correction from getting warbly or grainy at the edges. The same engine can also be pushed hard enough to produce the obvious, robotic snap that's become an effect in its own right.</p>
+
+        <h2>The two controls that shape the sound</h2>
+        <p>Tracks' autotune has exactly two dials, and understanding what each one does is the whole trick to getting the sound you want.</p>
+
+        <h3>Speed: how fast it snaps</h3>
+        <p>Speed sets how quickly the detected pitch is pulled toward the target note, from 5ms up to 250ms. At 5ms, the correction is nearly instant — a note that starts slightly flat or sharp jumps to pitch so fast that natural vocal slides and vibrato get flattened into stepped, robotic jumps between notes. That's the classic hard-tuned sound. At 250ms, the correction glides toward the target note gradually, which is slow enough that a singer's natural pitch movement — the slight scoop into a note, vibrato, expressive slides — mostly survives. The correction still pulls wrong notes into key, but it does it smoothly enough to stay under the radar.</p>
+
+        <h3>Amount: how far it actually moves the pitch</h3>
+        <p>Amount sets what fraction of the detected pitch error actually gets corrected, from 0% to 100%. At 100%, the note is pulled all the way to the target pitch. At lower amounts, the correction only closes part of the gap — a note that was a quarter-tone flat stays a little flat, just less so than before. Dropping the amount is a second way to keep a correction subtle even at a fast speed, and it's the setting to reach for when a take is mostly in tune and only needs a light nudge rather than a hard lock.</p>
+
+        <h2>Natural correction vs. the robotic effect</h2>
+        <p>Both sounds come from the same two dials, just pushed in opposite directions.</p>
+
+        <h3>For a natural, "just in tune" sound</h3>
+        <p>Use a slow Speed — 100ms to 250ms — with a moderate Amount, often somewhere around 50–80%. This lets genuine expressive pitch movement through while still correcting notes that drift meaningfully off-key. The goal is a vocal that sounds like a great, in-tune take rather than a processed one; if you can hear the correction working, the speed is probably too fast for this use case.</p>
+
+        <h3>For the hard, robotic "T-Pain" effect</h3>
+        <p>Use a fast Speed — 5ms to 20ms — with Amount at or near 100%. This is the opposite goal: you want the correction to be obvious. Every note snaps to the nearest scale tone almost instantly, turning slides and pitch drift into audible steps between exact pitches. It's a deliberate, stylized effect used across hip-hop, pop, and trap vocals, not a mistake — reach for it when you want the vocal to sound processed on purpose.</p>
+
+        <h3>Everything in between</h3>
+        <p>There's a wide, usable middle ground. A moderate speed around 40–80ms with a high amount gives you a fast, confident correction that still has a hint of glide instead of a hard stair-step. A slow speed with a low amount gives you the lightest possible touch — useful on a take that's already strong and just needs the occasional wandering note reeled in.</p>
+
+        <h2>How to apply autotune in Tracks, step by step</h2>
+
+        <h3>Step 1: Set your song's key</h3>
+        <p>Autotune snaps to whatever root note and scale — major or minor — are set in the transport bar, so this has to be right before anything else matters. If the key is wrong, autotune will confidently correct every note to the wrong scale.</p>
+
+        <h3>Step 2: Open the vocal clip's editor</h3>
+        <p>Record a vocal take (see <a href="/blog/record-vocals-in-browser">how to record vocals in your browser</a> if you haven't yet), then click the clip on the timeline to open its editor. The Autotune section shows your current song key as a reminder before you touch anything.</p>
+
+        <h3>Step 3: Dial in Speed and Amount</h3>
+        <p>Start from a natural setting — Speed around 150–200ms, Amount around 60% — and listen. If the take still wanders off pitch, lower the speed and raise the amount until it locks in. If you're going for the hard robotic effect instead, jump straight to a fast speed and full amount and adjust from there.</p>
+
+        <h3>Step 4: Apply and audition in context</h3>
+        <p>Click Apply Autotune. Tracks renders a new, tuned copy of the clip — the original recording underneath is not overwritten, so if the result isn't right you can undo and try different settings without re-recording. Always listen to the tuned vocal against the full mix, not solo — a correction that sounds slightly odd on its own can disappear once the track is playing, and one that sounded fine solo can occasionally sound over-processed against the other instruments.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Common autotune mistakes</h2>
+        <ul>
+          <li><strong>Wrong key set in the transport bar.</strong> Autotune can only pull notes toward the key you've told it. A vocal that sounds strange after tuning is often correctly tuned to the wrong key rather than badly tuned.</li>
+          <li><strong>Chromatic scale by accident.</strong> If your project scale is set to chromatic instead of major or minor, autotune will treat every semitone as valid and correct much less aggressively than you'd expect, since almost any note is already "in scale."</li>
+          <li><strong>Fast speed on a part that needs to breathe.</strong> A ballad or an expressive lead vocal usually sounds worse with a fast, hard-snap speed — the natural slides that make it emotional get flattened into robotic steps. Save fast settings for parts where that's the intended effect.</li>
+          <li><strong>Tuning before comping.</strong> Pick and comp the best phrases from your takes first, then tune the finished comp. Tuning a rough take and comping afterward means redoing the tuning on whatever gets swapped in.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does autotune work on any vocal, or just the right key?</h3>
+        <p>It works on any vocal, but it only sounds right if the project key matches the song. Set the correct root note and scale in the transport bar before applying autotune, since every correction is measured against that key.</p>
+
+        <h3>What's the difference between Speed and Amount?</h3>
+        <p>Speed controls how fast the pitch moves toward the target note; Amount controls how far it moves. A fast speed with a low amount gives you a quick but partial nudge. A slow speed with a full amount gives you a gradual glide that eventually lands fully on pitch. Most of the "natural vs. robotic" character comes from Speed.</p>
+
+        <h3>Can I undo autotune if I don't like the result?</h3>
+        <p>Yes. Applying autotune renders a new copy of the clip rather than overwriting the original recording, and the action is a normal undo step — press undo and try different Speed and Amount settings without re-recording.</p>
+
+        <h3>Will autotune fix a take that's badly out of tune?</h3>
+        <p>It helps, but there are limits. Pitch detection needs a clear, mostly-voiced signal to track accurately, so a take with heavy background noise, extreme pitch wobble, or notes that are very far from any in-key pitch will correct less cleanly than a take that's already close. Autotune is best used to polish a solid take, not to salvage a fundamentally rough one.</p>
+
+        <h3>Is this the same autotune sound as in commercial rap and pop records?</h3>
+        <p>The hard, robotic effect uses the same underlying idea — fast pitch snapping to a fixed scale — that made the effect famous. Set Speed low and Amount high and you'll get that same stepped, processed character.</p>
+
+        <h3>Do I need a MIDI keyboard or special mic for this?</h3>
+        <p>No. Autotune works on any recorded vocal clip, whether it came from a plain laptop mic or an audio interface. See <a href="/blog/record-vocals-in-browser">how to record vocals in your browser</a> for the recording step, and <a href="/blog/de-esser-explained">de-esser explained</a> for cleaning up harsh consonants afterward.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try built-in autotune for free</h3>
+            <p>Record a vocal and tune it to key right in your browser — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

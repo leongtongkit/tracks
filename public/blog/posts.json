@@ -1,5 +1,13 @@
 [
   {
+    "slug": "autotune-in-browser-natural-or-robotic",
+    "title": "How to use autotune in your browser: natural correction or the robotic effect",
+    "dek": "Tracks includes built-in autotune for pitch-correcting a vocal take. Here is how the Speed and Amount dials control the difference between a subtle, natural correction and the hard-tuned robotic effect, and when to reach for each.",
+    "date": "2026-07-21",
+    "tags": ["autotune", "pitch correction", "vocals", "retune speed", "mixing"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "audacity-vs-tracks-compared",
     "title": "Audacity vs Tracks: free audio editor or free browser DAW?",
     "dek": "Audacity is a free, open-source audio editor for recording and cleaning up sound. Tracks is a free browser-based DAW with a piano roll, synths, drum machines, and a full mixer. Here is how the two actually differ, and when you need one instead of the other.",
