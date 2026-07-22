@@ -1,5 +1,13 @@
 [
   {
+    "slug": "fl-studio-alternative-browser",
+    "title": "A free FL Studio alternative that runs in any browser",
+    "dek": "FL Studio costs money and needs an install. Tracks is a free browser DAW with a piano roll, step sequencer, synths, and a mixer, and it runs in any tab. Here is how the two compare and where a browser studio is the better call.",
+    "date": "2026-07-22",
+    "tags": ["FL Studio", "comparison", "browser DAW", "free alternative", "piano roll"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "autotune-in-browser-natural-or-robotic",
     "title": "How to use autotune in your browser: natural correction or the robotic effect",
     "dek": "Tracks includes built-in autotune for pitch-correcting a vocal take. Here is how the Speed and Amount dials control the difference between a subtle, natural correction and the hard-tuned robotic effect, and when to reach for each.",
