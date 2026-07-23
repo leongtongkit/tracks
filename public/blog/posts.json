@@ -1,5 +1,13 @@
 [
   {
+    "slug": "ableton-alternative-browser",
+    "title": "A free Ableton Live alternative that runs in any browser",
+    "dek": "Ableton Live is a paid DAW built around session view and clip launching. Tracks is a free browser studio with its own session view, piano roll, synths, and mixer. Here is how the two compare and when the browser version is the smarter call.",
+    "date": "2026-07-23",
+    "tags": ["Ableton", "comparison", "browser DAW", "free alternative", "session view"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "fl-studio-alternative-browser",
     "title": "A free FL Studio alternative that runs in any browser",
     "dek": "FL Studio costs money and needs an install. Tracks is a free browser DAW with a piano roll, step sequencer, synths, and a mixer, and it runs in any tab. Here is how the two compare and where a browser studio is the better call.",
