@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-house-music-browser",
+    "title": "How to make house music in your browser",
+    "dek": "House music runs on a four-on-the-floor kick, off-beat hi-hats, and a rolling bassline. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
+    "date": "2026-07-24",
+    "tags": ["house music", "four-on-the-floor", "drum machine", "bassline", "EDM"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "ableton-alternative-browser",
     "title": "A free Ableton Live alternative that runs in any browser",
     "dek": "Ableton Live is a paid DAW built around session view and clip launching. Tracks is a free browser studio with its own session view, piano roll, synths, and mixer. Here is how the two compare and when the browser version is the smarter call.",
