@@ -1,5 +1,13 @@
 [
   {
+    "slug": "vocal-chain-order-explained",
+    "title": "Vocal chain order explained: what order should effects go in?",
+    "dek": "A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, and compressor before it reaches the fader. Here is the exact order Tracks uses on every track, why it's built that way, and how to build a full chain step by step.",
+    "date": "2026-07-25",
+    "tags": ["vocal chain", "mixing", "gate", "de-esser", "compressor"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-house-music-browser",
     "title": "How to make house music in your browser",
     "dek": "House music runs on a four-on-the-floor kick, off-beat hi-hats, and a rolling bassline. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",

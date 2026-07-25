@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vocal chain order explained: what order should effects go in? | Tracks</title>
+    <meta name="description" content="A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, compressor, and sends. Here is the order Tracks uses on every track, why it's built that way, and how to build a full vocal chain step by step." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/vocal-chain-order-explained" />
+    <meta property="og:title" content="Vocal chain order explained: what order should effects go in?" />
+    <meta property="og:description" content="A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, compressor, and sends. Here is the order Tracks uses on every track and why it's built that way." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/vocal-chain-order-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to build a vocal chain in order",
+        "description": "Build a full vocal processing chain on one track in the Tracks browser studio, in the order the signal actually passes through: gate, EQ, de-esser, compressor, then sends.",
+        "step": [
+          { "@type": "HowToStep", "name": "Gate the raw signal first", "text": "Turn on the Gate at the top of the channel strip to cut room noise and hiss between phrases, before any other processing touches the signal." },
+          { "@type": "HowToStep", "name": "Shape the tone with EQ", "text": "High-pass everything below 80-100 Hz, cut any harsh or boxy resonance by ear, then add gentle boosts for air and presence." },
+          { "@type": "HowToStep", "name": "Tame sibilance with the de-esser", "text": "Set the Frq dial to where the S and T sounds live (usually 5-8 kHz) and raise Amt until they sit level with the rest of the vocal." },
+          { "@type": "HowToStep", "name": "Compress for consistent level", "text": "Set threshold, ratio, attack, and release so the loudest peaks are pulled down 4-8 dB, then raise makeup gain to match the pre-compression level." },
+          { "@type": "HowToStep", "name": "Send to reverb and delay for space", "text": "Raise the sendA (reverb) and sendB (delay) knobs to place the now-clean, level vocal in the mix without smearing it." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Vocal chain order explained: what order should effects go in?", "item": "https://tracks.jfound.net/blog/vocal-chain-order-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Vocal chain order explained: what order should effects go in?</h1>
+        <p class="art-meta">By Tongkit Leong · July 25, 2026 · 8 min read</p>
+
+        <p class="lede">A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, and compressor before it reaches the fader. In the <a href="/studio">Tracks browser studio</a>, every track's channel strip runs in that exact order — gate first, then EQ, then de-ess, then compression — and knowing why each stage sits where it does is the difference between a vocal that sounds mixed and one that just sounds processed.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What a "vocal chain" actually means</h2>
+        <p>Every effect on a track processes the output of whatever came before it, not the original recording. Turn a gate on after a compressor and it's gating an already-squashed, already-louder noise floor instead of the quiet room tone underneath the words. Turn a de-esser on after a compressor and it's fighting sibilance that compression has already boosted along with everything else. The individual settings matter less than most people think. The order they run in matters more, because a chain built in the wrong order asks each stage to fix a problem the stage before it just made worse.</p>
+        <p>That's what "vocal chain" means: not a list of effects, but a sequence. Get the sequence right and each stage does one job on a signal that's already been cleaned up by the stage before it. Get it wrong and you're stacking corrections on top of the mess the last effect left behind.</p>
+
+        <h2>The order Tracks actually uses</h2>
+        <p>You don't choose this order in Tracks — it's built into every channel strip the same way, so you can rely on it instead of guessing. Here's the signal path from the moment audio enters a track to the moment it leaves for the master bus:</p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Stage</th><th>What it does</th><th>Why it's here</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>1. Gate</td><td>Mutes the signal below a threshold</td><td>Decides what counts as noise before anything reshapes the signal</td></tr>
+              <tr><td>2. EQ</td><td>3-band parametric shaping</td><td>Fixes tone before dynamics processing reacts to it</td></tr>
+              <tr><td>3. De-ess</td><td>Dynamic cut on sibilant frequencies</td><td>Removes harsh S/T peaks before the compressor can react to them</td></tr>
+              <tr><td>4. Compressor</td><td>Levels the dynamic range</td><td>Works on a signal that's already gated, EQ'd, and de-essed</td></tr>
+              <tr><td>5. Fader + pan</td><td>Sets level and stereo position</td><td>The final, settled version of the signal</td></tr>
+              <tr><td>6. Sends</td><td>Reverb and delay buses</td><td>Tap off after the fader, so send level tracks the fader</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>One detail worth calling out because it surprises people who've mixed on other platforms: the de-esser sits <strong>before</strong> the compressor, not after. A lot of hardware-inspired chains put de-essing last, on the theory that compression is what makes sibilance jump out in the first place, so you de-ess the result. Tracks does the opposite — it removes the harsh consonant peaks first, so the compressor is reacting to a smoother, more honest signal instead of getting tricked into extra gain reduction every time an S lands.</p>
+        <p>If you add anything from the Insert FX rack — drive, bitcrusher, chorus, phaser, or the insert versions of delay and reverb — those run at the very front, before the gate. That's covered in more detail in <a href="/blog/creative-fx-chorus-phaser-bitcrusher">chorus, phaser, distortion, and bitcrusher explained</a>. The reverb and delay <em>sends</em> described in the table above are a separate thing from those insert effects — they're shared buses every track can dial into, not a per-track insert.</p>
+
+        <h2>Building a full vocal chain, step by step</h2>
+        <p>Here's how to work through a raw vocal take from record to mix-ready, following the order the engine already enforces.</p>
+
+        <h3>Step 1: Record or import the take</h3>
+        <p>Get a vocal onto a track first — see <a href="/blog/record-vocals-in-browser">how to record vocals in your browser</a> if you haven't yet. Everything below assumes you're starting from a raw, unprocessed take with normal room noise between phrases.</p>
+
+        <h3>Step 2: Gate out the noise floor</h3>
+        <p>Open that track's channel strip in the mixer and turn on the Gate. Set the threshold so it closes during silence between phrases but doesn't clip off quiet consonants at the start or end of a word. This runs first because it needs to judge the raw signal, not a version already brightened by EQ or pushed louder by compression makeup gain.</p>
+
+        <h3>Step 3: EQ for tone</h3>
+        <p>High-pass the vocal around 80–100 Hz to remove rumble that has no business being there, then sweep a narrow band by ear to find and cut anything boxy or nasal — often somewhere around 800 Hz–1 kHz. Finish with a small, wide boost around 10–12 kHz for air if the vocal needs it. Cut before you boost; it does more of the actual work.</p>
+
+        <h3>Step 4: De-ess the sibilance</h3>
+        <p>Turn on De-ess and set the Frq dial to wherever the S and T sounds actually sit in this take — usually 5–8 kHz, though a bright mic or a naturally sharp voice can push it higher. Raise Amt until the hiss stops jumping out, and stop there. The full method is in <a href="/blog/de-esser-explained">de-esser explained</a>.</p>
+
+        <h3>Step 5: Compress for consistent level</h3>
+        <p>With the signal already gated, tonally balanced, and de-essed, the compressor's job is simple: even out the natural loudness swings between a whispered line and a belted one. Start around a 4:1 ratio, an attack of 5–10 ms, and a release around 150 ms, targeting 4–8 dB of gain reduction on the loudest phrases. Raise the makeup gain afterward to bring the level back up to where it started.</p>
+
+        <h3>Step 6: Place it in space with sends</h3>
+        <p>Raise the track's sendA (reverb) and sendB (delay) knobs to taste. Because these sends tap the signal after the fader, the amount of reverb or delay you hear scales naturally with how loud the vocal is sitting in the mix — turn the vocal down and the reverb comes down with it, instead of drowning a quiet passage in a wash of space it was never meant to have.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Where autotune fits</h2>
+        <p>Autotune isn't part of the channel strip chain at all — it's applied directly to the recorded clip before the clip ever reaches the mixer. Pitch-correct the take first (see <a href="/blog/autotune-in-browser-natural-or-robotic">autotune: natural correction or the robotic effect</a>), render it, and then run the corrected clip through the gate-EQ-de-ess-compressor chain described above. Tuning after mixing means re-tuning every time you tweak a mix setting; tuning before means the chain only ever has to deal with a signal that's already on pitch.</p>
+
+        <h2>Common vocal chain mistakes</h2>
+        <ul>
+          <li><strong>Compressing before gating.</strong> A compressor's makeup gain raises the noise floor along with everything else, which makes noise harder for the gate to catch cleanly afterward. Gate first.</li>
+          <li><strong>Fixing sibilance with an EQ cut instead of a de-esser.</strong> A static EQ cut dulls the S sounds and every vowel in that frequency range equally. A de-esser only reacts when sibilance is actually present.</li>
+          <li><strong>Overcompressing to "fix" an uneven take.</strong> If a take needs more than 8–10 dB of gain reduction to sound even, the real fix is usually take comping — picking the best phrases from multiple passes — not a heavier compressor ratio. See <a href="/blog/take-comping-best-vocal-take">how to comp the best take from multiple recordings</a>.</li>
+          <li><strong>Dialing in reverb and delay before the dynamics are settled.</strong> Sends amplify whatever the dry signal is doing. A vocal with uneven level or leftover sibilance will carry both flaws straight into the reverb tail, so finish gate, EQ, de-ess, and compression first.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Can I reorder the gate, EQ, de-esser, and compressor in Tracks?</h3>
+        <p>No — that order is fixed in every channel strip, by design. It reflects a sequence that works for the overwhelming majority of vocal and instrument tracks, so you spend your time on settings instead of re-deriving signal flow from scratch on every project.</p>
+
+        <h3>Why does the de-esser come before the compressor instead of after?</h3>
+        <p>Because compression tends to make sibilance more audible, not less — it turns up the overall level, including the harsh consonant peaks. De-essing first removes those peaks before the compressor ever reacts to them, so the compressor isn't fooled into extra gain reduction every time an S or T lands.</p>
+
+        <h3>Do reverb and delay sends count as part of the chain?</h3>
+        <p>They're the last stop. Sends tap the signal after the fader and pan, so whatever you've already gated, EQ'd, de-essed, and compressed is what gets sent to the shared reverb and delay buses — not a separate, unprocessed copy of the track.</p>
+
+        <h3>Is this the same order for every track, or just vocals?</h3>
+        <p>Every track in Tracks — vocal, synth, drum, or bass — runs through the same gate-EQ-de-ess-compressor-fader-sends order. It's called a "vocal chain" here because vocals are where all five stages typically get used together, but nothing about the order is vocal-specific.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Every track's channel strip has a built-in Gate, EQ, De-ess, and Compressor running in this order, plus reverb and delay sends — no plugins needed. Open the <a href="/studio">studio</a>, record or import a vocal, and work through the steps above. For the individual stages in more depth, see <a href="/blog/how-to-mix-a-track-basics">how to mix a track: EQ, compression, and reverb basics</a> and <a href="/blog/noise-gate-clean-recordings">how to use a noise gate to clean up noisy recordings</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Build your vocal chain for free</h3>
+            <p>Gate, EQ, de-ess, and compress a vocal track in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
