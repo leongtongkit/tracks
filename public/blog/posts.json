@@ -1,5 +1,13 @@
 [
   {
+    "slug": "soundfont-instruments-explained",
+    "title": "SoundFont instruments explained: real instrument sounds in your browser",
+    "dek": "A SoundFont (.sf2) is a bank of sampled real instruments you can load straight into Tracks. Here is what an SF2 file actually is, how SoundFont tracks work in the browser studio, and how to build a track around real instrument sounds.",
+    "date": "2026-07-26",
+    "tags": ["soundfont", "sf2", "instruments", "browser DAW", "sound design"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "vocal-chain-order-explained",
     "title": "Vocal chain order explained: what order should effects go in?",
     "dek": "A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, and compressor before it reaches the fader. Here is the exact order Tracks uses on every track, why it's built that way, and how to build a full chain step by step.",
