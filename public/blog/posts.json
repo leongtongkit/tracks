@@ -1,5 +1,13 @@
 [
   {
+    "slug": "velocity-editing-piano-roll",
+    "title": "How to edit note velocity for a more human-sounding performance",
+    "dek": "Velocity controls how hard each note hits, and flat velocity is what makes programmed music sound robotic. Here is how to edit velocity in the Tracks piano roll to make a part breathe.",
+    "date": "2026-07-27",
+    "tags": ["velocity", "piano roll", "dynamics", "humanize", "MIDI"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "soundfont-instruments-explained",
     "title": "SoundFont instruments explained: real instrument sounds in your browser",
     "dek": "A SoundFont (.sf2) is a bank of sampled real instruments you can load straight into Tracks. Here is what an SF2 file actually is, how SoundFont tracks work in the browser studio, and how to build a track around real instrument sounds.",

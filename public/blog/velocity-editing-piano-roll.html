@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to edit note velocity for a more human-sounding performance | Tracks</title>
+    <meta name="description" content="Velocity controls how hard each note hits, and flat velocity is what makes programmed music sound robotic. Here is how to edit velocity in the Tracks piano roll to make a part breathe." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/velocity-editing-piano-roll" />
+    <meta property="og:title" content="How to edit note velocity for a more human-sounding performance" />
+    <meta property="og:description" content="Velocity controls how hard each note hits, and flat velocity is what makes programmed music sound robotic. Here is how to edit velocity in the Tracks piano roll to make a part breathe." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/velocity-editing-piano-roll" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to edit note velocity for a more human-sounding performance",
+        "description": "Edit note velocity in the Tracks piano roll to give a programmed part natural dynamic variation instead of a flat, robotic level on every hit.",
+        "step": [
+          { "@type": "HowToStep", "name": "Program or record the notes first", "text": "Draw the part in the piano roll or record it from a MIDI keyboard without worrying about dynamics yet." },
+          { "@type": "HowToStep", "name": "Open the velocity lane", "text": "Below the note grid, each note has a matching bar in the velocity lane showing how hard it hits." },
+          { "@type": "HowToStep", "name": "Drag individual velocity bars", "text": "Click and drag any bar up or down to raise or lower that note's velocity on its own." },
+          { "@type": "HowToStep", "name": "Shape a phrase, not just single notes", "text": "Raise velocity on downbeats and accented notes, and pull it down on quieter passing notes, so the phrase has a shape." },
+          { "@type": "HowToStep", "name": "Use Humanize for a quick pass", "text": "Run Humanize to add subtle random variation to both timing and velocity across the whole clip in one click." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to edit note velocity for a more human-sounding performance", "item": "https://tracks.jfound.net/blog/velocity-editing-piano-roll" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to edit note velocity for a more human-sounding performance</h1>
+        <p class="art-meta">By Tongkit Leong · July 27, 2026 · 7 min read</p>
+
+        <p class="lede">Velocity is how hard a note was hit, and it's the single biggest reason programmed music can sound stiff: every note drawn at the same height plays back at exactly the same volume. In the <a href="/studio">Tracks</a> piano roll, a velocity lane sits under the note grid so you can drag each note's hit strength up or down individually, turning a flat, mechanical part into one that actually breathes.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What velocity actually is</h2>
+        <p>When a drummer hits a snare or a pianist presses a key, they rarely apply the exact same force twice in a row. Some hits land harder, some softer, and that variation in force is what velocity captures. On a MIDI keyboard, velocity is measured from how fast you push a key down. In the piano roll, every note carries a velocity value even if you never played it on a keyboard at all — drawing a note with the pencil tool still gives it a velocity, just a default one.</p>
+        <p>The practical effect of velocity is volume: a higher-velocity note plays back louder than a lower-velocity one, using the exact same pitch, the exact same instrument, and the exact same timing. Nothing else about the note changes. That's what makes velocity such a precise dial for dynamics — you're not touching a track fader or an EQ, you're adjusting how hard one specific note hits.</p>
+
+        <h2>Why flat velocity sounds robotic</h2>
+        <p>Drum machines and piano rolls make it trivially easy to draw a run of notes that are all identical — same length, same pitch, same everything, including velocity. That precision is exactly what a grid is good for. But real playing is never that even. A hi-hat pattern played by a drummer has natural loudness variation between hits even at a fast, steady tempo, and a bassline played by a bass player accents certain notes over others without thinking about it.</p>
+        <p>When every note in a pattern sits at identical velocity, the ear picks up on the sameness almost immediately, even if the listener couldn't name why the part sounds off. It's the same effect covered in <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a>, but for volume instead of timing: quantize removes timing variation, and flat velocity removes volume variation. A beat can have perfect swing and still sound dead if every hit is exactly as loud as the last one.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to edit velocity in the Tracks piano roll</h2>
+
+        <h3>Step 1: Program or record the part first</h3>
+        <p>Draw the notes in the piano roll, or record them from a MIDI keyboard, without stopping to fix dynamics yet. Get the pitches and timing right first — velocity editing is a pass you do afterward, on notes that already exist.</p>
+
+        <h3>Step 2: Find the velocity lane</h3>
+        <p>Below the main note grid in the piano roll is a labeled "VEL" lane. Every note in the clip has a matching bar in this lane, positioned directly under it, with the bar's height showing how hard that note currently hits.</p>
+
+        <h3>Step 3: Drag bars up or down</h3>
+        <p>Click and drag any bar in the velocity lane to change that note's velocity on its own — taller means louder, shorter means softer. Because each bar lines up with one note, you can pick out a single snare hit, a single chord stab, or a single bass note and adjust it without touching anything around it.</p>
+
+        <h3>Step 4: Shape a phrase, not just individual hits</h3>
+        <p>Random variation helps, but intentional shaping helps more. Push velocity up on the notes that should feel like the point of emphasis — the downbeat of a bar, the top note of a melodic run, the snare on beat two and four — and pull it down on connecting or passing notes around them. A bassline that locks with the kick, for example, often reads better when the notes landing under the kick hit harder than the notes filling space between kicks; see <a href="/blog/bassline-locks-with-kick">how to write a bassline that locks with the kick drum</a> for the rhythmic side of that same idea.</p>
+
+        <h3>Step 5: Use Humanize for a fast baseline pass</h3>
+        <p>The piano roll toolbar includes a Humanize button that adds subtle random variation to both timing and velocity across every note in the clip at once. It's a fast way to knock the stiffness off a part you drew in with the pencil tool before you go back and hand-shape the notes that matter most. Humanize is a starting point, not a substitute for the manual shaping in Step 4 — random variation alone can't create the intentional accents a real performance has.</p>
+
+        <h2>Where velocity matters most</h2>
+        <ul>
+          <li><strong>Hi-hats and shakers</strong> — repeated fast notes are the first place flat velocity gets noticed, since the ear hears the same short sound over and over. Even small variation between hits goes a long way here.</li>
+          <li><strong>Melodic lines</strong> — a melody with velocity shaped around its phrasing feels sung or played, not typed. Louder on the notes that carry the phrase, softer on the notes that connect them.</li>
+          <li><strong>Chords and pads</strong> — less critical, since sustained sounds mask small velocity differences, but still useful for making a chord progression swell into a chorus rather than jumping in at full volume.</li>
+          <li><strong>Basslines</strong> — velocity differences between the root notes and the passing or ghost notes help a bassline sit in the mix instead of pushing every note forward with equal weight.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does velocity change pitch or timing, or only volume?</h3>
+        <p>Only volume. Velocity in Tracks changes how loud a note plays back; it doesn't move the note in time or change which pitch it plays. For timing feel, see <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a>.</p>
+
+        <h3>What velocity does a note get if I draw it with the pencil tool instead of playing it?</h3>
+        <p>A default mid-range velocity, which you can then drag up or down in the velocity lane like any other note. You don't need a MIDI keyboard to get dynamic variation into a part.</p>
+
+        <h3>Can Humanize ruin a part if I click it more than once?</h3>
+        <p>It can push timing and velocity further from where you left them each time you run it, so it's best used once on a fresh part, then followed by manual adjustment rather than repeated clicks. If a pass goes too far, undo and try again with lighter manual edits instead.</p>
+
+        <h3>Does velocity affect drum machine patterns or only the piano roll?</h3>
+        <p>Drum patterns in Tracks are built from notes in the same underlying piano roll data, so the velocity lane and per-note editing described here apply to drum tracks as well. See <a href="/blog/free-online-drum-machine">the free online drum machine guide</a> for the rest of the drum programming workflow.</p>
+
+        <h3>Is there a fast way to edit velocity in a browser DAW without a MIDI keyboard?</h3>
+        <p>Yes. Open the <a href="/studio">studio</a>, draw or select a clip, and drag the bars in the velocity lane under the piano roll — no MIDI hardware required. If you do have a keyboard, connecting it lets you record velocity from your actual playing instead of drawing it by hand; see <a href="/blog/use-midi-keyboard-browser">how to use a MIDI keyboard in a browser DAW</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Give your parts some dynamics</h3>
+            <p>The velocity lane, quantize, and swing are all built into the free Tracks piano roll — no plugins, no downloads.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
