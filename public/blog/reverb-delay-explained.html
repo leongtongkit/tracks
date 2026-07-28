@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reverb and delay explained: how much space does your mix need? | Tracks</title>
+    <meta name="description" content="Reverb and delay both add a sense of space to a sound, but they work in different ways. Here is what each effect actually does, how the Insert FX modules work in Tracks, and how much is too much." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/reverb-delay-explained" />
+    <meta property="og:title" content="Reverb and delay explained: how much space does your mix need?" />
+    <meta property="og:description" content="Reverb and delay both add a sense of space to a sound, but they work in different ways and get overused for different reasons. Here is what each effect actually does, how the sends in Tracks' mixer control them, and how much is too much." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/reverb-delay-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use reverb and delay in Tracks",
+        "description": "Add a sense of space and depth to any track in the Tracks browser studio using the built-in Reverb and Delay modules in the Insert FX rack.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open Insert FX on a track", "text": "In the mixer, select a track's channel strip and find the Insert FX section. Delay and Reverb are the last two modules in the chain, after Drive, Crush, Chorus, and Phaser." },
+          { "@type": "HowToStep", "name": "Shape the delay", "text": "Turn on the Delay module and set Time for the gap between echoes, Feedback for how many repeats you hear, and Mix for how loud the echoes sit against the dry signal." },
+          { "@type": "HowToStep", "name": "Shape the reverb", "text": "Turn on the Reverb module and set Size for how large the simulated space feels, Decay for how long the tail rings out, and Mix for how much of that space sits under the dry signal." },
+          { "@type": "HowToStep", "name": "Use one main space per song", "text": "Pick one reverb setting as your main room and reuse it across most tracks so the mix feels like one consistent space, rather than every instrument living in its own detached room." },
+          { "@type": "HowToStep", "name": "Automate or ride Mix for movement", "text": "Pull Mix back during busy sections and open it up in sparse ones, or automate it, so reverb and delay add motion instead of just permanent haze." },
+          { "@type": "HowToStep", "name": "Check in mono and against a reference", "text": "Fold the mix to mono to make sure a heavy tail isn't the only thing carrying a sound, and A/B against a reference track to catch a mix that has gotten too washed out to notice from inside it." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Reverb and delay explained: how much space does your mix need?", "item": "https://tracks.jfound.net/blog/reverb-delay-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Reverb and delay explained: how much space does your mix need?</h1>
+        <p class="art-meta">By Tongkit Leong · July 28, 2026 · 7 min read</p>
+
+        <p class="lede">Reverb simulates the reflections of a physical room around a sound, and delay repeats a sound as distinct, separate echoes. Both live in the Insert FX rack on every track in the <a href="/studio">Tracks browser studio</a>, free, with no plugins to install, and both are among the easiest effects to overuse without noticing.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Two different ways to add space</h2>
+        <p>It's easy to lump reverb and delay together because they both make a dry, close-up sound feel like it's happening somewhere bigger. But they get there differently, and knowing the difference tells you which one to reach for.</p>
+        <p>Reverb simulates thousands of tiny, overlapping reflections bouncing off the walls, floor, and ceiling of a space, which is why a reverb tail sounds like a smooth, continuous wash rather than a series of individual repeats. Delay is much simpler: it plays the sound again after a fixed gap, sometimes more than once as the repeats feed back into themselves and fade out. A reverb tail blurs into the background; a delay echo is a distinct, rhythmic event you can usually tap your foot to.</p>
+
+        <h2>Where they live in Tracks</h2>
+        <p>Every track's mixer channel strip has an <strong>Insert FX</strong> section with six modules in a fixed order: Drive, Crush, Chorus, Phaser, Delay, and Reverb. Delay and Reverb sit last in that chain, so anything you've already added with Drive, Crush, Chorus, or Phaser gets echoed and reverberated too, not the other way around. Each module has its own on/off toggle, so a track that doesn't need space costs nothing extra. The other four modules — Drive, Crush, Chorus, and Phaser — are covered in <a href="/blog/creative-fx-chorus-phaser-bitcrusher">Chorus, phaser, distortion, and bitcrusher explained</a>.</p>
+
+        <h3>Delay: Time, Feedback, Mix</h3>
+        <p>The <strong>Time</strong> knob sets the gap between the original sound and its first echo, in seconds. Short times in the tens of milliseconds add thickness and slap rather than a clear rhythmic repeat; longer times around a quarter or half second give you an audible, rhythmic echo you can line up with the tempo by ear. <strong>Feedback</strong> controls how much of each echo gets fed back into the delay line to create the next one — low feedback gives you one or two soft repeats, high feedback gives you a long trail of echoes that keeps going after the original note stops. <strong>Mix</strong> sets how loud those echoes sit against the dry signal.</p>
+
+        <h3>Reverb: Size, Decay, Mix</h3>
+        <p>Tracks' reverb builds a synthetic impulse response on the fly rather than loading a fixed preset, so <strong>Size</strong> and <strong>Decay</strong> genuinely shape the space instead of just picking from a list. <strong>Size</strong> controls how large the simulated room feels, from a tight closet to a cavernous hall. <strong>Decay</strong> controls how long the tail takes to fade out once the dry sound stops — short decay gives a sound a subtle sense of a room without smearing it, long decay gives you the wash you hear on ambient pads and cinematic vocals. <strong>Mix</strong> works the same as on Delay: it's the balance between the reverberated signal and the dry sound underneath it.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to dial in a space, step by step</h2>
+
+        <h3>Step 1: Open Insert FX on the track</h3>
+        <p>In the mixer, select the track's channel strip and find the Insert FX section. Delay and Reverb are the last two modules, after Drive, Crush, Chorus, and Phaser.</p>
+
+        <h3>Step 2: Start with one effect, not both</h3>
+        <p>Turn on either Delay or Reverb first, not both at once, and loop the section of the song where the track plays. It's much easier to hear what each effect is actually doing to a sound in isolation than to untangle a combined result.</p>
+
+        <h3>Step 3: Set the character before the Mix</h3>
+        <p>For Delay, dial in Time and Feedback first. For Reverb, dial in Size and Decay first. Push these further than feels comfortable while soloed — you'll pull back once you hear it against the full arrangement — so you know what the extreme end of the effect actually sounds like before you commit to a subtle setting.</p>
+
+        <h3>Step 4: Bring in Mix gradually</h3>
+        <p>Start Mix low, around 10–20%, and raise it while listening against the rest of the track, not soloed. Space should be felt more than heard — if you can point at exactly when the reverb or delay kicked in, it's usually too loud.</p>
+
+        <h3>Step 5: Stack carefully if you need both</h3>
+        <p>A short slap delay followed by a small amount of reverb is a common vocal setup: the delay adds rhythmic interest, and the reverb glues the delay's echoes into the room the rest of the track lives in. If you turn both modules on, keep at least one of them subtle so they don't fight for the same sonic space.</p>
+
+        <h2>How much is too much</h2>
+        <p>The most common mistake with reverb and delay isn't picking the wrong settings, it's using too much of a correct setting. A vocal buried under a long reverb tail loses intelligibility. A lead line with heavy feedback delay can turn a clear melody into a wash of overlapping notes that steps on the next phrase. Two easy checks catch this: solo the track and ask whether you can still make out the original performance underneath the effect, then un-solo and check whether the effect is eating space that a different track — a bassline, a hook, a lead vocal — actually needs more.</p>
+        <p>It also helps to think in terms of one main space per song rather than a different room on every track. Pick a Reverb setting you like and reuse it, with varying Mix amounts, across drums, vocals, and instruments, so the whole mix reads as one consistent room instead of five instruments each standing in their own isolated booth. Save a second, more extreme setting for a single feature moment — a vocal ad-lib, a breakdown, a transition — where you want the space itself to be noticeable.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What's the practical difference between reverb and delay?</h3>
+        <p>Reverb simulates a room's continuous reflections and sounds like a smooth wash or tail. Delay repeats a sound as distinct, separate echoes you can hear individually. Reverb answers "what room is this in"; delay answers "how many times does this repeat, and how far apart."</p>
+
+        <h3>Should I put reverb or delay first in the chain?</h3>
+        <p>In Tracks, the order is fixed: Delay comes before Reverb in the Insert FX rack. That means each delay echo also gets reverberated, which glues the repeats into the same space as the dry sound rather than leaving them sounding dry and disconnected.</p>
+
+        <h3>Why does my mix sound muddy after adding reverb?</h3>
+        <p>Long reverb tails on multiple tracks at once stack on top of each other and fill up the same low-to-mid frequency range, which reads as mud. Shorten Decay, lower Mix, or limit heavy reverb to fewer tracks — usually vocals and one or two lead elements — rather than adding it to everything.</p>
+
+        <h3>Can I sync delay time to my song's tempo?</h3>
+        <p>The Delay module's Time knob is set directly in seconds rather than in note divisions. To line an echo up with the beat, work out the gap between beats at your song's BPM (60 divided by BPM gives you a quarter note in seconds) and dial Time to that value or a fraction of it by ear.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Every track's mixer channel strip has a built-in Insert FX rack with Delay and Reverb modules alongside Drive, Crush, Chorus, and Phaser — no plugins needed. Open the <a href="/studio">studio</a>, select a track, and follow the steps above. To route several tracks through a shared reverb instead of duplicating settings on each one, see <a href="/blog/mix-group-buses-sends">group buses and sends</a>. For the corrective side of the chain, see <a href="/blog/how-to-mix-a-track-basics">How to mix a track: EQ, compression, and reverb basics</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try the built-in Delay and Reverb for free</h3>
+            <p>Add space and echo to any track in the Tracks mixer — no download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

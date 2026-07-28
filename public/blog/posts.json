@@ -1,5 +1,13 @@
 [
   {
+    "slug": "reverb-delay-explained",
+    "title": "Reverb and delay explained: how much space does your mix need?",
+    "dek": "Reverb and delay both add a sense of space to a sound, but they work in different ways and get overused for different reasons. Here is what each effect actually does, how the Insert FX modules work in Tracks, and how much is too much.",
+    "date": "2026-07-28",
+    "tags": ["reverb", "delay", "mixing", "sends", "effects"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "velocity-editing-piano-roll",
     "title": "How to edit note velocity for a more human-sounding performance",
     "dek": "Velocity controls how hard each note hits, and flat velocity is what makes programmed music sound robotic. Here is how to edit velocity in the Tracks piano roll to make a part breathe.",
