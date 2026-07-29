@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-trap-beats-browser",
+    "title": "How to make trap music in your browser",
+    "dek": "Trap runs on rolling 808 slides, rapid hi-hat rolls, and a half-time snare feel. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
+    "date": "2026-07-29",
+    "tags": ["trap", "808", "hi-hat rolls", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "reverb-delay-explained",
     "title": "Reverb and delay explained: how much space does your mix need?",
     "dek": "Reverb and delay both add a sense of space to a sound, but they work in different ways and get overused for different reasons. Here is what each effect actually does, how the Insert FX modules work in Tracks, and how much is too much.",
