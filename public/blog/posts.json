@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-dubstep-browser",
+    "title": "How to make dubstep in your browser",
+    "dek": "Dubstep runs on a half-time drum groove, a wobbling bassline built from automated filter cutoff, and heavy sidechain ducking. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-07-30",
+    "tags": ["dubstep", "wobble bass", "filter automation", "sidechain", "drum machine"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-trap-beats-browser",
     "title": "How to make trap music in your browser",
     "dek": "Trap runs on rolling 808 slides, rapid hi-hat rolls, and a half-time snare feel. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
