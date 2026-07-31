@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-phonk-music-browser",
+    "title": "How to make phonk music in your browser",
+    "dek": "Phonk runs on a cowbell-driven drum loop, a distorted Memphis-style bass, and pitched-down vocal chops. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-07-31",
+    "tags": ["phonk", "cowbell", "drum machine", "bass", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-dubstep-browser",
     "title": "How to make dubstep in your browser",
     "dek": "Dubstep runs on a half-time drum groove, a wobbling bassline built from automated filter cutoff, and heavy sidechain ducking. Here is how to program all three in Tracks with no software install.",
