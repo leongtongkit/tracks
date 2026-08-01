@@ -1,5 +1,13 @@
 [
   {
+    "slug": "logic-pro-alternative-browser",
+    "title": "A free Logic Pro alternative that runs in any browser",
+    "dek": "Logic Pro is a one-time-purchase Mac-only DAW with a deep sound library. Tracks is a free browser studio with its own piano roll, synths, drum machines, and mixer, and it runs on any device with a browser. Here is how the two compare and when the browser version is the smarter call.",
+    "date": "2026-08-01",
+    "tags": ["Logic Pro", "comparison", "browser DAW", "free alternative", "Mac"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-phonk-music-browser",
     "title": "How to make phonk music in your browser",
     "dek": "Phonk runs on a cowbell-driven drum loop, a distorted Memphis-style bass, and pitched-down vocal chops. Here is how to program all three in Tracks with no software install.",
