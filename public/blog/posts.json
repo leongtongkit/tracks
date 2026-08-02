@@ -1,5 +1,13 @@
 [
   {
+    "slug": "import-midi-file-browser-daw",
+    "title": "How to import a MIDI file into your browser DAW",
+    "dek": "Tracks reads standard MIDI files straight into the piano roll through the same Open button you use for a saved project. Here is how MIDI import works, what happens to tempo and drum channels, and what to check once the notes land.",
+    "date": "2026-08-02",
+    "tags": ["MIDI import", "standard MIDI file", "browser DAW", "piano roll", "workflow"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "logic-pro-alternative-browser",
     "title": "A free Logic Pro alternative that runs in any browser",
     "dek": "Logic Pro is a one-time-purchase Mac-only DAW with a deep sound library. Tracks is a free browser studio with its own piano roll, synths, drum machines, and mixer, and it runs on any device with a browser. Here is how the two compare and when the browser version is the smarter call.",

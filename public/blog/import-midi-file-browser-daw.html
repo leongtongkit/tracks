@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to import a MIDI file into your browser DAW | Tracks</title>
+    <meta name="description" content="Tracks reads standard MIDI files straight into the piano roll — no plugin, no conversion step. Here is how MIDI import works, what happens to tempo and drum channels, and what to do once the notes land." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/import-midi-file-browser-daw" />
+    <meta property="og:title" content="How to import a MIDI file into your browser DAW" />
+    <meta property="og:description" content="Drop a .mid file into Tracks and get real, editable notes on the piano roll. Here is how MIDI import works and what to check once it lands." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/import-midi-file-browser-daw" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to import a MIDI file into your browser DAW",
+        "description": "Load a standard MIDI file into the Tracks browser studio so its notes, velocities, and tempo become an editable project on the piano roll.",
+        "step": [
+          { "@type": "HowToStep", "name": "Have a standard MIDI file ready", "text": "Get a .mid or .midi file — exported from another DAW, downloaded as a MIDI pack, or bounced from a notation app." },
+          { "@type": "HowToStep", "name": "Open Tracks and use the Open button", "text": "In the Tracks toolbar, click Open and pick the .mid file the same way you would open a saved .tracks.json project." },
+          { "@type": "HowToStep", "name": "Let Tracks build a project from the file", "text": "Tracks reads every track in the MIDI file, turns channel-10 parts into a drum track, gives everything else a synth track, and sets the project tempo from the file's first tempo marker." },
+          { "@type": "HowToStep", "name": "Check the result on the piano roll", "text": "Open each imported track and confirm the notes, timing, and velocities look right before you keep working." },
+          { "@type": "HowToStep", "name": "Assign real sounds and keep building", "text": "Swap in synths, drum kits, or SoundFonts on the imported tracks, then arrange, mix, and export the project like any other Tracks song." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to import a MIDI file into your browser DAW", "item": "https://tracks.jfound.net/blog/import-midi-file-browser-daw" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to import a MIDI file into your browser DAW</h1>
+        <p class="art-meta">By Tongkit Leong · August 2, 2026 · 7 min read</p>
+
+        <p class="lede">In <a href="/studio">Tracks</a>, click the Open button in the toolbar and pick a .mid or .midi file — the same button you use to reopen a saved project. Tracks reads the file, builds a track for each part, turns channel-10 parts into a drum track, and sets the tempo from the file's tempo marker, so you land on an editable piano roll instead of a dead file icon.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What happens when you import a MIDI file</h2>
+        <p>A standard MIDI file is a list of instructions, not a recording: which note played, how hard it was hit, and exactly when it started and stopped, organized into separate tracks and channels. When Tracks imports one, it walks through every track in the file and rebuilds it as a real Tracks track with real notes on the piano roll — not a locked, opaque blob.</p>
+        <p>Specifically, for each track in the file Tracks:</p>
+        <ul>
+          <li><strong>Reads the note name from the file</strong> if the track has one, and uses it to label the new Tracks track.</li>
+          <li><strong>Detects drum parts automatically.</strong> Anything sent on MIDI channel 10 — the General MIDI percussion channel that virtually every DAW and notation app uses for drums — becomes a drum track in Tracks. Everything else becomes a synth track.</li>
+          <li><strong>Converts velocities</strong> so the exact hardness of each note hit carries over, which matters for how human a part feels — see <a href="/blog/velocity-editing-piano-roll">how to edit note velocity</a> if you want to keep shaping it afterward.</li>
+          <li><strong>Sets the project tempo</strong> from the first tempo marker found in the file, so the imported notes land at the same speed they were written at.</li>
+          <li><strong>Skips empty tracks</strong> and stops after 24 tracks, which covers the overwhelming majority of real songs — a MIDI file with more parts than that is unusual outside of orchestral scores.</li>
+        </ul>
+        <p>What it does not do is guess a sound for you beyond drums-or-not. A MIDI file carries no audio and no instrument definition Tracks can read directly, so every non-drum track opens on a default synth. That is normal for MIDI import anywhere, not a Tracks limitation — see <a href="/blog/export-midi-file-browser-daw">how MIDI export works</a> for the same trade-off in the other direction.</p>
+
+        <h2>Where a MIDI file to import comes from</h2>
+        <p>You do not need Tracks to have made the file. Anything that produces a standard MIDI file will work:</p>
+        <ul>
+          <li><strong>Another DAW's MIDI export</strong> — Ableton, FL Studio, Logic, or any other program that can bounce a MIDI file, including your own tracks exported earlier from Tracks itself. See <a href="/blog/ableton-alternative-browser">Ableton vs. Tracks</a> and <a href="/blog/fl-studio-alternative-browser">FL Studio vs. Tracks</a> if you are moving a project over from one of those.</li>
+          <li><strong>Free or paid MIDI packs</strong> — chord progressions, drum patterns, and melodic loops sold or given away as .mid files, meant to be dragged into whatever software you use.</li>
+          <li><strong>A MIDI keyboard recording saved elsewhere</strong> and exported before it reaches Tracks. If you are recording directly into Tracks instead, see <a href="/blog/use-midi-keyboard-browser">how to use a MIDI keyboard in a browser DAW</a> — you likely do not need to import anything in that case.</li>
+          <li><strong>Notation software</strong> that lets you write parts on a staff and export the result as MIDI.</li>
+        </ul>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to import a MIDI file in Tracks, step by step</h2>
+
+        <h3>Step 1: Get the .mid file onto your device</h3>
+        <p>Download or export the MIDI file from wherever it is coming from, so it sits somewhere your browser's file picker can reach it — your downloads folder is usually simplest.</p>
+
+        <h3>Step 2: Click Open in the Tracks toolbar</h3>
+        <p>The same Open button you use to reopen a saved <code>.tracks.json</code> project also accepts MIDI files. Click it and choose the .mid or .midi file from the picker.</p>
+
+        <h3>Step 3: Let Tracks build the project</h3>
+        <p>Tracks parses the file and replaces the current project with a new one built from its contents — one track per part, drums separated out, tempo set. Because this swaps out whatever was open, save or export anything you were already working on first if you want to keep it.</p>
+
+        <h3>Step 4: Check each track on the piano roll</h3>
+        <p>Open the imported tracks one at a time and look over the notes. Confirm the drum track actually contains drum hits, check that note lengths and velocities look reasonable, and nudge anything that came in from a file with unusual quantization or overlapping notes.</p>
+
+        <h3>Step 5: Assign real instruments and keep working</h3>
+        <p>Every imported track starts on a default sound, so this is the point to load the synth, drum kit, or SoundFont you actually want — see <a href="/blog/free-instruments-in-browser">free instruments in the browser</a> and <a href="/blog/soundfont-instruments-explained">SoundFont instruments explained</a>. From there the imported song behaves like any other Tracks project: mix it, arrange it, and export it however you need.</p>
+
+        <h2>Import vs. export vs. opening a saved project</h2>
+        <p>Tracks' Open button quietly does two different jobs, and it is worth knowing which one you are triggering:</p>
+        <ul>
+          <li><strong>Opening a <code>.tracks.json</code> file</strong> restores an exact Tracks project — every effect setting, mixer level, and arrangement decision, exactly as you left it.</li>
+          <li><strong>Importing a <code>.mid</code> or <code>.midi</code> file</strong> rebuilds only the notes into a fresh project — no mixer settings, no effects, because none of that exists in a MIDI file to begin with.</li>
+        </ul>
+        <p>If you are moving your own work between devices or back into Tracks later, the <code>.tracks.json</code> save is the one that keeps everything intact. Reach for MIDI import specifically when the notes are coming from somewhere that is not Tracks.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Will importing a MIDI file bring in the original sounds too?</h3>
+        <p>No. MIDI carries notes, not audio, so the original synth patch, sample library, or plugin sound from wherever the file came from does not travel with it. You choose new sounds inside Tracks after import — that is true of MIDI import in any program, not specific to Tracks.</p>
+
+        <h3>What happens to a track that has both drum hits and melodic notes on it?</h3>
+        <p>Tracks decides per track based on which channel most of its notes are on. If most of a track's notes sit on MIDI channel 10, the whole track imports as a drum track; otherwise it imports as a synth track.</p>
+
+        <h3>Does the tempo of my imported song match the original file?</h3>
+        <p>Yes, as long as the file has a tempo marker — Tracks reads it and sets the project's BPM to match, so the notes play back at the intended speed rather than whatever tempo your last project happened to be at.</p>
+
+        <h3>Can I import a MIDI file into a project I already have open, without replacing it?</h3>
+        <p>Importing builds a new project from the file rather than merging into your current one. If you want to combine an imported part with existing work, import the MIDI file first, then copy the notes you need into your other project's piano roll.</p>
+
+        <h3>Are there MIDI files Tracks can't read?</h3>
+        <p>Tracks supports the common tick-based timing that the vast majority of MIDI files use. Files that use SMPTE timecode timing instead of ticks — an uncommon format mostly seen in film and video scoring — are not supported.</p>
+
+        <h3>Is any of this uploaded anywhere?</h3>
+        <p>No. The MIDI file is read and converted entirely inside your browser. Nothing about your file, your project, or your session is sent to a server at any point.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Bring your notes into a real piano roll</h3>
+            <p>Import a MIDI file, assign real instruments, and keep building — free, in the browser, nothing to install.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
