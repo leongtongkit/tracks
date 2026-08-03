@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-synthwave-browser",
+    "title": "How to make synthwave in your browser",
+    "dek": "Synthwave runs on a driving eighth-note bassline, gated-reverb drums, and lush analog-style pad chords. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-08-03",
+    "tags": ["synthwave", "gated reverb", "analog synth", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "import-midi-file-browser-daw",
     "title": "How to import a MIDI file into your browser DAW",
     "dek": "Tracks reads standard MIDI files straight into the piano roll through the same Open button you use for a saved project. Here is how MIDI import works, what happens to tempo and drum channels, and what to check once the notes land.",
