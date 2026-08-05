@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-drill-music-browser",
+    "title": "How to make drill music in your browser",
+    "dek": "Drill runs on an off-beat kick pattern, a sliding 808 bassline, and triplet hi-hat rolls, all sitting in a sparser arrangement than most trap-adjacent genres. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-08-05",
+    "tags": ["drill", "triplet hi-hats", "808 slide", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-synthwave-browser",
     "title": "How to make synthwave in your browser",
     "dek": "Synthwave runs on a driving eighth-note bassline, gated-reverb drums, and lush analog-style pad chords. Here is how to program all three in Tracks with no software install.",
