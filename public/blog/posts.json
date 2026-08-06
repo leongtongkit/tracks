@@ -1,5 +1,13 @@
 [
   {
+    "slug": "record-instrument-browser-daw",
+    "title": "How to record guitar or any instrument in your browser DAW",
+    "dek": "Plug your audio interface into your computer, pick it as your input, and record real guitar, bass, or any line-level instrument straight into a free browser DAW. Here is how the setup, levels, and mixing work.",
+    "date": "2026-08-06",
+    "tags": ["recording", "guitar", "audio interface", "instruments", "workflow"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-drill-music-browser",
     "title": "How to make drill music in your browser",
     "dek": "Drill runs on an off-beat kick pattern, a sliding 808 bassline, and triplet hi-hat rolls, all sitting in a sparser arrangement than most trap-adjacent genres. Here is how to program all three in Tracks with no software install.",
