@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-afrobeats-browser",
+    "title": "How to make afrobeats music in your browser",
+    "dek": "Afrobeats runs on a syncopated log drum bassline, a rolling shaker groove, and call-and-response vocal chops sitting over a relaxed mid-tempo pocket. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-08-07",
+    "tags": ["afrobeats", "log drum", "shaker groove", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "record-instrument-browser-daw",
     "title": "How to record guitar or any instrument in your browser DAW",
     "dek": "Plug your audio interface into your computer, pick it as your input, and record real guitar, bass, or any line-level instrument straight into a free browser DAW. Here is how the setup, levels, and mixing work.",
