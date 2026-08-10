@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-techno-browser",
+    "title": "How to make techno in your browser",
+    "dek": "Techno runs on a driving four-on-the-floor kick, a hypnotic bassline, and long filter builds instead of chord changes. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
+    "date": "2026-08-10",
+    "tags": ["techno", "four-on-the-floor", "drum machine", "bassline", "acid", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-uk-garage-browser",
     "title": "How to make UK garage in your browser",
     "dek": "UK garage runs on a shuffled 2-step drum pattern, a sliding sub bassline, and pitched vocal chops sitting around 130 BPM. Here is how to program all three in Tracks with no software install.",
