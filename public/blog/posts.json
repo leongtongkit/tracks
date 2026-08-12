@@ -1,5 +1,13 @@
 [
   {
+    "slug": "pro-tools-alternative-browser",
+    "title": "A free Pro Tools alternative that runs in any browser",
+    "dek": "Pro Tools is the recording-studio standard, sold by subscription and built around multitrack audio recording. Tracks is a free browser DAW with real multitrack recording, comping, and a full mixer. Here is how the two actually compare.",
+    "date": "2026-08-12",
+    "tags": ["Pro Tools", "comparison", "browser DAW", "free alternative", "recording"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-jersey-club-browser",
     "title": "How to make Jersey club in your browser",
     "dek": "Jersey club runs on triplet-heavy kick patterns, a signature bed-squeak sample, and chopped vocal loops around 130 BPM. Here is how to program all three in Tracks with no software install.",
