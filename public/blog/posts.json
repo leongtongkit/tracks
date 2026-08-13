@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-reggaeton-browser",
+    "title": "How to make reggaeton in your browser",
+    "dek": "Reggaeton runs on the dembow riddim, a syncopated bass tumbao, and layered percussion sitting around 90 to 100 BPM. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-08-13",
+    "tags": ["reggaeton", "dembow", "riddim", "percussion", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "pro-tools-alternative-browser",
     "title": "A free Pro Tools alternative that runs in any browser",
     "dek": "Pro Tools is the recording-studio standard, sold by subscription and built around multitrack audio recording. Tracks is a free browser DAW with real multitrack recording, comping, and a full mixer. Here is how the two actually compare.",
