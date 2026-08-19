@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-grime-browser",
+    "title": "How to make grime in your browser",
+    "dek": "Grime runs on sparse 140 BPM beats, staccato square-wave synth riffs, and half-step drum patterns built for an MC to ride over. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-08-19",
+    "tags": ["grime", "140 bpm", "square wave riff", "drum machine", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-amapiano-browser",
     "title": "How to make amapiano in your browser",
     "dek": "Amapiano runs on a deep log drum bassline, a laid-back shaker groove, and airy piano stabs sitting around 112 to 115 BPM. Here is how to program all three in Tracks with no software install.",
