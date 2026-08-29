@@ -1,5 +1,13 @@
 [
   {
+    "slug": "tempo-map-change-bpm-mid-song",
+    "title": "How to change tempo mid-song with a tempo map",
+    "dek": "A tempo map lets a track speed up, slow down, or jump to a new BPM at an exact bar instead of staying locked to one tempo for the whole song. Here is how to set tempo changes and time signature changes in Tracks.",
+    "date": "2026-08-29",
+    "tags": ["tempo map", "bpm", "time signature", "arrangement", "tempo automation"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-hyperpop-browser",
     "title": "How to make hyperpop in your browser",
     "dek": "Hyperpop runs on a pitched-up, deliberately artificial vocal hook, a distorted and bitcrushed 808, and glitchy stutter fills that cut hard between sections. Here is how to program all three in Tracks with no software install.",

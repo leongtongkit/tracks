@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to change tempo mid-song with a tempo map | Tracks</title>
+    <meta name="description" content="A tempo map lets a song speed up, slow down, or jump to a new BPM at an exact bar instead of staying locked to one tempo start to finish. Here is how to set tempo changes and time signature changes in Tracks, no plugins, no download." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/tempo-map-change-bpm-mid-song" />
+    <meta property="og:title" content="How to change tempo mid-song with a tempo map" />
+    <meta property="og:description" content="A tempo map lets a song speed up, slow down, or jump to a new BPM at an exact bar. Here is how to set tempo changes and time signature changes in the Tracks browser studio." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/tempo-map-change-bpm-mid-song" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to change tempo mid-song with a tempo map",
+        "description": "Add tempo change points to the Tracks tempo map so a song can speed up, slow down, or jump to a new BPM at an exact bar instead of staying at one fixed tempo.",
+        "step": [
+          { "@type": "HowToStep", "name": "Set your song's starting tempo", "text": "Set the base BPM in the transport bar before you build anything, since every clip and pattern lines up to that starting tempo." },
+          { "@type": "HowToStep", "name": "Decide where the tempo needs to change", "text": "Mark the exact bar where a section needs a new BPM, using markers or the arrangement as a reference rather than guessing by ear." },
+          { "@type": "HowToStep", "name": "Add a tempo change point on the tempo map", "text": "Open the tempo map and add a new tempo point at that bar, entering the new BPM value." },
+          { "@type": "HowToStep", "name": "Choose a jump or a ramp", "text": "Set the tempo change to snap instantly at the bar line, or to ramp gradually from the old BPM to the new one over a chosen number of bars." },
+          { "@type": "HowToStep", "name": "Add a time signature change if needed", "text": "Add a time signature change at the same bar if the new section also needs a different meter, such as a 3/4 bridge inside a 4/4 song." },
+          { "@type": "HowToStep", "name": "Play through the transition and adjust", "text": "Listen to the section before and after the change together, and adjust the ramp length or jump point until the transition feels intentional rather than jarring." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to change tempo mid-song with a tempo map", "item": "https://tracks.jfound.net/blog/tempo-map-change-bpm-mid-song" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to change tempo mid-song with a tempo map</h1>
+        <p class="art-meta">By Tongkit Leong · August 29, 2026 · 8 min read</p>
+
+        <p class="lede">A tempo map is a track of tempo change points running alongside your song, letting the BPM jump or ramp to a new value at an exact bar instead of staying fixed for the whole track. In the <a href="/studio">Tracks browser studio</a>, you set your starting BPM in the transport bar, then add tempo points on the tempo map wherever the song needs to speed up, slow down, or snap to a new tempo.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What a tempo map actually is</h2>
+        <p>Most songs run at one tempo from the first bar to the last, and the transport bar's single BPM field is all you ever touch. A tempo map is what sits underneath that field for the songs that need more than one number — it's a list of tempo change points, each tied to a specific bar, that the transport reads through as playback moves forward. Between two points the tempo either holds steady or moves smoothly from one value to the next, depending on how you set the change.</p>
+        <p>Every clip, pattern, and piano roll note in Tracks is stored in musical time — bars and beats, not seconds — so when the tempo map changes speed, everything already arranged stays locked to the beat. A kick on beat one of bar 33 is still on beat one of bar 33 whether that bar plays at 90 BPM or 140 BPM; only the amount of real time it takes to get there changes.</p>
+
+        <h2>Why you'd want tempo to change mid-song</h2>
+        <p>A single fixed tempo is right for most tracks, and you should default to it. A tempo map earns its place when a section genuinely needs to feel faster or slower than the rest of the song, not as a way to fix a groove that just isn't working at its current speed.</p>
+        <ul>
+          <li><strong>A half-time or double-time drop.</strong> Drum and bass and dubstep producers often write a break that feels like it drops to half speed without the underlying grid actually changing — but a genuine tempo drop is a different, more dramatic tool, snapping the whole song to a new, slower feel for a breakdown before ramping back up.</li>
+          <li><strong>An intro that settles into the song.</strong> A slow, rubato-feeling intro that gradually speeds up into the first verse's steady tempo is a common way to give a song a sense of arrival, rather than starting the listener at full speed immediately.</li>
+          <li><strong>A live, human feel.</strong> Real bands drift a few BPM across a performance without anyone noticing. A very slight, gradual tempo ramp across a whole song — a couple of BPM over three minutes — can make a programmed arrangement feel less metronomic.</li>
+          <li><strong>A tempo-driven outro.</strong> Slowing down over the last few bars, the way a live drummer might ritardando into a final hit, reads as an ending in a way that a track that just stops does not.</li>
+          <li><strong>Sampling something recorded at a different tempo.</strong> If you're building a section around a sample or a loop that was written at a different BPM than the rest of your song, a tempo change is sometimes a cleaner fix than time-stretching the sample itself. See <a href="/blog/time-stretch-repitch-browser">time-stretching and repitching in the browser</a> for the alternative approach when the rest of the song can't move.</li>
+        </ul>
+
+        <h2>How to set a tempo change in Tracks</h2>
+
+        <h3>Step 1: Set your song's starting tempo</h3>
+        <p>Before you build anything, set the base BPM for the song in the transport bar. This is the tempo the whole arrangement lines up to by default, so it's worth settling on before you've programmed drum patterns or recorded takes against a placeholder number.</p>
+
+        <h3>Step 2: Decide exactly where the tempo needs to change</h3>
+        <p>Find the precise bar where the new section starts — not roughly, the exact bar. If you've already blocked your song out with markers, this is usually the same bar a section marker sits on. See <a href="/blog/song-structure-arrangement">how to arrange a song</a> if you haven't blocked out sections yet; doing that first makes tempo mapping far less guesswork.</p>
+
+        <h3>Step 3: Add a tempo point on the tempo map</h3>
+        <p>Open the tempo map and add a new tempo point at that bar, then enter the new BPM. The map keeps a record of every tempo point in the song in order, so you can always see, and edit, the full history of tempo changes rather than hunting for where a change happens by ear.</p>
+
+        <h3>Step 4: Choose a jump or a gradual ramp</h3>
+        <p>Decide whether the change should be instant — the tempo snaps to the new value right at the bar line, useful for a hard drop into a breakdown — or gradual, ramping smoothly from the old BPM to the new one across a span of bars you choose. A ramp of four to eight bars usually reads as a natural speed-up or slow-down; a ramp of one bar or less starts to feel closer to a jump.</p>
+
+        <h3>Step 5: Add a time signature change if the section needs one</h3>
+        <p>If the new section is also in a different meter — a 3/4 bridge inside an otherwise 4/4 song, for example — add a time signature change at the same bar. Tempo and time signature changes are independent, so you can change one without the other, but they often land at the same section boundary in practice.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h3>Step 6: Play through the transition and adjust</h3>
+        <p>Play from a few bars before the change through a few bars after it, in context, rather than soloing the moment of the change itself. A ramp that looks reasonable on the tempo map can still feel abrupt or sluggish against the actual arrangement, and the only real test is hearing it land against the drums and bass that carry it.</p>
+
+        <h2>Things to watch for</h2>
+        <p>Tempo mapping is simple mechanically, but a few habits keep it from causing problems elsewhere in the song:</p>
+        <ul>
+          <li><strong>Recorded audio doesn't retime itself automatically.</strong> MIDI notes and step patterns follow the tempo map without any extra work, since they're stored as musical positions. A recorded vocal or instrument take is audio, and audio only follows a tempo change smoothly if it's been time-stretched to match — otherwise a change in BPM changes how the recording sits against the beat around it. Check any audio clips that cross a tempo change point by ear.</li>
+          <li><strong>Big jumps read as a new section, not a mistake — use that.</strong> A large, sudden tempo jump is a strong musical statement, not a subtle one. That's exactly the effect you want for a hard breakdown, but it's worth being deliberate about, since a big jump in the wrong place reads as an error rather than a choice.</li>
+          <li><strong>Don't use a tempo ramp to fix a groove that feels wrong at its written tempo.</strong> If a pattern feels rushed or dragging at its current BPM, that's usually a swing, quantize, or arrangement issue, not a reason to bend the tempo map around it. See <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a> for the more direct fix.</li>
+          <li><strong>Keep the tempo map visible while you arrange around it.</strong> Once a song has more than one or two tempo points, it's easy to forget where they are while you're deep in a different section. Glancing at the tempo map before adding new patterns near a change point avoids programming something that assumes the wrong BPM.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Will a tempo change mess up patterns I've already programmed?</h3>
+        <p>No. MIDI notes, drum machine patterns, and piano roll parts are stored by bar and beat position, not by real time, so they stay locked to the beat through a tempo change automatically. Only the real-time duration of each bar changes, not where notes fall within it.</p>
+
+        <h3>Can I have more than one tempo change in a song?</h3>
+        <p>Yes. The tempo map holds as many tempo points as the song needs, each at its own bar, and you can mix instant jumps and gradual ramps freely across the same song.</p>
+
+        <h3>What's the difference between a tempo ramp and just picking a new fixed BPM for a section?</h3>
+        <p>A ramp transitions smoothly from one BPM to another over a span of bars you choose, so the change is heard as a gradual speeding-up or slowing-down. A jump changes the tempo instantly at the bar line, with no transition — the song is simply at a new tempo starting on that beat. Which one fits depends entirely on whether you want the listener to feel the transition happen or feel like they've arrived somewhere new.</p>
+
+        <h3>Do I need a tempo map for a normal song at one fixed tempo?</h3>
+        <p>No. If your song runs at one BPM throughout, the single tempo field in the transport bar is all you need — a tempo map with a single starting point is functionally identical to a fixed tempo. It's only worth opening once a song actually needs more than one tempo.</p>
+
+        <h3>Does a time signature change require a tempo change too?</h3>
+        <p>No, they're independent. You can change meter without changing BPM, change BPM without changing meter, or change both together at the same bar if a section needs it.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks' arrangement view includes a tempo map alongside markers and time signature changes, all editable without leaving the browser. Open the <a href="/studio">studio</a> and try adding a tempo point at a section boundary. For blocking out where those boundaries should sit first, see <a href="/blog/song-structure-arrangement">how to arrange a song</a>.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Give your song more than one tempo</h3>
+            <p>Add tempo and time signature changes right on the timeline in the free Tracks studio — no plugins, no download, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
