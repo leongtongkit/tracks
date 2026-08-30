@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to make chiptune music in your browser | Tracks</title>
+    <meta name="description" content="Step-by-step guide to programming chiptune (8-bit) music in your browser — square and pulse-wave leads, a triangle-wave bassline, fast arpeggios, and noise-channel drums, all in the Tracks free studio with no download required." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/make-chiptune-music-browser" />
+    <meta property="og:title" content="How to make chiptune music in your browser" />
+    <meta property="og:description" content="Program square-wave leads, a triangle bassline, fast arpeggios, and noise-channel drums from scratch in the Tracks browser studio — no install, no account, no cost." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/make-chiptune-music-browser" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to make chiptune music in your browser",
+        "description": "Build a complete chiptune track in the Tracks browser studio — program a square-wave lead, a triangle-wave bassline, fast arpeggios, and noise-channel drums, then arrange and export.",
+        "step": [
+          { "@type": "HowToStep", "name": "Set your tempo", "text": "Open Tracks and set the BPM in the transport bar. Chiptune typically runs fast, between 130 and 160 BPM, to match the energy of retro game soundtracks." },
+          { "@type": "HowToStep", "name": "Program the noise-channel drums", "text": "Open the 808 or 909 drum machine and lay down a simple, tight pattern: kick on the downbeats, a short noise-style hit standing in for the snare, and steady closed hats. Keep every hit short and dry, with little to no reverb." },
+          { "@type": "HowToStep", "name": "Write a pulse-wave lead melody", "text": "Add a synth track, set a square or pulse oscillator with no filter sweep, and write a simple, catchy melody in the piano roll using short, clipped note lengths." },
+          { "@type": "HowToStep", "name": "Add a triangle-wave bassline", "text": "On a second synth track, set a triangle oscillator and write a fast, repetitive bassline that mostly doubles the kick pattern, the way an original sound chip's limited voice count would have used it." },
+          { "@type": "HowToStep", "name": "Build fast arpeggios", "text": "On a third synth track, or by editing the lead, write very fast repeating note runs through a chord shape in the piano roll to simulate a single chip voice playing a chord by cycling through its notes." },
+          { "@type": "HowToStep", "name": "Arrange the track", "text": "Block out short, loop-friendly sections on the Tracks timeline — an intro riff, a main theme, and a bridge — the way an 8-bit game level or menu loop is built." },
+          { "@type": "HowToStep", "name": "Mix and export", "text": "Keep the mix narrow and dry, avoid heavy reverb or wide stereo effects, balance the lead above the bass and drums, then export to WAV or MP3." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to make chiptune music in your browser", "item": "https://tracks.jfound.net/blog/make-chiptune-music-browser" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to make chiptune music in your browser</h1>
+        <p class="art-meta">By Tongkit Leong · August 30, 2026 · 8 min read</p>
+
+        <p class="lede">Chiptune is built from square and pulse waves, a triangle-wave bassline, fast note-cycling arpeggios standing in for chords, and short, dry noise-channel drums — and you can program all four from scratch in the <a href="/studio">Tracks browser studio</a> in an afternoon, with no software to install and no account to create.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>The anatomy of a chiptune track</h2>
+        <p>Chiptune's sound comes from real hardware limits: 1980s sound chips like the Nintendo Entertainment System's APU or the Commodore 64's SID had only two or three melodic voices and one noise channel, so composers had to fake fullness with speed and repetition instead of layers. A handful of production choices recreate that sound on modern gear:</p>
+        <ul>
+          <li><strong>Square and pulse-wave leads</strong> — a thin, buzzy tone with a hollow middle, the signature timbre of an old sound chip's melody voice.</li>
+          <li><strong>Triangle-wave bass</strong> — a soft, rounded low end, usually the second voice on a real chip, often doubling the rhythm of the drums.</li>
+          <li><strong>Fast arpeggios instead of chords</strong> — cycling rapidly through the notes of a chord on a single voice to imply harmony a limited chip couldn't play at once.</li>
+          <li><strong>Short, dry noise-channel drums</strong> — clipped, minimal-reverb hits standing in for a chip's dedicated noise channel, used for both snare and hi-hat sounds.</li>
+          <li><strong>Tight, loop-friendly arrangement</strong> — short, repeating sections built to loop cleanly, the way a game level or menu theme needs to.</li>
+        </ul>
+        <p>Tracks has everything you need for this built in — the subtractive synth's square and triangle oscillators for leads and bass, the piano roll for programming fast arpeggio runs, and the 808/909 drum machine for tight, dry drum hits.</p>
+
+        <h2>Step 1: Set your tempo</h2>
+        <p>Open the <a href="/studio">Tracks studio</a> and set the BPM in the transport bar. Chiptune tends to run faster than most modern electronic genres:</p>
+        <ul>
+          <li><strong>Mellower, exploration-theme style:</strong> 110–130 BPM.</li>
+          <li><strong>Classic action or level theme:</strong> 140–155 BPM, the most common range.</li>
+          <li><strong>Boss-battle or high-energy chip music:</strong> 155–175 BPM.</li>
+        </ul>
+        <p>145 BPM is a solid starting point for a typical upbeat chiptune theme.</p>
+
+        <h2>Step 2: Program the noise-channel drums</h2>
+        <p>Add a track and open the drum machine. Program a tight, simple pattern on the 16-step grid: kick on steps 1 and 9, a short noise-style hit on steps 5 and 13 standing in for the snare, and closed hats on every step or every other step for constant motion. Keep the pattern simple — a real sound chip's noise channel could only play one sound at a time, so busy, layered drum programming breaks the illusion.</p>
+        <p>Keep reverb and delay sends off or very low on the drums. Chiptune drums are dry and close, not roomy — see <a href="/blog/reverb-delay-explained">Reverb and delay explained</a> if you want to understand what those sends are doing before you decide to skip them here.</p>
+
+        <h2>Step 3: Write a pulse-wave lead melody</h2>
+        <p>Add a new instrument track and open the subtractive synth. Set the oscillator to a square or pulse wave and turn the filter cutoff most of the way open — chiptune leads stay bright and thin rather than warm and filtered, since a real sound chip had no filter to sweep.</p>
+        <p>Open the piano roll on the lead track and write a simple, catchy, singable melody using short, clipped note lengths rather than long sustained notes. Game composers wrote memorable hooks because their tracks had to loop for minutes at a time without wearing out their welcome — keep your phrase short and repeat it with small variations rather than writing something sprawling.</p>
+
+        <h3>Getting the classic pulse-width character</h3>
+        <p>If your synth's pulse-wave option lets you narrow the pulse width rather than using a plain square wave, try a narrower setting for a thinner, more nasal tone closer to a real NES lead voice. A plain 50% square wave still reads as chiptune and is a safe default if you're not sure.</p>
+
+        <h2>Step 4: Add a triangle-wave bassline</h2>
+        <p>On a second synth track, set the oscillator to a triangle wave — soft and rounded, the classic chip bass tone. Write a fast, repetitive bassline in the piano roll that mostly doubles the kick pattern's rhythm, the way a real chip's second voice would lock to the drums rather than wandering independently.</p>
+        <p>If the bass and kick clash, open the mixer and apply a light EQ cut on the bass track around the frequency where the kick is loudest, so the two share the low end cleanly instead of masking each other.</p>
+
+        <h2>Step 5: Build fast arpeggios</h2>
+        <p>This is the trick that makes one melodic voice sound like a full chord. On a third synth track — or by editing sections of the lead — open the piano roll and write a very fast repeating run through the notes of a chord: root, third, fifth, and back, at a fast subdivision like sixteenth notes. Played fast enough, your ear blends the individual notes into a single chord-like texture, exactly the workaround chip composers used when their hardware only gave them one voice at a time. See <a href="/blog/chord-progressions-piano-roll">Chord progressions in the piano roll</a> for help picking chord shapes to arpeggiate.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Step 6: Arrange the track</h2>
+        <p>Chiptune arrangements are built to loop, borrowing structure from game soundtracks rather than a verse-chorus pop song. A common structure looks like this:</p>
+        <ol>
+          <li><strong>Intro riff (2–4 bars):</strong> a short hook that establishes the melody before the full arrangement kicks in.</li>
+          <li><strong>Main theme (16 bars):</strong> lead, bass, and drums together, looping the core melody with small variations each pass.</li>
+          <li><strong>Bridge or B-section (8–16 bars):</strong> a contrasting melody or key change for variety, the way a game level theme shifts for a second area.</li>
+          <li><strong>Return to main theme (16 bars):</strong> back to the primary hook to close the loop cleanly.</li>
+          <li><strong>Ending or loop point:</strong> either a short tag ending or a clean loop back to the intro riff.</li>
+        </ol>
+        <p>Block these sections out on the Tracks timeline before polishing any one part — see <a href="/blog/song-structure-arrangement">How to arrange a song</a> for more on building a structure from scratch.</p>
+
+        <h2>Step 7: Mix and export</h2>
+        <p>Before you export, keep a few chiptune-specific habits in mind in the Tracks mixer:</p>
+        <ol>
+          <li>Keep the overall mix narrow and dry — heavy reverb, wide stereo widening, or lush chorus effects work against the tight, close chip sound.</li>
+          <li>Balance the lead above the bass and drums so the melody stays the clear focal point, the way it would on a chip with a dedicated lead voice.</li>
+          <li>Apply a light compressor across the drum bus for punch, but keep it subtle — chiptune drums are meant to sound small and precise, not big and glued.</li>
+          <li>If you want a touch of grit on the lead or bass without leaving the retro palette, a light bitcrusher can push the tone closer to genuinely low sample-rate hardware — see <a href="/blog/creative-fx-chorus-phaser-bitcrusher">Chorus, phaser, distortion, and bitcrusher</a> for how to dial it in.</li>
+        </ol>
+        <p>When the balance feels right at a comfortable volume, export to WAV for a clean master file or MP3 to share online — see <a href="/blog/export-song-mp3-wav">How to export your song to MP3 or WAV</a> for the full walkthrough. Your project stays in your browser the entire time; Tracks never uploads it anywhere.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What BPM is chiptune music?</h3>
+        <p>Most chiptune sits between 110 and 175 BPM. Mellower, exploration-style themes run 110–130 BPM, classic action or level themes sit around 140–155 BPM, and high-energy boss-battle tracks push toward 155–175 BPM. 145 BPM is a solid default for a typical upbeat theme.</p>
+
+        <h3>Do I need an actual sound chip or a Game Boy to make chiptune?</h3>
+        <p>No. The sound comes from a handful of choices — square and pulse waves, triangle bass, fast arpeggios standing in for chords, and dry, minimal drums — all of which you can program with the standard synth and drum machine already in Tracks. Real hardware and chiptune trackers are one way in, but they're not required.</p>
+
+        <h3>Why do chiptune arpeggios sound so fast?</h3>
+        <p>Original sound chips typically had only two or three melodic voices, so a composer wanting a full chord had to fake it on a single voice by cycling through the chord's notes fast enough for the ear to blend them into one texture. Modern synths can play real chords, but the fast-arpeggio trick is kept on purpose because it's part of the genre's identity, not just a workaround.</p>
+
+        <h3>How long should a chiptune track be?</h3>
+        <p>Many chiptune tracks run 1.5 to 3 minutes and are built to loop cleanly, following the convention of a game level or menu theme rather than a full pop song arrangement. There's nothing stopping you from writing a longer, more developed piece if you want one.</p>
+
+        <h3>Can I use a MIDI keyboard to play the arpeggios and lead instead of clicking them in?</h3>
+        <p>Yes. Tracks supports Web MIDI, so if you have a MIDI keyboard connected over USB you can play the lead and bass parts live and record your performance directly into the piano roll, then clean up the timing afterward. See <a href="/blog/use-midi-keyboard-browser">How to use a MIDI keyboard in a browser DAW</a> for the setup steps.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Start building your chiptune track now</h3>
+            <p>Square-wave synth, drum machine, and piano roll — everything you need, free in your browser, no account required.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

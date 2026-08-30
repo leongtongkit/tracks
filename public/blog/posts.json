@@ -1,5 +1,19 @@
 [
   {
+    "slug": "make-chiptune-music-browser",
+    "title": "How to make chiptune music in your browser",
+    "dek": "Chiptune is built from square and pulse waves, a triangle-wave bassline, fast note-cycling arpeggios standing in for chords, and short, dry noise-channel drums. Here is how to program all four in Tracks.",
+    "date": "2026-08-30",
+    "tags": [
+      "chiptune",
+      "8-bit",
+      "synthesis",
+      "genre-guide",
+      "arpeggio"
+    ],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "tempo-map-change-bpm-mid-song",
     "title": "How to change tempo mid-song with a tempo map",
     "dek": "A tempo map lets a track speed up, slow down, or jump to a new BPM at an exact bar instead of staying locked to one tempo for the whole song. Here is how to set tempo changes and time signature changes in Tracks.",
