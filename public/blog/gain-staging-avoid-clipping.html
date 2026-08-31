@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gain staging: how to avoid clipping and keep a healthy mix | Tracks</title>
+    <meta name="description" content="Gain staging keeps every stage of your signal chain in a healthy range so nothing clips and every plugin works as designed. Here is how to gain-stage a mix from input to output in the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/gain-staging-avoid-clipping" />
+    <meta property="og:title" content="Gain staging: how to avoid clipping and keep a healthy mix" />
+    <meta property="og:description" content="Clipping and a flat, lifeless mix usually trace back to the same root cause: bad gain staging. Here is how to keep every stage of your signal chain in a healthy range in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/gain-staging-avoid-clipping" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Gain staging: how to avoid clipping and keep a healthy mix",
+        "description": "Keep every stage of a mix, from recording level to the master bus, sitting in a healthy range so nothing clips and every plugin works as designed.",
+        "step": [
+          { "@type": "HowToStep", "name": "Set a safe recording level", "text": "When recording, aim for peaks around -12 to -6 dB on the track meter, well clear of 0 dB, so a loud take never clips at the input." },
+          { "@type": "HowToStep", "name": "Leave headroom on every track fader", "text": "Keep individual track faders below unity so the mix bus has room to sum several loud tracks without clipping before you even open a plugin." },
+          { "@type": "HowToStep", "name": "Watch the input to every EQ and compressor", "text": "Feed each plugin a moderate, consistent level, since a compressor's threshold and a gate's threshold are both tuned to expect a certain input range." },
+          { "@type": "HowToStep", "name": "Check the master bus meter as you build the mix", "text": "Keep the master fader out of the red as more tracks come in, pulling group buses and individual faders down rather than pulling the master down last." },
+          { "@type": "HowToStep", "name": "Leave headroom for the limiter at the end", "text": "Stop mixing with peaks a few dB under 0 dB so the final limiter has room to bring the track up to a competitive loudness without simply clipping it there instead." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Gain staging: how to avoid clipping and keep a healthy mix", "item": "https://tracks.jfound.net/blog/gain-staging-avoid-clipping" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Gain staging: how to avoid clipping and keep a healthy mix</h1>
+        <p class="art-meta">By Tongkit Leong · August 31, 2026 · 7 min read</p>
+
+        <p class="lede">Gain staging means keeping the signal level healthy at every stage of your song — the recording, each track fader, every plugin, the group buses, and the master — instead of only worrying about it at the very end. Get it right and you have headroom to work with and plugins that behave the way they were designed to; get it wrong and you get a mix that clips, sounds flat no matter what EQ or compression you throw at it, or both. Here is how to gain-stage a project from input to output in <a href="/studio">Tracks</a>.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What clipping actually is</h2>
+        <p>Every stage of a digital signal chain has a ceiling at 0 dB. Push a signal past that ceiling and the peaks that would have gone higher get chopped flat instead of curving naturally — that's clipping, and it shows up as a harsh, brittle distortion that no amount of EQ or reverb can undo afterward. It can happen in one obvious place, like a hot recording, or it can happen invisibly by accumulation: twelve tracks that each look fine on their own meter can still sum to a clipped master bus, because their peaks add up.</p>
+        <p>Gain staging is the habit of managing level at every one of those stages so you never get there — not just watching the master meter at the end and turning things down when it turns red.</p>
+
+        <h2>Stage 1: recording level</h2>
+        <p>Level problems start at the input. If you're recording a mic or an instrument through an audio interface, aim for peaks landing somewhere around -12 to -6 dB on the track meter, not right up against 0 dB. A loud take with room to spare and a quieter take you can boost afterward is a far better trade than a "hot" take that's one loud note away from clipping the input, which can't be fixed after the fact. See <a href="/blog/record-instrument-browser-daw">how to record guitar or any instrument in your browser DAW</a> for the full input setup, and <a href="/blog/take-comping-best-vocal-take">how to comp the best take from multiple recordings</a> if you're stacking several takes and want the freedom to pick and choose without worrying that one of them clipped.</p>
+
+        <h2>Stage 2: track faders before you touch a plugin</h2>
+        <p>Before you reach for EQ or compression, look at where your track faders sit relative to each other and to unity (0 dB on the fader, not the meter). A common trap: every track gets pushed up individually to "feel loud enough" in isolation, and by the time you've done that to fifteen tracks, the sum is clipping the master bus before you've made a single mixing decision. Leave headroom by keeping faders below unity as a starting point and using the mix bus level, not individual fader height, as your reference for whether a track is loud enough.</p>
+        <p>A simple way to check: solo nothing, play the full arrangement, and watch the master meter in the Tracks mixer as more tracks come in. If it's creeping toward the top before you've added a single effect, that's your first sign to pull faders down now rather than fix it with a limiter later.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Stage 3: feeding plugins a sane level</h2>
+        <p>Compressors, gates, and de-essers are all threshold-based — they're tuned to react to a signal sitting in a particular range, and a level that's too hot or too quiet going in throws that calibration off before you've adjusted a single knob.</p>
+        <ul>
+          <li><strong>Compressor.</strong> A track that's already clipping before the compressor's threshold does anything useful will still sound distorted after compression — the compressor can't undo damage that happened upstream of it. Get the input level sane first, then set threshold and ratio.</li>
+          <li><strong>Gate.</strong> A gate's threshold is set relative to the noise floor and the signal you want to keep. If the track's level shifts wildly because gain staging upstream is inconsistent, the same gate threshold will open too early on some passages and stay shut on others.</li>
+          <li><strong>EQ.</strong> Boosting a frequency band raises the overall level of that track along with it. A handful of generous EQ boosts across several tracks is a common, easy-to-miss source of a master bus that clips even though no single track looked hot on its own.</li>
+        </ul>
+        <p>See <a href="/blog/how-to-mix-a-track-basics">how to mix a track: EQ, compression, and reverb basics</a> for how these tools work together once levels are under control, and <a href="/blog/vocal-chain-order-explained">vocal chain order explained</a> for why gate, EQ, de-esser, and compressor run in that specific order on a vocal.</p>
+
+        <h2>Stage 4: buses and the master</h2>
+        <p>If you're using <a href="/blog/mix-group-buses-sends">group buses</a> to collect drums, vocals, or synths under one fader, the same logic applies one level up: a bus summing six loud drum tracks needs headroom on its own fader before you decide how loud the whole group sits in the mix. Pull the bus down rather than compensating by pulling the master down — the master fader should be one of the last things you touch, not the first tool you reach for when things get loud.</p>
+        <p>Keep an eye on the master meter throughout the whole session, not just at the end. If it's regularly brushing the top with the arrangement still growing, address it now by trimming buses and individual tracks, rather than discovering it during the final export.</p>
+
+        <h2>Stage 5: leaving room for the limiter</h2>
+        <p>Most finished tracks end with a limiter on the master bus to bring the overall loudness up to something competitive with commercial releases. A limiter needs headroom to work with — if your mix is already peaking at 0 dB before the limiter, it has nothing left to push against and will simply clip instead of gluing the mix together. Stop mixing with peaks sitting a few dB under 0 dB, and let the limiter do the final loudness lift on top of that. See <a href="/blog/master-track-for-streaming">how to master a track for streaming: loudness basics</a> for how gain staging carries through into the mastering stage and what loudness target to aim for.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Fixing everything at the master fader.</strong> If the master is clipping, the fix is almost never the master fader itself — it's finding which track, bus, or plugin upstream is pushing too hot and trimming it there.</li>
+          <li><strong>Recording too hot "to be safe."</strong> A recording level with no headroom feels loud and confident until one unexpectedly loud take clips the input, and that clip is baked into the take permanently.</li>
+          <li><strong>Stacking EQ boosts without checking the level after.</strong> Every boost adds level. After shaping a track's tone, glance at the meter again before assuming the fader position you picked earlier still applies.</li>
+          <li><strong>Mixing at maximum volume with no headroom, then being surprised by the limiter.</strong> A mix that's already at 0 dB going into the limiter gives the limiter nothing to do but clip. Back off and give it 3–6 dB of room.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Is gain staging the same thing as mastering?</h3>
+        <p>No. Gain staging is level management throughout recording and mixing so nothing clips and every stage of the chain works as intended. Mastering is the final pass — gluing the mix together and bringing it up to a target loudness with a limiter — and it depends on good gain staging having happened first. See <a href="/blog/master-track-for-streaming">how to master a track for streaming: loudness basics</a>.</p>
+
+        <h3>What level should I actually be watching in Tracks?</h3>
+        <p>Watch the meter on the track or bus you're working on, and keep an eye on the master meter as the arrangement fills in. As a rule of thumb, keep peaks with headroom to spare rather than pushed up against the top — a track sitting a few dB under the ceiling still sounds plenty loud once every element is balanced against the others.</p>
+
+        <h3>Does gain staging matter if I'm just making a quick beat?</h3>
+        <p>It matters less the smaller the project — a four-track beat with no vocals is much less likely to clip by accumulation than a twenty-track arrangement. But the recording-level habit and not maxing every fader "to be loud" are worth keeping even on a quick project, since they cost nothing and save you from redoing a take later.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Tracks shows a level meter on every track, bus, and the master, along with per-track EQ, compression, gating, and a limiter for the final master bus, all in the browser with no plugins and no download. Open the <a href="/studio">studio</a> and watch the meters as you build up a mix. Nothing is uploaded — your project stays on your device.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Mix with headroom to spare, for free</h3>
+            <p>Track meters, EQ, compression, buses, and a master limiter — all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

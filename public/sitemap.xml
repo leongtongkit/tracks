@@ -16,6 +16,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tracks.jfound.net/blog/gain-staging-avoid-clipping</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tracks.jfound.net/blog/tempo-map-change-bpm-mid-song</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

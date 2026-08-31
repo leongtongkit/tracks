@@ -1,5 +1,13 @@
 [
   {
+    "slug": "gain-staging-avoid-clipping",
+    "title": "Gain staging: how to avoid clipping and keep a healthy mix",
+    "dek": "Gain staging keeps every stage of your signal chain, from the first fader to the master bus, sitting in a healthy range so nothing clips and every plugin works the way it was designed to. Here is how to gain-stage a mix from input to output in Tracks.",
+    "date": "2026-08-31",
+    "tags": ["gain staging", "clipping", "headroom", "mixing", "levels"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-chiptune-music-browser",
     "title": "How to make chiptune music in your browser",
     "dek": "Chiptune is built from square and pulse waves, a triangle-wave bassline, fast note-cycling arpeggios standing in for chords, and short, dry noise-channel drums. Here is how to program all four in Tracks.",
