@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Compressor vs. limiter: what's the difference and when to use each | Tracks</title>
+    <meta name="description" content="A compressor evens out a performance over time; a limiter is a compressor set up purely to stop peaks from crossing a ceiling. Here is what separates the two and when to reach for each one in the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/compressor-vs-limiter-explained" />
+    <meta property="og:title" content="Compressor vs. limiter: what's the difference and when to use each" />
+    <meta property="og:description" content="Same tool, different job: a compressor shapes dynamics across a whole performance, a limiter just stops the top from clipping. Here's how to tell them apart and set each one up in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/compressor-vs-limiter-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Compressor vs. limiter: what's the difference and when to use each",
+        "description": "A compressor evens out a performance over time so quiet notes sit closer to loud ones. A limiter is a compressor set up purely to stop peaks from crossing a ceiling. Here's how to tell them apart and when to reach for each in Tracks.",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/compressor-vs-limiter-explained"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Compressor vs. limiter: what's the difference and when to use each", "item": "https://tracks.jfound.net/blog/compressor-vs-limiter-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Compressor vs. limiter: what's the difference and when to use each</h1>
+        <p class="art-meta">By Tongkit Leong · September 1, 2026 · 8 min read</p>
+
+        <p class="lede">A compressor turns down loud moments and brings quiet ones closer to them, shaping how a whole performance moves over time. A limiter is a compressor pushed to an extreme setting — a fast, high-ratio ceiling that exists only to stop peaks from crossing a line. Same underlying tool, opposite jobs: one is for dynamics, the other is for safety.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>They're the same circuit, doing two different jobs</h2>
+        <p>A compressor and a limiter both work by turning a signal down once it crosses a threshold. There's no hard technical line between them — a limiter is really just a compressor dialed to a very high ratio, a near-instant attack, and a threshold set close to the ceiling. The reason producers talk about them as separate tools is that the settings you'd use for each produce completely different results, and mixing up the roles is one of the most common reasons a home mix ends up sounding flat or brittle.</p>
+        <p>In Tracks, you'll meet both. Every track's mixer strip has a compressor with threshold, ratio, attack, release, and makeup gain you can set by ear. The master bus has a limiter at the very end of the signal chain that you don't control directly — it's a fixed safety net that catches anything still hot enough to clip on the way out. Understanding what each one is for tells you where to spend your effort.</p>
+
+        <h2>What a compressor does</h2>
+        <p>A compressor's job is to make a performance more consistent. A vocal take that whispers a verse and belts a chorus, a bassline where some notes ring out louder than others, a drum loop where the snare hits inconsistently — a compressor narrows that gap so the track sits at a more even, controllable level without you riding the fader by hand.</p>
+        <p>Open the compressor on any track in the Tracks mixer and you'll see five controls:</p>
+        <ul>
+          <li><strong>Threshold</strong> — the level a signal has to cross before the compressor starts working. Set it just below where the loudest parts of the take peak.</li>
+          <li><strong>Ratio</strong> — how hard it pulls the signal down past that threshold. A 2:1 ratio is gentle; 8:1 and up starts to sound noticeably squeezed.</li>
+          <li><strong>Attack</strong> — how quickly it reacts once the signal crosses the threshold. A slower attack (10–30 ms) lets the initial transient — the snap of a snare, the pluck of a bass note — through before the compressor clamps down, keeping the sound punchy.</li>
+          <li><strong>Release</strong> — how quickly it lets go afterward. Too fast and it pumps audibly with the rhythm; too slow and it stays clamped into the next note.</li>
+          <li><strong>Makeup gain</strong> — turns the whole signal back up after compression, since pulling down the peaks also lowers the overall level.</li>
+        </ul>
+        <p>A typical starting point for smoothing out an uneven vocal or bass take: a 3:1 to 4:1 ratio, attack around 10–20 ms, release around 150–250 ms, and enough makeup gain to bring the level back to where it started. Aim for 3–6 dB of gain reduction on the loudest phrases — watch the reduction meter while the track plays and pull the threshold down until you see that much movement.</p>
+
+        <h3>Compression is a musical decision, not a fix-it button</h3>
+        <p>It's tempting to slap a compressor on every track "just in case," but compression changes the character of a sound — it can add punch and glue, or it can squash the life out of a performance if you overdo it. Use it where a track actually needs evening out, not as a default on everything. If a take needs more than 8–10 dB of gain reduction to sound consistent, the take itself is the problem, not the compressor settings — see <a href="/blog/take-comping-best-vocal-take">how to comp the best take from multiple recordings</a> for a better fix.</p>
+
+        <h2>What a limiter does</h2>
+        <p>A limiter has one job: make sure nothing crosses a ceiling. Where a compressor is tuned to shape the character of a sound, a limiter is tuned to be as transparent as possible while still catching every peak — a near-instant attack (a few milliseconds or less) and a very high ratio, often 10:1 or higher, so that once a signal hits the threshold it simply cannot go louder.</p>
+        <p>The master bus in Tracks has exactly this: a limiter sitting at the end of the signal chain, right before the final output, with a threshold a few dB below full scale and a fast attack. It's not a control you dial in yourself — it's a fixed safety net. Its purpose is to catch the odd loud moment that slips past your mix, not to do the work of shaping your track's overall loudness.</p>
+        <p>That distinction matters because of how the limiter behaves when it's overworked. A compressor set too aggressively sounds squeezed but still musical. A limiter pushed too hard — meaning your mix is hitting it constantly instead of occasionally — sounds different: transients disappear, the track loses punch, and everything flattens into a wall of similar-sounding loudness. That's the "brickwalled" sound you've probably heard on overly loud masters.</p>
+
+        <h2>How to tell which one you need</h2>
+        <table>
+          <thead><tr><th></th><th>Compressor</th><th>Limiter</th></tr></thead>
+          <tbody>
+            <tr><td>Where in Tracks</td><td>Every track's mixer strip</td><td>Fixed, on the master bus</td></tr>
+            <tr><td>Typical ratio</td><td>2:1 to 6:1</td><td>10:1 or higher</td></tr>
+            <tr><td>Typical attack</td><td>5–30 ms (lets transients through)</td><td>Near-instant</td></tr>
+            <tr><td>Goal</td><td>Even out a performance, add glue or punch</td><td>Stop peaks from clipping, full stop</td></tr>
+            <tr><td>You adjust it by ear for</td><td>How the track feels and sits in the mix</td><td>Nothing — it's a safety net, not a tone tool</td></tr>
+          </tbody>
+        </table>
+        <p>A simple rule: if you're trying to make a performance sound more even, controlled, or glued together, that's compression, and you do it on the individual track. If you're trying to stop a signal from clipping at the very end of the chain, that's limiting, and in Tracks that's already handled for you on the master bus.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Where each one fits in a real workflow</h2>
+        <h3>On individual tracks: reach for the compressor</h3>
+        <p>Use each track's compressor to solve a specific problem you can hear: a vocal that swings too much between quiet and loud lines, a bassline with inconsistent note volume, a drum hit that occasionally spikes above the rest of the pattern. Set it by watching the gain-reduction meter and listening for the moment the track stops fighting itself, then stop — see <a href="/blog/vocal-chain-order-explained">vocal chain order explained</a> for where compression fits alongside EQ, gating, and de-essing on a vocal track.</p>
+        <h3>On the master bus: let the limiter do less, not more</h3>
+        <p>Because the master limiter in Tracks is fixed rather than adjustable, the way you control how much it does is by controlling how hot your mix hits it. Leave headroom in your mix — pull individual track levels down so the loudest section of the song peaks a few dB below the top of the meter — and the limiter will barely have to work, which is exactly what you want. If you find the master consistently sounds squashed, the fix isn't a setting on the limiter; it's turning your tracks down before they reach it. See <a href="/blog/master-track-for-streaming">how to master a track for streaming</a> for the full gain-staging and loudness workflow.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Compressing to fix clipping.</strong> A compressor with a slow-ish attack still lets the first few milliseconds of a transient through uncompressed — it can reduce clipping, but it can't guarantee zero. If a track is clipping, lower its level first; use compression to shape dynamics, not as your only defense against distortion.</li>
+          <li><strong>Chasing loudness by driving the master limiter harder.</strong> Since the Tracks limiter is a safety net, not an adjustable loudness maximizer, the only way to make the master "hit" the limiter more is to send it a hotter mix — and that's the brickwalled, lifeless sound you want to avoid. Turn tracks down instead.</li>
+          <li><strong>Using one aggressive ratio for everything.</strong> A drum bus, a vocal, and a bassline all respond differently to compression. Set the ratio and attack by listening to that specific track, not from a preset number you read somewhere.</li>
+          <li><strong>Skipping makeup gain.</strong> Compression by definition turns the loud parts down, so without makeup gain a compressed track just sounds quieter, not more even. Bring the level back up afterward so you can judge the result fairly.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Is a limiter just a compressor with different numbers?</h3>
+        <p>Functionally, yes — a limiter is a compressor with a very high ratio, a near-instant attack, and a threshold near the top of the meter. The reason they're treated as separate tools is that those settings produce a specific result — a hard ceiling with minimal audible character — that's useful for a different purpose than shaping a performance's dynamics.</p>
+
+        <h3>Can I adjust the limiter on the Tracks master bus?</h3>
+        <p>No — it's a fixed safety net at the end of the signal chain, not a user-adjustable loudness maximizer. If you want to shape how loud or dense your overall mix sounds, do that with EQ and compression on individual tracks or a bus track, and control how hard the mix hits the limiter by managing your headroom. See <a href="/blog/mix-group-buses-sends">mix groups, buses, and sends</a> for how to route several tracks through one shared compressor.</p>
+
+        <h3>Should I compress every track?</h3>
+        <p>No. Compress tracks that actually have an unevenness problem — an inconsistent vocal take, a bassline with erratic note levels, drums that spike unpredictably. A well-recorded, evenly performed track often doesn't need compression at all, and adding it anyway just removes dynamics you might have wanted to keep.</p>
+
+        <h3>Why does my mix sound squashed even though I'm not driving the limiter hard?</h3>
+        <p>Check your individual track compressors first — a ratio and threshold set too aggressively on several tracks can flatten a mix just as much as an overworked limiter. Back off any compressor that's showing more than 6–8 dB of gain reduction and see if the mix opens back up.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Shape your dynamics for free</h3>
+            <p>A compressor on every track, a limiter watching your master — all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

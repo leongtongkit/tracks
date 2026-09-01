@@ -1,5 +1,13 @@
 [
   {
+    "slug": "compressor-vs-limiter-explained",
+    "title": "Compressor vs. limiter: what's the difference and when to use each",
+    "dek": "A compressor evens out a performance over time so quiet notes sit closer to loud ones, while a limiter is a compressor set up purely to stop peaks from crossing a ceiling. Here is what separates the two and when to reach for each one in Tracks.",
+    "date": "2026-09-01",
+    "tags": ["compressor", "limiter", "dynamics", "mixing", "mastering"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "gain-staging-avoid-clipping",
     "title": "Gain staging: how to avoid clipping and keep a healthy mix",
     "dek": "Gain staging keeps every stage of your signal chain, from the first fader to the master bus, sitting in a healthy range so nothing clips and every plugin works the way it was designed to. Here is how to gain-stage a mix from input to output in Tracks.",
