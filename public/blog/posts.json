@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-ambient-music-browser",
+    "title": "How to make ambient music in your browser",
+    "dek": "Ambient music trades a beat for a slow drone bed, a reverb-drenched pad that never quite resolves, sparse melodic fragments, and long automation swells. Here is how to layer all four from scratch in Tracks.",
+    "date": "2026-09-02",
+    "tags": ["ambient", "genre-guide", "synthesis", "reverb", "automation"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "compressor-vs-limiter-explained",
     "title": "Compressor vs. limiter: what's the difference and when to use each",
     "dek": "A compressor evens out a performance over time so quiet notes sit closer to loud ones, while a limiter is a compressor set up purely to stop peaks from crossing a ceiling. Here is what separates the two and when to reach for each one in Tracks.",

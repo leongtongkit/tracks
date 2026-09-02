@@ -16,6 +16,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tracks.jfound.net/blog/make-ambient-music-browser</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tracks.jfound.net/blog/compressor-vs-limiter-explained</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
