@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-reggae-music-browser",
+    "title": "How to make reggae music in your browser",
+    "dek": "Reggae runs on the one-drop drum pattern, an off-beat skank guitar or organ, and a deep, melodic bassline that carries the song. Here is how to program all three in Tracks with no software install.",
+    "date": "2026-09-03",
+    "tags": ["reggae", "one-drop", "skank", "bassline", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-ambient-music-browser",
     "title": "How to make ambient music in your browser",
     "dek": "Ambient music trades a beat for a slow drone bed, a reverb-drenched pad that never quite resolves, sparse melodic fragments, and long automation swells. Here is how to layer all four from scratch in Tracks.",
