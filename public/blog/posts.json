@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-disco-music-browser",
+    "title": "How to make disco music in your browser",
+    "dek": "Disco runs on a four-on-the-floor kick, a syncopated octave bassline, lush string stabs, and a chicken-scratch rhythm guitar sitting around 110 to 125 BPM. Here is how to program all four in Tracks with no software install.",
+    "date": "2026-09-05",
+    "tags": ["disco", "four-on-the-floor", "strings", "bassline", "genre"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-music-on-ipad-browser",
     "title": "Make music on an iPad without downloading an app",
     "dek": "Tracks runs as a full browser studio on iPad and Android tablets, no App Store and no install, with the same piano roll, synths, drum machines, and mixer as the desktop version. Here is how to set it up and what to expect on a tablet.",
