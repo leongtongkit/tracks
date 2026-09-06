@@ -1,5 +1,13 @@
 [
   {
+    "slug": "eq-cheat-sheet-by-instrument",
+    "title": "EQ cheat sheet: what to cut and boost by instrument",
+    "dek": "Every instrument in a mix has a frequency range where it needs room to breathe and a range where it mostly just gets in another instrument's way. Here is a practical EQ cheat sheet for kick, snare, bass, guitar, vocals, and synths, built for the Tracks browser studio.",
+    "date": "2026-09-06",
+    "tags": ["eq", "mixing", "frequency", "instruments", "cheat sheet"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "make-disco-music-browser",
     "title": "How to make disco music in your browser",
     "dek": "Disco runs on a four-on-the-floor kick, a syncopated octave bassline, lush string stabs, and a chicken-scratch rhythm guitar sitting around 110 to 125 BPM. Here is how to program all four in Tracks with no software install.",
