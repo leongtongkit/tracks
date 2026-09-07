@@ -1,5 +1,13 @@
 [
   {
+    "slug": "future-bass-browser",
+    "title": "How to make future bass in your browser",
+    "dek": "Future bass leans on a huge, detuned supersaw chord stack, a sidechained pump that ducks the pads under every kick, and a pitch-bent vocal chop riding on top. Here is how to program all three in Tracks with no plugins to install.",
+    "date": "2026-09-07",
+    "tags": ["future bass", "supersaw", "vocal chops", "sidechain", "genre"],
+    "readingTime": "9 min"
+  },
+  {
     "slug": "eq-cheat-sheet-by-instrument",
     "title": "EQ cheat sheet: what to cut and boost by instrument",
     "dek": "Every instrument in a mix has a frequency range where it needs room to breathe and a range where it mostly just gets in another instrument's way. Here is a practical EQ cheat sheet for kick, snare, bass, guitar, vocals, and synths, built for the Tracks browser studio.",
