@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-rnb-browser",
+    "title": "How to make R&B music in your browser",
+    "dek": "R&B lives on tight vocal harmony, a laid-back behind-the-beat pocket, and warm, extended chords under the melody. Here is how to build that sound in Tracks with no plugins to install.",
+    "date": "2026-09-08",
+    "tags": ["rnb", "vocal harmony", "chords", "genre", "groove"],
+    "readingTime": "9 min"
+  },
+  {
     "slug": "future-bass-browser",
     "title": "How to make future bass in your browser",
     "dek": "Future bass leans on a huge, detuned supersaw chord stack, a sidechained pump that ducks the pads under every kick, and a pitch-bent vocal chop riding on top. Here is how to program all three in Tracks with no plugins to install.",
