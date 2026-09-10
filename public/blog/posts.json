@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-kpop-browser",
+    "title": "How to make K-pop music in your browser",
+    "dek": "K-pop songs pack multiple sections, a hyper-polished vocal chain, and a genre-blending beat into three minutes flat. Here is how to build that structure in Tracks with no plugins to install.",
+    "date": "2026-09-10",
+    "tags": ["kpop", "genre", "vocal chain", "arrangement", "production"],
+    "readingTime": "10 min"
+  },
+  {
     "slug": "make-pop-music-browser",
     "title": "How to make a pop song in your browser",
     "dek": "Pop songs run on a simple four-chord loop, a groove that never distracts from the vocal, a bassline locked to the kick, and a hook built to repeat. Here is how to build that structure in Tracks with no plugins to install.",
