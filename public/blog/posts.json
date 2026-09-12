@@ -1,5 +1,13 @@
 [
   {
+    "slug": "lfo-modulation-explained",
+    "title": "What is an LFO? Adding movement to a static synth sound",
+    "dek": "An LFO is an oscillator too slow to hear on its own that wiggles another control for you, automatically and in rhythm. Here is how to use one for vibrato, filter wobble, and tremolo in the Tracks browser synth.",
+    "date": "2026-09-12",
+    "tags": ["synthesis", "sound design", "modulation", "production"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "panning-stereo-width-explained",
     "title": "Panning and stereo width explained: how to make a mix feel wide",
     "dek": "Panning moves a sound left or right in the stereo field, and stereo width is how spread out the whole mix feels between the speakers. Here is how to use both in Tracks so a mix feels wide without falling apart in mono.",

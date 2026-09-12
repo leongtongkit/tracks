@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What is an LFO? Adding movement to a static synth sound | Tracks</title>
+    <meta name="description" content="An LFO is an oscillator too slow to hear on its own that wiggles another control for you, automatically and in rhythm. Here is how to use one for vibrato, filter wobble, and tremolo in the Tracks browser synth." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/lfo-modulation-explained" />
+    <meta property="og:title" content="What is an LFO? Adding movement to a static synth sound" />
+    <meta property="og:description" content="An LFO wiggles a knob for you, automatically and in rhythm. Here is how to use one for vibrato, filter wobble, and tremolo in a free browser synth." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/lfo-modulation-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "What is an LFO? Adding movement to a static synth sound",
+        "datePublished": "2026-09-12",
+        "dateModified": "2026-09-12",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "JFound" },
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/lfo-modulation-explained",
+        "image": "https://tracks.jfound.net/og.png",
+        "description": "An LFO is an oscillator too slow to hear on its own that wiggles another control for you, automatically and in rhythm. How to use one for vibrato, filter wobble, and tremolo in a free browser synth."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "What is an LFO?", "item": "https://tracks.jfound.net/blog/lfo-modulation-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>What is an LFO? Adding movement to a static synth sound</h1>
+        <p class="art-meta">By Tongkit Leong · September 12, 2026 · 8 min read</p>
+
+        <p class="lede">An LFO (low-frequency oscillator) is a wave that moves too slowly to hear as a pitch, so instead of making a sound of its own it's routed to wiggle another control automatically and in rhythm — pitch for vibrato, a filter for a wobble or wah, or volume for tremolo. Tracks' synth has two built-in LFOs you can route this way on any patch, with no plugins to install.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why a static sound gets boring fast</h2>
+        <p>A held synth note with nothing moving is a flat line: the same pitch, the same tone, the same volume, for as long as the key is down. Real instruments don't work that way — a sustained violin note wavers slightly in pitch, a Rhodes patch through a tremolo amp pulses in volume, a filter sweep breathes as a synth pad holds. An LFO is how a synth fakes that liveliness without you having to draw the movement by hand for every single note. You set it up once on the patch, and every note that plays gets the same automatic wiggle for free.</p>
+
+        <h2>What "low-frequency" actually means here</h2>
+        <p>A regular oscillator in a synth runs at audio rate — tens or hundreds of hertz and up — fast enough that your ear hears it as a pitch. An LFO runs far slower, typically well under 20 Hz, which is too slow to perceive as a tone. Instead of connecting straight to the speakers, its output is wired to a parameter: a pitch control, a filter cutoff, a volume stage. The LFO itself is silent. What you hear is that other parameter rising and falling in time with the LFO's cycle.</p>
+
+        <h3>Rate: how fast the wiggle repeats</h3>
+        <p>In the Tracks synth, each LFO has a Rate knob running from a slow 0.05 Hz — one cycle roughly every 20 seconds, useful for a pad that drifts almost imperceptibly — up to 30 Hz, fast enough to blur into a buzz or a rough tremolo effect. Most musical uses sit well below that: somewhere around 4-7 Hz is a natural-sounding vibrato speed, and 1-3 Hz is a comfortable range for a visible filter wobble or a tremolo pulse you can tap your foot to.</p>
+
+        <h3>Wave shape: what the wiggle looks like</h3>
+        <p>The LFO's own waveform decides the character of the movement, exactly like a regular oscillator's waveform decides the character of a tone. Tracks gives each LFO four shapes to pick from:</p>
+        <ul>
+          <li><strong>Sine</strong> — a smooth, even rise and fall. The natural choice for vibrato and for a gentle, musical filter sweep.</li>
+          <li><strong>Triangle</strong> — similar to sine but slightly more linear on the way up and down. A close substitute for sine with a marginally sharper feel.</li>
+          <li><strong>Square</strong> — snaps between two levels with no in-between. This is what turns a tremolo into a rhythmic on/off chop instead of a smooth pulse, and it's the classic trick behind a stuttering gate effect.</li>
+          <li><strong>Sawtooth</strong> — ramps one direction and then snaps back. Useful for a filter effect that builds tension and then resets, like a repeating riser.</li>
+        </ul>
+
+        <h2>The three things an LFO can wiggle</h2>
+        <p>An LFO on its own does nothing audible — it needs a target. Tracks routes each of its two LFOs to three destinations at once, each with its own depth knob, so a single LFO can do more than one job simultaneously if you want it to.</p>
+
+        <h3>Pitch: vibrato</h3>
+        <p>Routing an LFO to pitch modulates the oscillator's tuning up and down in cents (hundredths of a semitone), which at a low depth and a sine wave around 5-6 Hz is textbook vibrato — the same wavering pitch a singer or string player adds by ear. Push the depth further and it stops sounding like an expressive technique and starts sounding like a deliberately unstable, warbling pitch, which has its own uses on a lead that needs to sound unsettled or lo-fi.</p>
+
+        <h3>Filter: auto-wah and wobble</h3>
+        <p>Routing an LFO to the filter cutoff moves the brightness of the sound up and down automatically, which is what gives you a hands-free wah effect or, pushed harder and synced to a fast rate, the wobble bass sound associated with dubstep and its relatives. A sine or triangle wave gives a smooth breathing motion; a square wave chops the brightness between two fixed points instead, which reads as more rhythmic and mechanical.</p>
+
+        <h3>Amp: tremolo</h3>
+        <p>Routing an LFO to amp modulates the volume instead of the tone, which is tremolo — the pulsing volume effect associated with vintage guitar amps and Rhodes-style keyboard patches. A sine wave at a slow rate gives a gentle, almost breathing pulse; a square wave at a faster rate turns it into the rhythmic on/off chop used on gated pads and choppy synth stabs.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Two LFOs means you can stack effects</h2>
+        <p>Because Tracks gives each patch two independent LFOs rather than one, you're not limited to a single movement per sound. A common combination is a slow LFO (sine, low rate, low depth) routed to pitch for a subtle vibrato that keeps a sustained note feeling alive, running alongside a second, faster LFO routed to the filter for a more obvious rhythmic wobble. Because the two run independently at their own rates, the result feels more organic than a single LFO doing everything at once — real instruments rarely wobble in just one dimension either.</p>
+
+        <table>
+          <thead>
+            <tr><th>Goal</th><th>Target</th><th>Wave</th><th>Rate</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Natural vibrato on a sustained lead</td><td>Pitch</td><td>Sine</td><td>~5-6 Hz, low depth</td></tr>
+            <tr><td>Slow, breathing pad movement</td><td>Filter</td><td>Sine/Triangle</td><td>~0.2-0.5 Hz</td></tr>
+            <tr><td>Wobble bass</td><td>Filter</td><td>Sine or Square</td><td>~1-4 Hz, high depth</td></tr>
+            <tr><td>Classic amp tremolo</td><td>Amp</td><td>Sine</td><td>~4-6 Hz</td></tr>
+            <tr><td>Gated, chopped stab</td><td>Amp</td><td>Square</td><td>Synced to your tempo by ear</td></tr>
+            <tr><td>Unstable, detuned lo-fi lead</td><td>Pitch</td><td>Sine or Triangle</td><td>Slow, moderate depth</td></tr>
+          </tbody>
+        </table>
+
+        <h2>A quick routine for programming movement into a patch</h2>
+        <ol>
+          <li><strong>Get the static tone right first.</strong> Set the oscillator, filter, and envelope on the <a href="/blog/synth-sound-design-subtractive-fm">subtractive or FM synth</a> so the sound is correct with no LFO at all — movement should enhance a good sound, not rescue a bad one.</li>
+          <li><strong>Pick one target to start.</strong> Decide whether the sound needs vibrato, a filter wobble, or a volume pulse, and route only one LFO to that target before adding a second.</li>
+          <li><strong>Set the rate by ear against the tempo.</strong> A filter wobble that fights the groove of the track reads as noise, not movement — nudge the rate until it locks into a feel that matches the song, even without hard tempo sync.</li>
+          <li><strong>Start the depth at zero and bring it up slowly.</strong> The gap between "subtle and alive" and "obviously wobbling" on any of these three targets is small — small moves at the depth knob matter more than they look like they should.</li>
+          <li><strong>Add the second LFO only if the first isn't enough.</strong> A second, independent LFO on a different target is often what separates a synth patch that sounds like a plugin preset from one that sounds specifically shaped for the part.</li>
+        </ol>
+
+        <h2>Frequently asked questions</h2>
+        <h3>What's the difference between an LFO and a regular envelope?</h3>
+        <p>An envelope shapes a sound once per note, from the moment it starts to the moment it fades, and then stops. An LFO cycles continuously and repeatedly for as long as a note is held, which is why an envelope suits a one-time contour like a pluck's attack, while an LFO suits an ongoing, repeating effect like vibrato or tremolo.</p>
+        <h3>Can I make the LFO speed match my song's tempo?</h3>
+        <p>Tracks' LFO rate is set directly in Hz rather than in tempo-synced note divisions, so you dial it in by ear against the track rather than picking a beat division from a menu. Playing the part in context and nudging the rate knob while it loops is the reliable way to land on a speed that feels locked to the groove.</p>
+        <h3>Why does my LFO seem to do nothing?</h3>
+        <p>The most common cause is a depth knob left at zero on the target you meant to modulate — the LFO itself is always running once a patch loads, but with no depth on pitch, filter, or amp there's nothing to hear. Check that the target's knob (Pitch, Filter, or Amp on the LFO panel) is turned up, not just the Rate.</p>
+        <h3>Should I use LFO 1 or LFO 2?</h3>
+        <p>They're identical and independent, so it doesn't matter which one you reach for first. The only reason to use both is to run two different modulations — say, pitch vibrato from one and filter wobble from the other — at their own separate rates on the same patch.</p>
+        <h3>Does this run entirely in the browser?</h3>
+        <p>Yes. Both LFOs are part of the same Web Audio engine as the rest of the synth, with no plugins to install and no account. Your patches and projects stay on your device and are never uploaded anywhere.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Put a wiggle on your patch</h3>
+            <p>Two built-in LFOs on every synth patch — free, in your browser, nothing leaves your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
