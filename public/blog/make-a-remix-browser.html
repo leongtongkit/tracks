@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to make a remix in your browser | Tracks</title>
+    <meta name="description" content="A remix starts from someone else's finished track instead of a blank project. Here is how to import a song, split it into stems, and rebuild it into your own version, free, in the Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/make-a-remix-browser" />
+    <meta property="og:title" content="How to make a remix in your browser" />
+    <meta property="og:description" content="A remix starts from someone else's finished track instead of a blank project. Here is how to import a song, split it into stems, and rebuild it into your own version." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/make-a-remix-browser" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to make a remix in your browser",
+        "description": "Import a finished track, split it into stems, keep the elements you want, match tempo, and build a new arrangement around them — entirely in the Tracks browser studio.",
+        "step": [
+          { "@type": "HowToStep", "name": "Import the original track", "text": "Drag the MP3 or WAV of the song you're remixing onto the timeline, or use the Import button. It loads as a waveform clip on a new audio track." },
+          { "@type": "HowToStep", "name": "Split it into stems", "text": "Select the clip, choose Extract Stems, and run the separation. You get four isolated tracks: vocals, drums, bass, and other." },
+          { "@type": "HowToStep", "name": "Keep what you want, mute the rest", "text": "Solo each stem, decide which ones belong in your remix, and mute or delete the ones you're replacing." },
+          { "@type": "HowToStep", "name": "Match tempo and key", "text": "Set the stem's original BPM and use Warp to repitch or stretch it to your project's tempo, so it locks in with everything you add around it." },
+          { "@type": "HowToStep", "name": "Build a new arrangement", "text": "Add your own drum pattern, bassline, or synth parts around the kept stem using the piano roll, drum machine, and sampler, and rearrange the song structure to feel like your version rather than a copy." },
+          { "@type": "HowToStep", "name": "Mix and export", "text": "EQ and level the new elements against the original stem, then export the finished remix as WAV or MP3." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to make a remix in your browser", "item": "https://tracks.jfound.net/blog/make-a-remix-browser" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to make a remix in your browser</h1>
+        <p class="art-meta">By Tongkit Leong · September 13, 2026 · 9 min read</p>
+
+        <p class="lede">A remix starts from a finished track instead of a blank project: you import the song, split it into stems, keep the piece you want — usually the vocal — and rebuild everything else around it. In <a href="/studio">Tracks</a> you can do the whole thing without leaving the browser: import, Extract Stems, Warp to your tempo, and arrange a new track around what you kept.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What a remix actually is</h2>
+        <p>A remix takes an existing recording apart and reassembles some of it inside a new production. That's different from a cover, where you re-perform someone else's song with your own instruments, and different from a mashup, which layers two or more existing tracks together mostly untouched. A remix usually keeps one real piece of the original — most often the lead vocal — and replaces everything around it: new drums, new bass, a new chord progression, sometimes a completely different genre or tempo.</p>
+        <p>The three moves that make up almost every remix are the same regardless of genre: pull an element out of the original, make it fit a new tempo and key, and build new material around it. Tracks has a dedicated tool for each step.</p>
+
+        <h2>Before you start: rights matter</h2>
+        <p>Being able to isolate a vocal or drum loop from a commercial release doesn't give you permission to release the result. If you're remixing for practice, a portfolio, or a private edit, that's low-risk. If you plan to publish or distribute a remix built on someone else's copyrighted recording, you need the rights holder's permission or a license — the tool doing the separation has no bearing on that. The safest way to publish freely is to remix your own tracks, royalty-free acapellas, or stems the original artist has released for remixing.</p>
+
+        <h2>How to make a remix in Tracks</h2>
+        <p>Open the <a href="/studio">Tracks studio</a> — no download or account needed — and work through these steps.</p>
+
+        <h3>Step 1: Import the track you're remixing</h3>
+        <p>Drag the MP3 or WAV file onto the timeline, or use the Import button. It appears as a waveform clip on a new audio track. Play it back to confirm the file is the version you want to work from.</p>
+
+        <h3>Step 2: Split it into stems</h3>
+        <p>Select the clip and choose Extract Stems. Tracks separates it into four tracks — vocals, drums, bass, and other — processing locally in your browser with the Web Audio API. A typical three-minute song takes one to three minutes to separate, depending on your device. See <a href="/blog/split-song-into-stems">How to split a song into stems</a> for the full walkthrough of this step, including how to clean up bleed afterward.</p>
+
+        <h3>Step 3: Decide what to keep</h3>
+        <p>Solo each stem and listen. Most remixes keep the vocal and discard the rest, but there's no rule — you might keep the vocal and the bassline and replace only the drums, or flip an instrumental hook from the "other" stem and drop the vocal entirely. Mute or delete whatever you're not carrying into the new version, and rename the tracks you're keeping so the project stays readable as it grows.</p>
+
+        <h3>Step 4: Match tempo and key</h3>
+        <p>The original track was almost certainly not made at the tempo you want to remix it at. Set the kept stem's original BPM in the clip's audio editor, then use Warp to either repitch it (vinyl-style, pitch follows speed — cleanest for small tempo changes) or stretch it (tempo changes, pitch stays put — better for a vocal you're slowing down or speeding up a lot). <a href="/blog/time-stretch-repitch-browser">Time-stretch and repitch explained</a> covers when to use each mode and how far you can push it before artifacts show up.</p>
+
+        <h3>Step 5: Build a new arrangement around it</h3>
+        <p>This is where the remix becomes yours. Program a new drum pattern in the 808 or 909 drum machine, sketch a bassline and chords in the piano roll using the subtractive or FM synth, and rearrange the song structure — a remix rarely follows the original's verse-chorus layout exactly. Chop the kept stem into smaller pieces if you want to rearrange the vocal phrasing itself; drag the clip onto the timeline, split it at the points you want, and move the pieces to new positions.</p>
+
+        <h3>Step 6: Mix and export</h3>
+        <p>Balance levels between the original stem and your new elements — a kept vocal often needs EQ to sit against a completely different backing track than the one it was mixed for. A high-pass filter around 100–150 Hz on the vocal, some compression to even out the performance, and a touch of reverb to tie it to the new instrumental usually gets it close. When it's balanced, export the finished remix as WAV or MP3. See <a href="/blog/export-song-mp3-wav">How to export your song to MP3 or WAV</a> for bounce settings.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>A few remix approaches to try</h2>
+
+        <h3>Vocal-over-new-beat</h3>
+        <p>The classic approach: keep only the vocal stem, discard everything else, and build a full new instrumental from scratch. This gives you the most creative freedom and works in any genre you can produce in Tracks — a house remix of a rock vocal, a lo-fi flip of a pop hook, a drum and bass edit of an acapella.</p>
+
+        <h3>Drum flip</h3>
+        <p>Keep the drum stem instead of the vocal. Chop it into one- or two-bar loops, rearrange them, layer your own 808 or kick on top, and build a beat that uses the original groove as raw material rather than a backing track. See <a href="/blog/sample-chopping-flip">Sample chopping and flipping</a> for chopping technique.</p>
+
+        <h3>Tempo-flip remix</h3>
+        <p>Take the whole track, drop the tempo by a large amount (a fast pop song slowed to half-time, for example), and stretch every stem to match. This alone can turn an upbeat original into something moodier without changing a single note — pair it with a simpler drum pattern and more space in the arrangement to sell the mood shift.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Do I need the original project file to remix a song?</h3>
+        <p>No. Stem extraction is built for exactly this case — you only have the finished mix, not the multi-track session. It won't be as clean as working from real stems, but it's usually clean enough to build a remix around.</p>
+
+        <h3>Will my stem sound perfectly isolated?</h3>
+        <p>Not perfectly — some bleed between stems is normal, especially on dense mixes. A little EQ on the kept stem (cutting frequencies that belong to instruments you removed) tightens it up. See the stem-splitting guide above for specific EQ moves.</p>
+
+        <h3>Can I remix a track that's a different key from what I want?</h3>
+        <p>Yes, within reason. Repitching a vocal up or down a few semitones is usually unnoticeable; pushing it further starts to change the character of the voice. If the key change is large, consider whether stretch (which preserves pitch) combined with your own new chords built around the vocal's existing key is a better fit than forcing the vocal itself to shift.</p>
+
+        <h3>Does any of this get uploaded anywhere?</h3>
+        <p>No. Import, stem extraction, warping, and every effect in Tracks run locally in your browser using the Web Audio API. Nothing is uploaded, there's no account, and your project stays on your device.</p>
+
+        <h3>What file format should I export my remix as?</h3>
+        <p>WAV if you want the highest quality or plan to master it further elsewhere; MP3 if you're sharing it quickly and file size matters. Both options are available from the export menu.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Build a remix for free in your browser</h3>
+            <p>Import a track, split it into stems, and rebuild the rest around it — no upload, no account, nothing leaving your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

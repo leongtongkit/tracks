@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-a-remix-browser",
+    "title": "How to make a remix in your browser",
+    "dek": "A remix starts from someone else's finished track, not a blank project. Here is how to import a song, split it into stems, and rebuild it into your own version in Tracks.",
+    "date": "2026-09-13",
+    "tags": ["remix", "stem extraction", "sampling", "arrangement", "production"],
+    "readingTime": "9 min"
+  },
+  {
     "slug": "lfo-modulation-explained",
     "title": "What is an LFO? Adding movement to a static synth sound",
     "dek": "An LFO is an oscillator too slow to hear on its own that wiggles another control for you, automatically and in rhythm. Here is how to use one for vibrato, filter wobble, and tremolo in the Tracks browser synth.",
