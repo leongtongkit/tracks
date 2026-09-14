@@ -1,5 +1,13 @@
 [
   {
+    "slug": "buildup-and-drop-explained",
+    "title": "How to build a buildup and drop that actually hits",
+    "dek": "A drop only lands if the buildup before it earned it. Here is how to program risers, snare rolls, filter sweeps, and a clean drop in Tracks.",
+    "date": "2026-09-14",
+    "tags": ["buildup", "drop", "riser", "tension", "arrangement", "sound design"],
+    "readingTime": "9 min"
+  },
+  {
     "slug": "make-a-remix-browser",
     "title": "How to make a remix in your browser",
     "dek": "A remix starts from someone else's finished track, not a blank project. Here is how to import a song, split it into stems, and rebuild it into your own version in Tracks.",
