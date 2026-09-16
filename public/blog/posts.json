@@ -1,5 +1,13 @@
 [
   {
+    "slug": "keyboard-shortcuts-browser-daw",
+    "title": "Tracks keyboard shortcuts: every hotkey, and how to play notes with your keyboard",
+    "dek": "Tracks has a full keyboard-shortcut sheet and lets your QWERTY keyboard work as a two-octave piano, with no MIDI hardware required. Here is every shortcut and how the keyboard-as-instrument mode works.",
+    "date": "2026-09-16",
+    "tags": ["keyboard shortcuts", "qwerty piano", "hotkeys", "workflow", "browser DAW"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "buildup-and-drop-explained",
     "title": "How to build a buildup and drop that actually hits",
     "dek": "A drop only lands if the buildup before it earned it. Here is how to program risers, snare rolls, filter sweeps, and a clean drop in Tracks.",
