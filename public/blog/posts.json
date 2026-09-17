@@ -1,5 +1,13 @@
 [
   {
+    "slug": "music-ownership-copyright-explained",
+    "title": "Do you own the music you make in Tracks? Copyright explained",
+    "dek": "Tracks never uploads or claims your project, and using free browser software doesn't change who owns your song. Here is who owns the music you make in a browser DAW, how copyright works the moment you record, and what to check before you sell or distribute it.",
+    "date": "2026-09-17",
+    "tags": ["copyright", "ownership", "licensing", "royalty-free", "browser DAW"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "keyboard-shortcuts-browser-daw",
     "title": "Tracks keyboard shortcuts: every hotkey, and how to play notes with your keyboard",
     "dek": "Tracks has a full keyboard-shortcut sheet and lets your QWERTY keyboard work as a two-octave piano, with no MIDI hardware required. Here is every shortcut and how the keyboard-as-instrument mode works.",
