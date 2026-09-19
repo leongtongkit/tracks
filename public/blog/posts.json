@@ -1,5 +1,13 @@
 [
   {
+    "slug": "midi-vs-audio-tracks-explained",
+    "title": "MIDI vs audio tracks: what's the difference, and when do you use each",
+    "dek": "A MIDI track stores performance data you can still edit note by note, and an audio track stores a fixed recorded waveform. Here is what separates the two in a browser DAW, and how to decide which one a part belongs on.",
+    "date": "2026-09-19",
+    "tags": ["MIDI", "audio track", "recording", "piano roll", "browser DAW"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "808-vs-909-drum-machine",
     "title": "808 vs. 909: which drum machine kit should you use?",
     "dek": "The 808 and 909 kits in Tracks are built for different jobs: an 808 kick sustains and slides in pitch, a 909 kick is short and punchy. Here is how to tell them apart and pick the right one for your genre.",

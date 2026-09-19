@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MIDI vs audio tracks: what's the difference, and when do you use each | Tracks</title>
+    <meta name="description" content="A MIDI track stores performance data you can still edit note by note, and an audio track stores a fixed recorded waveform. Here is what separates the two in a browser DAW, and how to decide which one a part belongs on." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/midi-vs-audio-tracks-explained" />
+    <meta property="og:title" content="MIDI vs audio tracks: what's the difference, and when do you use each" />
+    <meta property="og:description" content="A MIDI track stores editable performance data, an audio track stores a fixed recorded waveform. Here is how to tell them apart and pick the right one." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/midi-vs-audio-tracks-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MIDI vs audio tracks: what's the difference, and when do you use each",
+        "description": "A MIDI track stores performance data you can still edit note by note, and an audio track stores a fixed recorded waveform. Here is what separates the two in a browser DAW, and how to decide which one a part belongs on.",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "JFound" },
+        "datePublished": "2026-09-19",
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/midi-vs-audio-tracks-explained"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "MIDI vs audio tracks: what's the difference, and when do you use each", "item": "https://tracks.jfound.net/blog/midi-vs-audio-tracks-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>MIDI vs audio tracks: what's the difference, and when do you use each</h1>
+        <p class="art-meta">By Tongkit Leong · September 19, 2026 · 8 min read</p>
+
+        <p class="lede">A MIDI track stores performance data — which note, how hard, how long — so you can rewrite it after the fact. An audio track stores a fixed recording of sound waves, so what you hear is exactly what was played or sung. In the <a href="/studio">Tracks browser studio</a>, synth, drum, and SoundFont tracks are all MIDI-style tracks built around the piano roll, while anything you record from a mic or import as a file lands on an audio track.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>The core difference: instructions vs. sound</h2>
+        <p>A MIDI track never contains audio. It contains a list of events — note on, note off, pitch, velocity, timing — that get sent to an instrument every time the song plays. The instrument is what actually makes the sound. Change the instrument, and the same MIDI notes sound completely different. This is why you can write a bassline once and later swap it from a synth patch to a SoundFont upright bass without touching a single note.</p>
+        <p>An audio track contains a waveform: real, captured sound, sample by sample. There's no instrument standing between the data and what you hear — the recording <em>is</em> the sound. You can process it (EQ it, compress it, time-stretch it), but you can't ask it to play a different note the way you'd drag a MIDI note in the piano roll. If a vocal take is flat, you fix the pitch after the fact with a tool built for that job, you don't rewrite the "notes."</p>
+        <p>That one distinction — editable instructions vs. a fixed recording — explains almost every practical difference below.</p>
+
+        <h2>MIDI and audio tracks in Tracks</h2>
+        <p>Tracks separates track types along exactly this line:</p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>Track type</th><th>What it stores</th><th>Where you edit it</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Synth (subtractive/FM)</td><td>MIDI note data</td><td>Piano roll</td></tr>
+              <tr><td>808/909 drum machine</td><td>MIDI note data (step pattern)</td><td>Piano roll / step grid</td></tr>
+              <tr><td>16-pad sampler</td><td>MIDI note data triggering loaded samples</td><td>Piano roll / pad grid</td></tr>
+              <tr><td>SoundFont (.sf2)</td><td>MIDI note data</td><td>Piano roll</td></tr>
+              <tr><td>Audio (mic recording or imported file)</td><td>A recorded waveform</td><td>Waveform / clip view</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Every instrument track in Tracks — synth, drums, sampler, SoundFont — is a MIDI-style track under the hood, even though the sound it makes ranges from a synthesized lead to a sampled piano. What they share is that the notes live in the piano roll, so you can drag a note to a new pitch, nudge its timing, or scrub its velocity at any point, long after you first wrote it. See <a href="/blog/velocity-editing-piano-roll">how to edit note velocity for a more human-sounding performance</a> for what that editing actually looks like.</p>
+        <p>An audio track is what you get when you plug in a mic and hit record, or bring in an existing audio file. See <a href="/blog/record-instrument-browser-daw">how to record guitar or any instrument in your browser DAW</a> for the recording side of that. Once a take is captured, you're editing a waveform: trimming, comping between multiple takes, time-stretching, or running it through autotune — not moving individual notes.</p>
+
+        <h2>What you can and can't do with each</h2>
+        <h3>MIDI tracks give you</h3>
+        <ul>
+          <li><strong>Note-level editing</strong> — move, delete, or add individual notes after the fact.</li>
+          <li><strong>Instrument swapping</strong> — the same part can play through a completely different synth patch or SoundFont preset with no re-recording.</li>
+          <li><strong>Velocity and quantize control</strong> — adjust how hard each note hits, or snap timing to the grid. See <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a>.</li>
+          <li><strong>Small file size</strong> — a few hundred note events take up far less space than recorded audio of the same length.</li>
+        </ul>
+        <h3>Audio tracks give you</h3>
+        <ul>
+          <li><strong>Real performance nuance</strong> — the breath, grain, and timing of an actual human voice or instrument, which no synth fully recreates.</li>
+          <li><strong>Take comping</strong> — record several passes and stitch the best sections of each into one final take. See <a href="/blog/take-comping-best-vocal-take">how to comp the best take from multiple recordings</a>.</li>
+          <li><strong>Direct processing</strong> — autotune, time-stretch/repitch, and stem extraction all work on a waveform, not on note data.</li>
+          <li><strong>Sample sources</strong> — an audio clip can be chopped and re-triggered from the sampler, turning a recording into something closer to a MIDI-style instrument. See <a href="/blog/sample-chopping-flip">how to chop and flip a sample into a beat</a>.</li>
+        </ul>
+
+        <h2>How to decide which one a part belongs on</h2>
+        <p>A few practical rules cover most cases:</p>
+        <ul>
+          <li><strong>Vocals almost always go on an audio track.</strong> You're capturing a real performance, and pitch-correction tools like autotune are built to work on that recording.</li>
+          <li><strong>Basslines, leads, pads, and drum patterns usually start as MIDI.</strong> You'll want to audition different sounds and fix timing without re-playing the part, and MIDI makes both trivial.</li>
+          <li><strong>Guitar and other acoustic instruments depend on the part.</strong> A strummed rhythm part or a solo with real string noise and dynamics belongs on an audio track. A simple riff you might want to reassign to a different instrument later is often faster to write in the piano roll.</li>
+          <li><strong>If you're not sure, ask whether you'll want to change the notes later.</strong> If yes, MIDI. If the exact performance is the point, audio.</li>
+        </ul>
+        <p>Nothing stops you from mixing both in the same song — most finished tracks do. A typical arrangement might run a MIDI drum pattern and MIDI bassline alongside an audio vocal track and an audio guitar recording, all sitting on the same timeline and passing through the same mixer.</p>
+
+        <h2>Where they meet: MIDI import/export and freezing a MIDI track</h2>
+        <p>The line between the two isn't completely rigid. Tracks can read a standard MIDI file straight into the piano roll — see <a href="/blog/import-midi-file-browser-daw">how to import a MIDI file into your browser DAW</a> — which lands as note data on a MIDI-style track, ready to play through whichever instrument you assign. The reverse works too: notes you've written export as a standard MIDI file that any other DAW or notation app can read, covered in <a href="/blog/export-midi-file-browser-daw">how to export a MIDI file from your browser DAW</a>.</p>
+        <p>And when you bounce your finished song to WAV or MP3, every MIDI track gets rendered down to audio in the final file — see <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a>. At that point the MIDI/audio distinction disappears entirely: the export is just sound, the same as a recording would be.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Can I convert a MIDI track into an audio track?</h3>
+        <p>Not by flipping a switch on the track itself, but the effect is the same as exporting: bounce the song (or export stems) to WAV, and the rendered file is audio you can bring back in as a new audio track if you need to treat it that way — for example, to chop it in the sampler.</p>
+
+        <h3>Why does my recorded vocal sound different from a MIDI instrument playing the same melody?</h3>
+        <p>Because a MIDI track sends note events to a synth or SoundFont that generates a tone from scratch, while an audio track plays back the exact recorded waveform. A synth can only approximate a voice — an audio recording of an actual voice doesn't need to approximate anything.</p>
+
+        <h3>Do drum machine tracks count as MIDI even though they sound like drums?</h3>
+        <p>Yes. The 808 and 909 drum machines in Tracks store which pad triggers at which step as note data, then generate the drum sound from that data every time it plays. That's why you can change the kick or snare sample without touching the pattern — see <a href="/blog/808-vs-909-drum-machine">808 vs. 909: which drum machine kit should you use?</a>.</p>
+
+        <h3>Can I record a MIDI keyboard performance and still edit it afterward?</h3>
+        <p>Yes — playing a connected MIDI keyboard writes notes straight into the piano roll as you play, exactly like drawing them in by hand. See <a href="/blog/use-midi-keyboard-browser">how to use a MIDI keyboard in a browser DAW</a>.</p>
+
+        <h3>Which track type takes up more storage in my browser?</h3>
+        <p>Audio tracks, by a wide margin. A few minutes of recorded audio is megabytes of waveform data; the equivalent MIDI part is a small list of note events. If you're working on a low-storage device, leaning on MIDI-style tracks where you can keeps a project lighter.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try both track types for free</h3>
+            <p>Write a MIDI part in the piano roll, record a real take on an audio track, and mix them together — no install, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
