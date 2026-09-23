@@ -1,5 +1,13 @@
 [
   {
+    "slug": "make-jazz-browser",
+    "title": "How to make jazz music in your browser",
+    "dek": "Jazz is built on extended chords, swung rhythm, and a walking bassline that outlines the changes. Here is how to program a jazz progression, swing the groove, and voice a walking bass line in the Tracks browser studio.",
+    "date": "2026-09-23",
+    "tags": ["jazz", "swing", "walking bass", "chord voicing", "piano roll"],
+    "readingTime": "9 min"
+  },
+  {
     "slug": "midi-vs-audio-tracks-explained",
     "title": "MIDI vs audio tracks: what's the difference, and when do you use each",
     "dek": "A MIDI track stores performance data you can still edit note by note, and an audio track stores a fixed recorded waveform. Here is what separates the two in a browser DAW, and how to decide which one a part belongs on.",
