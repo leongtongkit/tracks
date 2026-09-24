@@ -1,5 +1,13 @@
 [
   {
+    "slug": "humanize-midi-explained",
+    "title": "Humanize in the piano roll: what it actually does",
+    "dek": "Humanize adds a small random nudge to timing and velocity on every note in a clip, in one click. Here is what the Tracks Humanize tool changes, and when to reach for it instead of hand-editing velocity or quantize and swing.",
+    "date": "2026-09-24",
+    "tags": ["humanize", "piano roll", "MIDI", "velocity", "groove"],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-jazz-browser",
     "title": "How to make jazz music in your browser",
     "dek": "Jazz is built on extended chords, swung rhythm, and a walking bassline that outlines the changes. Here is how to program a jazz progression, swing the groove, and voice a walking bass line in the Tracks browser studio.",

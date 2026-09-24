@@ -1,0 +1,147 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Humanize in the piano roll: what it actually does | Tracks</title>
+    <meta name="description" content="Humanize adds a small random nudge to timing and velocity on every note in a clip, in one click. Here is what the Tracks Humanize tool changes, and when to reach for it instead of hand-editing velocity or quantize and swing." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/humanize-midi-explained" />
+    <meta property="og:title" content="Humanize in the piano roll: what it actually does" />
+    <meta property="og:description" content="Humanize adds a small random nudge to timing and velocity on every note in a clip, in one click. Here is what the Tracks Humanize tool changes, and when to reach for it instead of hand-editing velocity or quantize and swing." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/humanize-midi-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to use Humanize on a MIDI clip in Tracks",
+        "description": "Run Humanize on a piano roll or drum clip in Tracks to add subtle random variation to note timing and velocity in one click.",
+        "step": [
+          { "@type": "HowToStep", "name": "Program or record the clip first", "text": "Get the pitches, drum hits, or chords right with quantize on, before adding any looseness." },
+          { "@type": "HowToStep", "name": "Select the clip in the piano roll", "text": "Open the clip you want to loosen up so the piano roll toolbar is active for it." },
+          { "@type": "HowToStep", "name": "Click Humanize", "text": "Humanize nudges every note's start time and velocity by a small random amount, all in one pass." },
+          { "@type": "HowToStep", "name": "Listen back and compare", "text": "A/B the humanized version against the original to check the variation reads as feel, not sloppiness." },
+          { "@type": "HowToStep", "name": "Undo or run it again", "text": "If it's too subtle, run it again to stack more variation; if it's too loose, undo and start from the quantized version." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Humanize in the piano roll: what it actually does", "item": "https://tracks.jfound.net/blog/humanize-midi-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Humanize in the piano roll: what it actually does</h1>
+        <p class="art-meta">By Tongkit Leong · September 24, 2026 · 7 min read</p>
+
+        <p class="lede">Humanize is a one-click tool in the Tracks piano roll that nudges every note's timing and velocity by a small random amount, so a clip that was drawn or quantized dead-on-grid picks up some of the looseness of a real performance. It doesn't change pitch, note length, or which notes exist — only when each one lands and how hard it hits.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What Humanize changes, note by note</h2>
+        <p>Every note in a piano roll clip has a start time and a velocity, whether you played it in on a MIDI keyboard or drew it with the pencil tool. Humanize walks through every note in the selected clip and applies two independent random nudges: a small shift to the start time, forward or back, and a small shift to velocity, up or down. Each note gets its own random amount, so the result isn't a uniform shift of the whole clip — it's per-note variation, the same way no two hits from a real drummer land at exactly the same instant or exactly the same volume.</p>
+        <p>The nudges are deliberately small. Humanize is built to take the edge off something that's mechanically perfect, not to scramble the part. A note that starts squarely on beat one will still land close to beat one afterward — just not to the sample.</p>
+
+        <h2>Why a perfectly quantized clip can sound stiff</h2>
+        <p>Quantizing a part snaps every note to the grid, which is exactly what you want while you're getting the pitches and rhythm right. But a grid has no velocity information and no timing variation built in — every note sits at the same subdivision, and if you drew the notes instead of playing them, every note also defaults to roughly the same hit strength. Put those two things together and a pattern that's rhythmically correct can still sound like it was typed rather than played, because nothing about it varies from one note to the next.</p>
+        <p>That's the same problem covered from two different angles in <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a> and <a href="/blog/velocity-editing-piano-roll">editing note velocity for a more human performance</a> — swing shifts alternating notes for timing feel, and the velocity lane lets you shape volume by hand, note by note. Humanize does a version of both at once, automatically, across an entire clip in a single click.</p>
+
+        <h2>How to use Humanize in Tracks</h2>
+
+        <h3>Step 1: Program or record the clip first</h3>
+        <p>Get the part right before you loosen it up. Draw the notes in the piano roll, record them from a MIDI keyboard, or quantize a recorded take so the rhythm sits where you want it. Humanize is a finishing pass, not a substitute for getting the pitches and structure correct.</p>
+
+        <h3>Step 2: Select the clip</h3>
+        <p>Open the clip in the piano roll. Humanize works on the currently open clip, so make sure it's the one you actually want to loosen before running it.</p>
+
+        <h3>Step 3: Click Humanize</h3>
+        <p>The piano roll toolbar has a Humanize button. Clicking it applies a random timing and velocity nudge to every note in the clip in one pass — there's nothing to configure, and it takes effect immediately.</p>
+
+        <h3>Step 4: Listen back and compare</h3>
+        <p>Loop the clip and listen for whether the variation reads as feel or as sloppiness. A hi-hat pattern or a background chord stab can usually take more looseness than a lead melody that needs to land precisely on the beat to make sense.</p>
+
+        <h3>Step 5: Undo, or run it again</h3>
+        <p>Because Humanize creates an undo point before it runs, you can always step back to the exact quantized version if the result is too loose. You can also run it again on top of an already-humanized clip to stack more variation — but each pass pushes timing and velocity further from where you started, so it's usually better to undo and re-run once than to click it repeatedly.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Humanize vs. hand-editing vs. quantize and swing</h2>
+        <p>These three tools solve the same underlying problem — a part that sounds too rigid — but they trade off speed against control.</p>
+        <ul>
+          <li><strong>Humanize</strong> is fastest: one click loosens timing and velocity across an entire clip at once. Best for a quick pass on a part you don't want to spend a lot of time hand-tuning, or as a starting point before manual touch-ups.</li>
+          <li><strong>Swing</strong>, covered in <a href="/blog/quantize-swing-groove-explained">quantize and swing explained</a>, shifts alternating notes by a consistent, adjustable amount rather than a random one. It's the right tool when you want a specific, repeatable groove — a swung hi-hat pattern, for example — rather than raw looseness.</li>
+          <li><strong>Manual velocity and timing edits</strong>, covered in <a href="/blog/velocity-editing-piano-roll">editing note velocity</a>, give you full control over exactly which notes are emphasized. This is the slowest option but the only one that can create intentional phrasing — accenting a downbeat on purpose rather than by chance.</li>
+        </ul>
+        <p>In practice, the three combine well: quantize for correctness, swing for a deliberate groove, Humanize for a fast layer of looseness, then a manual pass on the handful of notes — a snare accent, the top note of a run — that need to be exactly right rather than randomly close.</p>
+
+        <h2>Where Humanize helps, and where to skip it</h2>
+        <p>Humanize tends to help most on parts with a lot of repeated, similar notes, where flat timing and velocity are most audible: hi-hat and shaker patterns, background chord stabs, arpeggiated fills, and doubled or layered parts where a small amount of drift between layers actually adds width.</p>
+        <p>It's worth being more careful with it on parts where precision matters for a reason beyond feel. A kick pattern that's meant to lock tightly with a bassline, as described in <a href="/blog/bassline-locks-with-kick">how to write a bassline that locks with the kick</a>, or a kick that's driving a sidechain ducking effect as in <a href="/blog/sidechain-compression-explained">sidechain compression explained</a>, generally wants to stay close to the grid — timing drift there can blur the lock or make the ducking pump unevenly. A lead vocal melody or a hook that needs to land exactly on the beat to read correctly is also usually better shaped by hand than left to random variation.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Does Humanize change pitch or note length?</h3>
+        <p>No. Humanize only adjusts a note's start time and velocity. Pitch, note length, and which notes exist in the clip are untouched.</p>
+
+        <h3>Does Humanize work on drum patterns, or only melodic parts?</h3>
+        <p>Both. Drum patterns in Tracks are built from notes in the same piano roll data as melodic and chord clips, so Humanize applies the same way to a drum clip as it does to any other MIDI clip. See <a href="/blog/free-online-drum-machine">the free online drum machine guide</a> for the rest of the drum programming workflow.</p>
+
+        <h3>Will Humanize do anything to a recorded audio clip?</h3>
+        <p>No. Humanize acts on note data, so it only affects piano roll and drum clips. A recorded audio track isn't made of individual notes, so there's nothing for Humanize to nudge; for timing changes on audio, see <a href="/blog/time-stretch-repitch-browser">time-stretch and repitch</a> instead.</p>
+
+        <h3>Can I undo Humanize if I don't like the result?</h3>
+        <p>Yes. Running Humanize creates an undo point, so a single undo takes the clip straight back to how it sounded before you clicked it.</p>
+
+        <h3>Should I use Humanize before or after quantizing?</h3>
+        <p>After. Quantize first to get the rhythm correct, then run Humanize on top to add variation. Humanizing before quantizing defeats the purpose, since quantize would snap the notes right back onto the grid and undo the timing nudge.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Loosen up a stiff part</h3>
+            <p>Humanize, the velocity lane, and swing are all built into the free Tracks piano roll — no plugins, no downloads.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
