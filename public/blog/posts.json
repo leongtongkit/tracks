@@ -1,5 +1,18 @@
 [
   {
+    "slug": "unison-detune-explained",
+    "title": "Unison and detune explained: how to make a thin synth sound huge",
+    "dek": "Unison stacks several slightly-detuned copies of the same oscillator so one note fills the whole stereo field instead of sitting on a single thin line. Here is how voice count, detune, and spread work in the Tracks browser synth.",
+    "date": "2026-09-25",
+    "tags": [
+      "synth",
+      "sound design",
+      "unison",
+      "mixing"
+    ],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "humanize-midi-explained",
     "title": "Humanize in the piano roll: what it actually does",
     "dek": "Humanize adds a small random nudge to timing and velocity on every note in a clip, in one click. Here is what the Tracks Humanize tool changes, and when to reach for it instead of hand-editing velocity or quantize and swing.",

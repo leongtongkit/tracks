@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Unison and detune explained: how to make a thin synth sound huge | Tracks</title>
+    <meta name="description" content="Unison stacks several slightly-detuned copies of the same oscillator so one note fills the whole stereo field instead of sitting on a single thin line. Here is how voice count, detune, and spread work in the Tracks browser synth." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/unison-detune-explained" />
+    <meta property="og:title" content="Unison and detune explained: how to make a thin synth sound huge" />
+    <meta property="og:description" content="Unison stacks several slightly-detuned copies of the same oscillator so one note fills the whole stereo field. How voice count, detune, and spread work in a free browser synth." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/unison-detune-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Unison and detune explained: how to make a thin synth sound huge",
+        "datePublished": "2026-09-25",
+        "dateModified": "2026-09-25",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "JFound" },
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/unison-detune-explained",
+        "image": "https://tracks.jfound.net/og.png",
+        "description": "Unison stacks several slightly-detuned copies of the same oscillator so one note fills the whole stereo field instead of a single thin line. How voice count, detune, and spread work in a free browser synth."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Unison and detune explained", "item": "https://tracks.jfound.net/blog/unison-detune-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Unison and detune explained: how to make a thin synth sound huge</h1>
+        <p class="art-meta">By Tongkit Leong · September 25, 2026 · 8 min read</p>
+
+        <p class="lede">Unison plays several copies of the same oscillator on a single note at once, each nudged slightly off pitch from the others, so instead of one thin line you get a thick, chorused mass that fills the stereo field. Every oscillator in the Tracks synth has a unison control built in — up to seven voices, with a detune and a stereo spread knob — no plugins required.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why a single oscillator sounds thin</h2>
+        <p>One oscillator playing one waveform is, by definition, one pitch coming from one point in the stereo field. That's fine for a sub-bass or a clean sine lead, but it's exactly why a lot of synth patches that sound fine solo disappear the moment a real mix closes in around them — nothing about a single, perfectly centered oscillator competes for space against a wide-sounding guitar, a stereo pad, or a wall of reverb. Unison is the standard fix: instead of one voice, you play several at once, spread slightly apart in pitch and position, so the same note occupies more room without you touching the arrangement at all.</p>
+
+        <h2>What unison actually does</h2>
+        <p>Turn on unison for an oscillator in the Tracks synth and a single key press no longer triggers one copy of that oscillator — it triggers several, all tuned a few cents apart from each other and panned across the stereo field. Because they're all playing nearly, but not exactly, the same pitch, they beat against each other slightly as they play, which is the same physical effect that makes a room full of violins playing "in unison" sound thicker than one violin alone. The controls that shape this effect sit on every oscillator: voice count, detune amount, and stereo spread.</p>
+
+        <h3>Voice count: how many copies stack up</h3>
+        <p>Each oscillator's unison count is a choice of 1, 3, 5, or 7 voices. At 1, unison is effectively off — you get the plain, single oscillator. At 3, you get a noticeably thicker tone with only a mild CPU and mix-density cost. At 7, you get the maximum, densest stack Tracks offers, which is the classic supersaw-style wall of sound used for big EDM leads and chords. More voices isn't automatically better: a thin pluck or a bass line often wants to stay tight and centered at 1 or 3 voices, while a chord-stabbing lead or a pad that needs to feel enormous is where 7 voices earns its keep. Tracks automatically normalizes the summed level as you add voices, so switching from 1 to 7 doesn't just get louder — it gets wider and denser at roughly the same volume.</p>
+
+        <h3>Detune: how far apart the voices are tuned</h3>
+        <p>The detune knob runs from 0 to 60 cents (a cent is one-hundredth of a semitone) and sets how far the outer voices drift from the center pitch — the voices are spread evenly across that range, so the two most extreme voices in a wide stack sit up to 60 cents apart from each other, with the rest filling in between. A small amount, around 5-15 cents, gives a subtle chorus-like thickening that still reads as one pitch. Push it toward 30-60 cents and the effect gets noticeably wider and more detuned-sounding — the classic, obviously-stacked supersaw tone. There's a real tradeoff here: more detune means a thicker, wider sound, but also a less precisely-in-tune one, so a bass line that needs to lock tightly with a kick drum usually wants low detune, while a wide pad or lead has much more room to push it.</p>
+
+        <h3>Spread: where the voices sit in the stereo field</h3>
+        <p>Spread, from 0 to 1, controls how far across the left-right stereo field the unison voices are panned, working alongside detune rather than instead of it. At 0, every voice plays dead center — you get the pitch-thickening of unison with none of the stereo width. At 1, the voices fan all the way out from hard left to hard right, so the note doesn't just sound thicker, it sounds like it's coming from everywhere at once. This is the knob that turns a unison stack from "fatter mono sound" into "wide stereo sound," and it's worth checking your patch in mono occasionally — a sound that leans entirely on a wide spread for its size can shrink noticeably when summed to one speaker.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Unison is per-oscillator, not global</h2>
+        <p>Because the Tracks synth has up to three oscillators per patch, each one carries its own unison count, detune, and spread rather than sharing a single global setting. That means you can stack a wide 7-voice unison on oscillator 1 for a huge top layer, while keeping oscillator 2 at a tight 1 or 3 voices with little to no detune for a solid, centered low end underneath it. This is a common trick for basses and leads that need to feel big without turning to mud: let one layer do the width, and let another layer stay narrow and anchor the pitch.</p>
+
+        <table>
+          <thead>
+            <tr><th>Goal</th><th>Voices</th><th>Detune</th><th>Spread</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Tight, in-tune bass</td><td>1-3</td><td>0-8 ct</td><td>0-0.2</td></tr>
+            <tr><td>Subtle chorus on a lead</td><td>3</td><td>8-15 ct</td><td>0.3-0.5</td></tr>
+            <tr><td>Supersaw-style EDM lead or chord</td><td>7</td><td>30-60 ct</td><td>0.8-1</td></tr>
+            <tr><td>Wide pad that still holds a mono core</td><td>5-7 (top layer only)</td><td>20-40 ct</td><td>0.6-0.9</td></tr>
+            <tr><td>Mono-safe wide sound</td><td>5-7</td><td>15-30 ct</td><td>0.4-0.6</td></tr>
+          </tbody>
+        </table>
+
+        <h2>A quick routine for dialing in unison</h2>
+        <ol>
+          <li><strong>Start at 1 voice and get the tone right first.</strong> Set the oscillator wave, filter, and envelope on your <a href="/blog/synth-sound-design-subtractive-fm">subtractive or FM patch</a> with unison off, so you know what the raw sound is before you thicken it.</li>
+          <li><strong>Bump the voice count up one step at a time.</strong> Move from 1 to 3 and listen before jumping straight to 7 — the jump from 1 to 3 is often more useful than the jump from 3 to 7 for anything that isn't a lead or chord stab.</li>
+          <li><strong>Bring detune up gradually.</strong> Start near 10 cents and increase it while the note is looping until the thickening starts to feel like the effect you want, not an obviously out-of-tune pitch.</li>
+          <li><strong>Add spread last.</strong> Detune sets how thick the sound is; spread sets how wide it feels. Push spread up once the detune amount is settled, and check the result in mono if the part needs to survive a mono playback system.</li>
+          <li><strong>Layer a narrow oscillator underneath a wide one if the part needs to sit tightly with the rhythm section.</strong> A wide top layer for size, a narrow bottom layer for pitch stability, is a reliable way to get both.</li>
+        </ol>
+
+        <h2>Frequently asked questions</h2>
+        <h3>What's the difference between unison and an LFO?</h3>
+        <p>An <a href="/blog/lfo-modulation-explained">LFO</a> modulates a single voice's pitch, filter, or volume over time in a repeating cycle. Unison doesn't modulate anything — it plays multiple static, detuned copies of the same oscillator at once. The two can be combined: a unison stack with an LFO added on top gets both the constant width of unison and the ongoing movement of the LFO.</p>
+        <h3>Why does my unison sound out of tune instead of thick?</h3>
+        <p>That usually means the detune amount is too high for the part. A wide detune setting that sounds huge on a slow pad can sound flatly wrong on a fast melodic line, because there's less time for the ear to blend the detuned voices into one thick tone. Bring the detune down until the individual pitches stop being audible as separate notes.</p>
+        <h3>Does adding unison voices cost extra CPU?</h3>
+        <p>Yes — each unison voice is a real, separate oscillator being computed, so a 7-voice stack on all three oscillators of a patch is meaningfully heavier than a plain single-voice patch. If a project feels sluggish, dropping unison counts on parts that don't need the width (basses, short percussive stabs) is one of the cheaper ways to lighten the load.</p>
+        <h3>Should I use unison on a bass?</h3>
+        <p>Usually only a little, if at all. A bass generally needs to sit precisely on pitch and stay centered so it doesn't fight the kick drum for space, and both heavy detune and wide spread work against that. A small amount of unison (3 voices, low detune, low spread) can add body without giving up tightness — save the big 7-voice, wide-spread settings for leads, chords, and pads.</p>
+        <h3>Does this run entirely in the browser?</h3>
+        <p>Yes. Unison is part of the same Web Audio synth engine as the rest of Tracks, with no plugins to install and no account. Your patches and projects stay on your device and are never uploaded anywhere.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Stack some voices</h3>
+            <p>Up to seven-voice unison with detune and spread on every oscillator — free, in your browser, nothing leaves your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
