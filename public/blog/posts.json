@@ -1,5 +1,13 @@
 [
   {
+    "slug": "reference-track-mixing",
+    "title": "How to use a reference track when mixing",
+    "dek": "A reference track gives your ears a fixed point to compare against so you stop guessing whether your mix is too bright, too quiet, or too thin. Here is how to pick a good reference and use it in Tracks without just copying someone else's song.",
+    "date": "2026-09-26",
+    "tags": ["reference track", "mixing", "EQ", "mastering", "workflow"],
+    "readingTime": "8 min"
+  },
+  {
     "slug": "unison-detune-explained",
     "title": "Unison and detune explained: how to make a thin synth sound huge",
     "dek": "Unison stacks several slightly-detuned copies of the same oscillator so one note fills the whole stereo field instead of sitting on a single thin line. Here is how voice count, detune, and spread work in the Tracks browser synth.",
