@@ -1,5 +1,13 @@
 [
   {
+    "slug": "record-in-time-metronome-count-in",
+    "title": "Metronome and count-in: how to record in time in your browser",
+    "dek": "A metronome keeps a steady pulse under your playing, and a count-in gives you a bar of warning before recording starts. Here is how to use the Click button and the Count-in setting in Tracks so your takes line up with the grid.",
+    "date": "2026-10-01",
+    "tags": ["metronome", "count-in", "recording", "timing", "beginners"],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "time-signatures-explained",
     "title": "Time signatures explained: 3/4, 6/8, 7/8 and more in your browser",
     "dek": "A time signature tells you how many beats sit in each bar and what kind of note gets one beat. Here is how to switch the Sig menu in Tracks and write a waltz, a 6/8 groove, or a 7/8 riff.",
