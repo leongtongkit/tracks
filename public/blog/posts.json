@@ -1,10 +1,29 @@
 [
   {
+    "slug": "bpm-by-genre-cheat-sheet",
+    "title": "BPM by genre: a tempo cheat sheet for every style",
+    "dek": "The typical BPM range for house, trap, lo-fi, drum and bass and more, and how to set the tempo in your browser studio.",
+    "date": "2026-10-02",
+    "tags": [
+      "bpm",
+      "tempo",
+      "genres",
+      "beginners"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "record-in-time-metronome-count-in",
     "title": "Metronome and count-in: how to record in time in your browser",
     "dek": "A metronome keeps a steady pulse under your playing, and a count-in gives you a bar of warning before recording starts. Here is how to use the Click button and the Count-in setting in Tracks so your takes line up with the grid.",
     "date": "2026-10-01",
-    "tags": ["metronome", "count-in", "recording", "timing", "beginners"],
+    "tags": [
+      "metronome",
+      "count-in",
+      "recording",
+      "timing",
+      "beginners"
+    ],
     "readingTime": "6 min"
   },
   {
@@ -27,7 +46,12 @@
     "title": "A free Reaper alternative that runs in any browser",
     "dek": "Reaper is cheap and endlessly customizable, but it still needs an install, a license, and a plugin folder to feel complete. Here is how Tracks compares as a free browser-based alternative.",
     "date": "2026-09-27",
-    "tags": ["reaper", "daw", "comparison", "browser"],
+    "tags": [
+      "reaper",
+      "daw",
+      "comparison",
+      "browser"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -35,7 +59,13 @@
     "title": "How to use a reference track when mixing",
     "dek": "A reference track gives your ears a fixed point to compare against so you stop guessing whether your mix is too bright, too quiet, or too thin. Here is how to pick a good reference and use it in Tracks without just copying someone else's song.",
     "date": "2026-09-26",
-    "tags": ["reference track", "mixing", "EQ", "mastering", "workflow"],
+    "tags": [
+      "reference track",
+      "mixing",
+      "EQ",
+      "mastering",
+      "workflow"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -56,7 +86,13 @@
     "title": "Humanize in the piano roll: what it actually does",
     "dek": "Humanize adds a small random nudge to timing and velocity on every note in a clip, in one click. Here is what the Tracks Humanize tool changes, and when to reach for it instead of hand-editing velocity or quantize and swing.",
     "date": "2026-09-24",
-    "tags": ["humanize", "piano roll", "MIDI", "velocity", "groove"],
+    "tags": [
+      "humanize",
+      "piano roll",
+      "MIDI",
+      "velocity",
+      "groove"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -64,7 +100,13 @@
     "title": "How to make jazz music in your browser",
     "dek": "Jazz is built on extended chords, swung rhythm, and a walking bassline that outlines the changes. Here is how to program a jazz progression, swing the groove, and voice a walking bass line in the Tracks browser studio.",
     "date": "2026-09-23",
-    "tags": ["jazz", "swing", "walking bass", "chord voicing", "piano roll"],
+    "tags": [
+      "jazz",
+      "swing",
+      "walking bass",
+      "chord voicing",
+      "piano roll"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -72,7 +114,13 @@
     "title": "MIDI vs audio tracks: what's the difference, and when do you use each",
     "dek": "A MIDI track stores performance data you can still edit note by note, and an audio track stores a fixed recorded waveform. Here is what separates the two in a browser DAW, and how to decide which one a part belongs on.",
     "date": "2026-09-19",
-    "tags": ["MIDI", "audio track", "recording", "piano roll", "browser DAW"],
+    "tags": [
+      "MIDI",
+      "audio track",
+      "recording",
+      "piano roll",
+      "browser DAW"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -80,7 +128,13 @@
     "title": "808 vs. 909: which drum machine kit should you use?",
     "dek": "The 808 and 909 kits in Tracks are built for different jobs: an 808 kick sustains and slides in pitch, a 909 kick is short and punchy. Here is how to tell them apart and pick the right one for your genre.",
     "date": "2026-09-18",
-    "tags": ["808", "909", "drum machine", "beats", "sound design"],
+    "tags": [
+      "808",
+      "909",
+      "drum machine",
+      "beats",
+      "sound design"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -88,7 +142,13 @@
     "title": "Do you own the music you make in Tracks? Copyright explained",
     "dek": "Tracks never uploads or claims your project, and using free browser software doesn't change who owns your song. Here is who owns the music you make in a browser DAW, how copyright works the moment you record, and what to check before you sell or distribute it.",
     "date": "2026-09-17",
-    "tags": ["copyright", "ownership", "licensing", "royalty-free", "browser DAW"],
+    "tags": [
+      "copyright",
+      "ownership",
+      "licensing",
+      "royalty-free",
+      "browser DAW"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -96,7 +156,13 @@
     "title": "Tracks keyboard shortcuts: every hotkey, and how to play notes with your keyboard",
     "dek": "Tracks has a full keyboard-shortcut sheet and lets your QWERTY keyboard work as a two-octave piano, with no MIDI hardware required. Here is every shortcut and how the keyboard-as-instrument mode works.",
     "date": "2026-09-16",
-    "tags": ["keyboard shortcuts", "qwerty piano", "hotkeys", "workflow", "browser DAW"],
+    "tags": [
+      "keyboard shortcuts",
+      "qwerty piano",
+      "hotkeys",
+      "workflow",
+      "browser DAW"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -104,7 +170,14 @@
     "title": "How to build a buildup and drop that actually hits",
     "dek": "A drop only lands if the buildup before it earned it. Here is how to program risers, snare rolls, filter sweeps, and a clean drop in Tracks.",
     "date": "2026-09-14",
-    "tags": ["buildup", "drop", "riser", "tension", "arrangement", "sound design"],
+    "tags": [
+      "buildup",
+      "drop",
+      "riser",
+      "tension",
+      "arrangement",
+      "sound design"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -112,7 +185,13 @@
     "title": "How to make a remix in your browser",
     "dek": "A remix starts from someone else's finished track, not a blank project. Here is how to import a song, split it into stems, and rebuild it into your own version in Tracks.",
     "date": "2026-09-13",
-    "tags": ["remix", "stem extraction", "sampling", "arrangement", "production"],
+    "tags": [
+      "remix",
+      "stem extraction",
+      "sampling",
+      "arrangement",
+      "production"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -120,7 +199,12 @@
     "title": "What is an LFO? Adding movement to a static synth sound",
     "dek": "An LFO is an oscillator too slow to hear on its own that wiggles another control for you, automatically and in rhythm. Here is how to use one for vibrato, filter wobble, and tremolo in the Tracks browser synth.",
     "date": "2026-09-12",
-    "tags": ["synthesis", "sound design", "modulation", "production"],
+    "tags": [
+      "synthesis",
+      "sound design",
+      "modulation",
+      "production"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -128,7 +212,12 @@
     "title": "Panning and stereo width explained: how to make a mix feel wide",
     "dek": "Panning moves a sound left or right in the stereo field, and stereo width is how spread out the whole mix feels between the speakers. Here is how to use both in Tracks so a mix feels wide without falling apart in mono.",
     "date": "2026-09-11",
-    "tags": ["panning", "stereo width", "mixing", "production"],
+    "tags": [
+      "panning",
+      "stereo width",
+      "mixing",
+      "production"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -136,7 +225,13 @@
     "title": "How to make K-pop music in your browser",
     "dek": "K-pop songs pack multiple sections, a hyper-polished vocal chain, and a genre-blending beat into three minutes flat. Here is how to build that structure in Tracks with no plugins to install.",
     "date": "2026-09-10",
-    "tags": ["kpop", "genre", "vocal chain", "arrangement", "production"],
+    "tags": [
+      "kpop",
+      "genre",
+      "vocal chain",
+      "arrangement",
+      "production"
+    ],
     "readingTime": "10 min"
   },
   {
@@ -144,7 +239,13 @@
     "title": "How to make a pop song in your browser",
     "dek": "Pop songs run on a simple four-chord loop, a groove that never distracts from the vocal, a bassline locked to the kick, and a hook built to repeat. Here is how to build that structure in Tracks with no plugins to install.",
     "date": "2026-09-09",
-    "tags": ["pop", "genre", "hook", "songwriting", "vocal"],
+    "tags": [
+      "pop",
+      "genre",
+      "hook",
+      "songwriting",
+      "vocal"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -152,7 +253,13 @@
     "title": "How to make R&B music in your browser",
     "dek": "R&B lives on tight vocal harmony, a laid-back behind-the-beat pocket, and warm, extended chords under the melody. Here is how to build that sound in Tracks with no plugins to install.",
     "date": "2026-09-08",
-    "tags": ["rnb", "vocal harmony", "chords", "genre", "groove"],
+    "tags": [
+      "rnb",
+      "vocal harmony",
+      "chords",
+      "genre",
+      "groove"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -160,7 +267,13 @@
     "title": "How to make future bass in your browser",
     "dek": "Future bass leans on a huge, detuned supersaw chord stack, a sidechained pump that ducks the pads under every kick, and a pitch-bent vocal chop riding on top. Here is how to program all three in Tracks with no plugins to install.",
     "date": "2026-09-07",
-    "tags": ["future bass", "supersaw", "vocal chops", "sidechain", "genre"],
+    "tags": [
+      "future bass",
+      "supersaw",
+      "vocal chops",
+      "sidechain",
+      "genre"
+    ],
     "readingTime": "9 min"
   },
   {
@@ -168,7 +281,13 @@
     "title": "EQ cheat sheet: what to cut and boost by instrument",
     "dek": "Every instrument in a mix has a frequency range where it needs room to breathe and a range where it mostly just gets in another instrument's way. Here is a practical EQ cheat sheet for kick, snare, bass, guitar, vocals, and synths, built for the Tracks browser studio.",
     "date": "2026-09-06",
-    "tags": ["eq", "mixing", "frequency", "instruments", "cheat sheet"],
+    "tags": [
+      "eq",
+      "mixing",
+      "frequency",
+      "instruments",
+      "cheat sheet"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -176,7 +295,13 @@
     "title": "How to make disco music in your browser",
     "dek": "Disco runs on a four-on-the-floor kick, a syncopated octave bassline, lush string stabs, and a chicken-scratch rhythm guitar sitting around 110 to 125 BPM. Here is how to program all four in Tracks with no software install.",
     "date": "2026-09-05",
-    "tags": ["disco", "four-on-the-floor", "strings", "bassline", "genre"],
+    "tags": [
+      "disco",
+      "four-on-the-floor",
+      "strings",
+      "bassline",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -184,7 +309,13 @@
     "title": "Make music on an iPad without downloading an app",
     "dek": "Tracks runs as a full browser studio on iPad and Android tablets, no App Store and no install, with the same piano roll, synths, drum machines, and mixer as the desktop version. Here is how to set it up and what to expect on a tablet.",
     "date": "2026-09-04",
-    "tags": ["ipad", "tablet", "browser DAW", "no app", "free"],
+    "tags": [
+      "ipad",
+      "tablet",
+      "browser DAW",
+      "no app",
+      "free"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -192,7 +323,13 @@
     "title": "How to make reggae music in your browser",
     "dek": "Reggae runs on the one-drop drum pattern, an off-beat skank guitar or organ, and a deep, melodic bassline that carries the song. Here is how to program all three in Tracks with no software install.",
     "date": "2026-09-03",
-    "tags": ["reggae", "one-drop", "skank", "bassline", "genre"],
+    "tags": [
+      "reggae",
+      "one-drop",
+      "skank",
+      "bassline",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -200,7 +337,13 @@
     "title": "How to make ambient music in your browser",
     "dek": "Ambient music trades a beat for a slow drone bed, a reverb-drenched pad that never quite resolves, sparse melodic fragments, and long automation swells. Here is how to layer all four from scratch in Tracks.",
     "date": "2026-09-02",
-    "tags": ["ambient", "genre-guide", "synthesis", "reverb", "automation"],
+    "tags": [
+      "ambient",
+      "genre-guide",
+      "synthesis",
+      "reverb",
+      "automation"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -208,7 +351,13 @@
     "title": "Compressor vs. limiter: what's the difference and when to use each",
     "dek": "A compressor evens out a performance over time so quiet notes sit closer to loud ones, while a limiter is a compressor set up purely to stop peaks from crossing a ceiling. Here is what separates the two and when to reach for each one in Tracks.",
     "date": "2026-09-01",
-    "tags": ["compressor", "limiter", "dynamics", "mixing", "mastering"],
+    "tags": [
+      "compressor",
+      "limiter",
+      "dynamics",
+      "mixing",
+      "mastering"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -216,7 +365,13 @@
     "title": "Gain staging: how to avoid clipping and keep a healthy mix",
     "dek": "Gain staging keeps every stage of your signal chain, from the first fader to the master bus, sitting in a healthy range so nothing clips and every plugin works the way it was designed to. Here is how to gain-stage a mix from input to output in Tracks.",
     "date": "2026-08-31",
-    "tags": ["gain staging", "clipping", "headroom", "mixing", "levels"],
+    "tags": [
+      "gain staging",
+      "clipping",
+      "headroom",
+      "mixing",
+      "levels"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -238,7 +393,13 @@
     "title": "How to change tempo mid-song with a tempo map",
     "dek": "A tempo map lets a track speed up, slow down, or jump to a new BPM at an exact bar instead of staying locked to one tempo for the whole song. Here is how to set tempo changes and time signature changes in Tracks.",
     "date": "2026-08-29",
-    "tags": ["tempo map", "bpm", "time signature", "arrangement", "tempo automation"],
+    "tags": [
+      "tempo map",
+      "bpm",
+      "time signature",
+      "arrangement",
+      "tempo automation"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -246,7 +407,13 @@
     "title": "How to make hyperpop in your browser",
     "dek": "Hyperpop runs on a pitched-up, deliberately artificial vocal hook, a distorted and bitcrushed 808, and glitchy stutter fills that cut hard between sections. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-28",
-    "tags": ["hyperpop", "pitched vocals", "distortion", "bitcrusher", "genre"],
+    "tags": [
+      "hyperpop",
+      "pitched vocals",
+      "distortion",
+      "bitcrusher",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -254,7 +421,13 @@
     "title": "How to make footwork in your browser",
     "dek": "Footwork runs on a sparse chopped kick pattern, a stuttering vocal loop, and rapid triplet hi-hats sitting around 155 to 160 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-27",
-    "tags": ["footwork", "juke", "vocal chop", "triplet hi-hats", "genre"],
+    "tags": [
+      "footwork",
+      "juke",
+      "vocal chop",
+      "triplet hi-hats",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -262,7 +435,13 @@
     "title": "How to make vaporwave in your browser",
     "dek": "Vaporwave runs on a slowed and pitched-down sample, chorus-and-reverb-soaked textures, and a laid-back groove sitting around 60 to 80 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-26",
-    "tags": ["vaporwave", "chopped and screwed", "chorus", "sample chopping", "genre"],
+    "tags": [
+      "vaporwave",
+      "chopped and screwed",
+      "chorus",
+      "sample chopping",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -270,7 +449,13 @@
     "title": "How to make gqom in your browser",
     "dek": "Gqom runs on a stripped-back, syncopated kick pattern, dark atmospheric pads, and heavy sub bass sitting around 122 to 128 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-25",
-    "tags": ["gqom", "south african house", "sub bass", "drum machine", "genre"],
+    "tags": [
+      "gqom",
+      "south african house",
+      "sub bass",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -278,7 +463,13 @@
     "title": "How to make baile funk in your browser",
     "dek": "Baile funk runs on the tamborzão rhythm, a punchy 808 kick pattern, and chopped vocal shouts sitting around 130 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-24",
-    "tags": ["baile funk", "funk carioca", "tamborzao", "drum machine", "genre"],
+    "tags": [
+      "baile funk",
+      "funk carioca",
+      "tamborzao",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -286,7 +477,13 @@
     "title": "How to make hardstyle in your browser",
     "dek": "Hardstyle runs on a distorted reverse-bass kick, a screeching pitched-up lead, and a euphoric melodic breakdown sitting around 150 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-23",
-    "tags": ["hardstyle", "reverse bass", "distortion", "drum machine", "genre"],
+    "tags": [
+      "hardstyle",
+      "reverse bass",
+      "distortion",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -294,7 +491,13 @@
     "title": "How to make jungle music in your browser",
     "dek": "Jungle runs on a densely chopped Amen-style break, a deep stepped sub bassline, and ragga vocal textures scattered on top. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-22",
-    "tags": ["jungle", "breakbeat", "sampler", "sub bass", "genre"],
+    "tags": [
+      "jungle",
+      "breakbeat",
+      "sampler",
+      "sub bass",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -302,7 +505,13 @@
     "title": "How to make trance music in your browser",
     "dek": "Trance runs on a driving four-on-the-floor kick, a rolling 16th-note bassline, and a long arpeggiated build into a euphoric breakdown and drop. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-21",
-    "tags": ["trance", "arpeggio", "breakdown", "drum machine", "genre"],
+    "tags": [
+      "trance",
+      "arpeggio",
+      "breakdown",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -310,7 +519,13 @@
     "title": "How to make boom bap in your browser",
     "dek": "Boom bap runs on chunky swung drum breaks, chopped soul samples, and a dusty vinyl-crackle texture sitting around 85 to 95 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-20",
-    "tags": ["boom bap", "sample chopping", "swing", "drum machine", "genre"],
+    "tags": [
+      "boom bap",
+      "sample chopping",
+      "swing",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -318,7 +533,13 @@
     "title": "How to make grime in your browser",
     "dek": "Grime runs on sparse 140 BPM beats, staccato square-wave synth riffs, and half-step drum patterns built for an MC to ride over. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-19",
-    "tags": ["grime", "140 bpm", "square wave riff", "drum machine", "genre"],
+    "tags": [
+      "grime",
+      "140 bpm",
+      "square wave riff",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -326,7 +547,13 @@
     "title": "How to make amapiano in your browser",
     "dek": "Amapiano runs on a deep log drum bassline, a laid-back shaker groove, and airy piano stabs sitting around 112 to 115 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-14",
-    "tags": ["amapiano", "log drum", "piano stabs", "drum machine", "genre"],
+    "tags": [
+      "amapiano",
+      "log drum",
+      "piano stabs",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -334,7 +561,14 @@
     "title": "How to make reggaeton in your browser",
     "dek": "Reggaeton runs on the dembow riddim, a syncopated bass tumbao, and layered percussion sitting around 90 to 100 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-13",
-    "tags": ["reggaeton", "dembow", "riddim", "percussion", "drum machine", "genre"],
+    "tags": [
+      "reggaeton",
+      "dembow",
+      "riddim",
+      "percussion",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -342,7 +576,13 @@
     "title": "A free Pro Tools alternative that runs in any browser",
     "dek": "Pro Tools is the recording-studio standard, sold by subscription and built around multitrack audio recording. Tracks is a free browser DAW with real multitrack recording, comping, and a full mixer. Here is how the two actually compare.",
     "date": "2026-08-12",
-    "tags": ["Pro Tools", "comparison", "browser DAW", "free alternative", "recording"],
+    "tags": [
+      "Pro Tools",
+      "comparison",
+      "browser DAW",
+      "free alternative",
+      "recording"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -350,7 +590,14 @@
     "title": "How to make Jersey club in your browser",
     "dek": "Jersey club runs on triplet-heavy kick patterns, a signature bed-squeak sample, and chopped vocal loops around 130 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-11",
-    "tags": ["jersey club", "triplet kicks", "sampler", "vocal chops", "drum machine", "genre"],
+    "tags": [
+      "jersey club",
+      "triplet kicks",
+      "sampler",
+      "vocal chops",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -358,7 +605,14 @@
     "title": "How to make techno in your browser",
     "dek": "Techno runs on a driving four-on-the-floor kick, a hypnotic bassline, and long filter builds instead of chord changes. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
     "date": "2026-08-10",
-    "tags": ["techno", "four-on-the-floor", "drum machine", "bassline", "acid", "genre"],
+    "tags": [
+      "techno",
+      "four-on-the-floor",
+      "drum machine",
+      "bassline",
+      "acid",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -366,7 +620,14 @@
     "title": "How to make UK garage in your browser",
     "dek": "UK garage runs on a shuffled 2-step drum pattern, a sliding sub bassline, and pitched vocal chops sitting around 130 BPM. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-09",
-    "tags": ["uk garage", "2-step", "sub bass", "vocal chops", "drum machine", "genre"],
+    "tags": [
+      "uk garage",
+      "2-step",
+      "sub bass",
+      "vocal chops",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -374,7 +635,14 @@
     "title": "How to make drum and bass in your browser",
     "dek": "Drum and bass runs on fast chopped breakbeats near 174 BPM, a deep rolling sub bass, and a deliberately sparse arrangement. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-08",
-    "tags": ["drum and bass", "breakbeat", "sub bass", "174 bpm", "drum machine", "genre"],
+    "tags": [
+      "drum and bass",
+      "breakbeat",
+      "sub bass",
+      "174 bpm",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -382,7 +650,13 @@
     "title": "How to make afrobeats music in your browser",
     "dek": "Afrobeats runs on a syncopated log drum bassline, a rolling shaker groove, and call-and-response vocal chops sitting over a relaxed mid-tempo pocket. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-07",
-    "tags": ["afrobeats", "log drum", "shaker groove", "drum machine", "genre"],
+    "tags": [
+      "afrobeats",
+      "log drum",
+      "shaker groove",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -390,7 +664,13 @@
     "title": "How to record guitar or any instrument in your browser DAW",
     "dek": "Plug your audio interface into your computer, pick it as your input, and record real guitar, bass, or any line-level instrument straight into a free browser DAW. Here is how the setup, levels, and mixing work.",
     "date": "2026-08-06",
-    "tags": ["recording", "guitar", "audio interface", "instruments", "workflow"],
+    "tags": [
+      "recording",
+      "guitar",
+      "audio interface",
+      "instruments",
+      "workflow"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -398,7 +678,13 @@
     "title": "How to make drill music in your browser",
     "dek": "Drill runs on an off-beat kick pattern, a sliding 808 bassline, and triplet hi-hat rolls, all sitting in a sparser arrangement than most trap-adjacent genres. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-05",
-    "tags": ["drill", "triplet hi-hats", "808 slide", "drum machine", "genre"],
+    "tags": [
+      "drill",
+      "triplet hi-hats",
+      "808 slide",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -406,7 +692,13 @@
     "title": "How to make synthwave in your browser",
     "dek": "Synthwave runs on a driving eighth-note bassline, gated-reverb drums, and lush analog-style pad chords. Here is how to program all three in Tracks with no software install.",
     "date": "2026-08-03",
-    "tags": ["synthwave", "gated reverb", "analog synth", "drum machine", "genre"],
+    "tags": [
+      "synthwave",
+      "gated reverb",
+      "analog synth",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -414,7 +706,13 @@
     "title": "How to import a MIDI file into your browser DAW",
     "dek": "Tracks reads standard MIDI files straight into the piano roll through the same Open button you use for a saved project. Here is how MIDI import works, what happens to tempo and drum channels, and what to check once the notes land.",
     "date": "2026-08-02",
-    "tags": ["MIDI import", "standard MIDI file", "browser DAW", "piano roll", "workflow"],
+    "tags": [
+      "MIDI import",
+      "standard MIDI file",
+      "browser DAW",
+      "piano roll",
+      "workflow"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -422,7 +720,13 @@
     "title": "A free Logic Pro alternative that runs in any browser",
     "dek": "Logic Pro is a one-time-purchase Mac-only DAW with a deep sound library. Tracks is a free browser studio with its own piano roll, synths, drum machines, and mixer, and it runs on any device with a browser. Here is how the two compare and when the browser version is the smarter call.",
     "date": "2026-08-01",
-    "tags": ["Logic Pro", "comparison", "browser DAW", "free alternative", "Mac"],
+    "tags": [
+      "Logic Pro",
+      "comparison",
+      "browser DAW",
+      "free alternative",
+      "Mac"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -430,7 +734,13 @@
     "title": "How to make phonk music in your browser",
     "dek": "Phonk runs on a cowbell-driven drum loop, a distorted Memphis-style bass, and pitched-down vocal chops. Here is how to program all three in Tracks with no software install.",
     "date": "2026-07-31",
-    "tags": ["phonk", "cowbell", "drum machine", "bass", "genre"],
+    "tags": [
+      "phonk",
+      "cowbell",
+      "drum machine",
+      "bass",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -438,7 +748,13 @@
     "title": "How to make dubstep in your browser",
     "dek": "Dubstep runs on a half-time drum groove, a wobbling bassline built from automated filter cutoff, and heavy sidechain ducking. Here is how to program all three in Tracks with no software install.",
     "date": "2026-07-30",
-    "tags": ["dubstep", "wobble bass", "filter automation", "sidechain", "drum machine"],
+    "tags": [
+      "dubstep",
+      "wobble bass",
+      "filter automation",
+      "sidechain",
+      "drum machine"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -446,7 +762,13 @@
     "title": "How to make trap music in your browser",
     "dek": "Trap runs on rolling 808 slides, rapid hi-hat rolls, and a half-time snare feel. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
     "date": "2026-07-29",
-    "tags": ["trap", "808", "hi-hat rolls", "drum machine", "genre"],
+    "tags": [
+      "trap",
+      "808",
+      "hi-hat rolls",
+      "drum machine",
+      "genre"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -454,7 +776,13 @@
     "title": "Reverb and delay explained: how much space does your mix need?",
     "dek": "Reverb and delay both add a sense of space to a sound, but they work in different ways and get overused for different reasons. Here is what each effect actually does, how the Insert FX modules work in Tracks, and how much is too much.",
     "date": "2026-07-28",
-    "tags": ["reverb", "delay", "mixing", "sends", "effects"],
+    "tags": [
+      "reverb",
+      "delay",
+      "mixing",
+      "sends",
+      "effects"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -462,7 +790,13 @@
     "title": "How to edit note velocity for a more human-sounding performance",
     "dek": "Velocity controls how hard each note hits, and flat velocity is what makes programmed music sound robotic. Here is how to edit velocity in the Tracks piano roll to make a part breathe.",
     "date": "2026-07-27",
-    "tags": ["velocity", "piano roll", "dynamics", "humanize", "MIDI"],
+    "tags": [
+      "velocity",
+      "piano roll",
+      "dynamics",
+      "humanize",
+      "MIDI"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -470,7 +804,13 @@
     "title": "SoundFont instruments explained: real instrument sounds in your browser",
     "dek": "A SoundFont (.sf2) is a bank of sampled real instruments you can load straight into Tracks. Here is what an SF2 file actually is, how SoundFont tracks work in the browser studio, and how to build a track around real instrument sounds.",
     "date": "2026-07-26",
-    "tags": ["soundfont", "sf2", "instruments", "browser DAW", "sound design"],
+    "tags": [
+      "soundfont",
+      "sf2",
+      "instruments",
+      "browser DAW",
+      "sound design"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -478,7 +818,13 @@
     "title": "Vocal chain order explained: what order should effects go in?",
     "dek": "A vocal chain is the fixed order a signal passes through gate, EQ, de-esser, and compressor before it reaches the fader. Here is the exact order Tracks uses on every track, why it's built that way, and how to build a full chain step by step.",
     "date": "2026-07-25",
-    "tags": ["vocal chain", "mixing", "gate", "de-esser", "compressor"],
+    "tags": [
+      "vocal chain",
+      "mixing",
+      "gate",
+      "de-esser",
+      "compressor"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -486,7 +832,13 @@
     "title": "How to make house music in your browser",
     "dek": "House music runs on a four-on-the-floor kick, off-beat hi-hats, and a rolling bassline. Here is how to program all three in Tracks' drum machine, piano roll, and mixer with no software install.",
     "date": "2026-07-24",
-    "tags": ["house music", "four-on-the-floor", "drum machine", "bassline", "EDM"],
+    "tags": [
+      "house music",
+      "four-on-the-floor",
+      "drum machine",
+      "bassline",
+      "EDM"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -494,7 +846,13 @@
     "title": "A free Ableton Live alternative that runs in any browser",
     "dek": "Ableton Live is a paid DAW built around session view and clip launching. Tracks is a free browser studio with its own session view, piano roll, synths, and mixer. Here is how the two compare and when the browser version is the smarter call.",
     "date": "2026-07-23",
-    "tags": ["Ableton", "comparison", "browser DAW", "free alternative", "session view"],
+    "tags": [
+      "Ableton",
+      "comparison",
+      "browser DAW",
+      "free alternative",
+      "session view"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -502,7 +860,13 @@
     "title": "A free FL Studio alternative that runs in any browser",
     "dek": "FL Studio costs money and needs an install. Tracks is a free browser DAW with a piano roll, step sequencer, synths, and a mixer, and it runs in any tab. Here is how the two compare and where a browser studio is the better call.",
     "date": "2026-07-22",
-    "tags": ["FL Studio", "comparison", "browser DAW", "free alternative", "piano roll"],
+    "tags": [
+      "FL Studio",
+      "comparison",
+      "browser DAW",
+      "free alternative",
+      "piano roll"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -510,7 +874,13 @@
     "title": "How to use autotune in your browser: natural correction or the robotic effect",
     "dek": "Tracks includes built-in autotune for pitch-correcting a vocal take. Here is how the Speed and Amount dials control the difference between a subtle, natural correction and the hard-tuned robotic effect, and when to reach for each.",
     "date": "2026-07-21",
-    "tags": ["autotune", "pitch correction", "vocals", "retune speed", "mixing"],
+    "tags": [
+      "autotune",
+      "pitch correction",
+      "vocals",
+      "retune speed",
+      "mixing"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -518,7 +888,13 @@
     "title": "Audacity vs Tracks: free audio editor or free browser DAW?",
     "dek": "Audacity is a free, open-source audio editor for recording and cleaning up sound. Tracks is a free browser-based DAW with a piano roll, synths, drum machines, and a full mixer. Here is how the two actually differ, and when you need one instead of the other.",
     "date": "2026-07-20",
-    "tags": ["audacity", "comparison", "browser DAW", "free alternative", "audio editor"],
+    "tags": [
+      "audacity",
+      "comparison",
+      "browser DAW",
+      "free alternative",
+      "audio editor"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -526,7 +902,13 @@
     "title": "Chorus, phaser, distortion, and bitcrusher: creative effects explained",
     "dek": "Beyond EQ and compression, Tracks ships four creative effects that add movement, grit, and texture to a sound: chorus, phaser, distortion, and bitcrusher. Here is what each one does, how it works, and when to reach for it.",
     "date": "2026-07-19",
-    "tags": ["chorus", "phaser", "distortion", "bitcrusher", "effects"],
+    "tags": [
+      "chorus",
+      "phaser",
+      "distortion",
+      "bitcrusher",
+      "effects"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -534,7 +916,13 @@
     "title": "How to use a noise gate to clean up noisy recordings",
     "dek": "A noise gate mutes a track whenever its signal drops below a threshold, cutting hiss, room noise, and bleed between the notes you actually played. Here is how Tracks' built-in gate works and how to set it up on a vocal or instrument track.",
     "date": "2026-07-18",
-    "tags": ["noise gate", "gate", "recording", "mixing", "cleanup"],
+    "tags": [
+      "noise gate",
+      "gate",
+      "recording",
+      "mixing",
+      "cleanup"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -542,7 +930,13 @@
     "title": "De-esser explained: how to fix harsh S and T sounds in vocals",
     "dek": "A de-esser is a frequency-specific compressor that tames the harsh sibilant sounds in a vocal take without dulling the rest of the voice. Here is how sibilance happens and how to dial in Tracks' built-in de-esser so vocals sit smoothly in a mix.",
     "date": "2026-07-17",
-    "tags": ["de-esser", "vocals", "mixing", "sibilance", "recording"],
+    "tags": [
+      "de-esser",
+      "vocals",
+      "mixing",
+      "sibilance",
+      "recording"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -550,7 +944,13 @@
     "title": "How to comp the best take from multiple recordings",
     "dek": "Take comping means recording several passes of a vocal or instrument part and stitching the best sections of each into one final take. Here is how count-in recording and take comping work in Tracks so you never settle for a single imperfect performance.",
     "date": "2026-07-16",
-    "tags": ["take comping", "recording", "vocals", "workflow", "editing"],
+    "tags": [
+      "take comping",
+      "recording",
+      "vocals",
+      "workflow",
+      "editing"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -558,7 +958,13 @@
     "title": "How to write a bassline that locks with the kick drum",
     "dek": "A bassline that locks with the kick shares rhythmic space instead of colliding with it. Here is a practical method for placing bass notes around your kick drum in the Tracks piano roll so the low end stays tight instead of muddy.",
     "date": "2026-07-15",
-    "tags": ["bassline", "bass", "kick drum", "arrangement", "mixing"],
+    "tags": [
+      "bassline",
+      "bass",
+      "kick drum",
+      "arrangement",
+      "mixing"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -566,7 +972,13 @@
     "title": "What is the session view? Loop-based songwriting in a browser DAW",
     "dek": "The session view lets you launch and combine loop clips live instead of arranging on a fixed timeline. Here is what Tracks' clip-launch view does, when to use it instead of the timeline, and how to turn a jam into a finished arrangement.",
     "date": "2026-07-13",
-    "tags": ["session view", "clip launch", "loop-based", "songwriting", "workflow"],
+    "tags": [
+      "session view",
+      "clip launch",
+      "loop-based",
+      "songwriting",
+      "workflow"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -574,7 +986,13 @@
     "title": "Subtractive vs FM synthesis: how to design your own sounds",
     "dek": "Subtractive synthesis carves a sound out of a raw waveform with a filter, and FM synthesis builds a tone by using one oscillator to modulate another. Here is how each works in the Tracks browser synth and how to program your own patch from scratch.",
     "date": "2026-07-12",
-    "tags": ["synthesis", "subtractive synthesis", "FM synthesis", "sound design", "synth"],
+    "tags": [
+      "synthesis",
+      "subtractive synthesis",
+      "FM synthesis",
+      "sound design",
+      "synth"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -582,7 +1000,13 @@
     "title": "How to write chord progressions in the piano roll",
     "dek": "Chords give a song its emotional color and its harmonic backbone. Here is a practical, no-theory-degree way to build chord progressions in the Tracks piano roll, from picking a key to voicing and looping them.",
     "date": "2026-07-11",
-    "tags": ["chords", "chord progressions", "piano roll", "harmony", "songwriting"],
+    "tags": [
+      "chords",
+      "chord progressions",
+      "piano roll",
+      "harmony",
+      "songwriting"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -590,7 +1014,13 @@
     "title": "Time-stretch and repitch explained: change tempo or key without ruining quality",
     "dek": "Time-stretch changes a clip's length without changing its pitch, and repitch changes its pitch without changing its length. Here is how both work in the Tracks browser studio and when to use each one.",
     "date": "2026-07-10",
-    "tags": ["time-stretch", "repitch", "tempo", "pitch", "audio editing"],
+    "tags": [
+      "time-stretch",
+      "repitch",
+      "tempo",
+      "pitch",
+      "audio editing"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -598,7 +1028,13 @@
     "title": "How to chop and flip a sample into a beat",
     "dek": "Sample chopping cuts a longer audio clip into short one-shots so you can play them in a new order, on a new grid, in a new key. Here is how to chop and flip a sample using the Tracks 16-pad sampler with no downloads.",
     "date": "2026-07-09",
-    "tags": ["sampling", "sampler", "chopping", "beats", "production"],
+    "tags": [
+      "sampling",
+      "sampler",
+      "chopping",
+      "beats",
+      "production"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -606,7 +1042,13 @@
     "title": "Quantize and swing explained: how to make a beat groove",
     "dek": "Quantize snaps notes to the grid for tightness, and swing shifts alternating notes late for feel. Here is how to use both together in the Tracks piano roll and drum machine to make a beat sound programmed instead of robotic.",
     "date": "2026-07-08",
-    "tags": ["quantize", "swing", "groove", "rhythm", "piano roll"],
+    "tags": [
+      "quantize",
+      "swing",
+      "groove",
+      "rhythm",
+      "piano roll"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -614,7 +1056,12 @@
     "title": "How to export a MIDI file from your browser DAW",
     "dek": "Exporting a standard MIDI file gets the notes out of Tracks and into any other instrument, notation app, or DAW. Here is how MIDI export works, what it captures, and what it leaves behind.",
     "date": "2026-07-07",
-    "tags": ["MIDI export", "standard MIDI file", "browser DAW", "workflow"],
+    "tags": [
+      "MIDI export",
+      "standard MIDI file",
+      "browser DAW",
+      "workflow"
+    ],
     "readingTime": "6 min"
   },
   {
@@ -622,7 +1069,13 @@
     "title": "How to use group buses and sends to organize a mix",
     "dek": "Group buses collect related tracks under one fader and one effect chain, and sends let multiple tracks share a single reverb or delay. Here is how to set both up in Tracks to keep a busy mix organized and controllable.",
     "date": "2026-07-06",
-    "tags": ["group bus", "sends", "mixing", "reverb", "organization"],
+    "tags": [
+      "group bus",
+      "sends",
+      "mixing",
+      "reverb",
+      "organization"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -630,7 +1083,13 @@
     "title": "How to arrange a song: verse, chorus, bridge structure",
     "dek": "A song needs a structure before it needs polish. Here is how to block out verses, choruses, bridges, and transitions on the Tracks timeline so a pile of loops turns into a finished track.",
     "date": "2026-07-05",
-    "tags": ["arrangement", "song structure", "verse chorus bridge", "timeline", "markers"],
+    "tags": [
+      "arrangement",
+      "song structure",
+      "verse chorus bridge",
+      "timeline",
+      "markers"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -638,7 +1097,13 @@
     "title": "Where does your project actually live? Local storage in a browser DAW",
     "dek": "Tracks never uploads your project to a server. Here is how local, in-browser storage works, why it means no account and no cloud, and how to back up or move a project safely.",
     "date": "2026-07-04",
-    "tags": ["local storage", "privacy", "browser DAW", "no account", "backup"],
+    "tags": [
+      "local storage",
+      "privacy",
+      "browser DAW",
+      "no account",
+      "backup"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -646,7 +1111,13 @@
     "title": "How to master a track for streaming: loudness basics",
     "dek": "Mastering a track for streaming means gain-staging your mix, gluing it together on a bus, and watching a loudness meter instead of guessing. Here is how to do it in the free Tracks browser studio.",
     "date": "2026-07-03",
-    "tags": ["mastering", "loudness", "LUFS", "limiter", "streaming"],
+    "tags": [
+      "mastering",
+      "loudness",
+      "LUFS",
+      "limiter",
+      "streaming"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -654,7 +1125,12 @@
     "title": "How to use automation to make your mix move",
     "dek": "Static volume and effect settings make a mix feel flat. Here is how to draw automation curves for volume, pan, and effect sends in Tracks so your track builds, breathes, and changes over time.",
     "date": "2026-07-02",
-    "tags": ["automation", "mixing", "volume", "browser DAW"],
+    "tags": [
+      "automation",
+      "mixing",
+      "volume",
+      "browser DAW"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -662,7 +1138,13 @@
     "title": "Best free VST alternative instruments in the browser",
     "dek": "You don't need paid VST plugins to get good sounds — Tracks ships a subtractive synth, an FM synth, 808/909 drum machines, a 16-pad sampler, and SoundFont playback built into the browser, free.",
     "date": "2026-07-01",
-    "tags": ["instruments", "synth", "VST", "SoundFont", "free"],
+    "tags": [
+      "instruments",
+      "synth",
+      "VST",
+      "SoundFont",
+      "free"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -670,7 +1152,13 @@
     "title": "BandLab vs Soundtrap vs Tracks: free browser studios compared",
     "dek": "BandLab, Soundtrap, and Tracks are the three free browser DAWs most people encounter — here is a plain comparison of instruments, collaboration, export formats, and data privacy so you can pick the right studio for your workflow.",
     "date": "2026-06-27",
-    "tags": ["BandLab", "Soundtrap", "comparison", "browser DAW", "free"],
+    "tags": [
+      "BandLab",
+      "Soundtrap",
+      "comparison",
+      "browser DAW",
+      "free"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -678,7 +1166,13 @@
     "title": "How to make a beat for a rap song",
     "dek": "Making a rap beat starts with a kick-snare pattern, a sample or synth hook, and the right tempo — here is how to program all three in the Tracks browser studio with no downloads or software install.",
     "date": "2026-06-26",
-    "tags": ["rap", "beats", "hip-hop", "drum machine", "808"],
+    "tags": [
+      "rap",
+      "beats",
+      "hip-hop",
+      "drum machine",
+      "808"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -686,7 +1180,13 @@
     "title": "How to split a song into stems (vocals, drums, bass)",
     "dek": "Stem splitting separates a finished audio file into isolated parts — vocals, drums, bass, and other — so you can remix, sample, or study any element. Tracks runs this extraction entirely in your browser with no upload and no account.",
     "date": "2026-06-25",
-    "tags": ["stems", "stem extraction", "vocals", "remixing", "audio"],
+    "tags": [
+      "stems",
+      "stem extraction",
+      "vocals",
+      "remixing",
+      "audio"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -694,7 +1194,12 @@
     "title": "Sidechain compression explained (the \"pumping\" effect)",
     "dek": "Sidechain compression makes a track duck in volume whenever another track hits — it's the pumping effect you hear in dance music, and you can dial it in with Tracks' built-in sidechain ducking in minutes.",
     "date": "2026-06-24",
-    "tags": ["sidechain", "compression", "mixing", "pumping"],
+    "tags": [
+      "sidechain",
+      "compression",
+      "mixing",
+      "pumping"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -702,7 +1207,12 @@
     "title": "How to make a melody if you don't know music theory",
     "dek": "You don't need to read music to write a melody that works — here is a practical method for building a memorable tune in the Tracks piano roll using shapes, repetition, and your ear alone.",
     "date": "2026-06-23",
-    "tags": ["melody", "piano roll", "music theory", "beginners"],
+    "tags": [
+      "melody",
+      "piano roll",
+      "music theory",
+      "beginners"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -710,7 +1220,12 @@
     "title": "Free online music maker for students and Chromebooks",
     "dek": "Chromebooks block software installs, but tracks.jfound.net runs in any browser tab — here is how students can record, arrange, and export a full song with no account and no download.",
     "date": "2026-06-22",
-    "tags": ["Chromebook", "students", "free", "browser DAW"],
+    "tags": [
+      "Chromebook",
+      "students",
+      "free",
+      "browser DAW"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -718,7 +1233,12 @@
     "title": "How to use a MIDI keyboard in a browser DAW (Web MIDI)",
     "dek": "Connect your MIDI keyboard to your browser and play, record, and sequence with it in Tracks — no drivers, no software install, just the Web MIDI API and a USB cable.",
     "date": "2026-06-21",
-    "tags": ["MIDI", "keyboard", "Web MIDI", "browser DAW"],
+    "tags": [
+      "MIDI",
+      "keyboard",
+      "Web MIDI",
+      "browser DAW"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -726,7 +1246,12 @@
     "title": "Make lo-fi hip-hop in your browser",
     "dek": "Lo-fi hip-hop is built from slow, swinging drums, a warm bass line, a dusty chord loop, and a vinyl-style texture — and you can make all of it inside Tracks with no downloads.",
     "date": "2026-06-20",
-    "tags": ["lofi", "hip-hop", "beats", "browser DAW"],
+    "tags": [
+      "lofi",
+      "hip-hop",
+      "beats",
+      "browser DAW"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -734,7 +1259,12 @@
     "title": "How to export your song to MP3 or WAV",
     "dek": "Exporting your finished track from Tracks takes two clicks — here is how to choose between MP3 and WAV, what the settings mean, and how to get the best quality file for streaming, sharing, or sending to a mastering engineer.",
     "date": "2026-06-19",
-    "tags": ["export", "MP3", "WAV", "mastering"],
+    "tags": [
+      "export",
+      "MP3",
+      "WAV",
+      "mastering"
+    ],
     "readingTime": "6 min"
   },
   {
@@ -742,7 +1272,12 @@
     "title": "What is a DAW, and do you need an expensive one?",
     "dek": "A DAW (digital audio workstation) is software for recording, arranging, and mixing music. Here is what the core tools do, what the difference between free and paid options really is, and why a browser DAW can do the job for most producers.",
     "date": "2026-06-18",
-    "tags": ["DAW", "free", "getting started", "comparison"],
+    "tags": [
+      "DAW",
+      "free",
+      "getting started",
+      "comparison"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -750,7 +1285,12 @@
     "title": "How to mix a track: EQ, compression, and reverb basics",
     "dek": "Learn the fundamentals of mixing a track in your browser — EQ to shape tone, compression to control dynamics, and reverb to add space — with no plugins and no downloads.",
     "date": "2026-06-17",
-    "tags": ["mixing", "EQ", "compression", "reverb"],
+    "tags": [
+      "mixing",
+      "EQ",
+      "compression",
+      "reverb"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -758,7 +1298,11 @@
     "title": "Free online drum machine: program beats with no software",
     "dek": "Step by step guide to programming drum beats in your browser using Tracks' free online drum machine — 808, 909, swing, velocity, and export with no download or account.",
     "date": "2026-06-16",
-    "tags": ["drums", "beats", "drum machine"],
+    "tags": [
+      "drums",
+      "beats",
+      "drum machine"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -766,7 +1310,11 @@
     "title": "How to make a song in your browser for beginners",
     "dek": "A step-by-step beginner's guide to making a complete song in your browser — arrangement, melody, drums, and export — with no software and no account.",
     "date": "2026-06-15",
-    "tags": ["beginners", "tutorial", "getting started"],
+    "tags": [
+      "beginners",
+      "tutorial",
+      "getting started"
+    ],
     "readingTime": "8 min"
   },
   {
@@ -774,7 +1322,11 @@
     "title": "The best free online music studio (no download, no account)",
     "dek": "What a browser-based music studio can actually do in 2026 — and how to make a full track in one without spending a cent.",
     "date": "2026-06-14",
-    "tags": ["free", "browser DAW", "getting started"],
+    "tags": [
+      "free",
+      "browser DAW",
+      "getting started"
+    ],
     "readingTime": "7 min"
   },
   {
@@ -782,7 +1334,11 @@
     "title": "How to make beats in your browser (step by step)",
     "dek": "Build a beat from scratch using the drum machine, sampler, and piano roll — no plugins, no install.",
     "date": "2026-06-14",
-    "tags": ["beats", "drums", "tutorial"],
+    "tags": [
+      "beats",
+      "drums",
+      "tutorial"
+    ],
     "readingTime": "6 min"
   },
   {
@@ -790,7 +1346,11 @@
     "title": "A free GarageBand alternative that runs in any browser",
     "dek": "No Mac? No problem. Here's how Tracks compares to GarageBand and other desktop DAWs — and where a browser studio wins.",
     "date": "2026-06-14",
-    "tags": ["comparison", "GarageBand", "free"],
+    "tags": [
+      "comparison",
+      "GarageBand",
+      "free"
+    ],
     "readingTime": "6 min"
   },
   {
@@ -798,7 +1358,11 @@
     "title": "How to record and tune vocals in your browser",
     "dek": "Record a vocal take through your mic, comp the best parts, and snap it to key with built-in autotune — all online and free.",
     "date": "2026-06-14",
-    "tags": ["vocals", "recording", "autotune"],
+    "tags": [
+      "vocals",
+      "recording",
+      "autotune"
+    ],
     "readingTime": "6 min"
   }
 ]
