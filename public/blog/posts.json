@@ -1,5 +1,17 @@
 [
   {
+    "slug": "layer-drum-sounds-kick-snare",
+    "title": "How to layer drum sounds for a bigger kick and snare",
+    "dek": "Stack two or three samples into one punchy kick or snare in your browser: pick complementary layers, split the frequencies with EQ, and glue them on a group bus.",
+    "date": "2026-10-03",
+    "tags": [
+      "drums",
+      "layering",
+      "sound design"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "bpm-by-genre-cheat-sheet",
     "title": "BPM by genre: a tempo cheat sheet for every style",
     "dek": "The typical BPM range for house, trap, lo-fi, drum and bass and more, and how to set the tempo in your browser studio.",

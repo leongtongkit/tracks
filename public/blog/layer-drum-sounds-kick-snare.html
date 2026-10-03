@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to layer drum sounds for a bigger kick and snare | Tracks</title>
+    <meta name="description" content="How to layer drum sounds in the free Tracks browser studio: stack kick and snare samples, split them with EQ, and glue them on a group bus for a bigger hit." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/layer-drum-sounds-kick-snare" />
+    <meta property="og:title" content="How to layer drum sounds for a bigger kick and snare" />
+    <meta property="og:description" content="Layering drums means stacking two or three samples so each covers a different job: sub weight, body, and click. Here is how to do it in your browser." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/layer-drum-sounds-kick-snare" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": "How to layer drum sounds for a bigger kick and snare",
+  "description": "Layer kick and snare samples into one bigger drum hit using separate tracks, EQ, and a group bus in the Tracks browser studio.",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "name": "Pick layers with different jobs",
+      "text": "Choose one sample for low-end weight, one for body, and one for the click or snap. Layers that do the same job just get louder, not bigger."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Put each layer on its own track",
+      "text": "Load each sample on a separate track, using the 808 or 909 drum machine, the 16-pad sampler, or a SoundFont drum kit, and give every layer the same pattern."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Split the frequencies with EQ",
+      "text": "On each track, use the parametric EQ to roll off what that layer should not cover: cut the lows on the click layer and the highs on the sub layer."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Check the layers against each other",
+      "text": "Mute and unmute each layer while the pattern loops. If the combined hit sounds thinner than a single layer, the two are fighting and one needs a different sample or a small timing shift."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Balance the blend with track volume",
+      "text": "Set the main body layer first, then bring the other layers in underneath it until you feel them more than hear them."
+    },
+    {
+      "@type": "HowToStep",
+      "name": "Glue the layers on a group bus",
+      "text": "Route the layers to a group bus and add a light compressor so the stack behaves like a single drum hit."
+    }
+  ]
+}
+    </script>
+    <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Guides",
+      "item": "https://tracks.jfound.net/blog/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "How to layer drum sounds for a bigger kick and snare",
+      "item": "https://tracks.jfound.net/blog/layer-drum-sounds-kick-snare"
+    }
+  ]
+}
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to layer drum sounds for a bigger kick and snare</h1>
+        <p class="art-meta">By Tongkit Leong · October 3, 2026 · 6 min read</p>
+
+        <p class="lede">To layer drum sounds, stack two or three samples on separate tracks so each one covers a different job: sub weight, body, or click. Then use EQ to keep them out of each other's way and a group bus to glue them into one hit. You can do all of it in the free <a href="/studio">Tracks browser studio</a>.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why layer drums at all</h2>
+        <p>A single sample rarely does everything. A kick with a deep sub can lack attack, and a kick with a sharp click can feel thin on a small speaker. A snare with a fat body can disappear behind guitars or synths, while a bright snare can sound papery.</p>
+        <p>Layering lets you build the exact drum you hear in your head from parts. It is also how many full-sounding productions get a kick or snare that no single sample pack provides.</p>
+
+        <h2>Step 1: Pick layers with different jobs</h2>
+        <p>Think in three roles. The weight layer gives low-end power. The body layer gives the main tone and pitch of the drum. The click or snap layer gives the first few milliseconds of attack so the hit cuts through a mix.</p>
+        <p>For a kick, that might be a long 808 sub, a short punchy 909-style body, and a clicky transient. For a snare, it might be a tight snare for the crack, a clap for width, and a short noisy hit for air. Two layers that do the same job do not make a bigger drum, just a louder one.</p>
+
+        <h2>Step 2: Put each layer on its own track</h2>
+        <p>In <a href="/studio">Tracks</a>, give each layer its own track so you can set volume and EQ independently. You can source layers from the 808 and 909 drum machines, the 16-pad sampler, or a SoundFont drum kit. Draw or program the same rhythm on every layer so they trigger together.</p>
+        <p>If you are still deciding which machine suits your style, <a href="/blog/808-vs-909-drum-machine">808 vs 909</a> explains how the two sound and when each fits.</p>
+
+        <h2>Step 3: Split the frequencies with EQ</h2>
+        <p>Open the parametric EQ on each layer and remove what that layer should not be doing. Roll the low end off the click layer so it does not add mud. Roll the highs off the sub layer so it stays a clean low tone. Leave the body layer mostly full range.</p>
+        <p>You are giving each sample its own slice of the spectrum, which is the same idea covered in the <a href="/blog/eq-cheat-sheet-by-instrument">EQ cheat sheet by instrument</a>. Small cuts are usually enough. Use your ears and the EQ display, not fixed numbers.</p>
+
+        <h2>Step 4: Check the layers against each other</h2>
+        <p>Loop the pattern and mute each layer in turn. The full stack should sound bigger than the best single layer. If it sounds thinner or hollower, two layers are likely clashing in the low end, where their waveforms can partly cancel.</p>
+        <p>Try swapping one sample, or nudge one layer's notes slightly earlier or later in the piano roll, and listen again. Samples with a long silent lead-in or a slow start often need this kind of timing shift to land together with the others.</p>
+
+        <h2>Step 5: Balance the blend</h2>
+        <p>Set the body layer first, since it defines the drum. Then raise the other layers underneath it until you notice the drum feels bigger, not until you can hear each layer separately. If you can clearly pick out every layer, the stack is too obvious and will sound like three drums rather than one.</p>
+
+        <h2>Step 6: Glue the layers on a group bus</h2>
+        <p>Route all the layers of one drum to a group bus. On the bus, add a light compressor so the stack reacts together and sounds like a single hit. The <a href="/blog/mix-group-buses-sends">group buses and sends guide</a> shows how to set up routing in the mixer.</p>
+        <p>Once the stack is glued, treat it as one instrument. Mix its volume against your bass, and use sidechain ducking or the rhythmic gaps from <a href="/blog/bassline-locks-with-kick">locking a bassline with the kick</a> to keep the low end clear.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>How many layers should a kick or snare have?</h3>
+        <p>Two or three is plenty. Each layer should have a clear job. If you cannot say what a layer adds, remove it and see whether the drum loses anything.</p>
+
+        <h3>Why does my layered kick sound weaker than one sample?</h3>
+        <p>Usually the low ends of two layers overlap and partly cancel, or one layer starts slightly later than the other. Mute layers one at a time, cut the lows from the layer that should not be providing them, and try nudging timing.</p>
+
+        <h3>Do I need a sampler to layer drums?</h3>
+        <p>No. You can layer the built-in drum machines on separate tracks, or mix drum machine hits with sampler pads. The sampler gives you more options if you want to load your own sounds.</p>
+
+        <h3>Should I compress each layer or the whole stack?</h3>
+        <p>Start with the whole stack on a group bus, since that is what makes the layers act as one drum. Add compression to an individual layer only if it has an uneven level on its own.</p>
+
+        <h3>Is my project saved online?</h3>
+        <p>No. Tracks keeps your projects in your own browser on your device, and nothing is uploaded.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Build your own layered drums</h3>
+            <p>Free, no download, no account. Stack a kick, snare, and clap and hear them hit together.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
