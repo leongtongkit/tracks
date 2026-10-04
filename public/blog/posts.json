@@ -1,5 +1,17 @@
 [
   {
+    "slug": "double-track-vocals-harmonies",
+    "title": "How to double-track vocals and stack harmonies in your browser",
+    "dek": "Record a second take of the same line, pan the pair, and add a third-above harmony to turn one thin vocal into a wide, full chorus — free in the Tracks browser studio.",
+    "date": "2026-10-04",
+    "tags": [
+      "vocals",
+      "harmonies",
+      "recording"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "layer-drum-sounds-kick-snare",
     "title": "How to layer drum sounds for a bigger kick and snare",
     "dek": "Stack two or three samples into one punchy kick or snare in your browser: pick complementary layers, split the frequencies with EQ, and glue them on a group bus.",
