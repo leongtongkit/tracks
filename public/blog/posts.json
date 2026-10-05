@@ -1,5 +1,17 @@
 [
   {
+    "slug": "how-to-program-drum-fills",
+    "title": "How to program drum fills and transitions in your browser",
+    "dek": "Add a drum fill at the end of a phrase using a snare or tom roll, a velocity build, and a clean landing on the downbeat, free in the Tracks browser studio.",
+    "date": "2026-10-05",
+    "tags": [
+      "drum fills",
+      "drums",
+      "transitions"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "double-track-vocals-harmonies",
     "title": "How to double-track vocals and stack harmonies in your browser",
     "dek": "Record a second take of the same line, pan the pair, and add a third-above harmony to turn one thin vocal into a wide, full chorus — free in the Tracks browser studio.",
