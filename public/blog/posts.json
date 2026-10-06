@@ -1,5 +1,17 @@
 [
   {
+    "slug": "hi-hat-patterns-groove-browser",
+    "title": "How to program hi-hat patterns that groove, from 8ths to trap rolls",
+    "dek": "Build hi-hat patterns in your browser: steady eighths, sixteenths with accents, open-hat offbeats, and trap-style rolls, using velocity and swing for groove.",
+    "date": "2026-10-06",
+    "tags": [
+      "hi-hats",
+      "drums",
+      "groove"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "how-to-program-drum-fills",
     "title": "How to program drum fills and transitions in your browser",
     "dek": "Add a drum fill at the end of a phrase using a snare or tom roll, a velocity build, and a clean landing on the downbeat, free in the Tracks browser studio.",
