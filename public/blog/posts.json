@@ -1,5 +1,18 @@
 [
   {
+    "slug": "fix-muddy-mix-browser",
+    "title": "How to fix a muddy mix: clear up low-mid buildup in your browser",
+    "dek": "Find the 200-400 Hz buildup that makes a mix sound cloudy, then fix it with high-pass filters, EQ cuts, and arrangement choices, free in the Tracks browser studio.",
+    "date": "2026-10-07",
+    "tags": [
+      "muddy mix",
+      "EQ",
+      "low end",
+      "mixing"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "hi-hat-patterns-groove-browser",
     "title": "How to program hi-hat patterns that groove, from 8ths to trap rolls",
     "dek": "Build hi-hat patterns in your browser: steady eighths, sixteenths with accents, open-hat offbeats, and trap-style rolls, using velocity and swing for groove.",
