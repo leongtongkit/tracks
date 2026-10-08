@@ -1,5 +1,18 @@
 [
   {
+    "slug": "background-music-for-videos",
+    "title": "How to make background music for videos in your browser",
+    "dek": "Build a quiet loop-based instrumental that sits under a voiceover or a YouTube video, then export it as WAV or MP3 for free.",
+    "date": "2026-10-08",
+    "tags": [
+      "video",
+      "background music",
+      "YouTube",
+      "instrumental"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "fix-muddy-mix-browser",
     "title": "How to fix a muddy mix: clear up low-mid buildup in your browser",
     "dek": "Find the 200-400 Hz buildup that makes a mix sound cloudy, then fix it with high-pass filters, EQ cuts, and arrangement choices, free in the Tracks browser studio.",
