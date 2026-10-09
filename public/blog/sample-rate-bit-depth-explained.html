@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV | Tracks</title>
+    <meta name="description" content="Sample rate is how many times per second audio is measured; bit depth is how finely each measurement is stored. Here is what 44.1 vs 48 kHz and 16-bit WAV mean, and which export settings to pick in the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/sample-rate-bit-depth-explained" />
+    <meta property="og:title" content="Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV" />
+    <meta property="og:description" content="What sample rate and bit depth do, and which export settings to pick for streaming, video, and sharing in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/sample-rate-bit-depth-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV",
+        "description": "Pick the right sample rate and MP3 bitrate for your export in Tracks, based on where the song is going.",
+        "step": [
+          { "@type": "HowToStep", "name": "Decide where the song is going", "text": "Music for streaming and sharing is normally delivered at 44.1 kHz; music that will sit under video is normally delivered at 48 kHz." },
+          { "@type": "HowToStep", "name": "Open Settings and find the Export section", "text": "In the Tracks studio, the Export section of Settings holds the sample rate and MP3 bitrate choices." },
+          { "@type": "HowToStep", "name": "Choose 44.1 kHz or 48 kHz", "text": "Pick 44.1 kHz for a music release or 48 kHz if you will drop the file into a video editor. The setting applies to WAV, MP3, and stem exports." },
+          { "@type": "HowToStep", "name": "Choose an MP3 bitrate", "text": "Pick 128, 192, or 320 kbps. Use 320 kbps for the best MP3 quality, or 128 kbps for small voice-style files." },
+          { "@type": "HowToStep", "name": "Export WAV for masters, MP3 for sharing", "text": "WAV is exported as 16-bit stereo PCM and keeps everything. Export it as your master, then make MP3 copies for sending around." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV", "item": "https://tracks.jfound.net/blog/sample-rate-bit-depth-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV</h1>
+        <p class="art-meta">By Tongkit Leong · October 9, 2026 · 6 min read</p>
+
+        <p class="lede">Sample rate is how many times per second a digital recording measures the sound, and bit depth is how finely each of those measurements is stored. For almost every song, 44.1 kHz at 16-bit is plenty, and 48 kHz is the better choice when the audio is headed for video. You can set the rate and MP3 bitrate in the <a href="/studio">Tracks studio</a> in a few clicks.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What sample rate means</h2>
+        <p>Digital audio is a long list of snapshots of the sound wave. The sample rate is how many snapshots are taken each second, measured in hertz. At 44.1 kHz that is 44,100 snapshots per second.</p>
+        <p>The rate sets the highest frequency that can be captured: roughly half the sample rate. At 44.1 kHz that ceiling is about 22 kHz, already above what people can hear. That is why 44.1 kHz became the standard for music.</p>
+
+        <h2>What bit depth means</h2>
+        <p>Bit depth is how many possible values each snapshot can take. More bits means a finer scale and a lower noise floor. 16-bit audio has a dynamic range of about 96 dB, which is more than enough for a finished song.</p>
+        <p>Higher bit depths such as 24-bit matter mostly while recording and editing, where you want extra room for quiet signals. The WAV file Tracks exports is 16-bit stereo, which is the same format used on CDs and is what most platforms expect to receive.</p>
+
+        <h2>44.1 kHz vs 48 kHz: which to pick</h2>
+        <ul>
+          <li><strong>44.1 kHz</strong> is the standard for music: streaming uploads, CD-style releases, and sending a track to a friend.</li>
+          <li><strong>48 kHz</strong> is the standard for video. If the song goes into a video editor or under a voiceover, export at 48 kHz so the editor does not have to convert it.</li>
+        </ul>
+        <p>The audible difference between the two is tiny. The real reason to choose is compatibility: match what the destination expects and nothing needs resampling. If you are making music for a video, see <a href="/blog/background-music-for-videos">how to make background music for videos in your browser</a>.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Do higher rates sound better?</h2>
+        <p>Not for listening. Rates like 96 kHz capture frequencies nobody can hear, and files get roughly twice as large. Tracks offers 44.1 and 48 kHz for export because those are the two rates that cover nearly every real destination.</p>
+        <p>What does affect how a track sounds is level, not rate. Clipping, a muddy low end, or a weak master matter far more. See <a href="/blog/gain-staging-avoid-clipping">gain staging: how to avoid clipping</a> before worrying about rates.</p>
+
+        <h2>WAV vs MP3 and bitrate</h2>
+        <p>WAV stores every sample as is, so files are large but nothing is lost. MP3 throws away detail that is hard to hear in return for a much smaller file. MP3 quality is set by bitrate rather than bit depth, and Tracks offers three choices:</p>
+        <ul>
+          <li><strong>128 kbps</strong> gives small files, fine for quick previews.</li>
+          <li><strong>192 kbps</strong> is the default and a good balance for sharing.</li>
+          <li><strong>320 kbps</strong> is the highest MP3 quality, close to WAV for most listeners.</li>
+        </ul>
+        <p>Export a WAV as your master and make MP3 copies from it when you need to share. The full export walkthrough is in <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a>.</p>
+
+        <h2>How to set these in Tracks</h2>
+        <ol>
+          <li>Open the <a href="/studio">studio</a> and open Settings.</li>
+          <li>In the Export section, choose the sample rate (44.1 or 48 kHz) and the MP3 bitrate (128, 192, or 320 kbps).</li>
+          <li>Export your song as WAV or MP3. The rate applies to WAV, MP3, and stem exports.</li>
+        </ol>
+        <p>The files are rendered in your browser and saved to your device. Nothing is uploaded.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What sample rate should I use for music?</h3>
+        <p>Use 44.1 kHz for music you plan to stream or share. Use 48 kHz if the audio is going into a video.</p>
+
+        <h3>Is 16-bit good enough?</h3>
+        <p>Yes for a finished song. 16-bit gives about 96 dB of dynamic range, which covers the full range of most music. Extra bits help mainly during recording and processing.</p>
+
+        <h3>Does exporting at 48 kHz make my song sound better?</h3>
+        <p>No. It makes the file compatible with video workflows. For listening to music, 44.1 and 48 kHz sound the same to nearly everyone.</p>
+
+        <h3>Should I export WAV or MP3?</h3>
+        <p>Export WAV when you want a lossless master, and MP3 when you need a small file to send or upload. You can make both from the same project.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Export at the rate you need, for free</h3>
+            <p>Choose 44.1 or 48 kHz and your MP3 bitrate, then bounce WAV or MP3 in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
