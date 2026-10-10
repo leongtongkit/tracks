@@ -1,5 +1,18 @@
 [
   {
+    "slug": "mix-vocals-over-a-beat",
+    "title": "How to mix vocals over a beat so they sit in the track",
+    "dek": "Get a recorded vocal to sit on top of a downloaded or self-made beat: level, EQ, compression, reverb and delay sends, and a quick reference check in the free Tracks browser studio.",
+    "date": "2026-10-10",
+    "tags": [
+      "vocals",
+      "mixing",
+      "beats",
+      "rap"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "sample-rate-bit-depth-explained",
     "title": "Sample rate and bit depth explained: 44.1 vs 48 kHz, 16-bit WAV",
     "dek": "What sample rate and bit depth actually do, which export settings to pick for streaming, video, and sharing, and how to set them in the free Tracks browser studio.",
