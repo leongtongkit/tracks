@@ -1,5 +1,18 @@
 [
   {
+    "slug": "back-up-share-project-file-browser-daw",
+    "title": "How to back up and move your music project between computers",
+    "dek": "Your Tracks projects live in your browser, so learn to save a project file, restore it on another computer, and keep a backup you control.",
+    "date": "2026-10-16",
+    "tags": [
+      "backup",
+      "project file",
+      "workflow",
+      "privacy"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "how-to-finish-a-song-browser",
     "title": "How to finish a song: stop looping and get to a done track",
     "dek": "Why most tracks stall at an eight-bar loop, and a practical routine to arrange, mix, export, and release a finished song from the free Tracks browser studio.",
