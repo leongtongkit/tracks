@@ -1,5 +1,18 @@
 [
   {
+    "slug": "make-arpeggio-piano-roll",
+    "title": "How to make an arpeggio in the piano roll",
+    "dek": "Turn a chord into a flowing arpeggio by drawing notes in the piano roll: pick a pattern, set the rhythm, shape velocity, and sound it out with the synth.",
+    "date": "2026-10-17",
+    "tags": [
+      "arpeggio",
+      "piano roll",
+      "chords",
+      "melody"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "back-up-share-project-file-browser-daw",
     "title": "How to back up and move your music project between computers",
     "dek": "Your Tracks projects live in your browser, so learn to save a project file, restore it on another computer, and keep a backup you control.",
