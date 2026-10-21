@@ -1,5 +1,18 @@
 [
   {
+    "slug": "transpose-change-key-browser",
+    "title": "How to transpose a song and change its key in the piano roll",
+    "dek": "Move a melody or whole song to a new key by shifting selected notes up or down in semitones, so it fits your vocal range or another track.",
+    "date": "2026-10-21",
+    "tags": [
+      "transpose",
+      "key",
+      "piano roll",
+      "vocals"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "bass-sound-on-phone-speakers",
     "title": "How to make your bass audible on phone and laptop speakers",
     "dek": "Small speakers cannot reproduce sub bass. Add harmonics with the Drive effect, layer a mid-range bass, and check your mix at low volume so the low end still comes through.",
