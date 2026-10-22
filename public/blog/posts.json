@@ -1,5 +1,18 @@
 [
   {
+    "slug": "synth-pad-warm-lush-browser",
+    "title": "How to make a warm synth pad in your browser",
+    "dek": "Build a soft, slow pad with a saw or triangle wave, slow attack and release, a low-pass filter, unison detune, and reverb, then play long chords underneath your song.",
+    "date": "2026-10-22",
+    "tags": [
+      "synth pad",
+      "sound design",
+      "chords",
+      "ambient"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "transpose-change-key-browser",
     "title": "How to transpose a song and change its key in the piano roll",
     "dek": "Move a melody or whole song to a new key by shifting selected notes up or down in semitones, so it fits your vocal range or another track.",
