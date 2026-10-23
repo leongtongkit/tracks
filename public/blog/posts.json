@@ -1,5 +1,18 @@
 [
   {
+    "slug": "high-pass-filter-low-cut-explained",
+    "title": "High-pass filter explained: when and where to cut low frequencies",
+    "dek": "A high-pass filter removes rumble and low end you cannot use. Learn where to set it on vocals, guitars, synths and drums so your mix gets cleaner and the bass hits harder.",
+    "date": "2026-10-23",
+    "tags": [
+      "high-pass filter",
+      "EQ",
+      "low cut",
+      "mixing"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "synth-pad-warm-lush-browser",
     "title": "How to make a warm synth pad in your browser",
     "dek": "Build a soft, slow pad with a saw or triangle wave, slow attack and release, a low-pass filter, unison detune, and reverb, then play long chords underneath your song.",
