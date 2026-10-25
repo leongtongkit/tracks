@@ -1,5 +1,18 @@
 [
   {
+    "slug": "load-your-own-samples-sampler-browser",
+    "title": "How to load your own sample and play it as an instrument",
+    "dek": "Load a WAV or MP3 into the Tracks sampler, set its root note, and play it across the keyboard or in the piano roll to make a melody, bass, or vocal chop.",
+    "date": "2026-10-25",
+    "tags": [
+      "sampler",
+      "samples",
+      "root note",
+      "piano roll"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "ghost-notes-snare-groove-browser",
     "title": "How to program ghost notes on the snare for a groovier beat",
     "dek": "Ghost notes are quiet snare hits between the main backbeats. Add them in the piano roll at low velocity to give a drum loop feel and movement.",
