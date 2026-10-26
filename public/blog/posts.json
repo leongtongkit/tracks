@@ -1,5 +1,18 @@
 [
   {
+    "slug": "make-cinematic-music-browser",
+    "title": "How to make cinematic music in your browser",
+    "dek": "Build a film-style cue in a free browser studio: a low drone, slow string chords, a rising build, and one big hit, then export it.",
+    "date": "2026-10-26",
+    "tags": [
+      "cinematic",
+      "film score",
+      "pads",
+      "build"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "load-your-own-samples-sampler-browser",
     "title": "How to load your own sample and play it as an instrument",
     "dek": "Load a WAV or MP3 into the Tracks sampler, set its root note, and play it across the keyboard or in the piano roll to make a melody, bass, or vocal chop.",
