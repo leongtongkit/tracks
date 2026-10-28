@@ -1,5 +1,17 @@
 [
   {
+    "slug": "adsr-envelope-explained",
+    "title": "ADSR envelope explained: attack, decay, sustain, release",
+    "dek": "What the four ADSR stages do to a synth sound, and how to set them for plucks, pads, basses and leads in your browser.",
+    "date": "2026-10-28",
+    "tags": [
+      "synth",
+      "envelope",
+      "sound design"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-cinematic-music-browser",
     "title": "How to make cinematic music in your browser",
     "dek": "Build a film-style cue in a free browser studio: a low drone, slow string chords, a rising build, and one big hit, then export it.",

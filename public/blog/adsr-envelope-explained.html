@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ADSR envelope explained: attack, decay, sustain, release | Tracks</title>
+    <meta name="description" content="ADSR is the four-stage envelope that shapes how a synth note starts, settles, holds and fades. Here is what each knob does and how to set them for plucks, pads, basses and leads in the free Tracks browser synth." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/adsr-envelope-explained" />
+    <meta property="og:title" content="ADSR envelope explained: attack, decay, sustain, release" />
+    <meta property="og:description" content="What the four ADSR stages do to a synth sound, and how to set them for plucks, pads, basses and leads in your browser." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/adsr-envelope-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "ADSR envelope explained: attack, decay, sustain, release",
+        "datePublished": "2026-10-28",
+        "dateModified": "2026-10-28",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "JFound" },
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/adsr-envelope-explained",
+        "image": "https://tracks.jfound.net/og.png",
+        "description": "ADSR is the four-stage envelope that shapes how a synth note starts, settles, holds and fades. Here is what each knob does and how to set them for plucks, pads, basses and leads in the free Tracks browser synth."
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "ADSR envelope explained", "item": "https://tracks.jfound.net/blog/adsr-envelope-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>ADSR envelope explained: attack, decay, sustain, release</h1>
+        <p class="art-meta">By Tongkit Leong · October 28, 2026 · 7 min read</p>
+
+        <p class="lede">ADSR stands for attack, decay, sustain, and release: four settings that describe how a synth note's volume (or brightness) changes from the moment you press a key to the moment the sound dies away. Attack, decay, and release are times, sustain is a level, and together they decide whether a patch sounds like a pluck, a pad, a bass, or a lead.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What an envelope does</h2>
+        <p>A synth oscillator produces a steady tone the instant it runs. Left alone, that would be a flat, constant buzz that switches on and off like a light. An envelope is the shape that turns that buzz into a note: it controls how the level rises when you press a key, where it settles while you hold it, and how it fades after you let go.</p>
+        <p>Every note you play triggers the envelope from the start. That is why the same oscillator can sound like a piano-style pluck with one envelope and a slow string swell with another.</p>
+
+        <h2>The four stages</h2>
+        <h3>Attack: how fast the sound arrives</h3>
+        <p>Attack is the time it takes to rise from silence to full level after you press a key. A very short attack (a few milliseconds) is instant and punchy, which suits drums, plucks, and basses. A long attack fades the note in over a second or more, which suits pads and swells.</p>
+        <h3>Decay: how fast it falls from the peak</h3>
+        <p>Decay is the time it takes to drop from that peak down to the sustain level. A short decay gives a sharp initial "spike" that settles quickly. A long decay lets the note glide down slowly.</p>
+        <h3>Sustain: the level while you hold the key</h3>
+        <p>Sustain is the odd one out: it is a level, not a time. It is the volume the note rests at for as long as the key stays down. At full sustain there is no audible decay at all; at zero, the note falls to silence even if you keep holding, which is how a pluck or a mallet sound behaves.</p>
+        <h3>Release: how long it fades after you let go</h3>
+        <p>Release is the time the note takes to fade out once the key comes up. A short release cuts the note off tightly. A long release lets it ring out and overlap the next note, which makes pads and ambient parts sound smooth and connected.</p>
+
+        <h2>The ADSR knobs in the Tracks synth</h2>
+        <p>The Tracks synth has two envelopes on every patch, each with its own Attack, Decay, Sustain, and Release knobs. They are described in the <a href="/blog/synth-sound-design-subtractive-fm">subtractive and FM sound design guide</a>, and both run in the browser with nothing to install.</p>
+        <ul>
+          <li><strong>Amp envelope</strong> — shapes the volume of the note. Attack runs from 1 ms up to 4 s, Decay from 5 ms to 4 s, Sustain from 0 to 1, and Release from 5 ms up to 8 s.</li>
+          <li><strong>Filter envelope</strong> — shapes the filter cutoff over the life of the note, with the same four controls. The Env Amt knob in the filter section sets how far the envelope pushes the cutoff, and it can go negative to sweep the filter downward instead of up.</li>
+        </ul>
+        <p>Using the two together is where sounds get character. The amp envelope decides how loud the note is over time; the filter envelope decides how bright it is over time. A bass that opens bright and quickly closes down feels "plucked" even though its volume stays steady.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Starting points for common sounds</h2>
+        <p>These are starting values to tweak by ear, not rules. Your waveform, filter, and the part you play all change what sounds right.</p>
+        <table>
+          <thead>
+            <tr><th>Sound</th><th>Attack</th><th>Decay</th><th>Sustain</th><th>Release</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Pluck or mallet</td><td>Very short</td><td>Short to medium</td><td>Low or zero</td><td>Short</td></tr>
+            <tr><td>Tight bass</td><td>Very short</td><td>Short</td><td>Medium to high</td><td>Short</td></tr>
+            <tr><td>Lead</td><td>Short</td><td>Medium</td><td>High</td><td>Short to medium</td></tr>
+            <tr><td>Warm pad</td><td>Long</td><td>Medium</td><td>High</td><td>Long</td></tr>
+            <tr><td>Slow string swell</td><td>Very long</td><td>Long</td><td>High</td><td>Long</td></tr>
+            <tr><td>Stab or chord hit</td><td>Very short</td><td>Short</td><td>Low</td><td>Short</td></tr>
+          </tbody>
+        </table>
+
+        <h2>A quick routine for shaping a patch</h2>
+        <ol>
+          <li><strong>Decide the job first.</strong> Is this a short rhythmic sound or a long sustained one? That tells you whether to start with a snappy envelope or a slow one.</li>
+          <li><strong>Set the amp envelope.</strong> Play a few notes and adjust Attack until the start feels right, then Release until the end of each note fits the part.</li>
+          <li><strong>Set sustain.</strong> Hold a long note. If it should keep ringing, push Sustain up; if it should die away on its own, pull it down and shape the fall with Decay.</li>
+          <li><strong>Add the filter envelope.</strong> Raise Env Amt and give the filter envelope a short decay for a brightness "blip" at the start of each note. This is the quickest way to make a flat patch sound alive.</li>
+          <li><strong>Check it in the mix.</strong> A long release on a bass can smear into the next note and blur the low end, so shorten it until the notes stay distinct. For pads, a long release is usually what you want. If a sound still feels static, a slow <a href="/blog/lfo-modulation-explained">LFO</a> adds movement on top.</li>
+        </ol>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>A click at the start of a note.</strong> An attack of 1 ms can be audible as a tiny click on some waveforms. Nudge Attack up slightly.</li>
+          <li><strong>Notes that never seem to end.</strong> A very long release makes notes pile up. Shorten it if the part feels washy.</li>
+          <li><strong>A pluck that will not pluck.</strong> If Sustain is high, the note holds instead of falling away. Drop Sustain toward zero and set Decay to taste.</li>
+          <li><strong>Pad that arrives late.</strong> A long attack delays the sound. Play the part slightly earlier or shorten Attack if it feels behind the beat.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+        <h3>What does ADSR stand for?</h3>
+        <p>Attack, Decay, Sustain, Release. It describes how a note's level changes over time: the rise, the initial fall, the held level, and the fade-out after the key is released.</p>
+        <h3>Why is sustain a level and not a time?</h3>
+        <p>Because the note lasts as long as you hold the key. The envelope only needs to know what level to rest at during that time; how long the note lasts is up to you.</p>
+        <h3>What is the difference between an envelope and an LFO?</h3>
+        <p>An envelope plays out once per note and then stops. An LFO repeats continuously for as long as the note sounds. Use an envelope for the shape of a note and an LFO for ongoing movement.</p>
+        <h3>What does the filter envelope add?</h3>
+        <p>It moves the filter cutoff over the life of each note, so the tone changes as well as the volume. A short decay on the filter envelope gives the familiar "pew" or pluck character.</p>
+        <h3>Does this run entirely in the browser?</h3>
+        <p>Yes. The synth and both envelopes run on the Web Audio API in your browser, with no account and no install. Your projects stay on your device and are never uploaded.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Shape a sound of your own</h3>
+            <p>Amp and filter envelopes on every synth patch. Free, in your browser, nothing leaves your device.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
