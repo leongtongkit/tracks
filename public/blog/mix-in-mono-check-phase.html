@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to check your mix in mono and fix phase problems | Tracks</title>
+    <meta name="description" content="Mono playback exposes phase cancellation and buried parts. Learn how to test your mix in mono and fix what disappears, using the free Tracks browser studio." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/mix-in-mono-check-phase" />
+    <meta property="og:title" content="How to check your mix in mono and fix phase problems" />
+    <meta property="og:description" content="Mono playback exposes phase cancellation and buried parts. Here is how to test your mix in mono and fix what disappears." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/mix-in-mono-check-phase" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to check your mix in mono and fix phase problems",
+        "description": "Test a mix in mono and fix phase cancellation so it holds up on phones, single speakers, and club systems.",
+        "step": [
+                {
+                        "@type": "HowToStep",
+                        "name": "Pan stereo parts to center",
+                        "text": "Set the track pan to center so left and right carry the same signal, and note any change in level or tone against the stereo version."
+                },
+                {
+                        "@type": "HowToStep",
+                        "name": "Play the export on a single speaker",
+                        "text": "Export the song and play it on a phone speaker, a single Bluetooth speaker, or a computer with mono audio turned on in its accessibility settings."
+                },
+                {
+                        "@type": "HowToStep",
+                        "name": "Listen for parts that vanish or thin out",
+                        "text": "Compare against the stereo version and note any instrument that drops in level, loses its low end, or disappears."
+                },
+                {
+                        "@type": "HowToStep",
+                        "name": "Find the cause",
+                        "text": "Solo each suspect track and look for doubled recordings, stereo effects, or two layers playing the same sound slightly offset in time."
+                },
+                {
+                        "@type": "HowToStep",
+                        "name": "Fix and re-test",
+                        "text": "Pan one of the clashing layers to center, shift or nudge a layer, or reduce the stereo effect, then re-check against the mono playback."
+                }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to check your mix in mono and fix phase problems", "item": "https://tracks.jfound.net/blog/mix-in-mono-check-phase" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to check your mix in mono and fix phase problems</h1>
+        <p class="art-meta">By Tongkit Leong · October 29, 2026 · 7 min read</p>
+
+        <p class="lede">To check a mix in mono, play it with the left and right channels summed into one and listen for anything that gets quieter, thinner, or disappears. Parts vanish because of phase cancellation, and you can fix most cases by centering a layer, removing a doubled copy, or backing off a stereo effect in <a href="/studio">Tracks</a>.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>Why mono still matters</h2>
+        <p>A lot of listening is not true stereo. Phone speakers, smart speakers, a single Bluetooth speaker, and many club and shop PA systems play one signal, or something close to it. When your stereo mix is folded down, the left and right channels are added together. If a sound is in both channels with its waveform flipped, the two cancel and you hear less of it, sometimes nothing at all.</p>
+        <p>That is phase cancellation. A mix that sounds wide and exciting on headphones can lose its bass, its vocal doubles, or a whole synth layer once it is summed. The check takes two minutes and is worth doing before you export.</p>
+
+        <h2>What causes phase problems</h2>
+        <ul>
+          <li><strong>Two layers of the same sound.</strong> Stacking two similar kicks or two copies of a bass can cancel at certain frequencies if their waveforms do not line up.</li>
+          <li><strong>Doubled recordings panned hard apart.</strong> Two takes of a guitar or vocal are different enough to stay audible in mono, but a copy of the same take, nudged a few milliseconds, can comb-filter and sound hollow.</li>
+          <li><strong>Heavy stereo effects.</strong> Chorus, wide reverbs, and short stereo delays push different signals to each side. Pushed far, they thin out when summed. See <a href="/blog/creative-fx-chorus-phaser-bitcrusher">chorus, phaser, distortion, and bitcrusher explained</a> for how those effects work.</li>
+          <li><strong>Wide synth patches.</strong> Unison voices spread across the stereo field sound huge in stereo and can lose body in mono. Our guide to <a href="/blog/unison-detune-explained">unison and detune</a> covers the trade-off.</li>
+        </ul>
+
+        <h2>How to check your mix in mono</h2>
+        <p>Be honest about the tools: the quickest checks use your device, not a special button.</p>
+        <h3>Play the export on a single speaker</h3>
+        <p>Export the song and play the file through a phone speaker or one Bluetooth speaker. Most operating systems also have a mono audio option in their accessibility settings, which sums the output for everything you play. Turn it on, play the exported file, and listen. Remember to turn it off afterwards. For the export steps, see <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a>.</p>
+        <h3>Center your tracks and compare</h3>
+        <p>Inside the studio, every track has a pan dial. Set a suspect track to center, solo it, and listen to whether it behaves differently than when it is panned. Because nothing is uploaded and your project stays on your device, you can try this freely and undo it.</p>
+        <h3>Know what to listen for</h3>
+        <ul>
+          <li>The bass or kick gets weaker or hollow.</li>
+          <li>The lead vocal drops back behind the instruments.</li>
+          <li>A pad or synth layer nearly disappears.</li>
+          <li>A doubled part sounds thin, like it is played through a tube.</li>
+        </ul>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>How to fix what disappears</h2>
+        <ol>
+          <li><strong>Keep low end in the center.</strong> Kick, bass, and sub elements should sit at center so they sum cleanly. This is the same rule from the <a href="/blog/panning-stereo-width-explained">panning and stereo width guide</a>.</li>
+          <li><strong>Solo the problem track.</strong> Find the one that drops out, then mute others one by one to see which pair clashes.</li>
+          <li><strong>Remove duplicate layers.</strong> If two tracks play the same sound, delete one or give them clearly different notes, octaves, or tones.</li>
+          <li><strong>Pan one clashing layer to center.</strong> Or pan them less extremely, so they overlap less.</li>
+          <li><strong>Reduce the stereo effect.</strong> Lower the wet amount on a chorus or a wide delay, or turn down the spread on a wide synth patch.</li>
+          <li><strong>Re-test.</strong> Export again and listen on the single speaker. A fix that works in mono usually still sounds good in stereo.</li>
+        </ol>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Only mixing on headphones.</strong> They hide mono problems. Pair this check with <a href="/blog/mix-on-headphones-browser">mixing on headphones</a> and a reference listen.</li>
+          <li><strong>Chasing width at the cost of the center.</strong> Wide is good, but the vocal, kick, snare, and bass carry the song.</li>
+          <li><strong>Leaving system mono switched on.</strong> After testing, turn the accessibility option off so you hear the real stereo mix again.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>What does it mean to check a mix in mono?</h3>
+        <p>It means listening with the left and right channels combined into one. It reveals phase cancellation, where parts get quieter or vanish, and shows whether the mix holds up on phones and single speakers.</p>
+
+        <h3>Does a mono mix have to sound the same as stereo?</h3>
+        <p>No. It will feel narrower, and that is expected. What matters is that nothing important disappears or loses its low end.</p>
+
+        <h3>Is a stereo mix with some phase issues ever acceptable?</h3>
+        <p>Small differences in tone are normal. If a lead part or the bass drops out in mono, fix it, because many listeners will hear exactly that.</p>
+
+        <h3>Can I do this in the Tracks browser studio?</h3>
+        <p>Yes. Use the pan dial on each track and the track solo and mute controls to find and fix clashes, then export and play the file on a single speaker. Open the <a href="/studio">studio</a> to try it. Your project stays on your device.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Make a mix that holds up everywhere</h3>
+            <p>Per-track pan, solo, EQ, and a full mixer, all in the browser. No download, no account.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

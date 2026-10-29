@@ -1,5 +1,18 @@
 [
   {
+    "slug": "mix-in-mono-check-phase",
+    "title": "How to check your mix in mono and fix phase problems",
+    "dek": "Mono playback exposes phase cancellation and buried parts. Here is how to test your mix in mono and fix what disappears.",
+    "date": "2026-10-29",
+    "tags": [
+      "mono",
+      "phase",
+      "mixing",
+      "stereo"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "adsr-envelope-explained",
     "title": "ADSR envelope explained: attack, decay, sustain, release",
     "dek": "What the four ADSR stages do to a synth sound, and how to set them for plucks, pads, basses and leads in your browser.",
