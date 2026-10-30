@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Saturation and distortion explained: add warmth and grit | Tracks</title>
+    <meta name="description" content="What saturation and distortion do to a sound, and how to use the Drive effect in Tracks to add warmth to bass, punch to drums, and grit to leads." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/saturation-distortion-explained" />
+    <meta property="og:title" content="Saturation and distortion explained: add warmth and grit" />
+    <meta property="og:description" content="What saturation and distortion do to a sound, and how to use the Drive effect in Tracks to add warmth to bass, punch to drums, and grit to leads." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/saturation-distortion-explained" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "Saturation and distortion explained: add warmth and grit",
+        "description": "Add warmth or grit to a track with the Drive effect in the Tracks browser studio, then set Drive, Tone and Mix.",
+        "step": [
+          { "@type": "HowToStep", "name": "Open Insert FX on the track", "text": "Select the track in the mixer and find the Insert FX section. Drive is the first module in the rack." },
+          { "@type": "HowToStep", "name": "Turn Drive on at a low setting", "text": "Enable Drive and start with the Drive knob low. Saturation shows up as a thicker, slightly louder-sounding tone, not an obvious effect." },
+          { "@type": "HowToStep", "name": "Shape the top end with Tone", "text": "Use the Tone knob, a low-pass filter after the clipping stage, to roll off the fizzy upper harmonics that distortion adds." },
+          { "@type": "HowToStep", "name": "Blend with Mix", "text": "Use the Mix knob to blend the driven signal with the clean one, so you keep the original punch and add only as much grit as the part needs." },
+          { "@type": "HowToStep", "name": "Compare with Drive bypassed", "text": "Toggle Drive off and on while the full mix plays. Keep it only if the part sounds better in context, not just better solo." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Saturation and distortion explained: add warmth and grit", "item": "https://tracks.jfound.net/blog/saturation-distortion-explained" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Saturation and distortion explained: add warmth and grit</h1>
+        <p class="art-meta">By Tongkit Leong · October 30, 2026 · 7 min read</p>
+
+        <p class="lede">Saturation and distortion both work by clipping a signal so it generates new harmonics: a little makes a sound warmer and thicker, a lot makes it gritty and aggressive. In the <a href="/studio">Tracks browser studio</a> the Drive effect in each track's Insert FX rack does both, free, with nothing to install.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What saturation and distortion actually do</h2>
+        <p>When a clean signal is pushed into a curve that flattens its peaks, the shape of the waveform changes. That change adds harmonics: extra frequencies, mostly multiples of the ones already there, that were not in the original sound.</p>
+        <p>Those new harmonics are why a driven sound seems fuller. A thin bass note gains overtones you can hear on small speakers, and a dull snare gains bite. Saturation and distortion are the same process at different amounts. Saturation is the gentle end, where you feel warmth more than you hear an effect. Distortion is the heavy end, where the effect is the point.</p>
+
+        <h2>Why add it at all</h2>
+        <ul>
+          <li><strong>Bass that translates.</strong> A pure low sine barely registers on laptop or phone speakers. Harmonics give your ear something to latch onto. See <a href="/blog/bass-sound-on-phone-speakers">how to make bass audible on phone speakers</a>.</li>
+          <li><strong>Drums with punch.</strong> Light drive on a kick or snare bus glues the transient and the body together and makes the hit feel denser.</li>
+          <li><strong>Leads that cut.</strong> A clean synth lead can vanish behind guitars-style parts. Drive adds upper-mid energy so it stays in front.</li>
+          <li><strong>Character.</strong> Hard drive turns a clean part into something dirty on purpose, common in trap, drill, techno and hardstyle.</li>
+        </ul>
+
+        <h2>How Drive works in Tracks</h2>
+        <p>Every track has an Insert FX section in the mixer with six modules in a fixed order: Drive, Crush, Chorus, Phaser, Delay and Reverb. Drive is the first. It sits before the gate, EQ and compressor, so the harmonics it creates become the material the rest of the channel strip shapes.</p>
+        <p>Drive pushes the signal into a soft-clipping curve (a tanh waveshaper) and has three controls:</p>
+        <ul>
+          <li><strong>Drive</strong> sets how hard the signal hits the curve. Low settings are subtle warmth; high settings are heavy fuzz. Output level is compensated as you turn it up, so it does not simply get louder.</li>
+          <li><strong>Tone</strong> is a low-pass filter after the clipping, sweeping from about 400 Hz to 14 kHz. Turn it down to tame fizz, up for a brighter edge.</li>
+          <li><strong>Mix</strong> blends the driven signal with the original. Partial mix keeps the clean transient and layers grit underneath.</li>
+        </ul>
+
+        <h2>How to add saturation in Tracks</h2>
+
+        <h3>Step 1: Open Insert FX</h3>
+        <p>Open the <a href="/studio">studio</a>, select the track in the mixer, and find the Insert FX section. Turn Drive on.</p>
+
+        <h3>Step 2: Start low</h3>
+        <p>Set Drive low. Play the part in the full mix and listen for the sound getting thicker, not for an obvious effect. You are looking for the point where it starts to feel fuller.</p>
+
+        <h3>Step 3: Set Tone</h3>
+        <p>Distortion adds high harmonics that can turn harsh. Lower Tone until the fizz goes, then raise it slightly if the part loses presence.</p>
+
+        <h3>Step 4: Blend with Mix</h3>
+        <p>If the part loses punch when driven hard, pull Mix back so some of the clean signal comes through. This is the quickest way to add grit without flattening a drum hit.</p>
+
+        <h3>Step 5: A/B in context</h3>
+        <p>Toggle Drive on and off with everything playing. A driven sound often seems better solo because it is louder or brighter. If it does not help in the full mix, turn it down or off.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Settings to try by instrument</h2>
+        <ul>
+          <li><strong>Bass:</strong> low-to-moderate Drive, Tone around the middle, Mix about half. Cut unneeded sub afterward with the EQ if the low end gets crowded.</li>
+          <li><strong>Kick and snare:</strong> low Drive, Tone fairly open, partial Mix so the transient stays clean.</li>
+          <li><strong>Lead synth:</strong> moderate Drive with Tone rolled down a little so it is bold but not piercing.</li>
+          <li><strong>Vocals:</strong> very light Drive for presence, then check sibilance with the <a href="/blog/de-esser-explained">de-esser</a>, since added harmonics can brighten S sounds.</li>
+        </ul>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Judging by loudness.</strong> Distortion can sound better simply because it is louder. Match levels before comparing.</li>
+          <li><strong>Too much on everything.</strong> Drive on every track makes a mix dense and tiring. Use it where a part needs character.</li>
+          <li><strong>Ignoring Tone.</strong> Untamed upper harmonics are the usual reason distortion sounds cheap.</li>
+          <li><strong>Forgetting headroom.</strong> Driven parts can pile up. Check your <a href="/blog/gain-staging-avoid-clipping">gain staging</a> so the master does not clip.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Is saturation the same as distortion?</h3>
+        <p>They are the same process at different amounts. Saturation usually means subtle harmonic warmth; distortion means obvious grit. In Tracks both come from the Drive module.</p>
+
+        <h3>Is distortion the same as clipping?</h3>
+        <p>Related, but not the same. Drive clips the signal on purpose with a smooth curve to add harmonics. Digital clipping at the master output is an accident that sounds harsh, and you should avoid it.</p>
+
+        <h3>What is the difference between Drive and Crush?</h3>
+        <p>Drive adds harmonics by clipping the waveform. Crush reduces bit depth and sample rate for a grainy, lo-fi texture. They sound different and can be combined. See <a href="/blog/creative-fx-chorus-phaser-bitcrusher">chorus, phaser, distortion and bitcrusher</a>.</p>
+
+        <h3>Can I use it on the whole mix?</h3>
+        <p>Drive is a per-track insert, so apply it to individual parts. To glue several parts, send them to a group bus first; see <a href="/blog/mix-group-buses-sends">group buses and sends</a>.</p>
+
+        <h3>Does it cost anything or upload my music?</h3>
+        <p>No. Tracks is free and runs in your browser, and your projects stay on your device.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Try Drive on your own track</h3>
+            <p>Add warmth or grit in the Tracks mixer. No download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

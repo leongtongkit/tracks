@@ -1,5 +1,18 @@
 [
   {
+    "slug": "saturation-distortion-explained",
+    "title": "Saturation and distortion explained: add warmth and grit",
+    "dek": "What saturation and distortion do to a sound, and how to use the Drive effect in Tracks to add warmth to bass, punch to drums, and grit to leads.",
+    "date": "2026-10-30",
+    "tags": [
+      "mixing",
+      "saturation",
+      "distortion",
+      "drive"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "mix-in-mono-check-phase",
     "title": "How to check your mix in mono and fix phase problems",
     "dek": "Mono playback exposes phase cancellation and buried parts. Here is how to test your mix in mono and fix what disappears.",
