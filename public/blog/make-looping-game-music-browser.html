@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to make looping game music in your browser | Tracks</title>
+    <meta name="description" content="Write video game background music that loops cleanly: pick a bar count, make the last bar lead back to the first, handle the export's reverb tail, and test the loop. Free in Tracks." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/make-looping-game-music-browser" />
+    <meta property="og:title" content="How to make looping game music in your browser" />
+    <meta property="og:description" content="Write video game background music that loops cleanly: pick a bar count, make the last bar lead back to the first, handle the export's reverb tail, and test the loop. Free in Tracks." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/make-looping-game-music-browser" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to make looping game music in your browser",
+        "description": "Write video game background music that loops cleanly: pick a bar count, make the last bar lead back to the first, handle the export's reverb tail, and test the loop. Free in Tracks.",
+        "step": [
+          {
+            "@type": "HowToStep",
+            "name": "Pick a tempo and a bar count",
+            "text": "Choose a tempo and a loop length of 8 or 16 bars so the music fits a level, menu, or scene without feeling short."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Write chords and a bass that return home",
+            "text": "Use a 4 or 8 chord progression where the last chord leads back to the first, with a bass note per chord."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Add drums and one melodic hook",
+            "text": "Program a steady drum pattern and a short melody built from a few notes, so it can repeat for minutes without annoying the player."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Mix it quietly and cut the harsh highs",
+            "text": "Keep the level modest and soften bright sounds because players hear the loop for a long time under sound effects."
+          },
+          {
+            "@type": "HowToStep",
+            "name": "Export and trim the tail to the loop point",
+            "text": "Bounce to WAV, then trim the export to exactly the loop length so the reverb tail does not leave a gap or a bump at the seam. Test it on repeat."
+          }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to make looping game music in your browser", "item": "https://tracks.jfound.net/blog/make-looping-game-music-browser" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to make looping game music in your browser</h1>
+        <p class="art-meta">By Tongkit Leong · November 6, 2026 · 7 min read</p>
+
+        <p class="lede">Looping game music is a short piece, usually 8 to 32 bars, whose last bar leads straight back into its first so the seam is never noticed. You can write one for free in the <a href="/studio">Tracks browser studio</a>, then export a WAV and trim it to the exact loop length.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What makes game music loop well?</h2>
+        <p>A player might hear your track for ten minutes on one level. So a good loop has three traits: the end resolves back to the start, nothing in it demands attention, and it has enough small variation that repeats do not feel identical.</p>
+        <p>This is different from <a href="/blog/background-music-for-videos">background music for a video</a>, which plays once and fades out. A game loop never fades out, so the seam is the whole job.</p>
+
+        <h2>Step 1: Pick a tempo and a length</h2>
+        <p>Match tempo to the mood of the scene:</p>
+        <ul>
+          <li><strong>60 to 90 BPM:</strong> menus, exploration, calm towns.</li>
+          <li><strong>100 to 130 BPM:</strong> platforming, puzzles, light action.</li>
+          <li><strong>140 BPM and up:</strong> boss fights, races, chases.</li>
+        </ul>
+        <p>Aim for 8 or 16 bars. At 120 BPM in 4/4, 16 bars lasts 32 seconds, which is long enough to avoid obvious repetition and short enough to keep the file small. The <a href="/blog/bpm-by-genre-cheat-sheet">BPM by genre cheat sheet</a> has more reference speeds.</p>
+
+        <h2>Step 2: Write chords that come back home</h2>
+        <p>Open the piano roll in the <a href="/studio">studio</a> and write one chord per bar. The trick for looping is to make the final chord pull toward the first. A progression like i, VI, III, VII in a minor key does this naturally, because the last chord sets up the return to i. See <a href="/blog/chord-progressions-piano-roll">chord progressions in the piano roll</a> for how to enter them, and <a href="/blog/major-minor-scales-piano-roll">major vs minor scales</a> if you are choosing a key.</p>
+        <p>Add a bass track that plays the root of each chord. Keep the bass pattern identical on the last bar and the first bar so the rhythm does not stutter at the seam.</p>
+
+        <h2>Step 3: Add drums and a small hook</h2>
+        <p>Program a steady drum pattern with the drum machine and keep it simple. A kick on the beat, a snare on 2 and 4, and a hi-hat pattern are enough. If the loop is 16 bars, change the last bar slightly, perhaps a short fill, so the loop has a sense of motion. Our guide to <a href="/blog/how-to-program-drum-fills">programming drum fills</a> shows how, and <a href="/blog/hi-hat-patterns-groove-browser">hi-hat patterns</a> helps keep the groove from feeling stiff.</p>
+        <p>For the melody, use three to five notes and repeat a short phrase. Game themes stick because they are simple. Chiptune-style sounds from the synth fit many games, and the <a href="/blog/make-chiptune-music-browser">chiptune guide</a> covers that sound in detail.</p>
+
+        <h2>Step 4: Keep the mix quiet and comfortable</h2>
+        <p>Game music sits under footsteps, voices, and effects, and players hear it for hours. Pull the faders down, keep the master well below clipping, and tame harsh highs with a high-cut or gentle EQ. The <a href="/blog/gain-staging-avoid-clipping">gain staging guide</a> explains how to check headroom.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Step 5: Test the loop before you export</h2>
+        <p>Drag on the ruler in the arrange view to set the loop region around your bars, then press play and listen to the seam several times. Check for these problems:</p>
+        <ul>
+          <li><strong>A click:</strong> a note cut off right at the loop point. Shorten the last note or let it end a hair early.</li>
+          <li><strong>A rhythm stumble:</strong> the last beat and the first beat are too close together, or the last bar has an extra note.</li>
+          <li><strong>A sudden volume jump:</strong> a sustained pad that starts at full volume on bar one. Start it earlier in the previous bar instead.</li>
+        </ul>
+
+        <h2>Step 6: Export and trim to the loop point</h2>
+        <p>When you bounce the song to WAV or MP3, the export keeps a short tail after the last note so reverb and delay can ring out. That is good for a normal song and a problem for a loop, because the tail leaves silence or extra sound after your last bar. Open the WAV in any audio editor and trim it to exactly the loop length, or use your game engine's loop-point settings. The <a href="/blog/export-song-mp3-wav">export guide</a> covers the file formats.</p>
+        <p>Keep reverb and delay short on a loop so the trimmed seam stays clean.</p>
+        <p>Prefer WAV for games. MP3 files carry a small gap at the start and end, which can make a loop audibly hiccup. Your project stays on your device, and nothing is uploaded. Save the <code>.tracks.json</code> project file so you can edit the loop later.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>A loop that ends with a big finish:</strong> a cymbal crash or final chord sounds like an ending, so the loop feels like it restarts rather than continues.</li>
+          <li><strong>Too short:</strong> a 2-bar loop is tiring within a minute. Go to 8 bars or more.</li>
+          <li><strong>Too many ideas:</strong> if every bar differs, players cannot hum it. Repeat a hook.</li>
+          <li><strong>Exporting MP3:</strong> use WAV so the loop point stays sample-accurate.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>How long should game music loop be?</h3>
+        <p>Most background loops run 30 seconds to 2 minutes. Eight to 32 bars at a moderate tempo is a practical range.</p>
+
+        <h3>Can I use music I make in Tracks in my game?</h3>
+        <p>Music you compose yourself from your own notes and drum patterns is yours. Check the license on any samples or SoundFont files you import. The <a href="/blog/music-ownership-copyright-explained">music ownership guide</a> has more.</p>
+
+        <h3>Do I need to install anything?</h3>
+        <p>No. Tracks runs in a modern desktop browser with no account or download.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Write your game's soundtrack</h3>
+            <p>Build a loop, test the seam, and export it. Free, in your browser, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

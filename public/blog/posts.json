@@ -1,5 +1,18 @@
 [
   {
+    "slug": "make-looping-game-music-browser",
+    "title": "How to make looping game music in your browser",
+    "dek": "Write video game background music that loops without a click or a gap: pick a bar count, end on a chord that leads back to the start, trim the export to the loop point, and test the seam.",
+    "date": "2026-11-06",
+    "tags": [
+      "game music",
+      "loop",
+      "soundtrack",
+      "export"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "make-dancehall-browser",
     "title": "How to make dancehall in your browser",
     "dek": "Build a dancehall riddim in a free browser studio: a tight kick and snare pattern around 90 to 105 BPM, a heavy bass, short stabs, and a vocal chant, then export it.",
