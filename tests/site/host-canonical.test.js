@@ -46,4 +46,11 @@ describe('site addresses are ocari.co (jfound.net hosts are redirects)', () => {
       expect(text.match(/cdn-cgi\/zaraz\/i\.js/g) ?? []).toHaveLength(1)
     }
   })
+
+  test('every page carries the AdSense site tag exactly once', () => {
+    for (const rel of htmlFiles()) {
+      const text = readFileSync(join(root, rel), 'utf8')
+      expect(text.match(/google-adsense-account/g) ?? []).toHaveLength(1)
+    }
+  })
 })
