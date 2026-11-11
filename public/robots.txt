@@ -1,4 +1,4 @@
-# tracks.jfound.net + synth.jfound.net — policy: cite AND train
+# tracks.ocari.co + synth.ocari.co — policy: cite AND train
 User-agent: Bytespider
 Disallow: /
 
@@ -6,5 +6,5 @@ User-agent: *
 Allow: /
 
 # Both hosts serve this same file; each sitemap lists only its own host's URLs.
-Sitemap: https://tracks.jfound.net/sitemap.xml
-Sitemap: https://synth.jfound.net/sitemap-synth.xml
+Sitemap: https://tracks.ocari.co/sitemap.xml
+Sitemap: https://synth.ocari.co/sitemap-synth.xml

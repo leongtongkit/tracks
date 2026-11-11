@@ -5,8 +5,8 @@ import { isPhone, renderMobileBlock } from './mobile-gate'
 
 if (isPhone()) {
   renderMobileBlock('Synth', [
-    { href: 'https://tracks.jfound.net/', label: 'Visit Tracks' },
-    { href: 'https://tracks.jfound.net/help/', label: 'Read the guides' },
+    { href: 'https://tracks.ocari.co/', label: 'Visit Tracks' },
+    { href: 'https://tracks.ocari.co/help/', label: 'Read the guides' },
   ])
 } else {
   void import('./synth-app')

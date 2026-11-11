@@ -1,8 +1,14 @@
-// synth.jfound.net worker: serves the synth standalone page from the shared
-// build (the repo root now belongs to the Tracks DAW).
+// synth.ocari.co worker: serves the synth standalone page from the shared
+// build (the repo root now belongs to the Tracks DAW). The previous address
+// (synth.jfound.net) permanently redirects here, same path and query.
 export default {
   async fetch(request, env) {
     const url = new URL(request.url)
+    if (url.hostname === 'synth.jfound.net') {
+      url.protocol = 'https:'
+      url.hostname = 'synth.ocari.co'
+      return Response.redirect(url.toString(), 301)
+    }
     if (url.pathname === '/' || url.pathname === '/index.html') {
       // '/synth' is the canonical asset path (html_handling strips '.html');
       // rewriting straight to it avoids a 307 bounce on the root

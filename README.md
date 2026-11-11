@@ -1,12 +1,12 @@
 # Tracks
 
 A complete music-production studio that runs in your browser, free, with no
-account and no install — live at **[tracks.jfound.net](https://tracks.jfound.net)**.
+account and no install — live at **[tracks.ocari.co](https://tracks.ocari.co)**.
 Multi-track arrangement, piano roll, built-in synths/drums/samplers, mic and
 MIDI recording, mixer with EQ/dynamics/sends, autotune, stem extraction, and
 WAV/MP3 export. Your projects never leave your device.
 
-A standalone synthesizer lives at **[synth.jfound.net](https://synth.jfound.net)**
+A standalone synthesizer lives at **[synth.ocari.co](https://synth.ocari.co)**
 (same repo, `synth.html`, served by the `synth-jfound` worker).
 
 ## Features
