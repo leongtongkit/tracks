@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fix recording latency in a browser DAW: stop the delay when you play or sing | Tracks</title>
+    <meta name="description" content="Hear a delay between playing and hearing yourself? Here is what causes recording latency in a browser, and the changes that cut it." />
+    <link rel="canonical" href="https://tracks.jfound.net/blog/fix-recording-latency-browser-daw" />
+    <meta property="og:title" content="Fix recording latency in a browser DAW: stop the delay when you play or sing" />
+    <meta property="og:description" content="Hear a delay between playing and hearing yourself? Here is what causes recording latency in a browser, and the changes that cut it." />
+    <meta property="og:url" content="https://tracks.jfound.net/blog/fix-recording-latency-browser-daw" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.jfound.net/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.jfound.net/og.png" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Fix recording latency in a browser DAW: stop the delay when you play or sing",
+        "description": "Hear a delay between playing and hearing yourself? Here is what causes recording latency in a browser, and the changes that cut it.",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "datePublished": "2026-11-11",
+        "mainEntityOfPage": "https://tracks.jfound.net/blog/fix-recording-latency-browser-daw"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.jfound.net/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Fix recording latency in a browser DAW: stop the delay when you play or sing", "item": "https://tracks.jfound.net/blog/fix-recording-latency-browser-daw" }
+        ]
+      }
+    </script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Fix recording latency in a browser DAW: stop the delay when you play or sing</h1>
+        <p class="art-meta">By Tongkit Leong · November 11, 2026 · 6 min read</p>
+
+        <p class="lede">Recording latency is the short delay between making a sound and hearing it back through your headphones. To cut it, plug in wired headphones, close other tabs and apps, and use a USB audio interface if you have one; Bluetooth headphones are the most common cause of a long delay.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What recording latency is</h2>
+        <p>When you sing into a microphone or play a MIDI keyboard, the sound has to travel a long way before you hear it. It goes into your device, through the browser, through the studio's audio engine, and out to your headphones. Every step takes a little time, and the total is latency.</p>
+        <p>Under about 10 to 20 milliseconds, most people do not notice it. Past 50 milliseconds, it feels like an echo, and playing in time gets hard.</p>
+
+        <h2>Why browsers add delay</h2>
+        <p>A browser sits between your music app and your hardware. It handles audio through the Web Audio API, which asks the operating system for sound and then mixes it for the page. Tracks runs its audio engine on the Web Audio API and asks the browser for the lowest-latency mode it offers. How low that actually goes depends on your device, your operating system, and what you plug in.</p>
+        <p>You cannot remove the delay completely in any browser. You can only shrink the parts you control.</p>
+
+        <h2>The biggest cause: Bluetooth headphones</h2>
+        <p>Wireless Bluetooth headphones and earbuds add a delay of roughly 100 to 300 milliseconds in many cases. That is long enough to make every take feel late. If you do one thing, switch to wired headphones for recording. You can go back to Bluetooth for listening and mixing, where a delay does not matter.</p>
+
+        <h2>How to reduce recording latency</h2>
+        <h3>Step 1: Use wired headphones</h3>
+        <p>Plug headphones into the headphone jack or a USB adapter. Wired output skips the Bluetooth delay, and it also keeps the backing track from leaking into your mic.</p>
+
+        <h3>Step 2: Close what you do not need</h3>
+        <p>Close other browser tabs, video calls, and heavy apps. A busy computer has less spare time to process audio, and that can add delay or cause crackles. Keep the <a href="/studio">studio</a> in its own window.</p>
+
+        <h3>Step 3: Use an audio interface or a USB mic if you can</h3>
+        <p>Built-in laptop microphones and speakers are fine for sketches, but a dedicated USB microphone or audio interface usually responds faster and more consistently. This is optional. Plenty of good takes are made with the built-in mic.</p>
+
+        <h3>Step 4: Keep the project light</h3>
+        <p>If you have many tracks with heavy effects, focus on the part you are recording. Mute or bypass tracks you do not need for the take, and the engine has less work to do while you record.</p>
+
+        <h3>Step 5: Record raw, not processed</h3>
+        <p>Tracks records the mic without echo cancellation, noise suppression, or auto gain by default, because those voice-call features are made for speech and can interfere with music. If you changed the Recording settings, switch the mic processing option back off for music takes.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Working around latency you cannot remove</h2>
+        <p>Sometimes a small delay is left over. These habits help you stay in time anyway.</p>
+        <ul>
+          <li><strong>Play to the click, not to what you hear.</strong> Turn on the metronome and a count-in, as in the <a href="/blog/record-in-time-metronome-count-in">metronome and count-in guide</a>, and lock to the click.</li>
+          <li><strong>Lower the monitoring temptation.</strong> If hearing yourself late is distracting, turn your own voice down in the headphones and focus on the backing track.</li>
+          <li><strong>Check the take, then nudge it.</strong> After recording, zoom in on the waveform and compare it with the grid. If a take sits late, trim or move the clip a little earlier so it lines up.</li>
+          <li><strong>Prefer MIDI where it fits.</strong> MIDI notes can be fixed afterward with <a href="/blog/quantize-swing-groove-explained">quantize</a>, so a late-sounding keyboard take is easy to repair. See the <a href="/blog/use-midi-keyboard-browser">MIDI keyboard guide</a>.</li>
+        </ul>
+
+        <h2>Latency, crackles, and dropouts are different problems</h2>
+        <p>A steady delay is latency. Pops, clicks, and stuttering are dropouts, and they usually mean the computer is overloaded. Closing tabs and lightening the project helps both. If a recording itself sounds clipped or harsh rather than late, check your levels with the <a href="/blog/gain-staging-avoid-clipping">gain staging guide</a>.</p>
+
+        <h2>Frequently asked questions</h2>
+
+        <h3>Why is there a delay when I record in my browser?</h3>
+        <p>Audio passes through your hardware, the operating system, the browser, and the studio before it reaches your headphones. Each step adds a little time, and Bluetooth adds the most.</p>
+
+        <h3>Do Bluetooth headphones work for recording?</h3>
+        <p>They work for listening, but their delay makes recording feel late. Use wired headphones for takes.</p>
+
+        <h3>Will the delay end up in my recording?</h3>
+        <p>Not usually. The delay you hear is in monitoring, so a clean take can still be fine. The real risk is playing late because you followed the delayed sound, so follow the click instead.</p>
+
+        <h3>Can I get zero latency?</h3>
+        <p>No. Every digital system has some delay. The goal is to get it low enough that you stop noticing it.</p>
+
+        <h3>Is it free, and are my recordings uploaded?</h3>
+        <p>It is free with no account. Your projects and recordings stay in your browser on your device and are never uploaded.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Record a take with less delay</h3>
+            <p>Put on wired headphones, turn on the click, and press record. No download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.jfound.net/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>

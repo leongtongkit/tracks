@@ -1,5 +1,18 @@
 [
   {
+    "slug": "fix-recording-latency-browser-daw",
+    "title": "Fix recording latency in a browser DAW: stop the delay when you play or sing",
+    "dek": "Hear a delay between playing and hearing yourself? Here is what causes recording latency in a browser, and the changes that cut it.",
+    "date": "2026-11-11",
+    "tags": [
+      "latency",
+      "recording",
+      "headphones",
+      "troubleshooting"
+    ],
+    "readingTime": "6 min"
+  },
+  {
     "slug": "make-looping-game-music-browser",
     "title": "How to make looping game music in your browser",
     "dek": "Write video game background music that loops without a click or a gap: pick a bar count, end on a chord that leads back to the start, trim the export to the loop point, and test the seam.",
