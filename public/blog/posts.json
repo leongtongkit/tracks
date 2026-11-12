@@ -1,5 +1,18 @@
 [
   {
+    "slug": "static-mix-balance-faders-first",
+    "title": "How to build a static mix: set fader levels before any effects",
+    "dek": "Get a balanced rough mix using only faders and pan: start with the drums and bass, add one part at a time, and reach for EQ and compression only when levels alone cannot fix it.",
+    "date": "2026-11-12",
+    "tags": [
+      "mixing",
+      "faders",
+      "balance",
+      "beginners"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "fix-recording-latency-browser-daw",
     "title": "Fix recording latency in a browser DAW: stop the delay when you play or sing",
     "dek": "Hear a delay between playing and hearing yourself? Here is what causes recording latency in a browser, and the changes that cut it.",
