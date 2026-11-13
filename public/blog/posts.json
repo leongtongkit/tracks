@@ -1,5 +1,18 @@
 [
   {
+    "slug": "export-stems-for-mastering-collaboration",
+    "title": "How to export stems for mastering or a collaborator",
+    "dek": "Bounce one clean audio file per track from the browser, name and line them up so a mastering engineer or bandmate can drop them in any DAW and hear your mix.",
+    "date": "2026-11-13",
+    "tags": [
+      "stems",
+      "export",
+      "collaboration",
+      "mastering"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "static-mix-balance-faders-first",
     "title": "How to build a static mix: set fader levels before any effects",
     "dek": "Get a balanced rough mix using only faders and pan: start with the drums and bass, add one part at a time, and reach for EQ and compression only when levels alone cannot fix it.",

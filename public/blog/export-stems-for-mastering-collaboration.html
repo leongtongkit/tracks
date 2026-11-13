@@ -1,0 +1,163 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>How to export stems for mastering or a collaborator | Tracks</title>
+    <meta name="description" content="Export one WAV per track from the Tracks browser studio, prepare the project so the files line up, and hand clean stems to a mastering engineer or collaborator. Free, in your browser." />
+    <link rel="canonical" href="https://tracks.ocari.co/blog/export-stems-for-mastering-collaboration" />
+    <meta property="og:title" content="How to export stems for mastering or a collaborator" />
+    <meta property="og:description" content="Stems are one audio file per track. Here is how to export them from Tracks, what to check first, and how to send them so a collaborator or mastering engineer can import them without guesswork." />
+    <meta property="og:url" content="https://tracks.ocari.co/blog/export-stems-for-mastering-collaboration" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://tracks.ocari.co/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://tracks.ocari.co/og.png" />
+    <meta name="google-adsense-account" content="ca-pub-4201800488909351" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "HowTo",
+        "name": "How to export stems for mastering or a collaborator",
+        "description": "Export one WAV file per track from the Tracks browser studio, check the project first, and package the stems so a collaborator or mastering engineer can import them cleanly.",
+        "step": [
+          { "@type": "HowToStep", "name": "Check the project before exporting", "text": "Play the song start to finish. Fix clipping, remove tracks you no longer use, and give each track a clear name, because the names are what your collaborator will see." },
+          { "@type": "HowToStep", "name": "Open the export dialog", "text": "Click the export button in the top toolbar of the Tracks studio. The export dialog opens with format, sample rate, and bit-depth options." },
+          { "@type": "HowToStep", "name": "Choose WAV and a quality setting", "text": "Pick WAV so the stems are lossless. Use 44100 Hz or 48000 Hz and 24-bit if you want maximum headroom for the person receiving them." },
+          { "@type": "HowToStep", "name": "Enable per-track stem export", "text": "Turn on the per-track stem export option and click Export. Tracks renders each track to its own WAV file and downloads them as a zip archive." },
+          { "@type": "HowToStep", "name": "Test the stems and send them", "text": "Unzip the archive, import the files into a fresh session at the same sample rate, and confirm they line up. Then send the zip along with a short note listing tempo and key." }
+        ]
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://tracks.ocari.co/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "How to export stems for mastering or a collaborator", "item": "https://tracks.ocari.co/blog/export-stems-for-mastering-collaboration" }
+        ]
+      }
+    </script>
+    <script defer src="https://tracks.ocari.co/cdn-cgi/zaraz/i.js"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>How to export stems for mastering or a collaborator</h1>
+        <p class="art-meta">By Tongkit Leong · November 13, 2026 · 7 min read</p>
+
+        <p class="lede">A stem is a single audio file for one track of your song, and a stem export gives you one file per track, all the same length so they line up when imported. In the <a href="/studio">Tracks browser studio</a>, you turn on per-track stem export in the export dialog and get a zip of WAV files rendered on your own device.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+
+        <h2>What stems are, and why people ask for them</h2>
+        <p>A normal export is a stereo mixdown: every instrument blended into one file. You cannot pull the bass out of that file later. A stem export keeps each track separate, so whoever receives the files can hear and change them one at a time.</p>
+        <p>The usual reasons to export stems:</p>
+        <ul>
+          <li><strong>Mixing help.</strong> Another person mixes the song and needs control over each part.</li>
+          <li><strong>Mastering.</strong> Some mastering engineers ask for stems or a stereo file. Ask which they prefer before you export.</li>
+          <li><strong>Collaboration.</strong> A vocalist, guitarist, or producer builds on your beat in their own software.</li>
+          <li><strong>Remixes and live sets.</strong> You want to mute or reuse individual parts in another program.</li>
+          <li><strong>Troubleshooting.</strong> You import the stems into a fresh session to hear what is wrong in isolation.</li>
+        </ul>
+        <p>Stems are not the same as a MIDI file. Stems are audio and carry the sound; a MIDI file carries only notes. If your collaborator wants to swap the instruments, send both. See <a href="/blog/export-midi-file-browser-daw">how to export a MIDI file</a>.</p>
+
+        <h2>Prepare the project first</h2>
+        <p>Five minutes of cleanup here saves the other person an hour.</p>
+        <h3>Name every track</h3>
+        <p>Names like "Kick", "Bass", "Lead vocal" and "Pad" are far more useful than "Track 7". Rename before you export.</p>
+        <h3>Remove what you are not using</h3>
+        <p>Delete muted or empty tracks you will never use. Anything left in the project can end up in the zip and confuse the receiver.</p>
+        <h3>Check your levels</h3>
+        <p>Play the whole song and watch the meters. If a track clips, lower its fader first. Clipping that is baked into a stem cannot be undone by the person who receives it. For more on this, read <a href="/blog/gain-staging-avoid-clipping">gain staging: how to avoid clipping</a>.</p>
+        <h3>Note the tempo and key</h3>
+        <p>Stems are plain audio, so tempo and key are not stored in them. Write down the BPM and, if you know it, the key, and include them when you send the files. If your song changes tempo, mention that too.</p>
+
+        <h2>How to export stems in Tracks</h2>
+        <h3>Step 1: Open the export dialog</h3>
+        <p>Click the export button in the top toolbar. The dialog shows the format, sample rate, and bit-depth options.</p>
+        <h3>Step 2: Choose WAV</h3>
+        <p>Use WAV for stems. It is lossless, so the receiver starts from your full-quality audio. MP3 stems are lossy, and each later round of processing makes the loss more audible. The full comparison is in <a href="/blog/export-song-mp3-wav">how to export your song to MP3 or WAV</a>.</p>
+        <h3>Step 3: Pick sample rate and bit depth</h3>
+        <p>44100 Hz is the common default. 48000 Hz suits video work. 24-bit gives more headroom for the person processing the files. Whatever you choose, tell the receiver, because the stems should be imported at that same sample rate.</p>
+        <h3>Step 4: Turn on per-track stem export and export</h3>
+        <p>Enable the per-track stem export option and click Export. Tracks renders each track to its own WAV file and downloads them as a zip archive. Every file is the same length as the full mix, so if you drag them all to the start of a timeline in another DAW, they play in sync.</p>
+        <p>The rendering happens in your browser, so your project is not uploaded anywhere to make the stems.</p>
+
+        <div class="ad-slot" data-ad-slot="blog-bottom" aria-hidden="true"></div>
+
+        <h2>Test the stems before you send them</h2>
+        <p>This step is the one people skip. Unzip the archive and import every file into a new session, all at position zero. Press play and check three things:</p>
+        <ul>
+          <li>The combined stems sound like your mix. If the balance is off, a fader or effect setting may not have carried over the way you expected.</li>
+          <li>Nothing is missing. Count the files against your track list.</li>
+          <li>Everything starts together. Because all files are the same length, they should line up without nudging.</li>
+        </ul>
+        <p>You can import audio files into Tracks directly: use a blank project and drag the WAVs in.</p>
+
+        <h2>Sending the files</h2>
+        <p>Keep it simple: send the zip as it is, plus a short text note with the BPM, key, sample rate, and bit depth. If you also have a stereo reference mix, include it as an MP3 or WAV so the receiver knows what you are aiming for. Our guide on <a href="/blog/reference-track-mixing">reference track mixing</a> explains why this helps.</p>
+        <p>If you want to keep the project itself or hand over everything, a project file is the better option. See <a href="/blog/back-up-share-project-file-browser-daw">how to back up and share your project file</a>.</p>
+
+        <h2>Common mistakes</h2>
+        <ul>
+          <li><strong>Sending only the stereo mix when stems were requested.</strong> Ask what the person needs first.</li>
+          <li><strong>Leaving tracks unnamed.</strong> The receiver then has to guess what each file is.</li>
+          <li><strong>Exporting with clipping.</strong> Fix levels before you render.</li>
+          <li><strong>Forgetting the sample rate.</strong> A mismatch can make files play at the wrong speed on import.</li>
+          <li><strong>Skipping the test import.</strong> A two-minute check catches almost every problem.</li>
+        </ul>
+
+        <h2>Frequently asked questions</h2>
+        <h3>What is the difference between a stem and a track?</h3>
+        <p>A track is a lane in your project. A stem is the audio rendered from that lane as a file. Stems are what leave your project; tracks stay inside it.</p>
+        <h3>Do stems include my effects?</h3>
+        <p>Check by testing: import the stems into a fresh session and compare them to your mix. Rendering is meant to capture what you hear on each track, but a quick listen confirms it for your particular project before you send anything.</p>
+        <h3>Should I send stems or a stereo mix for mastering?</h3>
+        <p>Ask the engineer. Many prefer a stereo file with some headroom, and a few ask for stems as well. Our guide to <a href="/blog/master-track-for-streaming">mastering a track for streaming</a> covers the stereo route.</p>
+        <h3>Is there a limit on how many stems I can export?</h3>
+        <p>Stems are one file per track, so the number depends on how many tracks your project has. Group tracks onto buses first if you want fewer, bigger files.</p>
+        <h3>Is it free, and does it upload my music?</h3>
+        <p>Yes, it is free, and no, nothing is uploaded. Tracks runs in your browser and your music stays on your device.</p>
+
+        <div class="cta-card">
+          <div>
+            <h3>Export your stems for free</h3>
+            <p>One WAV per track, rendered in your browser. No download, no account, nothing uploaded.</p>
+          </div>
+          <a class="btn-primary" href="/studio">Open the studio →</a>
+        </div>
+      </article>
+    </main>
+
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+          <a href="https://synth.ocari.co/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device.</p>
+    </footer>
+  </body>
+</html>
