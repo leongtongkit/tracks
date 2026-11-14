@@ -1,5 +1,18 @@
 [
   {
+    "slug": "make-bossa-nova-browser",
+    "title": "How to make bossa nova in your browser",
+    "dek": "Write a bossa nova groove: the two-bar guitar rhythm, soft seventh and ninth chords, a bass that alternates root and fifth, and a gentle, quiet mix.",
+    "date": "2026-11-14",
+    "tags": [
+      "bossa nova",
+      "latin",
+      "genre",
+      "guitar"
+    ],
+    "readingTime": "7 min"
+  },
+  {
     "slug": "export-stems-for-mastering-collaboration",
     "title": "How to export stems for mastering or a collaborator",
     "dek": "Bounce one clean audio file per track from the browser, name and line them up so a mastering engineer or bandmate can drop them in any DAW and hear your mix.",
