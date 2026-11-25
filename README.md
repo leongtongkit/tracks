@@ -1,12 +1,12 @@
 # Tracks
 
 A complete music-production studio that runs in your browser, free, with no
-account and no install — live at **[tracks.ocari.co](https://tracks.ocari.co)**.
+account and no install — live at **[freetracks.app](https://freetracks.app)**.
 Multi-track arrangement, piano roll, built-in synths/drums/samplers, mic and
 MIDI recording, mixer with EQ/dynamics/sends, autotune, stem extraction, and
 WAV/MP3 export. Your projects never leave your device.
 
-A standalone synthesizer lives at **[synth.ocari.co](https://synth.ocari.co)**
+A standalone synthesizer lives at **[synth.freetracks.app](https://synth.freetracks.app)**
 (same repo, `synth.html`, served by the `synth-jfound` worker).
 
 ## Features

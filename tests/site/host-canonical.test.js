@@ -1,5 +1,5 @@
-// The site lives at tracks.ocari.co / synth.ocari.co; tracks.jfound.net and
-// synth.jfound.net are permanent redirects only. New pages and posts (the
+// The site lives at freetracks.app / synth.freetracks.app; tracks.jfound.net,
+// synth.jfound.net, tracks.ocari.co, and synth.ocari.co are permanent redirects only. New pages and posts (the
 // daily blog writer commits straight to main) must carry the new hosts in
 // every canonical, og, sitemap and robots reference — CI runs this before
 // the deploy, so an old-host page is caught before it reaches the site.
@@ -23,20 +23,24 @@ function htmlFiles() {
   return files
 }
 
-describe('site addresses are ocari.co (jfound.net hosts are redirects)', () => {
+describe('site lives at freetracks.app / synth.freetracks.app (four old hosts are permanent redirects only)', () => {
   for (const rel of htmlFiles()) {
-    test(`${rel} names no retired host`, () => {
+    test(`${rel} names none of the four permanent-redirect-only hosts`, () => {
       const text = readFileSync(join(root, rel), 'utf8')
       expect(text).not.toContain('tracks.jfound.net')
       expect(text).not.toContain('synth.jfound.net')
+      expect(text).not.toContain('tracks.ocari.co')
+      expect(text).not.toContain('synth.ocari.co')
     })
   }
 
-  test('sitemaps and robots list only ocari.co addresses', () => {
+  test('sitemaps and robots list only freetracks.app / synth.freetracks.app addresses', () => {
     for (const rel of ['public/sitemap.xml', 'public/sitemap-synth.xml', 'public/robots.txt']) {
       const text = readFileSync(join(root, rel), 'utf8')
       expect(text).not.toContain('tracks.jfound.net')
       expect(text).not.toContain('synth.jfound.net')
+      expect(text).not.toContain('tracks.ocari.co')
+      expect(text).not.toContain('synth.ocari.co')
     }
   })
 
