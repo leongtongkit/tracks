@@ -1,5 +1,17 @@
 [
   {
+    "slug": "lmms-alternative-browser",
+    "title": "A free LMMS alternative that runs in your browser",
+    "dek": "LMMS is a free, open-source desktop app for making beats. Tracks is a free browser studio with no install. See what each one covers and where each fits.",
+    "date": "2026-11-25",
+    "tags": [
+      "lmms",
+      "alternative",
+      "free daw"
+    ],
+    "readingTime": 6
+  },
+  {
     "slug": "cubase-alternative-browser",
     "title": "A free Cubase alternative that runs in your browser",
     "dek": "Cubase is a deep, paid studio for Windows and Mac. Here is what a free browser DAW covers for everyday work, and where Cubase still wins.",
