@@ -1757,3 +1757,43 @@
   pointer-events: none;
 }
 .pad-cell-on .pad-key { color: #0b0b0c; background: rgba(255, 255, 255, 0.4); }
+
+.first-visit-tip {
+  position: fixed;
+  left: 14px;
+  bottom: 40px;
+  z-index: 60;
+  max-width: min(330px, calc(100vw - 28px));
+  padding: 12px;
+  background: var(--body-grey);
+  color: var(--ink);
+  border: 1px solid var(--edge);
+  border-radius: 6px;
+  box-shadow: 0 8px 24px #0006;
+  font-size: 0.75rem;
+}
+.first-visit-tip > button { float: right; }
+.first-visit-tip ol { padding-left: 20px; line-height: 1.5; }
+.replace-card .seg-btn { margin-right: 6px; }
+.backup-notice {
+  position: fixed;
+  left: 14px;
+  bottom: 8px;
+  z-index: 30;
+  color: var(--ink-soft);
+  background: var(--body-grey);
+  padding: 3px 6px;
+  font-size: 0.65rem;
+}
+.backup-notice button {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+@media (max-width: 1300px) {
+  .transport-bar { height: auto; flex-wrap: wrap; padding: 6px 10px; }
+  .bar-space { flex: 1 1 auto; flex-wrap: wrap; }
+}

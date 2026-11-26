@@ -74,6 +74,7 @@ export class PresetBrowser {
         build: () => saved.patch,
       })
     }
+    this.entries.sort((a, b) => a.category.localeCompare(b.category))
     this.buildList()
   }
 

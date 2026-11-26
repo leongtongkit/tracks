@@ -39,6 +39,8 @@ import { detectPitch } from './dsp/autotune'
 import { ArrangeView } from './ui/arrange'
 import { BottomPanel } from './ui/bottom'
 import { buildHelpOverlay } from './ui/help'
+import { showFirstVisitTip } from './ui/first-visit'
+import { confirmReplace } from './ui/replace-confirm'
 import { buildSettingsPanel } from './ui/settings-panel'
 
 const app = new DawApp()
@@ -145,6 +147,7 @@ bottom.setInstrumentMount((host, trackId) => {
     editor = document.createElement('div')
     editor.className = 'instrument-host'
     const browser = new PresetBrowser(store)
+    browser.showLoaded(store.getPatch())
     browser.el.classList.add('instrument-presets')
     editor.appendChild(browser.el)
     editor.appendChild(buildInstrumentEditor(store))
@@ -155,6 +158,7 @@ bottom.setInstrumentMount((host, trackId) => {
 })
 
 root.appendChild(daw)
+showFirstVisitTip()
 
 // musical keyboard (same two-manual layout as the synth) plays the armed track
 // and lights the matching keys on the instrument-section piano
@@ -321,14 +325,20 @@ fileInput.addEventListener('change', () => {
     : importProjectJson(f)
   void loader
     .then(project => {
-      app.transport.stop()
-      app.song?.allNotesOff()
-      app.history.clear()
-      app.project = project
-      app.selectedClip = null
-      app.armedTrackId = project.tracks[0]?.id ?? null
-      void app.song?.syncTracks(project)
-      app.emit('tracks', 'clips', 'project', 'selection')
+      const replace = (): void => {
+        app.transport.stop()
+        app.song?.allNotesOff()
+        app.history.clear()
+        app.project = project
+        app.selectedClip = null
+        app.armedTrackId = project.tracks[0]?.id ?? null
+        void app.song?.syncTracks(project)
+        app.emit('tracks', 'clips', 'project', 'selection')
+      }
+      const hasContent = app.project.tracks.length > 0 || app.project.scenes.length > 0 ||
+        app.project.markers.length > 0 || Object.keys(app.project.samples).length > 0
+      if (hasContent) confirmReplace(() => downloadProjectJson(app), replace)
+      else replace()
     })
     .catch(() => alert('That file is not a Tracks project or readable MIDI file.'))
   fileInput.value = ''
@@ -355,6 +365,15 @@ fileBar.appendChild(midiBtn)
 fileBar.appendChild(saveBtn)
 fileBar.appendChild(openBtn)
 fileBar.appendChild(fileInput)
+const backupNotice = document.createElement('div')
+backupNotice.className = 'backup-notice'
+backupNotice.append('Saved in this browser. ')
+const backup = document.createElement('button')
+backup.type = 'button'
+backup.textContent = 'Download a backup.'
+backup.addEventListener('click', () => downloadProjectJson(app))
+backupNotice.appendChild(backup)
+daw.appendChild(backupNotice)
 
 // ---------- global keys ----------
 
