@@ -24,15 +24,15 @@ export function buildHelpOverlay(): { toggle(): void } {
   overlay.className = 'help-overlay hidden'
   const card = document.createElement('div')
   card.className = 'help-card'
-  const title = document.createElement('h2')
-  title.textContent = 'Keyboard shortcuts'
-  card.appendChild(title)
   const close = document.createElement('button')
   close.type = 'button'
-  close.className = 'help-close'
+  close.className = 'seg-btn help-close help-close-top'
   close.textContent = 'Close'
   close.addEventListener('click', () => overlay.classList.add('hidden'))
   card.appendChild(close)
+  const title = document.createElement('h2')
+  title.textContent = 'Keyboard shortcuts'
+  card.appendChild(title)
   const table = document.createElement('dl')
   table.className = 'help-list'
   for (const [keys, what] of SHORTCUTS) {
@@ -49,6 +49,7 @@ export function buildHelpOverlay(): { toggle(): void } {
   tutorial.target = '_blank'
   tutorial.rel = 'noopener'
   tutorial.textContent = 'Full tutorial'
+  tutorial.className = 'help-tutorial'
   card.appendChild(tutorial)
   overlay.appendChild(card)
   overlay.addEventListener('click', e => {
