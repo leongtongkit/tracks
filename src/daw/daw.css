@@ -1780,6 +1780,7 @@
 }
 .first-visit-tip > button { float: right; }
 .first-visit-tip ol { padding-left: 20px; line-height: 1.5; }
+.first-visit-tip a { color: inherit; }
 .replace-card .seg-btn { margin-right: 6px; }
 .backup-notice {
   position: fixed;
@@ -1796,6 +1797,7 @@
   padding: 0;
   background: none;
   color: inherit;
+  font: inherit;
   text-decoration: underline;
   cursor: pointer;
 }
