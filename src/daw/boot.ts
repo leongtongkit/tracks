@@ -176,6 +176,9 @@ bottom.setInstrumentMount((host, trackId) => {
     browser.el.classList.add('instrument-presets')
     editor.appendChild(browser.el)
     editor.appendChild(buildInstrumentEditor(store))
+    store.subscribeAll((_v, path) => {
+      if (path === '*') app.presetLoaded(trackId, store.getPatch().name)
+    })
     instrumentCache.set(trackId, editor)
   }
   host.appendChild(editor)
