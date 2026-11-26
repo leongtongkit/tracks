@@ -25,6 +25,14 @@ export function songTitle(name: string): string {
   return name.trim() || 'Untitled'
 }
 
+// The name a songs-list row (and its Delete question) shows for a kept song.
+// The open song's row shows the live project name: a rename reaches the
+// library entry only on the next debounced autosave, so the entry can still
+// carry the old name right after a rename.
+export function songRowTitle(entryName: string, isOpen: boolean, openName: string): string {
+  return songTitle(isOpen ? openName : entryName)
+}
+
 export function buildSongsPanel(deps: SongsPanelDeps): SongsPanel {
   const { app, library } = deps
   const overlay = document.createElement('div')
@@ -107,13 +115,15 @@ export function buildSongsPanel(deps: SongsPanelDeps): SongsPanel {
     }
     const current = library.currentId()
     for (const s of songs) {
+      const isOpen = s.id === current
+      const shown = songRowTitle(s.name, isOpen, app.project.name)
       const li = document.createElement('li')
       li.className = 'songs-row'
       const info = document.createElement('span')
       info.className = 'songs-info'
       const name = document.createElement('span')
       name.className = 'songs-title'
-      name.textContent = songTitle(s.name) + (s.id === current ? ' (open now)' : '')
+      name.textContent = shown + (isOpen ? ' (open now)' : '')
       const when = document.createElement('span')
       when.className = 'songs-when'
       when.textContent = new Date(s.updatedAt).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' })
@@ -128,7 +138,7 @@ export function buildSongsPanel(deps: SongsPanelDeps): SongsPanel {
       del.className = 'seg-btn'
       del.textContent = 'Delete'
       del.addEventListener('click', () => {
-        confirmStart(`Delete “${songTitle(s.name)}” from this browser? This cannot be undone.`, 'Delete', () => {
+        confirmStart(`Delete “${shown}” from this browser? This cannot be undone.`, 'Delete', () => {
           library.remove(s.id)
           render()
         })
