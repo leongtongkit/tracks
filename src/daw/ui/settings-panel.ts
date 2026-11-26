@@ -20,7 +20,18 @@ export function buildSettingsPanel(app: DawApp): { toggle(): void } {
   const privacy = document.createElement('p')
   privacy.className = 'audio-hint'
   privacy.textContent =
-    'Tracks is a local tool: projects, recordings, and these settings stay in this browser. Nothing is uploaded anywhere.'
+    'Tracks is a local tool: projects, recordings, and these settings stay in this browser. Nothing is uploaded anywhere. '
+  // the Cookie settings link is picked up by consent.js's [data-cookie-settings] handler
+  const privacyLink = document.createElement('a')
+  privacyLink.href = '/privacy'
+  privacyLink.target = '_blank'
+  privacyLink.rel = 'noopener'
+  privacyLink.textContent = 'Privacy'
+  const cookieLink = document.createElement('a')
+  cookieLink.href = '/privacy#cookie-settings'
+  cookieLink.dataset.cookieSettings = ''
+  cookieLink.textContent = 'Cookie\u00a0settings'
+  privacy.append(privacyLink, ' · ', cookieLink)
   card.appendChild(privacy)
 
   const changed = (): void => {

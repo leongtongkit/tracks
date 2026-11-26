@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Privacy &amp; cookies | Tracks</title>
+    <meta name="description" content="What Tracks stores and sends: your music stays on your device, and Google Analytics and Google AdSense load only if you allow them. Every cookie, listed." />
+    <link rel="canonical" href="https://freetracks.app/privacy" />
+    <meta property="og:title" content="Tracks — Privacy &amp; cookies" />
+    <meta property="og:description" content="Your music stays on your device. Analytics and ads load only if you allow them." />
+    <meta property="og:url" content="https://freetracks.app/privacy" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://freetracks.app/og.png" />
+    <meta name="google-adsense-account" content="ca-pub-4201800488909351" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "name": "Privacy & cookies",
+        "url": "https://freetracks.app/privacy",
+        "dateModified": "2026-11-26",
+        "publisher": { "@type": "Organization", "@id": "https://jfound.net/#org", "name": "JFound", "url": "https://jfound.net/" }
+      }
+    </script>
+    <!-- relative on purpose: this page is also served at synth.freetracks.app/privacy -->
+    <script defer src="/cdn-cgi/zaraz/i.js"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="https://freetracks.app/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="https://freetracks.app/help/">Help</a>
+        <a href="https://freetracks.app/blog/">Guides</a>
+        <a href="https://freetracks.app/community/">Community</a>
+        <a href="https://synth.freetracks.app/">Synth</a>
+        <a class="nav-cta" href="https://freetracks.app/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article privacy">
+        <h1>Privacy &amp; cookies</h1>
+        <p class="art-meta">Last updated November 26, 2026</p>
+
+        <p class="lede">Your music never leaves your device. Tracks has no accounts and no upload, so your projects, recordings and sounds are never sent to us. Google Analytics and Google ads load only if you choose <strong>Allow</strong> in the privacy notice.</p>
+
+        <p>This page covers freetracks.app and synth.freetracks.app. Tracks is made by <a href="https://jfound.net/">JFound</a>. Questions about this page or your data: <a href="mailto:support@ocari.co">support@ocari.co</a>.</p>
+
+        <h2>Your music stays on your device</h2>
+        <p>The studio and the synth run entirely in your browser. Everything you make is saved in your browser's own storage on your device, not on a server:</p>
+        <ul>
+          <li><strong>Local storage:</strong> your current studio project (<code>tracks.session.v1</code>), studio settings (<code>tracks.settings.v1</code>), and the synth's sound, saved patches and sequencer pattern (<code>synth.session.v1</code>, <code>synth.patches.v1</code>, <code>synth.seq.v1</code>).</li>
+          <li><strong>IndexedDB:</strong> samples and SoundFonts you load (<code>tracks-samples</code>, <code>tracks-soundfonts</code>).</li>
+        </ul>
+        <p>Microphone recording and MIDI keyboards are handled in your browser too. The browser asks your permission first, and the sound never leaves your device. Saving a project or exporting audio downloads a file to your computer. We cannot see, back up or recover any of this. Clearing your browser's site data deletes it.</p>
+
+        <h2>The privacy notice: Allow or Decline</h2>
+        <p>On your first visit a small notice asks whether to allow Google Analytics and ads. Nothing is sent to Google until you answer, and nothing is sent at all if you decline. Your answer is saved in this browser's local storage (<code>jfound_cookie_consent</code>) so the notice doesn't ask again.</p>
+        <p id="cookie-settings">To change your answer at any time, use <a href="#cookie-settings" data-cookie-settings>Cookie settings</a>. The link is at the bottom of every page and in the studio's Settings panel. It opens the notice again.</p>
+
+        <h2>If you choose Allow</h2>
+        <h3>Google Analytics</h3>
+        <p>We use Google Analytics 4 (measurement ID <code>G-STDK4QN3F6</code>) to count visits and see which pages and features people use. It is loaded through Cloudflare Zaraz, which keeps a random visitor ID and the visit details in its own cookies on freetracks.app (listed below) instead of Google's usual <code>_ga</code> cookie. Google keeps this analytics data for 14 months. Google's own explanation: <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener">How Google uses information from sites that use its services</a>.</p>
+        <h3>Google AdSense</h3>
+        <p>Ads help keep Tracks free. After you allow, the Google AdSense script loads and Google may show ads. Google and its partners may set or read their own advertising cookies to show ads and measure them, including ads based on your earlier visits to this and other sites. Google explains these cookies here: <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noopener">How Google uses cookies in advertising</a>. You can turn off personalised ads at <a href="https://adssettings.google.com/" target="_blank" rel="noopener">Google's My Ad Center</a>.</p>
+        <p>If you choose Decline, neither Google Analytics nor the AdSense script is loaded, and Google is not contacted from our pages.</p>
+
+        <h2>Every cookie and stored item on our pages</h2>
+        <p>Observed on the live site on November 26, 2026, in a fresh browser. All cookies here are set by freetracks.app itself, not by another site.</p>
+        <table>
+          <thead>
+            <tr><th>Name</th><th>When</th><th>What it does</th><th>Kept for</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>cf_zaraz_client</code> (cookie)</td><td>First visit</td><td>Set by Cloudflare Zaraz, the tool that loads Google Analytics. We saw it stay empty, before and after Allow.</td><td>1 year</td></tr>
+            <tr><td><code>jfound_cookie_consent</code> (local storage)</td><td>After Allow or Decline</td><td>Remembers your answer.</td><td>Until you clear site data</td></tr>
+            <tr><td><code>zaraz-consent</code> (cookie)</td><td>After Allow or Decline</td><td>Zaraz's copy of your answer, so it knows whether it may load Google Analytics.</td><td>1 year</td></tr>
+            <tr><td><code>cfz_zaraz-analytics</code> (cookie)</td><td>After Allow only</td><td>A random visitor ID and session ID, so Google Analytics can tell a returning visit from a new one.</td><td>1 year</td></tr>
+            <tr><td><code>cfz_google-analytics_v4</code> (cookie)</td><td>After Allow only</td><td>How long you spent on a page and how many events were counted, for Google Analytics.</td><td>1 year</td></tr>
+            <tr><td><code>cfzs_google-analytics_v4</code> (cookie)</td><td>After Allow only</td><td>How many pages you viewed in this visit, for Google Analytics.</td><td>Until you close the browser</td></tr>
+          </tbody>
+        </table>
+        <p>After Allow, Google's ad and analytics services (on google.com, doubleclick.net and googlesyndication.com) may also set cookies on their own domains, as described in the Google links above.</p>
+
+        <h2>Hosting</h2>
+        <p>The site is hosted on Cloudflare. Like any web host, Cloudflare handles your IP address and basic request details (such as your browser type) to deliver pages and protect the site from abuse. Cloudflare also loads its Web Analytics script on every page, before and regardless of your choice. It counts page views and measures page speed, sets no cookies and stores nothing in your browser. See <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener">Cloudflare's privacy policy</a>.</p>
+
+        <h2>Community board</h2>
+        <p>The <a href="https://freetracks.app/community/">community board</a> runs on GitHub Discussions. Posting there means signing in to GitHub, and GitHub's own <a href="https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener">privacy statement</a> and terms apply. We don't store anything about you on our side.</p>
+
+        <h2>Changes to this page</h2>
+        <p>If what Tracks stores or sends changes, we'll update this page and the date at the top.</p>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="https://freetracks.app/studio">Studio</a>
+          <a href="https://freetracks.app/help/">Help</a>
+          <a href="https://freetracks.app/blog/">Guides</a>
+          <a href="https://freetracks.app/community/">Community</a>
+          <a href="https://synth.freetracks.app/">Synth</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device. · <a href="/privacy">Privacy</a> · <a href="/privacy#cookie-settings" data-cookie-settings>Cookie settings</a></p>
+    </footer>
+  </body>
+</html>

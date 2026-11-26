@@ -724,6 +724,7 @@
   min-height: 0;
 }
 
+.audio-hint a { color: var(--ink); }
 .audio-hint {
   font-family: var(--font-mono);
   font-size: 0.68rem;

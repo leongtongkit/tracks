@@ -43,6 +43,7 @@ function openTab({ storedConsent = null } = {}) {
   const body = makeEl('body')
   const buttons = {} // consent panel buttons, by selector, with their click handlers
   const listeners = {}
+  const docListeners = {}
 
   const makeBox = () => {
     const box = makeEl('div')
@@ -61,7 +62,8 @@ function openTab({ storedConsent = null } = {}) {
       readyState: 'complete',
       head, body, documentElement: makeEl('html'),
       createElement: (tag) => (tag === 'div' ? makeBox() : makeEl(tag)),
-      addEventListener() {},
+      getElementById: () => null,
+      addEventListener(type, fn) { (docListeners[type] = docListeners[type] || []).push(fn) },
       // ads.js asks "is adsbygoogle already on the page?" before injecting
       querySelector: (sel) =>
         (sel.includes('adsbygoogle')
@@ -91,6 +93,15 @@ function openTab({ storedConsent = null } = {}) {
     adsenseRequested: () => head.children.some((c) => String(c.src || '').includes(ADSENSE_HOST)),
     click: (sel) => buttons[sel]._click(),
     storedConsent: () => store.get('jfound_cookie_consent'),
+    /** panels consent.js has put on the page so far */
+    panelsShown: () => body.children.filter((c) => String(c._html).includes('cm-yes')).length,
+    /** the visitor clicks a "Cookie settings" link (any [data-cookie-settings] element) */
+    clickCookieSettings: () => {
+      const link = makeEl('a')
+      const e = { target: { closest: (sel) => (sel === '[data-cookie-settings]' ? link : null) }, preventDefault() { e.prevented = true } }
+      ;(docListeners.click || []).forEach((fn) => fn(e))
+      return e
+    },
   }
 }
 
@@ -133,6 +144,28 @@ describe('ALLOW takes effect in the tab that clicked it', () => {
     tab.click('.cm-yes')
     const hits = tab.requestedScripts().filter((s) => s.includes(ADSENSE_HOST))
     expect(hits).toHaveLength(1)
+  })
+})
+
+describe('Cookie settings reopens the panel so a choice can be changed', () => {
+  it('a returning visitor sees no panel until they ask for it', () => {
+    const tab = openTab({ storedConsent: true })
+    expect(tab.panelsShown()).toBe(0)
+    const e = tab.clickCookieSettings()
+    expect(e.prevented).toBe(true)
+    expect(tab.panelsShown()).toBe(1)
+  })
+
+  it('switching ALLOW to DECLINE stores the new choice', () => {
+    const tab = openTab({ storedConsent: true })
+    tab.clickCookieSettings()
+    tab.click('.cm-no')
+    expect(tab.storedConsent()).toContain('"analytics":false')
+  })
+
+  it('the panel links its Details to this site\'s own privacy page', () => {
+    expect(CONSENT_JS).toContain('href="/privacy"')
+    expect(CONSENT_JS).not.toContain('jfound.net/privacy-notice')
   })
 })
 

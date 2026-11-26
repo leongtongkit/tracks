@@ -606,6 +606,11 @@
     <priority>0.5</priority>
   </url>
   <url>
+    <loc>https://freetracks.app/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
     <loc>https://freetracks.app/blog/bpm-by-genre-cheat-sheet</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

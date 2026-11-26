@@ -1026,3 +1026,21 @@ body {
     animation: none !important;
   }
 }
+
+/* synth page: privacy + cookie settings, out of the way in the corner */
+.legal-links {
+  position: fixed;
+  left: 8px;
+  bottom: 6px;
+  z-index: 50;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: rgba(18, 18, 17, 0.78);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--bone-dim);
+}
+.legal-links a { color: var(--bone-dim); text-decoration: none; }
+.legal-links a:hover,
+.legal-links a:focus-visible { color: var(--bone); text-decoration: underline; }

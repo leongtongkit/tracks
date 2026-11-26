@@ -1,9 +1,11 @@
 // Consent module — TE-industrial skin shared by tracks + synth.
-// jfound.net zone runs Cloudflare Zaraz with Consent Management: GA4 is
-// bound to an Analytics purpose at the edge and stays silent until consent
+// The freetracks.app zone runs Cloudflare Zaraz with Consent Management: GA4
+// is bound to an Analytics purpose at the edge and stays silent until consent
 // is set. This module suppresses Zaraz's default modal (visually foreign
 // here) and renders a hardware-style panel instead; choices are mirrored
 // into zaraz.consent. Same bridge logic as jfound.net's cookie.js.
+// Any element with [data-cookie-settings] (the "Cookie settings" footer link,
+// the studio's Settings panel) reopens the panel so a choice can be changed.
 (function () {
   'use strict';
   var KEY = 'jfound_cookie_consent';
@@ -85,9 +87,14 @@
     '#consent-mod .cm-yes:hover{border-color:var(--accent,#ff4d00);}';
 
   function showPanel() {
-    var style = document.createElement('style');
-    style.textContent = CSS;
-    document.head.appendChild(style);
+    var open = document.getElementById('consent-mod');
+    if (open) open.remove();
+    if (!document.getElementById('consent-mod-css')) {
+      var style = document.createElement('style');
+      style.id = 'consent-mod-css';
+      style.textContent = CSS;
+      document.head.appendChild(style);
+    }
 
     var box = document.createElement('div');
     box.id = 'consent-mod';
@@ -95,9 +102,9 @@
     box.setAttribute('aria-label', 'Privacy');
     box.innerHTML =
       '<div class="cm-head"><i></i>PRIVACY</div>' +
-      '<div class="cm-body">Allow anonymous analytics (GA4) and ads to keep Tracks free. ' +
+      '<div class="cm-body">Allow Google Analytics and ads to help keep Tracks free. ' +
       'Your music never leaves your device and is never collected or resold. ' +
-      '<a href="https://jfound.net/privacy-notice" target="_blank" rel="noopener">Details</a></div>' +
+      '<a href="/privacy">Details</a></div>' +
       '<div class="cm-row">' +
       '<button type="button" class="cm-no">DECLINE</button>' +
       '<button type="button" class="cm-yes"><i></i>ALLOW</button>' +
@@ -106,6 +113,17 @@
     box.querySelector('.cm-yes').addEventListener('click', function () { writeChoice(true); box.remove(); });
     document.body.appendChild(box);
   }
+
+  // "Cookie settings" links: reopen the panel. Registered before the early
+  // return below, because a visitor who already chose is exactly who needs it.
+  // Capture phase: the studio's Settings card stops click propagation.
+  document.addEventListener('click', function (e) {
+    var t = e.target && e.target.closest ? e.target.closest('[data-cookie-settings]') : null;
+    if (!t) return;
+    e.preventDefault();
+    showPanel();
+  }, true);
+  window.tracksConsent = { open: showPanel };
 
   suppress();
   var saved = readChoice();
