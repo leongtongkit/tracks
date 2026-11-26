@@ -1,5 +1,17 @@
 [
   {
+    "slug": "cakewalk-alternative-browser",
+    "title": "A free Cakewalk alternative that runs in your browser",
+    "dek": "Cakewalk is a free Windows-only desktop DAW. Tracks is a free browser studio for any device. Here is an honest comparison of what each covers.",
+    "date": "2026-11-26",
+    "tags": [
+      "cakewalk",
+      "alternative",
+      "free daw"
+    ],
+    "readingTime": 6
+  },
+  {
     "slug": "lmms-alternative-browser",
     "title": "A free LMMS alternative that runs in your browser",
     "dek": "LMMS is a free, open-source desktop app for making beats. Tracks is a free browser studio with no install. See what each one covers and where each fits.",
