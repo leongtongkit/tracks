@@ -357,6 +357,7 @@ export class DawApp {
     if (kind === 'synth') {
       const preset = TRACK_PRESETS[this.project.tracks.length % TRACK_PRESETS.length]
       track = newTrack(preset, { preset })
+      track.nameFromPreset = true
     } else {
       const names: Record<TrackKind, string> = { synth: 'Synth', drums: 'Drums', sampler: 'Sampler', pads: 'Pads', audio: 'Audio', bus: 'Group', soundfont: 'SoundFont' }
       track = newTrack(names[kind], { kind })
@@ -435,6 +436,16 @@ export class DawApp {
     if (!track || !name.trim()) return
     this.checkpoint('rename track')
     track.name = name.trim().slice(0, 24)
+    delete track.nameFromPreset
+    this.emit('tracks')
+  }
+
+  // a preset was loaded on a synth track: follow its name unless the user named the track
+  presetLoaded(id: string, presetName: string): void {
+    const track = this.track(id)
+    const name = presetName.trim().slice(0, 24)
+    if (!track || !track.nameFromPreset || !name || track.name === name) return
+    track.name = name
     this.emit('tracks')
   }
 

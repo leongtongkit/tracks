@@ -179,6 +179,9 @@ export interface TrackData {
   // neutral strip) and played back through the live strip instead of synthesised
   // live — saves CPU. lengthBeats is the bounce length on the song timeline.
   frozen?: { sampleId: string; lengthBeats: number }
+  // synth tracks named after their preset: picking another preset renames the
+  // track until it is renamed by hand. Missing = false (keeps the saved name).
+  nameFromPreset?: boolean
 }
 
 export interface SampleMeta {
@@ -519,6 +522,7 @@ function migrateTrack(raw: unknown, index: number): TrackData {
       })(),
     },
     auto: migrateAuto(auto),
+    ...(t.nameFromPreset === true ? { nameFromPreset: true } : {}),
     clips: clips.slice(0, 256).map(migrateClip).filter((c): c is Clip => c !== null),
     session: (Array.isArray(t.session) ? t.session : []).slice(0, 64).map(s => (s === null ? null : migrateClip(s))),
     ...(() => {

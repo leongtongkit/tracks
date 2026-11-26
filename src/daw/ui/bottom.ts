@@ -5,6 +5,7 @@ import type { DawApp } from '../daw-app'
 import { buildAudioClipEditor } from './audio-editor'
 import { MixerView } from './mixer'
 import { PianoRoll } from './piano-roll'
+import { StepGrid } from './step-grid'
 
 type Tab = 'clip' | 'instrument' | 'mixer'
 
@@ -12,6 +13,8 @@ export class BottomPanel {
   readonly el: HTMLElement
   private readonly app: DawApp
   private readonly roll: PianoRoll
+  private readonly steps: StepGrid
+  private drumView: 'grid' | 'roll' = 'grid'
   private readonly mixer: MixerView
   private tab: Tab = 'instrument'
   private readonly tabs: HTMLElement
@@ -21,6 +24,7 @@ export class BottomPanel {
   constructor(app: DawApp) {
     this.app = app
     this.roll = new PianoRoll(app)
+    this.steps = new StepGrid(app)
     this.mixer = new MixerView(app)
     this.el = document.createElement('div')
     this.el.className = 'bottom-panel'
@@ -111,11 +115,38 @@ export class BottomPanel {
       this.tabs.appendChild(label)
     }
 
+    const drumClip = this.tab === 'clip' && !clip?.audio && clip && sel && this.app.track(sel.trackId)?.kind === 'drums'
+    if (drumClip) {
+      const sw = document.createElement('span')
+      sw.className = 'bottom-view-switch'
+      for (const [v, text, title] of [
+        ['grid', 'Grid', 'Step grid: click squares to build a beat'],
+        ['roll', 'Piano roll', 'Piano roll: draw drum hits at any time, not only on steps'],
+      ] as const) {
+        const b = document.createElement('button')
+        b.type = 'button'
+        b.className = 'seg-btn'
+        b.textContent = text
+        b.title = title
+        b.classList.toggle('seg-on', this.drumView === v)
+        b.addEventListener('click', () => {
+          this.drumView = v
+          this.render()
+        })
+        sw.appendChild(b)
+      }
+      this.tabs.appendChild(sw)
+    }
+
     this.mixer.unmount()
     this.body.innerHTML = ''
+    this.body.classList.toggle('bottom-body-scroll', this.tab === 'instrument')
     if (this.tab === 'clip') {
       if (clip?.audio && sel) {
         this.body.appendChild(buildAudioClipEditor(this.app, sel.trackId, clip))
+      } else if (clip && sel && drumClip && this.drumView === 'grid') {
+        this.steps.show(sel.trackId, clip)
+        this.body.appendChild(this.steps.el)
       } else if (clip && sel) {
         this.roll.show(sel.trackId, clip)
         this.body.appendChild(this.roll.el)
