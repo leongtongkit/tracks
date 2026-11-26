@@ -32,6 +32,16 @@ function lib(storage = new MemStorage()): { storage: MemStorage; lib: SongLibrar
 }
 
 describe('song library', () => {
+  it('remembers a switch to a new song across a reload, so the old song is not overwritten', () => {
+    const { storage, lib: l } = lib()
+    expect(l.update(song('A'), 1000)).toBe('ok')
+    l.setCurrent(null)
+    const { lib: reloaded } = lib(storage)
+    expect(reloaded.currentId()).toBeNull()
+    expect(reloaded.update(song('B'), 2000)).toBe('ok')
+    expect(reloaded.list().map(s => s.name)).toEqual(['B', 'A'])
+  })
+
   it('lists newest first and updates the current song in place', () => {
     const { lib: l } = lib()
     expect(l.update(song('A'), 1000)).toBe('ok')

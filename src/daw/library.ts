@@ -101,10 +101,13 @@ export class SongLibrary {
     return this.detached ? null : this.envelope.current
   }
 
-  // the song being edited is a different one now (new song, opened file)
+  // The song being edited is a different one now (new song, opened file).
+  // Stored right away: a stale pointer would let the next autosave after a
+  // reload overwrite the song that was open before.
   setCurrent(id: string | null): void {
     this.detached = false
-    this.envelope = { ...this.envelope, current: id }
+    const env = { ...this.envelope, current: id }
+    if (this.write(env) !== 'ok') this.envelope = env
   }
 
   // empty songs and untouched demo/template songs are not worth listing
