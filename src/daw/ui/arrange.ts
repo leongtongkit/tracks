@@ -35,6 +35,8 @@ export class ArrangeView {
   private loopBtn!: HTMLButtonElement
   private metroBtn!: HTMLButtonElement
   private writeBtn!: HTMLButtonElement
+  // shows the open song's tempo, time signature and key (another song may be loaded)
+  private syncSongFields: () => void = () => {}
   private readonly sessionGrid: { toggle(): void }
 
   constructor(app: DawApp) {
@@ -51,6 +53,7 @@ export class ArrangeView {
     app.on('selection', () => this.renderLanes())
     app.on('project', () => {
       // bpm/time-sig/markers all affect the ruler + grid (and waveforms scale with bpm)
+      this.syncSongFields()
       this.renderTransport()
       this.renderRuler()
       this.renderLanes()
@@ -170,6 +173,15 @@ export class ArrangeView {
     })
     sig.appendChild(sigLabel)
     sig.appendChild(sigSel)
+
+    this.syncSongFields = () => {
+      const p = this.app.project
+      const chip = bpm.querySelector('output')
+      if (chip) chip.textContent = String(Math.round(p.bpm))
+      rootSel.value = String(p.key.root)
+      scaleSel.value = p.key.scale
+      sigSel.value = `${p.timeSig.num}/${p.timeSig.den}`
+    }
 
     const session = btn('Session', 'Session view — launch looping clips in a scenes × tracks grid')
     session.addEventListener('click', () => this.sessionGrid.toggle())
