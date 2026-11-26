@@ -279,3 +279,54 @@ describe('undo/redo history', () => {
     expect(app.history.canRedo()).toBe(false)
   })
 })
+
+describe('note editing history', () => {
+  it('undoes separate note edits one at a time and preserves the current clip and armed track', () => {
+    const app = new DawApp()
+    const trackId = app.project.tracks[0].id
+    const armedId = app.project.tracks[1].id
+    const clip = app.addClip(trackId, 0)!
+    app.armTrack(armedId)
+    app.history.clear()
+    for (const pitch of [60, 62, 64]) {
+      app.checkpoint('add note', false)
+      app.clip({ trackId, clipId: clip.id })!.notes.push({ start: 0, dur: 0.25, pitch, vel: 0.8 })
+    }
+    const pitches = (): number[] => app.clip(app.selectedClip)!.notes.map(n => n.pitch)
+    app.undo()
+    expect(pitches()).toEqual([60, 62])
+    expect(app.selectedClip).toEqual({ trackId, clipId: clip.id })
+    expect(app.armedTrackId).toBe(armedId)
+    app.undo()
+    expect(pitches()).toEqual([60])
+    app.redo()
+    expect(pitches()).toEqual([60, 62])
+    expect(app.selectedClip).toEqual({ trackId, clipId: clip.id })
+    expect(app.armedTrackId).toBe(armedId)
+  })
+
+  it('keeps consecutive note drags separate while continuous controls still coalesce', () => {
+    const app = new DawApp()
+    const trackId = app.project.tracks[0].id
+    const clip = app.addClip(trackId, 0)!
+    clip.notes.push({ start: 0, dur: 1, pitch: 60, vel: 0.8 })
+    app.history.clear()
+    const note = (): typeof clip.notes[number] => app.clip({ trackId, clipId: clip.id })!.notes[0]
+    app.checkpoint(`edit note ${clip.id}`, false)
+    note().start = 1
+    app.checkpoint(`edit note ${clip.id}`, false)
+    note().dur = 0.5
+    app.undo()
+    expect([note().start, note().dur]).toEqual([1, 1])
+    app.undo()
+    expect([note().start, note().dur]).toEqual([0, 1])
+  })
+
+  it('clears selection when undo removes the selected clip', () => {
+    const app = new DawApp()
+    const trackId = app.project.tracks[0].id
+    app.addClip(trackId, 0)
+    app.undo()
+    expect(app.selectedClip).toBeNull()
+  })
+})

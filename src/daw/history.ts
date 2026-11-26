@@ -25,10 +25,10 @@ export class History {
     this.app = app
   }
 
-  checkpoint(label: string): void {
+  checkpoint(label: string, coalesce = true): void {
     const now = performance.now()
     const top = this.undoStack[this.undoStack.length - 1]
-    if (top && top.label === label && now - top.at < COALESCE_MS) {
+    if (coalesce && top && top.label === label && now - top.at < COALESCE_MS) {
       top.at = now
       this.redoStack.length = 0
       return
@@ -86,6 +86,7 @@ export class History {
         app.song.store(track.id)?.loadPatch(track.patch)
       }
     }
-    app.emit('project', 'tracks', 'clips', 'selection', 'mixer')
+    app.emit('project', 'tracks', 'clips', 'mixer')
+    if (!app.selectedClip) app.emit('selection')
   }
 }

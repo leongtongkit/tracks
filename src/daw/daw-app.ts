@@ -87,8 +87,8 @@ export class DawApp {
   }
 
   // take an undo snapshot before a mutation; same-label calls coalesce
-  checkpoint(label: string): void {
-    this.history.checkpoint(label)
+  checkpoint(label: string, coalesce = true): void {
+    this.history.checkpoint(label, coalesce)
   }
 
   undo(): void {

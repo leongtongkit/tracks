@@ -91,7 +91,7 @@ export class BottomPanel {
   private render(): void {
     const sel = this.app.selectedClip
     const clip = this.app.clip(sel)
-    const trackId = sel?.trackId ?? this.app.armedTrackId
+    const trackId = this.tab === 'clip' ? sel?.trackId : this.app.armedTrackId
 
     this.tabs.innerHTML = ''
     for (const [t, label] of [['clip', 'Clip'], ['instrument', 'Instrument'], ['mixer', 'Mixer']] as const) {

@@ -42,7 +42,9 @@ export class PianoRoll {
   private scroller!: HTMLElement
   private velBars!: HTMLElement
   private velViewport!: HTMLElement
-  private lastDur = 1
+  private scrollTop = 0
+  private scrollLeft = 0
+  private restoringScroll = false
   private gridBeats = 0.25
   private swing = 0 // 0..1 swing applied on quantize
   private readonly selection = new Set<Note>()
@@ -66,7 +68,7 @@ export class PianoRoll {
       if ((e.code === 'Delete' || e.code === 'Backspace') && this.selection.size > 0 && this.clip) {
         e.preventDefault()
         e.stopPropagation()
-        this.app.checkpoint('delete notes')
+        this.app.checkpoint('delete notes', false)
         this.clip.notes = this.clip.notes.filter(n => !this.selection.has(n))
         this.selection.clear()
         this.app.emit('clips')
@@ -79,14 +81,16 @@ export class PianoRoll {
   }
 
   show(trackId: string, clip: Clip): void {
-    const fresh = this.clip?.id !== clip.id
-    if (fresh) this.selection.clear()
+    const fresh = this.clip?.id !== clip.id || this.trackId !== trackId
+    if (fresh || this.clip !== clip) this.selection.clear()
     this.trackId = trackId
     this.clip = clip
     this.render()
     // the panel attaches this element after show(); scrolling only works once
     // it is in the DOM with real layout, so defer one frame
-    if (fresh) requestAnimationFrame(() => this.scrollToContent())
+    if (fresh) requestAnimationFrame(() => {
+      if (this.clip?.id === clip.id && this.trackId === trackId) this.scrollToContent()
+    })
   }
 
   private rows(): number {
@@ -100,6 +104,10 @@ export class PianoRoll {
   private render(): void {
     const clip = this.clip
     if (!clip) return
+    if (this.scroller?.isConnected && !this.restoringScroll) {
+      this.scrollTop = this.scroller.scrollTop
+      this.scrollLeft = this.scroller.scrollLeft
+    }
     this.el.innerHTML = ''
     this.el.appendChild(this.buildToolbar())
     this.scroller = document.createElement('div')
@@ -157,9 +165,23 @@ export class PianoRoll {
     this.scroller.appendChild(inner)
     this.el.appendChild(this.scroller)
     this.el.appendChild(this.buildVelLane())
-    this.scroller.addEventListener('scroll', () => {
-      this.velViewport.scrollLeft = this.scroller.scrollLeft
+    const scroller = this.scroller
+    this.restoringScroll = true
+    const restoreScroll = (): void => {
+      if (this.scroller !== scroller) return
+      scroller.scrollTop = this.scrollTop
+      scroller.scrollLeft = this.scrollLeft
+      this.velViewport.scrollLeft = scroller.scrollLeft
+      this.restoringScroll = false
+    }
+    scroller.addEventListener('scroll', () => {
+      if (this.scroller !== scroller || this.restoringScroll) return
+      this.scrollTop = scroller.scrollTop
+      this.scrollLeft = scroller.scrollLeft
+      this.velViewport.scrollLeft = scroller.scrollLeft
     })
+    if (this.el.isConnected) restoreScroll()
+    else requestAnimationFrame(restoreScroll)
   }
 
   // ---------- toolbar ----------
@@ -315,6 +337,9 @@ export class PianoRoll {
       : 72
     this.scroller.scrollTop = (PITCH_MAX - target) * KEY_H - 60
     this.scroller.scrollLeft = 0
+    this.scrollTop = this.scroller.scrollTop
+    this.scrollLeft = 0
+    this.velViewport.scrollLeft = 0
   }
 
   private posOf(e: PointerEvent): { beat: number; pitch: number } {
@@ -356,7 +381,7 @@ export class PianoRoll {
       }
       this.selection.clear()
       if (beat >= clip.length) return
-      draft = { start: beat, dur: Math.min(this.lastDur, clip.length - beat), pitch, vel: 0.8 }
+      draft = { start: beat, dur: Math.min(this.gridBeats, clip.length - beat), pitch, vel: 0.8 }
       draftEl = this.noteEl(draft)
       this.notesLayer.appendChild(draftEl)
     })
@@ -375,6 +400,7 @@ export class PianoRoll {
       }
       if (!draft || !draftEl || !this.clip) return
       const { beat } = this.posOf(e)
+      if (beat === draft.start) return
       const dur = Math.max(SNAP, beat + SNAP - draft.start)
       draft.dur = Math.min(dur, this.clip.length - draft.start)
       draftEl.style.width = `${draft.dur * PPB - 1}px`
@@ -397,9 +423,8 @@ export class PianoRoll {
         return
       }
       if (!draft || !this.clip) return
-      this.app.checkpoint('add note')
+      this.app.checkpoint('add note', false)
       this.clip.notes.push(draft)
-      this.lastDur = draft.dur
       this.audition(draft.pitch)
       draft = null
       draftEl = null
@@ -468,7 +493,7 @@ export class PianoRoll {
       const pos = this.posOf(e)
       if (!touched && (pos.beat !== start.beat || pos.pitch !== start.pitch)) {
         touched = true
-        this.app.checkpoint(`edit note ${this.clip.id}`)
+        this.app.checkpoint(`edit note ${this.clip.id}`, false)
       }
       if (mode === 'move') {
         const dBeat = pos.beat - start.beat
@@ -486,7 +511,6 @@ export class PianoRoll {
         }
       } else {
         note.dur = Math.min(this.clip.length - note.start, Math.max(SNAP, orig.dur + pos.beat - start.beat))
-        this.lastDur = note.dur
         place()
       }
     })
@@ -505,7 +529,7 @@ export class PianoRoll {
     el.addEventListener('dblclick', e => {
       e.stopPropagation()
       if (!this.clip) return
-      this.app.checkpoint('delete note')
+      this.app.checkpoint('delete note', false)
       const i = this.clip.notes.indexOf(note)
       if (i !== -1) this.clip.notes.splice(i, 1)
       this.app.emit('clips')

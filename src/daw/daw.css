@@ -40,6 +40,12 @@
   min-width: 56px;
 }
 
+.transport-play.seg-on,
+.transport-play.seg-on:hover {
+  color: var(--bone);
+  background: var(--control);
+}
+
 .pos-chip {
   font-family: var(--font-mono);
   font-size: 0.78rem;

@@ -24,6 +24,9 @@ export class ArrangeView {
   private lanes!: HTMLElement
   private headers!: HTMLElement
   private scroller!: HTMLElement
+  private laneSpacer!: HTMLElement
+  private scrollTop = 0
+  private scrollLayoutPending = false
   private playhead!: HTMLElement
   private positionChip!: HTMLElement
   private playBtn!: HTMLButtonElement
@@ -200,6 +203,16 @@ export class ArrangeView {
 
     this.scroller = document.createElement('div')
     this.scroller.className = 'lane-scroll'
+    const syncScroll = (source: HTMLElement, target: HTMLElement): void => {
+      if (this.scrollLayoutPending) return
+      this.scrollTop = source.scrollTop
+      if (target.scrollTop !== this.scrollTop) target.scrollTop = this.scrollTop
+    }
+    this.headers.addEventListener('scroll', () => syncScroll(this.headers, this.scroller))
+    this.scroller.addEventListener('scroll', () => syncScroll(this.scroller, this.headers))
+    const observer = new ResizeObserver(() => this.scheduleScrollLayout())
+    observer.observe(this.headers)
+    observer.observe(this.scroller)
 
     const inner = document.createElement('div')
     inner.className = 'lane-inner'
@@ -219,6 +232,23 @@ export class ArrangeView {
     body.appendChild(this.headers)
     body.appendChild(this.scroller)
     return body
+  }
+
+  private scheduleScrollLayout(): void {
+    if (this.scrollLayoutPending) return
+    this.scrollLayoutPending = true
+    requestAnimationFrame(() => {
+      const add = this.headers.querySelector<HTMLElement>('.add-track-row')
+      if (add && this.laneSpacer) {
+        const style = getComputedStyle(add)
+        this.laneSpacer.style.height = `${add.offsetHeight + parseFloat(style.marginTop) + parseFloat(style.marginBottom)}px`
+        this.headers.style.paddingBottom = `${Math.max(0, this.headers.clientHeight - this.scroller.clientHeight)}px`
+        this.scroller.scrollTop = this.scrollTop
+        this.headers.scrollTop = this.scroller.scrollTop
+        this.scrollTop = this.scroller.scrollTop
+      }
+      this.scrollLayoutPending = false
+    })
   }
 
   private widthBeats(): number {
@@ -336,6 +366,7 @@ export class ArrangeView {
       add.appendChild(b)
     }
     this.headers.appendChild(add)
+    this.scheduleScrollLayout()
   }
 
   private trackHeader(track: TrackData): HTMLElement {
@@ -566,6 +597,9 @@ export class ArrangeView {
         this.lanes.appendChild(this.autoLaneEl(track))
       }
     })
+    this.laneSpacer = document.createElement('div')
+    this.lanes.appendChild(this.laneSpacer)
+    this.scheduleScrollLayout()
     this.renderRuler()
   }
 
