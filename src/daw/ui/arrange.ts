@@ -8,6 +8,7 @@ import { buildSessionGrid } from './session-grid'
 import { sampleStore } from '../samples'
 import { settings } from '../settings'
 import { miniDial } from './mini-dial'
+import { previewRects } from '../clip-preview'
 
 const ROW_H = 56
 const AUTO_H = 44
@@ -95,7 +96,8 @@ export class ArrangeView {
       this.metroBtn.classList.toggle('seg-on', this.app.transport.metronome)
     })
 
-    this.writeBtn = btn('W', 'Automation write: move a mixer knob while playing to record it')
+    this.writeBtn = btn('W', 'Automation write: while the song plays, moving a mixer knob such as volume or pan records the movement so the song repeats it. Click again to turn off.')
+    tip(this.writeBtn, 'Automation write: while the song plays, moving a mixer knob such as volume or pan records the movement so the song repeats it. Click again to turn off.')
     this.writeBtn.addEventListener('click', () => this.app.toggleAutomationWrite())
 
     this.positionChip = document.createElement('output')
@@ -120,7 +122,7 @@ export class ArrangeView {
     const rootSel = document.createElement('select')
     rootSel.className = 'seg-select'
     rootSel.setAttribute('aria-label', 'Key')
-    rootSel.title = 'Key'
+    tip(rootSel, 'Key of the song: the note it is built around')
     ;['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].forEach((n, i) => {
       const o = document.createElement('option')
       o.value = String(i)
@@ -132,7 +134,7 @@ export class ArrangeView {
     const scaleSel = document.createElement('select')
     scaleSel.className = 'seg-select'
     scaleSel.setAttribute('aria-label', 'Scale')
-    scaleSel.title = 'Scale'
+    tip(scaleSel, 'Scale: Chromatic = all notes allowed. Major or Minor = only the notes of the chosen key (used by autotune).')
     for (const [v, label] of [['chromatic', 'Chrom'], ['major', 'Major'], ['minor', 'Minor']] as const) {
       const o = document.createElement('option')
       o.value = v
@@ -393,7 +395,7 @@ export class ArrangeView {
     const arm = document.createElement('button')
     arm.type = 'button'
     arm.className = 'arm-dot'
-    arm.title = 'Arm: your keyboard plays this track'
+    tip(arm, 'Arm for recording: your keyboard plays this track and Rec records into it')
     arm.addEventListener('click', () => this.app.armTrack(track.id))
     const name = document.createElement('span')
     name.className = 'track-name'
@@ -420,9 +422,9 @@ export class ArrangeView {
       frz.className = 'track-freeze' + (track.frozen ? ' seg-on' : '')
       frz.textContent = busy ? '…' : track.frozen ? 'Frozen' : 'Freeze'
       frz.disabled = busy
-      frz.title = track.frozen
-        ? 'Unfreeze — edit this track live again'
-        : 'Freeze — bounce this track to audio to save CPU (unfreeze to edit)'
+      tip(frz, track.frozen
+        ? 'Frozen: this track is now audio. Click to unfreeze and edit it again.'
+        : 'Freeze: turn this track into audio to save computer power; click again to edit it')
       frz.addEventListener('click', () => {
         if (track.frozen) this.app.unfreezeTrack(track.id)
         else void this.app.freezeTrack(track.id)
@@ -435,7 +437,8 @@ export class ArrangeView {
 
     const controls = document.createElement('div')
     controls.className = 'track-head-controls'
-    const auto = btn('A', 'Show the automation lane (any channel parameter)')
+    const auto = btn('A', 'Automation: draw how this track\'s volume, pan or effects change over time')
+    tip(auto, 'Automation: draw how this track\'s volume, pan or effects change over time')
     auto.classList.toggle('seg-on', this.autoOpen.has(track.id))
     auto.addEventListener('click', () => {
       if (this.autoOpen.has(track.id)) this.autoOpen.delete(track.id)
@@ -460,10 +463,12 @@ export class ArrangeView {
       })
       controls.appendChild(sel)
     }
-    const mute = btn('M', 'Mute')
+    const mute = btn('M', 'Mute: silence this track')
+    tip(mute, 'Mute: silence this track')
     mute.classList.toggle('seg-on', track.mixer.mute)
     mute.addEventListener('click', () => this.app.setMixer(track.id, { mute: !track.mixer.mute }))
-    const solo = btn('S', 'Solo')
+    const solo = btn('S', 'Solo: hear only this track (and other soloed tracks)')
+    tip(solo, 'Solo: hear only this track (and other soloed tracks)')
     solo.classList.toggle('seg-on', track.mixer.solo)
     solo.addEventListener('click', () => this.app.setMixer(track.id, { solo: !track.mixer.solo }))
     const vol = miniDial({
@@ -627,14 +632,20 @@ export class ArrangeView {
       drawWave(wave, clip, this.localBpm(clip.start))
       el.appendChild(wave)
     }
-    const label = document.createElement('span')
-    label.className = 'clip-label'
-    label.textContent = clip.audio
-      ? (sampleStore.name(clip.audio.sampleId) ?? 'audio')
-      : clip.notes.length
-        ? `${clip.notes.length} notes`
-        : 'empty'
-    el.appendChild(label)
+    let preview: HTMLCanvasElement | null = null
+    if (!clip.audio && clip.notes.length) {
+      preview = document.createElement('canvas')
+      preview.className = 'clip-notes'
+      preview.setAttribute('aria-label', `${clip.notes.length} notes`)
+      drawNotes(preview, clip, this.ppb)
+      el.appendChild(preview)
+      el.title = `${clip.notes.length} notes`
+    } else {
+      const label = document.createElement('span')
+      label.className = 'clip-label'
+      label.textContent = clip.audio ? (sampleStore.name(clip.audio.sampleId) ?? 'audio') : 'empty'
+      el.appendChild(label)
+    }
 
     const grip = document.createElement('div')
     grip.className = 'clip-grip'
@@ -680,6 +691,7 @@ export class ArrangeView {
       } else if (mode === 'size') {
         clip.length = Math.max(1, origLen + dBeats)
         el.style.width = `${clip.length * this.ppb}px`
+        if (preview) drawNotes(preview, clip, this.ppb)
       } else {
         // trim start: move start right, shorten, and advance the source offset
         // so the audio under the cursor stays put
@@ -861,6 +873,21 @@ export class ArrangeView {
   }
 }
 
+// small picture of the clip's notes; pitch range is the clip's own
+function drawNotes(canvas: HTMLCanvasElement, clip: Clip, ppb: number): void {
+  const w = Math.max(2, Math.round(clip.length * ppb))
+  const h = ROW_H - 12
+  canvas.width = w
+  canvas.height = h
+  const g = canvas.getContext('2d')
+  if (!g) return
+  g.clearRect(0, 0, w, h)
+  for (const r of previewRects(clip.notes, clip.length, w, h)) {
+    g.fillStyle = `rgba(29, 29, 27, ${0.4 + 0.5 * r.vel})`
+    g.fillRect(Math.round(r.x), Math.round(r.y), Math.max(1, Math.round(r.w)), Math.max(1, Math.round(r.h)))
+  }
+}
+
 // min/max peak columns of the clip's slice of its sample
 function drawWave(canvas: HTMLCanvasElement, clip: Clip, bpm: number): void {
   const region = clip.audio
@@ -902,6 +929,11 @@ function btn(text: string, title: string): HTMLButtonElement {
   b.textContent = text
   b.title = title
   return b
+}
+
+function tip(el: HTMLElement, text: string): void {
+  el.title = text
+  el.setAttribute('aria-label', text)
 }
 
 function altKey(): string {
