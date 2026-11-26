@@ -119,6 +119,8 @@ export class ArrangeView {
     keyLabel.textContent = 'Key'
     const rootSel = document.createElement('select')
     rootSel.className = 'seg-select'
+    rootSel.setAttribute('aria-label', 'Key')
+    rootSel.title = 'Key'
     ;['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'].forEach((n, i) => {
       const o = document.createElement('option')
       o.value = String(i)
@@ -129,6 +131,8 @@ export class ArrangeView {
     rootSel.addEventListener('change', () => this.app.setKey({ root: Number(rootSel.value) }))
     const scaleSel = document.createElement('select')
     scaleSel.className = 'seg-select'
+    scaleSel.setAttribute('aria-label', 'Scale')
+    scaleSel.title = 'Scale'
     for (const [v, label] of [['chromatic', 'Chrom'], ['major', 'Major'], ['minor', 'Minor']] as const) {
       const o = document.createElement('option')
       o.value = v
@@ -149,6 +153,8 @@ export class ArrangeView {
     sigLabel.textContent = 'Sig'
     const sigSel = document.createElement('select')
     sigSel.className = 'seg-select'
+    sigSel.setAttribute('aria-label', 'Time signature')
+    sigSel.title = 'Time signature'
     for (const [num, den] of [[4, 4], [3, 4], [2, 4], [5, 4], [6, 8], [7, 8], [12, 8]] as const) {
       const o = document.createElement('option')
       o.value = `${num}/${den}`

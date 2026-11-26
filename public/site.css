@@ -172,7 +172,7 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
 .feat { padding: clamp(2rem, 6vw, 4rem) 0; }
 .feat-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(248px, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 1px;
   background: var(--well-edge);
   border: 1px solid var(--well-edge);
@@ -384,8 +384,6 @@ main { max-width: var(--maxw); margin: 0 auto; padding: 0 clamp(1rem, 4vw, 2rem)
   justify-content: center;
 }
 .ad-slot.is-filled { border: none; background: none; min-height: 0; display: block; }
-.ad-slot::before { content: 'ADVERTISEMENT'; }
-.ad-slot.is-filled::before { content: none; }
 .ad-leaderboard { width: 100%; }
 /* AdSense Auto ads place units automatically; keep the manual placeholder
    boxes hidden unless a manual ad unit actually fills one. */
@@ -591,3 +589,6 @@ kbd { font-family: var(--font-mono); font-size: 0.8em; background: var(--well); 
   .nav-links a:not(.nav-cta):not([href="/help/"]):not([href="/blog/"]):not([href="/community/"]) { display: none; }
   .foot-cols { flex-direction: column; }
 }
+
+@media (max-width: 850px) { .feat-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 540px) { .feat-grid { grid-template-columns: 1fr; } }

@@ -27,6 +27,12 @@ export function buildHelpOverlay(): { toggle(): void } {
   const title = document.createElement('h2')
   title.textContent = 'Keyboard shortcuts'
   card.appendChild(title)
+  const close = document.createElement('button')
+  close.type = 'button'
+  close.className = 'help-close'
+  close.textContent = 'Close'
+  close.addEventListener('click', () => overlay.classList.add('hidden'))
+  card.appendChild(close)
   const table = document.createElement('dl')
   table.className = 'help-list'
   for (const [keys, what] of SHORTCUTS) {
@@ -38,8 +44,19 @@ export function buildHelpOverlay(): { toggle(): void } {
     table.appendChild(dd)
   }
   card.appendChild(table)
+  const tutorial = document.createElement('a')
+  tutorial.href = '/help/'
+  tutorial.target = '_blank'
+  tutorial.rel = 'noopener'
+  tutorial.textContent = 'Full tutorial'
+  card.appendChild(tutorial)
   overlay.appendChild(card)
-  overlay.addEventListener('click', () => overlay.classList.add('hidden'))
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.add('hidden')
+  })
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') overlay.classList.add('hidden')
+  })
   document.body.appendChild(overlay)
   return {
     toggle: () => overlay.classList.toggle('hidden'),
