@@ -1,0 +1,51 @@
+# Tracks
+
+> Tracks is a free music-production studio (a DAW, digital audio workstation) that runs in a web browser at freetracks.app. There is no account, no download and no paywall. Projects, recordings and settings stay in the visitor's own browser; nothing is uploaded.
+
+Tracks is made by JFound and is open source under the GNU Affero General Public License v3.0 or later. Everything runs on the Web Audio API with a custom audio engine.
+
+What the studio does:
+
+- Arrange: multi-track timeline, piano roll with velocity, quantize, swing, tempo map, time signatures, markers, and a session (clip-launch) view.
+- Instruments: subtractive and FM synthesizer, 808 and 909 drum machines, a 16-pad sampler, and SoundFont (.sf2) playback.
+- Record: microphone input or a MIDI keyboard (Web MIDI), with count-in and take comping.
+- Mix: per-track parametric EQ, compressor, gate, de-esser, reverb and delay sends, group buses, sidechain ducking, and automation of any parameter.
+- Vocals and audio: built-in autotune, time-stretch and repitch, and stem extraction (drums, bass, vocals, other).
+- Export: WAV and MP3, per-track stems, standard MIDI file, and a self-contained .tracks.json project file.
+
+A separate synthesizer with its own patches, effects and step sequencer runs at synth.freetracks.app.
+
+Cost and privacy: Tracks is free to use. Google Analytics and Google AdSense load only if the visitor allows them in the site's privacy notice; music and projects are never collected either way.
+
+## Start here
+
+- [Tracks home](https://freetracks.app/): what Tracks is and what it can do
+- [Open the studio](https://freetracks.app/studio): the music studio itself, ready in a browser tab
+- [Synth](https://synth.freetracks.app/): the standalone browser synthesizer
+- [Help manual](https://freetracks.app/help/): a getting-started tutorial plus every feature explained, including keyboard shortcuts
+- [Privacy](https://freetracks.app/privacy): what is stored, where, and what loads only with consent
+
+## Guides
+
+- [The best free online music studio](https://freetracks.app/blog/free-online-music-studio): what a browser-based studio can do and how to make a full track in one
+- [What is a DAW](https://freetracks.app/blog/what-is-a-daw): what a digital audio workstation is, and whether you need an expensive one
+- [How to make a song in your browser for beginners](https://freetracks.app/blog/make-a-song-beginners): arrangement, melody and export, step by step
+- [How to make beats in your browser](https://freetracks.app/blog/how-to-make-beats-in-browser): drum machine, sampler and piano roll
+- [Free online drum machine](https://freetracks.app/blog/free-online-drum-machine): programming drum beats with no software
+- [How to use a MIDI keyboard in a browser DAW](https://freetracks.app/blog/use-midi-keyboard-browser): connecting a keyboard through Web MIDI
+- [How to mix a track](https://freetracks.app/blog/how-to-mix-a-track-basics): EQ, compression and reverb basics
+- [How to split a song into stems](https://freetracks.app/blog/split-song-into-stems): separating vocals, drums and bass
+- [How to export your song to MP3 or WAV](https://freetracks.app/blog/export-song-mp3-wav): choosing a format and exporting
+- [Free online music maker for students and Chromebooks](https://freetracks.app/blog/music-maker-chromebook-students): making music where software installs are blocked
+- [A free GarageBand alternative](https://freetracks.app/blog/free-garageband-alternative): how Tracks compares with GarageBand
+- [BandLab vs Soundtrap vs Tracks](https://freetracks.app/blog/bandlab-soundtrap-tracks-compared): three free browser studios compared
+- [A free FL Studio alternative](https://freetracks.app/blog/fl-studio-alternative-browser): piano roll and pattern work in the browser
+- [A free Ableton Live alternative](https://freetracks.app/blog/ableton-alternative-browser): session view and clip launching in the browser
+- [Audacity vs Tracks](https://freetracks.app/blog/audacity-vs-tracks-compared): a free audio editor or a free browser DAW
+
+## Optional
+
+- [All guides](https://freetracks.app/blog/): every Tracks guide, newest first
+- [Community board](https://freetracks.app/community/): questions, ideas and songs from people using Tracks
+- [Source code](https://github.com/leongtongkit/tracks): the full Tracks source on GitHub
+- [Sitemap](https://freetracks.app/sitemap.xml): every page on freetracks.app

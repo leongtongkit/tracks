@@ -9,6 +9,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the IndexNow step diffs this push against the previous one
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -24,3 +26,8 @@ jobs:
         run: |
           npx --yes wrangler@4 deploy
           npx --yes wrangler@4 deploy -c wrangler-synth.toml
+      # Ask IndexNow engines (Bing and others) to re-crawl the blog pages this
+      # push added or changed. Best effort: a refusal never fails the deploy.
+      - name: IndexNow
+        continue-on-error: true
+        run: node scripts/indexnow.mjs --changed "${{ github.event.before }}"
