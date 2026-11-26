@@ -356,18 +356,6 @@ showSongName()
 app.on('project', showSongName)
 arrange.el.querySelector('.brand')?.after(songLabel)
 
-// /studio?template=<id> from a guide article: load that starter, then drop the
-// query so a reload does not open it again. Unknown ids are ignored.
-{
-  const url = new URL(window.location.href)
-  const wanted = url.searchParams.get('template')
-  if (isTemplateId(wanted)) {
-    url.searchParams.delete('template')
-    history.replaceState(null, '', url.pathname + url.search + url.hash)
-    startTemplate(wanted, 'guide')
-  }
-}
-
 // file actions live on the transport bar's right side
 const fileBar = document.querySelector('.bar-space')!
 const wavBtn = document.createElement('button')
@@ -1103,4 +1091,17 @@ window.__tracksRenderTest = async () => {
   const t0 = performance.now()
   const buf = await renderProject(p)
   return { ...analyzeBuffer(buf), renderMs: Math.round(performance.now() - t0) }
+}
+
+// /studio?template=<id> from a guide article: load that starter, then drop the
+// query so a reload does not open it again. Unknown ids are ignored.
+// Runs last: the dialogs it may open need the file bar built above.
+{
+  const url = new URL(window.location.href)
+  const wanted = url.searchParams.get('template')
+  if (isTemplateId(wanted)) {
+    url.searchParams.delete('template')
+    history.replaceState(null, '', url.pathname + url.search + url.hash)
+    startTemplate(wanted, 'guide')
+  }
 }
