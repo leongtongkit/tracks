@@ -5,6 +5,7 @@
 
 import type { DawApp } from '../daw-app'
 import type { Clip, Note } from '../project'
+import { trackOnce } from '../analytics'
 
 const KEY_H = 13
 const PPB = 64 // pixels per beat
@@ -425,6 +426,7 @@ export class PianoRoll {
       if (!draft || !this.clip) return
       this.app.checkpoint('add note', false)
       this.clip.notes.push(draft)
+      trackOnce('first_note')
       this.audition(draft.pitch)
       draft = null
       draftEl = null

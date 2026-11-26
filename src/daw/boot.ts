@@ -42,6 +42,7 @@ import { buildHelpOverlay } from './ui/help'
 import { showFirstVisitTip } from './ui/first-visit'
 import { confirmReplace } from './ui/replace-confirm'
 import { buildSettingsPanel } from './ui/settings-panel'
+import { isSongInProgress, track } from './analytics'
 
 const app = new DawApp()
 // recover persisted samples (recordings/imports) before anything plays
@@ -49,7 +50,10 @@ void sampleStore.loadAll()
 // recover persisted SoundFonts so loaded instruments survive a reload
 void soundFontStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
-app.project = loadSession() ?? demoSong()
+const savedSession = loadSession()
+app.project = savedSession ?? demoSong()
+track('studio_open')
+if (isSongInProgress(savedSession, demoSong())) track('resume_project')
 
 app.armedTrackId = app.project.tracks[0]?.id ?? null
 const root = document.getElementById('app')!
@@ -236,6 +240,7 @@ wavBtn.addEventListener('click', () => {
       app.song?.collectPatches(app.project)
       const blob = await renderProjectToWav(app.project, settings.exportRate)
       downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.wav`)
+      track('export_audio', { format: 'wav' })
     } finally {
       wavBtn.disabled = false
       wavBtn.textContent = 'Export WAV'
@@ -258,6 +263,7 @@ mp3Btn.addEventListener('click', () => {
       await new Promise(r => setTimeout(r, 30)) // let the label paint
       const blob = encodeMp3(buf, settings.mp3Kbps)
       downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mp3`)
+      track('export_audio', { format: 'mp3' })
     } finally {
       mp3Btn.disabled = false
       mp3Btn.textContent = 'MP3'
@@ -272,6 +278,7 @@ midiBtn.title = 'Export all note tracks as a standard MIDI file'
 midiBtn.addEventListener('click', () => {
   const bytes = exportMidi(app.project)
   downloadBlob(new Blob([bytes.buffer as ArrayBuffer], { type: 'audio/midi' }), `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mid`)
+  track('export_audio', { format: 'midi' })
 })
 const stemsBtn = document.createElement('button')
 stemsBtn.type = 'button'
@@ -296,6 +303,7 @@ stemsBtn.addEventListener('click', () => {
         downloadBlob(blob, `${base}-${tracks[i].name.replaceAll(/\W+/g, '-')}.wav`)
         await new Promise(r => setTimeout(r, 400)) // keep the browser's download UI happy
       }
+      if (tracks.length) track('export_audio', { format: 'stems' })
     } finally {
       stemsBtn.disabled = false
       stemsBtn.textContent = 'Stems'
@@ -307,7 +315,11 @@ saveBtn.type = 'button'
 saveBtn.className = 'seg-btn'
 saveBtn.textContent = 'Save'
 saveBtn.title = 'Download the project as a file'
-saveBtn.addEventListener('click', () => downloadProjectJson(app))
+const saveProject = (): void => {
+  downloadProjectJson(app)
+  track('project_save')
+}
+saveBtn.addEventListener('click', saveProject)
 const openBtn = document.createElement('button')
 openBtn.type = 'button'
 openBtn.className = 'seg-btn'
@@ -334,10 +346,11 @@ fileInput.addEventListener('change', () => {
         app.armedTrackId = project.tracks[0]?.id ?? null
         void app.song?.syncTracks(project)
         app.emit('tracks', 'clips', 'project', 'selection')
+        track('project_open', { file: /\.midi?$/i.test(f.name) ? 'midi' : 'project' })
       }
       const hasContent = app.project.tracks.length > 0 || app.project.scenes.length > 0 ||
         app.project.markers.length > 0 || Object.keys(app.project.samples).length > 0
-      if (hasContent) confirmReplace(() => downloadProjectJson(app), replace)
+      if (hasContent) confirmReplace(saveProject, replace)
       else replace()
     })
     .catch(() => alert('That file is not a Tracks project or readable MIDI file.'))
@@ -371,7 +384,7 @@ backupNotice.append('Saved in this browser. ')
 const backup = document.createElement('button')
 backup.type = 'button'
 backup.textContent = 'Download a backup.'
-backup.addEventListener('click', () => downloadProjectJson(app))
+backup.addEventListener('click', saveProject)
 backupNotice.appendChild(backup)
 daw.appendChild(backupNotice)
 

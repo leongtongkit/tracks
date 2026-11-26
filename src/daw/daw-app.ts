@@ -27,6 +27,7 @@ import { quantizeLaunch, sessionAudioEvents, sessionNoteEvents } from './session
 import { settings } from './settings'
 import { SongEngine } from './song-engine'
 import { Transport } from './transport'
+import { trackOnce } from './analytics'
 
 export type DawEvent = 'project' | 'tracks' | 'clips' | 'selection' | 'transport' | 'mixer' | 'arm'
 
@@ -922,6 +923,7 @@ export class DawApp {
     const dur = Math.max(0.125, endBeat - startBeat)
     if (rel + dur > clip.length) clip.length = Math.ceil(rel + dur)
     clip.notes.push({ start: rel, dur, pitch, vel })
+    trackOnce('first_note')
     this.emit('clips')
   }
 }
