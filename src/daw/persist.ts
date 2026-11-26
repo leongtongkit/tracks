@@ -4,18 +4,47 @@ import { decodeWav, encodeWav } from '../record/wav'
 import type { DawApp } from './daw-app'
 import { migrateProject, newId, newTrack, pruneSamples, type Clip, type Note, type Project, defaultProject } from './project'
 import { sampleStore } from './samples'
+import { fileBase, isQuotaError, SongLibrary, type WriteStatus } from './library'
+import { settings } from './settings'
 
 const SESSION_KEY = 'tracks.session.v1'
 
-export function saveSession(app: DawApp): void {
+export const library = new SongLibrary({
+  getItem: k => {
+    try {
+      return localStorage.getItem(k)
+    } catch {
+      return null
+    }
+  },
+  setItem: (k, v) => localStorage.setItem(k, v),
+})
+
+// 'full' = the browser refused to store the song (storage is full)
+export type SaveResult = 'ok' | 'full'
+
+export function saveSession(app: DawApp): SaveResult {
+  let result: SaveResult = 'ok'
   try {
     app.song?.collectPatches(app.project)
     pruneSamples(app.project)
     // sample binaries persist separately in IndexedDB; this is metadata only
     localStorage.setItem(SESSION_KEY, JSON.stringify(app.project))
-  } catch {
+  } catch (e) {
     // best-effort
+    if (isQuotaError(e)) result = 'full'
   }
+  // the song list follows autosave and never writes when autosave is off
+  if (settings.autosave) {
+    let status: WriteStatus = 'error'
+    try {
+      status = library.update(app.project)
+    } catch {
+      // the song list must never break the studio
+    }
+    if (status === 'full') result = 'full'
+  }
+  return result
 }
 
 export function loadSession(): Project | null {
@@ -47,7 +76,7 @@ export function serializeProjectWithSamples(app: DawApp): string {
 
 export function downloadProjectJson(app: DawApp): void {
   const blob = new Blob([serializeProjectWithSamples(app)], { type: 'application/json' })
-  downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.tracks.json`)
+  downloadBlob(blob, `${fileBase(app.project.name)}.tracks.json`)
 }
 
 function bufToB64(buf: ArrayBuffer): string {

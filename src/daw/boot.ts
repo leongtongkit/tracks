@@ -20,10 +20,15 @@ import {
   downloadBlob,
   downloadProjectJson,
   importProjectJson,
+  library,
   loadSession,
   saveSession,
 } from './persist'
-import { defaultEqBands, defaultMixer, defaultProject, newId, newTrack, projectEndBeat } from './project'
+import { fileBase, hasContent } from './library'
+import { buildTemplate, emptySong, isTemplateId, TEMPLATE_IDS, type TemplateId } from './templates'
+import { buildSongsPanel, songTitle } from './ui/songs-panel'
+import { confirmStart } from './ui/start-confirm'
+import { defaultEqBands, defaultMixer, defaultProject, newId, newTrack, projectEndBeat, type Project } from './project'
 import { collectEvents } from './transport'
 import { settings } from './settings'
 import { sampleStore } from './samples'
@@ -51,6 +56,10 @@ void sampleStore.loadAll()
 void soundFontStore.loadAll()
 // boot: last session if it exists, otherwise the demo song
 const savedSession = loadSession()
+// the demo and the starter songs are not worth listing until they are changed
+library.untouched = [demoSong(), ...TEMPLATE_IDS.map(buildTemplate)]
+// first run with the song list: a song in progress becomes its first entry
+library.adoptSession(savedSession)
 app.project = savedSession ?? demoSong()
 track('studio_open')
 if (isSongInProgress(savedSession, demoSong())) track('resume_project')
@@ -217,13 +226,123 @@ for (const ev of ['project', 'tracks', 'clips', 'mixer'] as const) {
   app.on(ev, () => {
     clearTimeout(saveTimer)
     saveTimer = setTimeout(() => {
-      if (settings.autosave) saveSession(app)
+      if (settings.autosave) showStorageFull(saveSession(app) === 'full')
     }, 900)
   })
 }
 window.addEventListener('beforeunload', () => {
   if (settings.autosave) saveSession(app)
 })
+
+// ---------- songs: new, templates, my songs ----------
+
+// swap the open song for another; `kept` is its entry in the song list, if any
+function loadSong(project: Project, kept: string | null): void {
+  app.transport.stop()
+  app.song?.allNotesOff()
+  app.history.clear()
+  app.project = project
+  app.selectedClip = null
+  app.armedTrackId = project.tracks[0]?.id ?? null
+  library.setCurrent(kept)
+  void app.song?.syncTracks(project)
+  app.emit('tracks', 'clips', 'project', 'selection')
+}
+
+// Never lose work silently: a song with content that is safely in the song list
+// gets a short question; one that is not gets Save first / Replace / Cancel.
+function switchSong(opts: { message: (name: string) => string; startLabel: string; go: () => void }): void {
+  const cur = app.project
+  if (!hasContent(cur) || !library.worthKeeping(cur)) {
+    opts.go()
+    return
+  }
+  let kept = library.isKept(cur)
+  if (!kept && settings.autosave) {
+    showStorageFull(saveSession(app) === 'full')
+    kept = library.isKept(cur)
+  }
+  if (kept) confirmStart(opts.message(songTitle(cur.name)), opts.startLabel, opts.go)
+  else confirmReplace(saveProject, opts.go)
+}
+
+const newMessage = (name: string): string => `Start a new song? \u201c${name}\u201d stays in My songs in this browser.`
+const openMessage = (name: string): string => `Open this song? \u201c${name}\u201d stays in My songs in this browser.`
+
+function startEmpty(): void {
+  switchSong({
+    message: newMessage,
+    startLabel: 'Start new',
+    go: () => {
+      loadSong(emptySong(), null)
+      track('new_song', { template: 'empty' })
+      songsPanel.close()
+    },
+  })
+}
+
+function startTemplate(id: TemplateId, from: 'studio' | 'guide'): void {
+  switchSong({
+    message: newMessage,
+    startLabel: 'Start new',
+    go: () => {
+      loadSong(buildTemplate(id), null)
+      track('new_song', { template: id })
+      track('template_open', { template: id, from })
+      songsPanel.close()
+    },
+  })
+}
+
+function openKeptSong(id: string): void {
+  if (id === library.currentId()) {
+    songsPanel.close()
+    return
+  }
+  switchSong({
+    message: openMessage,
+    startLabel: 'Open song',
+    go: () => {
+      const project = library.open(id)
+      if (!project) return
+      loadSong(project, id)
+      songsPanel.close()
+    },
+  })
+}
+
+const songsPanel = buildSongsPanel({
+  app,
+  library,
+  startEmpty,
+  startTemplate: id => startTemplate(id, 'studio'),
+  openSong: openKeptSong,
+})
+
+// the song name sits next to the logo and opens the panel
+const songLabel = document.createElement('button')
+songLabel.type = 'button'
+songLabel.className = 'song-name'
+songLabel.title = 'Rename, start, or open a song'
+songLabel.addEventListener('click', () => songsPanel.toggle())
+const showSongName = (): void => {
+  songLabel.textContent = songTitle(app.project.name)
+}
+showSongName()
+app.on('project', showSongName)
+arrange.el.querySelector('.brand')?.after(songLabel)
+
+// /studio?template=<id> from a guide article: load that starter, then drop the
+// query so a reload does not open it again. Unknown ids are ignored.
+{
+  const url = new URL(window.location.href)
+  const wanted = url.searchParams.get('template')
+  if (isTemplateId(wanted)) {
+    url.searchParams.delete('template')
+    history.replaceState(null, '', url.pathname + url.search + url.hash)
+    startTemplate(wanted, 'guide')
+  }
+}
 
 // file actions live on the transport bar's right side
 const fileBar = document.querySelector('.bar-space')!
@@ -239,7 +358,7 @@ wavBtn.addEventListener('click', () => {
     try {
       app.song?.collectPatches(app.project)
       const blob = await renderProjectToWav(app.project, settings.exportRate)
-      downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.wav`)
+      downloadBlob(blob, `${fileBase(app.project.name)}.wav`)
       track('export_audio', { format: 'wav' })
     } finally {
       wavBtn.disabled = false
@@ -262,7 +381,7 @@ mp3Btn.addEventListener('click', () => {
       mp3Btn.textContent = 'Encoding...'
       await new Promise(r => setTimeout(r, 30)) // let the label paint
       const blob = encodeMp3(buf, settings.mp3Kbps)
-      downloadBlob(blob, `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mp3`)
+      downloadBlob(blob, `${fileBase(app.project.name)}.mp3`)
       track('export_audio', { format: 'mp3' })
     } finally {
       mp3Btn.disabled = false
@@ -277,7 +396,7 @@ midiBtn.textContent = 'MIDI'
 midiBtn.title = 'Export all note tracks as a standard MIDI file'
 midiBtn.addEventListener('click', () => {
   const bytes = exportMidi(app.project)
-  downloadBlob(new Blob([bytes.buffer as ArrayBuffer], { type: 'audio/midi' }), `${app.project.name.replaceAll(/\W+/g, '-') || 'tracks'}.mid`)
+  downloadBlob(new Blob([bytes.buffer as ArrayBuffer], { type: 'audio/midi' }), `${fileBase(app.project.name)}.mid`)
   track('export_audio', { format: 'midi' })
 })
 const stemsBtn = document.createElement('button')
@@ -290,7 +409,7 @@ stemsBtn.addEventListener('click', () => {
     stemsBtn.disabled = true
     try {
       app.song?.collectPatches(app.project)
-      const base = app.project.name.replaceAll(/\W+/g, '-') || 'tracks'
+      const base = fileBase(app.project.name)
       const tracks = app.project.tracks.filter(t => t.clips.length > 0)
       for (let i = 0; i < tracks.length; i++) {
         stemsBtn.textContent = `Stem ${i + 1}/${tracks.length}`
@@ -338,14 +457,7 @@ fileInput.addEventListener('change', () => {
   void loader
     .then(project => {
       const replace = (): void => {
-        app.transport.stop()
-        app.song?.allNotesOff()
-        app.history.clear()
-        app.project = project
-        app.selectedClip = null
-        app.armedTrackId = project.tracks[0]?.id ?? null
-        void app.song?.syncTracks(project)
-        app.emit('tracks', 'clips', 'project', 'selection')
+        loadSong(project, null)
         track('project_open', { file: /\.midi?$/i.test(f.name) ? 'midi' : 'project' })
       }
       const hasContent = app.project.tracks.length > 0 || app.project.scenes.length > 0 ||
@@ -375,17 +487,30 @@ fileBar.appendChild(wavBtn)
 fileBar.appendChild(mp3Btn)
 fileBar.appendChild(stemsBtn)
 fileBar.appendChild(midiBtn)
+const songsBtn = document.createElement('button')
+songsBtn.type = 'button'
+songsBtn.className = 'seg-btn'
+songsBtn.textContent = 'Songs'
+songsBtn.title = 'Rename this song, start a new one, or open one kept in this browser'
+songsBtn.addEventListener('click', () => songsPanel.toggle())
+fileBar.appendChild(songsBtn)
 fileBar.appendChild(saveBtn)
 fileBar.appendChild(openBtn)
 fileBar.appendChild(fileInput)
 const backupNotice = document.createElement('div')
 backupNotice.className = 'backup-notice'
-backupNotice.append('Saved in this browser. ')
+const noticeText = document.createElement('span')
+noticeText.textContent = 'Saved in this browser. '
 const backup = document.createElement('button')
 backup.type = 'button'
 backup.textContent = 'Download a backup.'
 backup.addEventListener('click', saveProject)
-backupNotice.appendChild(backup)
+backupNotice.append(noticeText, backup)
+function showStorageFull(full: boolean): void {
+  backupNotice.classList.toggle('backup-warn', full)
+  noticeText.textContent = full ? 'Browser storage is full. ' : 'Saved in this browser. '
+  backup.textContent = full ? 'Download a backup with Save.' : 'Download a backup.'
+}
 bottom.el.appendChild(backupNotice) // sits in the empty right end of the tab row
 
 // ---------- global keys ----------

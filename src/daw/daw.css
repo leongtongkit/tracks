@@ -1810,3 +1810,53 @@
   .transport-bar { height: auto; flex-wrap: wrap; padding: 6px 10px; }
   .bar-space { flex: 1 1 auto; flex-wrap: wrap; }
 }
+
+/* ---------- songs panel ---------- */
+.song-name {
+  max-width: 14ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  background: none;
+  border: none;
+  border-bottom: 1px dotted var(--ink-soft);
+  padding: 0 2px;
+  font: inherit;
+  font-size: 0.72rem;
+  color: var(--ink);
+  cursor: pointer;
+}
+.songs-card { width: min(520px, 92vw); }
+.songs-heading {
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 14px 0 6px;
+}
+.songs-name {
+  width: 100%;
+  box-sizing: border-box;
+  font: inherit;
+  font-size: 0.85rem;
+  padding: 6px 8px;
+  border: 1px solid #b5b4ab;
+  border-radius: 4px;
+  background: var(--panel-grey);
+  color: var(--ink);
+}
+.songs-starters { display: flex; flex-wrap: wrap; gap: 6px; }
+.songs-list { list-style: none; margin: 0; padding: 0; }
+.songs-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--edge);
+}
+.songs-info { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.songs-title { font-size: 0.82rem; color: var(--ink); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.songs-when { font-size: 0.68rem; color: var(--ink-soft); }
+.songs-empty { font-size: 0.8rem; color: var(--ink-soft); padding: 6px 0; }
+.backup-notice.backup-warn { color: var(--accent-deep); font-weight: 600; }
