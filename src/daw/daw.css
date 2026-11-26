@@ -1782,14 +1782,16 @@
 .first-visit-tip ol { padding-left: 20px; line-height: 1.5; }
 .first-visit-tip a { color: inherit; }
 .replace-card .seg-btn { margin-right: 6px; }
+.bottom-panel { position: relative; }
 .backup-notice {
-  position: fixed;
-  left: 14px;
-  bottom: 8px;
-  z-index: 30;
+  position: absolute;
+  top: 6px;
+  right: 12px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  gap: 0.3em;
   color: var(--ink-soft);
-  background: var(--body-grey);
-  padding: 3px 6px;
   font-size: 0.65rem;
 }
 .backup-notice button {

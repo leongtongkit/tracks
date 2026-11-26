@@ -386,7 +386,7 @@ backup.type = 'button'
 backup.textContent = 'Download a backup.'
 backup.addEventListener('click', saveProject)
 backupNotice.appendChild(backup)
-daw.appendChild(backupNotice)
+bottom.el.appendChild(backupNotice) // sits in the empty right end of the tab row
 
 // ---------- global keys ----------
 
