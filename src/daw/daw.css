@@ -1810,3 +1810,109 @@
   .transport-bar { height: auto; flex-wrap: wrap; padding: 6px 10px; }
   .bar-space { flex: 1 1 auto; flex-wrap: wrap; }
 }
+
+/* ---------- drum step grid ---------- */
+.sgrid {
+  min-height: 0;
+  display: grid;
+  grid-template-rows: 30px 1fr;
+}
+.sgrid-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 10px;
+  border-bottom: 1px solid var(--edge);
+}
+.sgrid-hint {
+  font-size: 0.65rem;
+  color: var(--ink-soft);
+  margin-right: auto;
+}
+.sgrid-bar-label {
+  font-family: var(--font-mono);
+  font-size: 0.6rem;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+.sgrid-scroll {
+  min-height: 0;
+  overflow: auto;
+  padding: 8px 10px;
+}
+.sgrid-grid {
+  display: grid;
+  grid-template-columns: 92px repeat(16, minmax(24px, 1fr));
+  gap: 3px;
+  min-width: 640px;
+}
+.sgrid-name {
+  text-align: left;
+  font-size: 0.7rem;
+  padding: 0 6px;
+  border: 1px solid var(--edge);
+  border-radius: var(--radius-sm);
+  background: var(--panel-grey);
+  color: var(--ink);
+  cursor: pointer;
+  position: sticky;
+  left: 0;
+  z-index: 1;
+}
+.sgrid-name:hover {
+  border-color: var(--accent);
+}
+.sgrid-cell {
+  height: 26px;
+}
+.sgrid-group-gap {
+  margin-left: 6px;
+}
+.sgrid-past {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+.sgrid-head:not(.seq-on) {
+  background: rgba(255, 77, 0, 0.28);
+}
+.sgrid-head.seq-on {
+  background: var(--accent);
+  border-color: var(--accent-deep);
+}
+.bottom-view-switch {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 12px;
+}
+
+/* ---------- keyboard toggle + scrolling instrument panel ---------- */
+.bottom-body-scroll {
+  overflow-y: auto;
+  align-content: start;
+  grid-auto-rows: min-content;
+}
+.piano-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+.piano-head .piano-label {
+  margin-bottom: 0;
+}
+.instrument-piano-closed {
+  margin-top: 0;
+  padding: 0 10px 8px;
+}
+.instrument-piano:not(.instrument-piano-closed) {
+  padding: 0 10px 10px;
+}
+.clip-notes {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}

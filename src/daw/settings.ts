@@ -11,6 +11,7 @@ export interface AppSettings {
   mp3Kbps: 128 | 192 | 320
   exportRate: 44100 | 48000 // WAV/MP3/stems sample rate
   midiInput: string | null // active hardware MIDI device name; null = all
+  showKeyboard: boolean // on-screen keyboard under the instrument panel
 }
 
 const KEY = 'tracks.settings.v1'
@@ -26,6 +27,7 @@ export function defaultSettings(): AppSettings {
     mp3Kbps: 192,
     exportRate: 44100,
     midiInput: null,
+    showKeyboard: false,
   }
 }
 
@@ -43,6 +45,7 @@ function load(): AppSettings {
     if (typeof parsed.micProcessing === 'boolean') out.micProcessing = parsed.micProcessing
     if (parsed.mp3Kbps === 128 || parsed.mp3Kbps === 192 || parsed.mp3Kbps === 320) out.mp3Kbps = parsed.mp3Kbps
     if (parsed.exportRate === 44100 || parsed.exportRate === 48000) out.exportRate = parsed.exportRate
+    if (typeof parsed.showKeyboard === 'boolean') out.showKeyboard = parsed.showKeyboard
     if (typeof parsed.midiInput === 'string' || parsed.midiInput === null) out.midiInput = parsed.midiInput ?? null
   } catch {
     // corrupted settings → defaults

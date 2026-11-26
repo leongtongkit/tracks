@@ -25,7 +25,7 @@ import {
 } from './persist'
 import { defaultEqBands, defaultMixer, defaultProject, newId, newTrack, projectEndBeat } from './project'
 import { collectEvents } from './transport'
-import { settings } from './settings'
+import { saveSettings, settings } from './settings'
 import { sampleStore } from './samples'
 import { buildAudioTrackEditor } from './ui/audio-editor'
 import { buildDrumEditor } from './ui/drum-editor'
@@ -107,11 +107,32 @@ const playPiano = new Piano({
 })
 const pianoSlot = document.createElement('div')
 pianoSlot.className = 'instrument-piano'
+const pianoHead = document.createElement('div')
+pianoHead.className = 'piano-head'
 const pianoLabel = document.createElement('span')
 pianoLabel.className = 'piano-label'
 pianoLabel.textContent = 'Keyboard — your computer keys play these notes'
-pianoSlot.appendChild(pianoLabel)
+const pianoToggle = document.createElement('button')
+pianoToggle.type = 'button'
+pianoToggle.className = 'seg-btn piano-toggle'
+const syncPiano = (): void => {
+  const open = settings.showKeyboard
+  pianoToggle.textContent = open ? 'Hide keyboard' : 'Show keyboard'
+  pianoToggle.title = open ? 'Hide the on-screen keyboard (your computer keys still play)' : 'Show an on-screen keyboard you can click'
+  pianoToggle.setAttribute('aria-expanded', String(open))
+  playPiano.el.style.display = open ? '' : 'none'
+  pianoSlot.classList.toggle('instrument-piano-closed', !open)
+}
+pianoToggle.addEventListener('click', () => {
+  settings.showKeyboard = !settings.showKeyboard
+  saveSettings()
+  syncPiano()
+})
+pianoHead.appendChild(pianoLabel)
+pianoHead.appendChild(pianoToggle)
+pianoSlot.appendChild(pianoHead)
 pianoSlot.appendChild(playPiano.el)
+syncPiano()
 const MELODIC = new Set<string>(['synth', 'sampler', 'soundfont'])
 
 bottom.setInstrumentMount((host, trackId) => {
