@@ -2,32 +2,138 @@ name: deploy
 
 on:
   push:
-    branches: [main]
+    branches: [main, staging-gate]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # the IndexNow step diffs this push against the previous one
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
       - run: npm ci
-      # Gate the deploy: the daily blog routine pushes new HTML straight to main,
-      # so this is where a re-introduced ad script or an unescaped post field gets
-      # caught — before it reaches the live site.
+      # The daily blog routine pushes HTML straight to main; gate it before live.
       - run: npm test
       - run: npm run build
+      - run: printf '%s\n' "$GITHUB_SHA" > dist/build.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  staging:
+    needs: build
+    runs-on: ubuntu-latest
+    outputs:
+      tracks_url: ${{ steps.deploy.outputs.tracks_url }}
+      synth_url: ${{ steps.deploy.outputs.synth_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
+      - id: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          set -euo pipefail
+          npx --yes wrangler@4 deploy --env staging | tee /tmp/tracks-deploy.log
+          npx --yes wrangler@4 deploy -c wrangler-synth.toml --env staging | tee /tmp/synth-deploy.log
+          tracks_url=$(grep -Eo 'https://[^[:space:]]+\.workers\.dev' /tmp/tracks-deploy.log | head -1)
+          synth_url=$(grep -Eo 'https://[^[:space:]]+\.workers\.dev' /tmp/synth-deploy.log | head -1)
+          test -n "$tracks_url" && test -n "$synth_url"
+          echo "tracks_url=$tracks_url" >> "$GITHUB_OUTPUT"
+          echo "synth_url=$synth_url" >> "$GITHUB_OUTPUT"
+      - env:
+          TRACKS_URL: ${{ steps.deploy.outputs.tracks_url }}
+          SYNTH_URL: ${{ steps.deploy.outputs.synth_url }}
+        run: |
+          for url in "$TRACKS_URL" "$SYNTH_URL"; do
+            matched=false
+            for attempt in {1..18}; do
+              if [ "$(curl -fsS --max-time 5 "$url/build.txt" || true)" = "$GITHUB_SHA" ]; then matched=true; break; fi
+              sleep 5
+            done
+            if [ "$matched" != true ]; then echo "Build mismatch: $url"; exit 1; fi
+          done
+
+  e2e:
+    needs: staging
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npx playwright test
+        env:
+          TRACKS_URL: ${{ needs.staging.outputs.tracks_url }}
+          SYNTH_URL: ${{ needs.staging.outputs.synth_url }}
+          EXPECT_STAGING: '1'
+          CI: '1'
+      - name: Check staging build after tests
+        env:
+          TRACKS_URL: ${{ needs.staging.outputs.tracks_url }}
+          SYNTH_URL: ${{ needs.staging.outputs.synth_url }}
+        run: |
+          for url in "$TRACKS_URL" "$SYNTH_URL"; do
+            if [ "$(curl -fsS --max-time 5 "$url/build.txt")" != "$GITHUB_SHA" ]; then echo "Build mismatch: $url"; exit 1; fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-results
+          path: |
+            playwright-report/
+            test-results/
+
+  live:
+    needs: [build, e2e]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # IndexNow diffs this push against the previous one.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist
       - env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           npx --yes wrangler@4 deploy
           npx --yes wrangler@4 deploy -c wrangler-synth.toml
-      # Ask IndexNow engines (Bing and others) to re-crawl the blog pages this
-      # push added or changed. Best effort: a refusal never fails the deploy.
+      - run: |
+          for url in https://freetracks.app https://synth.freetracks.app; do
+            matched=false
+            for attempt in {1..18}; do
+              if [ "$(curl -fsS --max-time 5 "$url/build.txt" || true)" = "$GITHUB_SHA" ]; then matched=true; break; fi
+              sleep 5
+            done
+            if [ "$matched" != true ]; then echo "Build mismatch: $url"; exit 1; fi
+          done
+      # Ask IndexNow to re-crawl changed blog pages; a refusal does not fail deploy.
       - name: IndexNow
         continue-on-error: true
         run: node scripts/indexnow.mjs --changed "${{ github.event.before }}"
