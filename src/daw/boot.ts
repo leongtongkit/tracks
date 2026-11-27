@@ -565,36 +565,17 @@ async function importSheet(file: File): Promise<void> {
 const sheetBtn = document.createElement('button')
 sheetBtn.className = 'seg-btn'
 sheetBtn.textContent = 'Sheet music'
-sheetBtn.title = 'Import or export sheet music (ABC), for example from YuE2'
+sheetBtn.title = 'See a track as sheet music, print it, or import and export ABC (for example for YuE2)'
 sheetBtn.addEventListener('click', () => {
-  const overlay = document.createElement('div'); overlay.className = 'help-overlay'
-  const card = document.createElement('div'); card.className = 'help-card replace-card sheet-card'
-  card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', 'Sheet music')
-  card.innerHTML = `<h2>Sheet music (ABC)</h2><h3>Import</h3><button class="seg-btn" type="button">Choose .abc file</button><input type="file" accept=".abc,text/vnd.abc,text/plain" hidden><div class="sheet-drop">or drop an .abc file here</div><p>Notes, chords, tempo, time signature and key come in. Lyrics don't.</p><h3>Export</h3><label>Melody from <select aria-label="Melody from"></select></label><label>Chords from <select aria-label="Chords from"><option value="">No chords</option></select></label><p class="sheet-empty"></p><button class="seg-btn sheet-download" type="button">Download .abc</button><p role="status"></p><a href="/blog/yue2-sheet-music-tracks" target="_blank" rel="noopener">How to use this with YuE2</a><button class="seg-btn sheet-close" type="button">Close</button>`
-  const input = card.querySelector('input')!; const select = card.querySelector<HTMLSelectElement>('[aria-label="Melody from"]')!; const chords = card.querySelector<HTMLSelectElement>('[aria-label="Chords from"]')!
-  sheetStatus = card.querySelector('[role="status"]')
-  const close = (): void => { overlay.remove(); sheetClose = null; sheetStatus = null; document.removeEventListener('keydown', escape) }
-  sheetClose = close
-  const escape = (e: KeyboardEvent): void => { if (e.key === 'Escape') close() }
-  document.addEventListener('keydown', escape)
-  card.querySelector('button')!.addEventListener('click', () => input.click())
-  input.addEventListener('change', () => { const f = input.files?.[0]; if (f) void importSheet(f) })
-  card.querySelector('.sheet-close')!.addEventListener('click', close)
-  const drop = card.querySelector('.sheet-drop')!
-  drop.addEventListener('dragover', e => { e.preventDefault() })
-  drop.addEventListener('drop', e => { const f = (e as DragEvent).dataTransfer?.files[0]; if (f && /\.abc$/i.test(f.name)) { e.preventDefault(); void importSheet(f) } })
-  const tracks = app.project.tracks.filter(t => t.clips.some(c => c.notes.length))
-  for (const t of tracks) { select.add(new Option(t.name, t.id)); chords.add(new Option(t.name, t.id)) }
-  const download = card.querySelector<HTMLButtonElement>('.sheet-download')!; download.disabled = !tracks.length
-  if (!tracks.length) card.querySelector('.sheet-empty')!.textContent = 'Add a track with notes to export it.'
-  download.addEventListener('click', () => { void (async () => {
-    const { exportAbc } = await import('./abc'); const result = exportAbc(app.project, select.value, chords.value)
-    if (result.error) { if (sheetStatus) sheetStatus.textContent = result.error; return }
-    const name = `${fileBase(app.project.name)}.abc`; downloadBlob(new Blob([result.text], { type: 'text/vnd.abc' }), name)
-    if (sheetStatus) sheetStatus.textContent = result.messages.join(' ') || `Saved ${name}.`
-    track('abc_export', { notes: result.notes, chords: result.chords, top_note: result.notes_dropped ? 1 : 0 })
-  })() })
-  overlay.appendChild(card); document.body.appendChild(overlay)
+  if (sheetClose || sheetBtn.disabled) return
+  sheetBtn.disabled = true
+  void import('./sheet-dialog')
+    .then(({ openSheetDialog }) => {
+      const dialog = openSheetDialog({ app, importSheet: f => { void importSheet(f) }, onClose: () => { sheetClose = null; sheetStatus = null } })
+      sheetClose = dialog.close; sheetStatus = dialog.status
+    })
+    .catch(() => toast('Could not open sheet music. Check your connection and try again.'))
+    .finally(() => { sheetBtn.disabled = false })
 })
 window.addEventListener('dragover', e => { if (!e.defaultPrevented && [...(e.dataTransfer?.items ?? [])].some(item => item.kind === 'file')) e.preventDefault() })
 window.addEventListener('drop', e => { if (e.defaultPrevented) return; const f = e.dataTransfer?.files[0]; if (f && /\.abc$/i.test(f.name)) { e.preventDefault(); void importSheet(f) } })

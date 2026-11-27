@@ -1968,7 +1968,28 @@
 
 .share-card label{display:block;margin:12px 0 4px}.share-card input,.share-card textarea{display:block;box-sizing:border-box;width:100%;margin-top:4px}.share-card textarea{height:70px}.share-card{max-width:560px;width:90%}
 
-.sheet-card { display: flex; flex-direction: column; gap: 0.65rem; }
+.sheet-card { color: var(--ink); display: flex; flex-direction: column; gap: 0.65rem; width: min(960px, 94vw); max-width: none; max-height: 92vh; overflow: auto; box-sizing: border-box; cursor: auto; }
 .sheet-card h2, .sheet-card h3, .sheet-card p { margin: 0; }
-.sheet-card label { display: flex; justify-content: space-between; gap: 1rem; }
+.sheet-head { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.sheet-head h2 { margin: 0; }
+.sheet-io label, .sheet-bar label { display: flex; align-items: center; gap: 0.4rem; }
+.sheet-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; }
+.sheet-meta, .sheet-note { font-size: 0.8rem; }
+.sheet-card h3 { font-size: 0.75rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.sheet-note:empty { display: none; }
+.sheet-score { background: #fff; color: #111; border-radius: 4px; padding: 6px; min-height: 120px; font-size: 0.85rem; }
+.sheet-score svg { display: block; }
+.sheet-score .sheet-now { fill: var(--accent); }
+.sheet-cursor { stroke: var(--accent); stroke-width: 2; opacity: 0.75; }
+.sheet-io { display: flex; flex-direction: column; gap: 0.65rem; border-top: 1px solid #b5b4ab; padding-top: 0.75rem; }
 .sheet-drop { border: 1px dashed currentColor; border-radius: 6px; padding: 1rem; text-align: center; }
+@media print {
+  body.sheet-open > :not(.sheet-overlay) { display: none !important; }
+  body.sheet-open .sheet-overlay { position: static; display: block; background: none; }
+  body.sheet-open .sheet-card { width: 100%; max-width: none; margin: 0; max-height: none; overflow: visible; box-shadow: none; border: 0; padding: 0; background: #fff; }
+  body.sheet-open .sheet-card > :not(.sheet-score):not(.sheet-meta) { display: none !important; }
+  body.sheet-open .sheet-meta { color: #111; }
+  body.sheet-open .sheet-score { padding: 0; }
+  .sheet-cursor { display: none; }
+  .sheet-score .sheet-now { fill: currentColor; }
+}
