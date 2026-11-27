@@ -198,6 +198,31 @@ test.describe('studio', () => {
     await expect(page.getByRole('button', { name: 'Export WAV' })).toBeEnabled()
   })
 
+  test('WAV export plays every note of a melody, not only the last', async ({ page }) => {
+    // one synth line of steady notes: 8 bars at 88 BPM (the YuE2 example melody)
+    await openStudio(page)
+    await page.getByRole('button', { name: 'Sheet music' }).click()
+    await page.getByRole('dialog', { name: 'Sheet music' }).locator('input[type=file]').setInputFiles('e2e/yue2/melody.abc')
+    await page.getByRole('dialog', { name: 'Replace the current song?' }).getByRole('button', { name: 'Replace', exact: true }).click()
+    await expect.poll(() => songState(page)).toMatchObject({ name: 'melody', tracks: ['Vocal Melody'], noteCount: 56 })
+    // 32 beats at 88 BPM = 21.8 s of notes: every half second of it has sound
+    const silentWindows = async (): Promise<number[]> => {
+      const [download] = await Promise.all([
+        page.waitForEvent('download', { timeout: 60_000 }),
+        page.getByRole('button', { name: 'Export WAV' }).click(),
+      ])
+      const wav = parseWav(await readFile((await download.path())!))
+      return wav.halfSecondPeaks.slice(0, 43).flatMap((p, i) => (p < 0.02 ? [i / 2] : []))
+    }
+    expect(await silentWindows(), 'mono synth (imported sound)').toEqual([])
+    // a poly sound reuses voices as notes end: same check
+    await page.locator('.lane').first().locator('.clip').first().click()
+    await page.getByRole('button', { name: 'Instrument', exact: true }).click()
+    await page.locator('.instrument-presets .preset-name').click()
+    await page.locator('.instrument-presets .preset-item', { hasText: /^House Piano$/ }).click()
+    expect(await silentWindows(), 'poly synth (House Piano)').toEqual([])
+  })
+
   test('a guide link opens its starter song', async ({ page }) => {
     // read the real link out of a published guide
     await page.goto(TRACKS_URL + '/blog/make-lofi-hip-hop')

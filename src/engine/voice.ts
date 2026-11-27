@@ -51,6 +51,11 @@ export class Voice {
     mods?: VoiceMods,
     velocity = 1,
   ): void {
+    // An earlier note on this voice may still be booked to sound: the offline
+    // export books every note up front, and a mono retrigger can land inside a
+    // release. Let that note play until t and fade there, rather than cutting
+    // it off now (which in the export silenced every note but the last).
+    if (this.state !== 'free' && ctx.currentTime < this.releaseEnd) this.steal(t)
     this.dispose()
     const freq = midiToFreq(note)
     this.baseFreq = freq

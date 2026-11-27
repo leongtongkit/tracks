@@ -9,6 +9,8 @@ export interface WavInfo {
   seconds: number
   /** largest absolute sample value, 0..1 */
   peak: number
+  /** loudest sample in each half second (both channels), 0..1 */
+  halfSecondPeaks: number[]
 }
 
 export function parseWav(buf: Buffer): WavInfo {
@@ -41,6 +43,8 @@ export function parseWav(buf: Buffer): WavInfo {
   const bytes = fmt.bits / 8
   const frames = Math.floor(data.size / (bytes * fmt.channels))
   let peak = 0
+  const window = Math.round(fmt.sampleRate / 2)
+  const halfSecondPeaks: number[] = new Array(Math.ceil(frames / window)).fill(0)
   for (let i = 0; i < frames * fmt.channels; i++) {
     const at = data.offset + i * bytes
     let v: number
@@ -49,6 +53,8 @@ export function parseWav(buf: Buffer): WavInfo {
     else throw new Error(`unsupported wav format ${fmt.format}/${fmt.bits}`)
     const a = Math.abs(v)
     if (a > peak) peak = a
+    const w = Math.floor(i / fmt.channels / window)
+    if (a > halfSecondPeaks[w]) halfSecondPeaks[w] = a
   }
   return {
     format: fmt.format,
@@ -58,5 +64,6 @@ export function parseWav(buf: Buffer): WavInfo {
     frames,
     seconds: frames / fmt.sampleRate,
     peak,
+    halfSecondPeaks,
   }
 }
