@@ -1,5 +1,17 @@
 [
   {
+    "slug": "studio-one-alternative-browser",
+    "title": "A free Studio One alternative that runs in your browser",
+    "dek": "Studio One is a paid desktop DAW with a drag-and-drop workflow. Here is an honest look at what a free browser DAW covers, and where Studio One still wins.",
+    "date": "2026-11-27",
+    "tags": [
+      "studio one",
+      "alternative",
+      "free daw"
+    ],
+    "readingTime": 6
+  },
+  {
     "slug": "cakewalk-alternative-browser",
     "title": "A free Cakewalk alternative that runs in your browser",
     "dek": "Cakewalk is a free Windows-only desktop DAW. Tracks is a free browser studio for any device. Here is an honest comparison of what each covers.",
