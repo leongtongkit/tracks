@@ -74,7 +74,11 @@ export class Analytics {
     }
     if (this.consent !== true || !this.queue.length) return
     const z = this.env.zaraz()
-    if (!z || typeof z.track !== 'function' || (z.consent && !z.consent.APIReady)) {
+    // Zaraz defines a placeholder zaraz.track before its consent API exists; an event
+    // sent through it then goes out before the visitor's choice reaches Zaraz, and
+    // GA4 drops it. So wait for the consent API itself (consent.js hands the choice
+    // over the moment it is ready).
+    if (!z || typeof z.track !== 'function' || !z.consent?.APIReady) {
       this.retry()
       return
     }

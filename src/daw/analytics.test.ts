@@ -24,11 +24,15 @@ function harness(choice: boolean | null) {
     loadZaraz(apiReady = true) {
       zaraz = { track: (n, p) => void sent.push([n, p]), consent: { APIReady: apiReady } }
     },
+    // Zaraz's placeholder: track() exists, its consent API doesn't yet
+    loadZarazPlaceholder() {
+      zaraz = { track: (n, p) => void sent.push([n, p]) }
+    },
     choose(analytics: boolean) {
       consentCb(analytics)
     },
     zarazReady() {
-      if (zaraz?.consent) zaraz.consent.APIReady = true
+      if (zaraz) zaraz.consent = { APIReady: true }
       readyCb()
     },
     runTimers() {
@@ -89,6 +93,17 @@ describe('studio analytics respect the privacy choice', () => {
     h.zarazReady()
     h.runTimers()
     expect(h.sent).toEqual([['studio_open', undefined]])
+  })
+
+  test("an event sent while Zaraz is still loading waits for its consent API, so GA4 doesn't drop it", () => {
+    const h = harness(true)
+    h.loadZarazPlaceholder()
+    h.a.track('sheet_open', { from: 'saved' })
+    h.runTimers()
+    expect(h.sent).toEqual([])
+    h.zarazReady()
+    h.runTimers()
+    expect(h.sent).toEqual([['sheet_open', { from: 'saved' }]])
   })
 
   test('once() counts an event a single time per page load', () => {
