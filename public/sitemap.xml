@@ -11,6 +11,11 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://freetracks.app/sheet-music</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://freetracks.app/blog/cakewalk-alternative-browser</loc>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>

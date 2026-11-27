@@ -11,7 +11,7 @@ import { describe, test, expect } from 'vitest'
 const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 
 function htmlFiles() {
-  const files = ['index.html', 'studio.html', 'synth.html']
+  const files = ['index.html', 'studio.html', 'synth.html', 'sheet-music.html']
   const walk = (dir) => {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       const p = join(dir, e.name)
@@ -45,7 +45,7 @@ describe('site lives at freetracks.app / synth.freetracks.app (four old hosts ar
   })
 
   test('product pages load the Zaraz loader exactly once', () => {
-    for (const rel of ['index.html', 'studio.html', 'synth.html']) {
+    for (const rel of ['index.html', 'studio.html', 'synth.html', 'sheet-music.html']) {
       const text = readFileSync(join(root, rel), 'utf8')
       expect(text.match(/cdn-cgi\/zaraz\/i\.js/g) ?? []).toHaveLength(1)
     }

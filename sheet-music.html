@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sheet music editor for YuE2 scores — Tracks</title>
+    <meta name="description" content="A free sheet music editor in your browser for YuE2's ABC scores: see the score as notation and as text side by side, edit notes with buttons or by typing, check it against YuE2's rules, play it, print it and save it." />
+    <link rel="canonical" href="https://freetracks.app/sheet-music" />
+    <meta property="og:title" content="Sheet music editor for YuE2 scores — Tracks" />
+    <meta property="og:description" content="Edit a YuE2 score as sheet music and as ABC text, side by side. Free, in your browser, nothing uploaded." />
+    <meta property="og:url" content="https://freetracks.app/sheet-music" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="https://freetracks.app/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://freetracks.app/og.png" />
+    <meta name="google-adsense-account" content="ca-pub-4201800488909351" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <link rel="stylesheet" href="/src/sheet/sheet.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "Tracks sheet music editor",
+        "url": "https://freetracks.app/sheet-music",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Any (web browser)",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "description": "Edit two-part ABC scores in the format YuE2 reads and writes, as sheet music and as text, with a live check, playback, printing and saving. Runs in the browser; nothing is uploaded."
+      }
+    </script>
+    <script defer src="https://freetracks.app/cdn-cgi/zaraz/i.js"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site sheet-page">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+    <main class="se">
+      <div class="se-intro">
+        <h1>Sheet music editor</h1>
+        <p>Edit a score in the ABC format <a href="/blog/yue2-sheet-music-tracks">YuE2</a> reads and writes. The sheet music and the text stay in step: click a note to pick it, change it with the buttons or the keyboard, or type in the text. Everything stays in your browser.</p>
+      </div>
+
+      <div class="se-files" role="toolbar" aria-label="Score">
+        <button type="button" class="se-btn" data-act="new">New score</button>
+        <button type="button" class="se-btn" data-act="open">Open .abc</button>
+        <input type="file" accept=".abc,text/vnd.abc,text/plain" hidden />
+        <button type="button" class="se-btn" data-act="save">Save .abc</button>
+        <button type="button" class="se-btn" data-act="print">Print / PDF</button>
+        <button type="button" class="se-btn se-play" data-act="play">Play</button>
+        <button type="button" class="se-btn" data-act="studio">Send to studio</button>
+        <span class="se-name" aria-live="polite"></span>
+      </div>
+
+      <div class="se-tools" role="toolbar" aria-label="Note tools">
+        <span class="se-group">
+          <button type="button" class="se-btn" data-op="prev" title="Previous note (←)" aria-label="Previous note">◀</button>
+          <button type="button" class="se-btn" data-op="next" title="Next note (→)" aria-label="Next note">▶</button>
+        </span>
+        <span class="se-group" aria-label="Pitch">
+          <button type="button" class="se-btn" data-op="step-up" title="Up a step (↑)">Up</button>
+          <button type="button" class="se-btn" data-op="step-down" title="Down a step (↓)">Down</button>
+          <button type="button" class="se-btn" data-op="sharp" title="Up a semitone (Alt+↑)" aria-label="Up a semitone">♯</button>
+          <button type="button" class="se-btn" data-op="flat" title="Down a semitone (Alt+↓)" aria-label="Down a semitone">♭</button>
+          <button type="button" class="se-btn" data-op="oct-up" title="Up an octave (Shift+↑)">8va</button>
+          <button type="button" class="se-btn" data-op="oct-down" title="Down an octave (Shift+↓)">8vb</button>
+        </span>
+        <span class="se-group" aria-label="Length">
+          <button type="button" class="se-btn" data-len="16" title="Sixteenth note (1)" aria-label="Sixteenth note">1/16</button>
+          <button type="button" class="se-btn" data-len="8" title="Eighth note (2)" aria-label="Eighth note">1/8</button>
+          <button type="button" class="se-btn" data-len="4" title="Quarter note (3)" aria-label="Quarter note">1/4</button>
+          <button type="button" class="se-btn" data-len="2" title="Half note (4)" aria-label="Half note">1/2</button>
+          <button type="button" class="se-btn" data-len="1" title="Whole note (5)" aria-label="Whole note">1</button>
+          <button type="button" class="se-btn" data-op="dot" title="Dotted (.)">Dot</button>
+        </span>
+        <span class="se-group">
+          <button type="button" class="se-btn" data-op="rest" title="Rest / note (R)">Rest</button>
+          <button type="button" class="se-btn" data-op="delete" title="Delete (Delete)">Delete</button>
+          <button type="button" class="se-btn" data-op="insert" title="Split into two notes (I)">Insert after</button>
+          <button type="button" class="se-btn" data-op="bar" title="Add a bar after this one (|)">Add bar</button>
+        </span>
+        <span class="se-group se-chord">
+          <label>Chord <input type="text" size="7" placeholder="Am7" aria-label="Chord symbol" autocomplete="off" spellcheck="false" /></label>
+          <button type="button" class="se-btn" data-op="chord" title="Put this chord on the picked note (Enter)">Set chord</button>
+        </span>
+        <span class="se-group">
+          <button type="button" class="se-btn" data-op="undo" title="Undo (Ctrl+Z)">Undo</button>
+          <button type="button" class="se-btn" data-op="redo" title="Redo (Ctrl+Shift+Z)">Redo</button>
+        </span>
+      </div>
+      <p class="se-phone-note" hidden>The studio needs a computer or tablet. Save the score here and open it in the studio there.</p>
+      <p class="se-picked" aria-live="polite"></p>
+
+      <div class="se-panes">
+        <section class="se-view-wrap" aria-label="Sheet music">
+          <div class="se-view" tabindex="0" aria-label="Sheet music: click a note to pick it"></div>
+        </section>
+        <section class="se-text-wrap">
+          <label for="se-text">ABC text</label>
+          <div class="se-text">
+            <div class="se-mirror" aria-hidden="true"></div>
+            <textarea id="se-text" wrap="off" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+          </div>
+        </section>
+      </div>
+
+      <section class="se-check" aria-label="Score check">
+        <h2>Score check</h2>
+        <p class="se-verdict" role="status"></p>
+        <ul class="se-problems"></ul>
+      </section>
+
+      <section class="se-lyrics">
+        <h2>Lyrics</h2>
+        <p>YuE2 takes lyrics separately from the score, so they're saved as their own text file. Mark each part with a tag like [Verse] or [Chorus].</p>
+        <textarea aria-label="Lyrics" rows="6" placeholder="[Verse]&#10;First line of the verse&#10;&#10;[Chorus]&#10;First line of the chorus"></textarea>
+        <button type="button" class="se-btn" data-act="lyrics">Save lyrics (.txt)</button>
+      </section>
+
+      <section class="se-help">
+        <h2>Keys</h2>
+        <p>With the sheet music picked (not the text): ← → move between notes · ↑ ↓ a step · Shift+↑ ↓ an octave · Alt+↑ ↓ a semitone · 1–5 sixteenth to whole note · . dotted · R rest · Delete · I insert after · | add bar · Ctrl+Z undo · Ctrl+Shift+Z redo.</p>
+        <p>The buttons change the text so that every bar stays the right length and the score stays in YuE2's format. Open a score with Open .abc, or drop an .abc file on the page. The <a href="/blog/yue2-sheet-music-tracks">YuE2 guide</a> shows how to use the score you save.</p>
+      </section>
+
+      <dialog class="se-new" aria-label="New score">
+        <form method="dialog">
+          <h2>New score</h2>
+          <label>Tempo (BPM) <input name="bpm" type="number" min="40" max="240" value="96" required /></label>
+          <label>Time signature
+            <select name="meter"><option>4/4</option><option>3/4</option><option>2/4</option><option>6/8</option><option>12/8</option></select>
+          </label>
+          <label>Key <select name="key"></select></label>
+          <label>Bars <input name="bars" type="number" min="1" max="64" value="8" required /></label>
+          <p>The current score stays in Undo.</p>
+          <div class="se-new-actions">
+            <button type="submit" class="se-btn" value="create">Create</button>
+            <button type="submit" class="se-btn" value="cancel" formnovalidate>Cancel</button>
+          </div>
+        </form>
+      </dialog>
+    </main>
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/help/">Help</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device. · <a href="/privacy">Privacy</a> · <a href="/privacy#cookie-settings" data-cookie-settings>Cookie settings</a></p>
+    </footer>
+    <script type="module" src="/src/sheet/main.ts"></script>
+  </body>
+</html>

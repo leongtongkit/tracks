@@ -1,0 +1,107 @@
+/* Sheet music editor (/sheet-music). Rides the site's tokens (public/site.css):
+   the tools sit on a grey aluminium panel, the notation on white paper, the
+   ABC text in a dark well. Orange marks the picked note and the play cursor. */
+
+.sheet-page main.se { max-width: 1400px; padding-bottom: 3rem; }
+.se-intro { padding: clamp(1.5rem, 4vw, 2.5rem) 0 1rem; max-width: 52rem; }
+.se-intro h1 { font-family: var(--font-display); font-weight: 700; font-size: clamp(1.8rem, 5vw, 2.6rem); line-height: 1.05; color: var(--bone); margin-bottom: 0.6rem; }
+.se-intro p { color: var(--body-grey); }
+
+.se-files, .se-tools {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem 0.5rem;
+  background: var(--panel-grey); color: var(--ink);
+  border: 1px solid var(--edge); padding: 0.55rem 0.65rem;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+.se-files { border-radius: var(--radius-lg) var(--radius-lg) 0 0; }
+.se-tools { border-top: 0; border-radius: 0 0 var(--radius-lg) var(--radius-lg); background: var(--panel-lo); }
+.se-group { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 0.25rem; padding-right: 0.55rem; border-right: 1px solid var(--edge); }
+.se-group:last-child { border-right: 0; }
+.se-btn {
+  font: 600 0.8rem/1 var(--font-text); color: var(--bone);
+  background: var(--control); border: 1px solid #111; border-radius: var(--radius-sm);
+  padding: 0.5rem 0.62rem; min-height: 2.1rem; cursor: pointer;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.12) inset;
+  transition: background 0.12s, border-color 0.12s, transform 0.08s var(--ease-snap);
+}
+.se-btn:hover:not(:disabled) { border-color: var(--accent); }
+.se-btn:active:not(:disabled) { transform: translateY(1px); }
+.se-btn:focus-visible, .se-view:focus-visible, .se-text textarea:focus-visible, .se-chord input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.se-btn:disabled { opacity: 0.45; cursor: default; }
+.se-play[aria-pressed='true'] { background: var(--accent); color: #1a0c04; border-color: var(--accent-deep); }
+.se-name { font-size: 0.78rem; color: var(--ink-soft); margin-left: auto; overflow-wrap: anywhere; }
+.se-chord label { display: inline-flex; align-items: center; gap: 0.35rem; font-size: 0.78rem; font-weight: 600; }
+.se-chord input { font: 0.85rem ui-monospace, 'SF Mono', Menlo, Consolas, monospace; width: 6.5rem; padding: 0.4rem 0.45rem; border: 1px solid var(--edge); border-radius: var(--radius-sm); background: #fff; color: var(--ink); }
+.se-phone-note { font-size: 0.8rem; color: var(--bone-dim); margin-top: 0.4rem; }
+
+.se-picked { min-height: 1.6em; margin: 0.6rem 0 0.5rem; font-size: 0.85rem; color: var(--body-grey); }
+.se-picked.se-refused { color: var(--led); }
+
+.se-panes { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 0.9rem; align-items: start; }
+.se-view {
+  background: #fff; color: #111; border-radius: var(--radius-md); padding: 0.5rem;
+  min-height: 220px; max-height: 70vh; overflow: auto;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+.se-view svg { display: block; }
+.se-view .abcjs-note, .se-view .abcjs-rest, .se-view .abcjs-mmrest { cursor: pointer; }
+.se-view .sheet-now { fill: var(--accent); }
+.se-view .sheet-cursor { stroke: var(--accent); stroke-width: 2; opacity: 0.75; }
+.se-view-empty { font-size: 0.9rem; color: #555; padding: 1rem; }
+
+.se-text-wrap label { display: block; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--bone-dim); margin-bottom: 0.3rem; }
+.se-text { position: relative; background: var(--well); border: 1px solid var(--well-edge); border-radius: var(--radius-md); }
+.se-text textarea, .se-mirror {
+  font: 0.86rem/1.55 ui-monospace, 'SF Mono', Menlo, Consolas, monospace; letter-spacing: 0;
+  white-space: pre; tab-size: 4; padding: 0.7rem 0.8rem; border: 0; margin: 0;
+  width: 100%; height: min(70vh, 34rem); overflow: auto; scrollbar-gutter: stable;
+}
+.se-text textarea { position: relative; display: block; background: transparent; color: var(--bone); caret-color: var(--accent); resize: vertical; }
+.se-mirror { position: absolute; inset: 0; color: transparent; pointer-events: none; overflow: hidden; }
+.se-mirror mark { background: rgba(255, 77, 0, 0.42); color: transparent; border-radius: 2px; }
+.se-mirror .se-bad { text-decoration: underline wavy #ff5a5a; text-decoration-skip-ink: none; text-underline-offset: 3px; }
+
+.se-check, .se-lyrics, .se-help { margin-top: 1.6rem; max-width: 52rem; }
+.se-check h2, .se-lyrics h2, .se-help h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.25rem; color: var(--bone); margin-bottom: 0.4rem; }
+.se-verdict { font-size: 0.92rem; color: var(--body-grey); }
+.se-verdict.se-ok::before { content: '● '; color: #4cc38a; }
+.se-verdict.se-warn::before { content: '● '; color: var(--led); }
+.se-problems { list-style: none; margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.se-problems button {
+  text-align: left; width: 100%; font: 0.88rem/1.45 var(--font-text); color: var(--bone);
+  background: rgba(255, 90, 90, 0.08); border: 1px solid rgba(255, 90, 90, 0.35); border-radius: var(--radius-sm);
+  padding: 0.45rem 0.6rem; cursor: pointer;
+}
+.se-problems button:hover { border-color: #ff5a5a; }
+.se-lyrics p, .se-help p { color: var(--body-grey); font-size: 0.9rem; margin-bottom: 0.5rem; }
+.se-lyrics textarea { width: 100%; font: 0.92rem/1.5 var(--font-text); background: var(--well); color: var(--bone); border: 1px solid var(--well-edge); border-radius: var(--radius-md); padding: 0.6rem 0.7rem; margin-bottom: 0.5rem; resize: vertical; }
+
+.se-new { margin: auto; border: 1px solid var(--edge); border-radius: var(--radius-lg); background: var(--panel-grey); color: var(--ink); padding: 1.1rem 1.2rem; width: min(22rem, 92vw); }
+.se-new::backdrop { background: rgba(0, 0, 0, 0.6); }
+.se-new form { display: flex; flex-direction: column; gap: 0.65rem; }
+.se-new h2 { font-family: var(--font-display); font-size: 1.3rem; }
+.se-new label { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; font-size: 0.88rem; font-weight: 600; }
+.se-new input, .se-new select { font: 0.9rem var(--font-text); padding: 0.35rem 0.45rem; border: 1px solid var(--edge); border-radius: var(--radius-sm); background: #fff; color: var(--ink); min-width: 7.5rem; }
+.se-new p { font-size: 0.8rem; color: var(--ink-soft); }
+.se-new-actions { display: flex; gap: 0.5rem; justify-content: flex-end; }
+
+.se-drop-hint { outline: 2px dashed var(--accent); outline-offset: 6px; }
+
+@media (max-width: 820px) {
+  .se-panes { grid-template-columns: minmax(0, 1fr); }
+  .se-view { max-height: none; }
+  .se-text textarea, .se-mirror { height: 18rem; font-size: 0.8rem; }
+  .se-group { border-right: 0; padding-right: 0; }
+  .se-name { margin-left: 0; width: 100%; }
+  .se-btn { padding: 0.5rem 0.55rem; }
+}
+
+@media print {
+  body.sheet-page { background: #fff; }
+  body.sheet-page .site-nav, body.sheet-page .site-foot, .se-intro, .se-files, .se-tools, .se-phone-note, .se-picked, .se-text-wrap, .se-check, .se-lyrics, .se-help { display: none !important; }
+  .se-panes { display: block; }
+  .se-view { box-shadow: none; padding: 0; max-height: none; overflow: visible; }
+  .se-view .sheet-cursor { display: none; }
+  .se-view .sheet-now { fill: currentColor; }
+  .se-view .abcjs-note_selected { fill: currentColor; }
+}

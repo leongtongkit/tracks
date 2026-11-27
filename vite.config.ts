@@ -11,6 +11,7 @@ export default defineConfig({
         embed: resolve(__dirname, 'embed.html'),
         synth: resolve(__dirname, 'synth.html'),
         styletile: resolve(__dirname, 'styletile.html'),
+        sheet: resolve(__dirname, 'sheet-music.html'),
       },
     },
   },

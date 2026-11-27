@@ -11,7 +11,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..', '..')
 const read = (rel) => readFileSync(join(root, rel), 'utf8')
 
 function htmlFiles() {
-  const files = ['index.html', 'studio.html', 'synth.html']
+  const files = ['index.html', 'studio.html', 'synth.html', 'sheet-music.html']
   const walk = (dir) => {
     for (const e of readdirSync(dir, { withFileTypes: true })) {
       const p = join(dir, e.name)

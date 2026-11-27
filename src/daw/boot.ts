@@ -49,6 +49,7 @@ import { BottomPanel } from './ui/bottom'
 import { buildHelpOverlay } from './ui/help'
 import { showFirstVisitTip } from './ui/first-visit'
 import { confirmReplace } from './ui/replace-confirm'
+import { takeScore } from '../sheet/handoff'
 import { buildSettingsPanel } from './ui/settings-panel'
 import { isSongInProgress, track } from './analytics'
 
@@ -545,18 +546,24 @@ fileInput.addEventListener('change', () => {
 openBtn.addEventListener('click', () => fileInput.click())
 let sheetStatus: HTMLElement | null = null
 let sheetClose: (() => void) | null = null
-async function importSheet(file: File): Promise<void> {
+// `from` is 'sheet-music' when the sheet music editor sent the score here
+async function importSheet(file: File, from: 'file' | 'sheet-music' = 'file'): Promise<void> {
   try {
     const abc = await import('./abc')
     const parsed = abc.parseAbc(await file.text())
     if (parsed.error) { if (sheetStatus) sheetStatus.textContent = parsed.error; else toast(parsed.error); return }
     const project = abc.abcToProject(parsed, file.name)
+    const notes = parsed.voices.reduce((n, v) => n + v.notes.length, 0)
     const replace = (): void => {
       loadSong(project, null)
       sheetClose?.()
-      const notes = parsed.voices.reduce((n, v) => n + v.notes.length, 0)
       toast(`Opened ${project.name}: ${notes} notes, ${parsed.chords.length} chords.${parsed.lyrics ? " Lyrics weren't imported." : ''}${parsed.skipped.length ? ` Skipped: ${parsed.skipped.join(', ')}.` : ''}`)
-      track('abc_import', { notes, chords: parsed.chords.length, skipped: parsed.skipped.length, lyrics: parsed.lyrics ? 1 : 0 })
+      if (from === 'file') track('abc_import', { notes, chords: parsed.chords.length, skipped: parsed.skipped.length, lyrics: parsed.lyrics ? 1 : 0 })
+    }
+    if (from === 'sheet-music') {
+      track('sheet_to_studio', { notes, chords: parsed.chords.length })
+      switchSong({ message: openMessage, startLabel: 'Open score', go: replace })
+      return
     }
     const occupied = app.project.tracks.length > 0 || app.project.scenes.length > 0 || app.project.markers.length > 0 || Object.keys(app.project.samples).length > 0
     if (occupied) confirmReplace(saveProject, replace); else replace()
@@ -1203,6 +1210,18 @@ window.__tracksRenderTest = async () => {
     url.searchParams.delete('template')
     history.replaceState(null, '', url.pathname + url.search + url.hash)
     startTemplate(wanted, 'guide')
+  }
+}
+
+// /studio?from=sheet-music: the sheet music editor sent a score; open it as
+// tracks (asking first, as for any song), then drop the query.
+{
+  const url = new URL(window.location.href)
+  if (url.searchParams.get('from') === 'sheet-music') {
+    url.searchParams.delete('from')
+    history.replaceState(null, '', url.pathname + url.search + url.hash)
+    const sent = takeScore('studio')
+    if (sent) void importSheet(new File([sent.text], sent.name, { type: 'text/vnd.abc' }), 'sheet-music')
   }
 }
 

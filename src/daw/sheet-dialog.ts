@@ -1,6 +1,8 @@
 // The Sheet music dialog: shows a track as notation (with chord names from a
 // second track), plays along with a cursor, prints, and imports or exports ABC
-// for YuE2. Loaded on first open, so none of it weighs on the studio's first load.
+// for YuE2, or opens the score in the sheet music editor. Loaded on first open,
+// so none of it weighs on the studio's first load.
+import { sendScore } from '../sheet/handoff'
 import { exportAbc } from './abc'
 import { track } from './analytics'
 import type { DawApp } from './daw-app'
@@ -23,11 +25,11 @@ export function openSheetDialog(ctx: SheetDialogContext): { close(): void; statu
   card.innerHTML = `<div class="sheet-head"><h2>Sheet music</h2><button class="seg-btn sheet-close" type="button">Close</button></div>
 <div class="sheet-bar"><label>Melody from <select aria-label="Melody from"></select></label><label>Chords from <select aria-label="Chords from"><option value="">No chords</option></select></label><button class="seg-btn sheet-play" type="button">Play</button><button class="seg-btn sheet-print" type="button">Print / Save as PDF</button></div>
 <p class="sheet-meta"></p><div class="sheet-score"></div><p class="sheet-note"></p>
-<div class="sheet-io"><h3>Import</h3><button class="seg-btn sheet-choose" type="button">Choose .abc file</button><input type="file" accept=".abc,text/vnd.abc,text/plain" hidden><div class="sheet-drop">or drop an .abc file here</div><p>Notes, chords, tempo, time signature and key come in. Lyrics don't.</p><h3>Export</h3><p>Saves the melody and chords shown above as an .abc file.</p><button class="seg-btn sheet-download" type="button">Download .abc</button><p role="status"></p><a href="/blog/yue2-sheet-music-tracks" target="_blank" rel="noopener">How to use this with YuE2</a></div>`
+<div class="sheet-io"><h3>Import</h3><button class="seg-btn sheet-choose" type="button">Choose .abc file</button><input type="file" accept=".abc,text/vnd.abc,text/plain" hidden><div class="sheet-drop">or drop an .abc file here</div><p>Notes, chords, tempo, time signature and key come in. Lyrics don't.</p><h3>Export</h3><p>Saves the melody and chords shown above as an .abc file, or opens them in the sheet music editor, where you can edit the score note by note.</p><div class="sheet-bar"><button class="seg-btn sheet-download" type="button">Download .abc</button><button class="seg-btn sheet-edit" type="button">Edit as sheet music</button></div><p role="status"></p><a href="/blog/yue2-sheet-music-tracks" target="_blank" rel="noopener">How to use this with YuE2</a></div>`
   const $ = <T extends Element>(sel: string): T => card.querySelector<T>(sel)!
   const input = $<HTMLInputElement>('input'), melody = $<HTMLSelectElement>('[aria-label="Melody from"]'), chords = $<HTMLSelectElement>('[aria-label="Chords from"]')
   const score = $<HTMLElement>('.sheet-score'), meta = $<HTMLElement>('.sheet-meta'), note = $<HTMLElement>('.sheet-note')
-  const play = $<HTMLButtonElement>('.sheet-play'), print = $<HTMLButtonElement>('.sheet-print'), download = $<HTMLButtonElement>('.sheet-download')
+  const play = $<HTMLButtonElement>('.sheet-play'), print = $<HTMLButtonElement>('.sheet-print'), download = $<HTMLButtonElement>('.sheet-download'), editor = $<HTMLButtonElement>('.sheet-edit')
   const status = $<HTMLElement>('[role="status"]')
 
   let drawn: DrawnSheet | null = null
@@ -60,7 +62,7 @@ export function openSheetDialog(ctx: SheetDialogContext): { close(): void; statu
   const parts = defaultParts(p, app.selectedClip?.trackId)
   if (parts.melody) melody.value = parts.melody
   chords.value = parts.chords ?? ''
-  download.disabled = print.disabled = play.disabled = !tracks.length
+  download.disabled = print.disabled = play.disabled = editor.disabled = !tracks.length
 
   // the Play button follows the transport, whoever started it
   const follow = (): void => { const label = app.transport.playing ? 'Stop' : 'Play'; if (play.textContent !== label) play.textContent = label; frame = requestAnimationFrame(follow) }
@@ -99,6 +101,14 @@ export function openSheetDialog(ctx: SheetDialogContext): { close(): void; statu
     downloadBlob(new Blob([result.text], { type: 'text/vnd.abc' }), file)
     status.textContent = result.messages.join(' ') || `Saved ${file}.`
     track('abc_export', { notes: result.notes, chords: result.chords, top_note: result.notes_dropped ? 1 : 0 })
+  })
+
+  // the song itself is kept by the studio's save-on-leave, as for any link out
+  editor.addEventListener('click', () => {
+    const result = exportAbc(app.project, melody.value, chords.value)
+    if (result.error) { status.textContent = result.error; return }
+    if (!sendScore('sheet-music', { text: result.text, name: `${fileBase(app.project.name)}.abc` })) { status.textContent = "This browser wouldn't hand the score over. Use Download .abc, then open the file in the editor."; return }
+    location.assign('/sheet-music?from=studio')
   })
 
   overlay.appendChild(card); document.body.appendChild(overlay); document.body.classList.add('sheet-open')

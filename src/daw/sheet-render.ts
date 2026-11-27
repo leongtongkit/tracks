@@ -1,12 +1,23 @@
 // Draws sheet music with abcjs (MIT) and moves a cursor along it with the
-// studio's own transport. Loaded only when the Sheet music dialog opens: abcjs
-// is large, and the studio's first load must not pay for it.
+// studio's own transport (or any other clock). Loaded only when sheet music is
+// shown: abcjs is large, and the studio's first load must not pay for it.
+// The sheet music editor also uses it to pick notes by clicking them.
 import type { NoteTimingEvent } from 'abcjs'
 import renderAbc from 'abcjs/src/api/abc_tunebook_svg'
 
 export interface DrawnSheet {
   notes: number
+  /** highlight what was written between these two places in the ABC text */
+  select(start: number, end: number): void
   destroy(): void
+}
+
+export interface SheetOptions {
+  /** a note, rest or bar was clicked: where it is written in the ABC text */
+  onClick?(start: number, end: number): void
+  selectionColor?: string
+  /** lay the score out for a narrow screen this many pixels wide, two bars to a line */
+  wrapWidth?: number
 }
 
 interface Moment {
@@ -22,9 +33,15 @@ const SVG = 'http://www.w3.org/2000/svg'
 
 // `qpm` is the Q: tempo written in the ABC; `position` returns the song beat
 // (quarter notes from the start of the song, as the transport counts them).
-export function drawSheet(target: HTMLElement, abc: string, qpm: number, position: () => number): DrawnSheet {
+export function drawSheet(target: HTMLElement, abc: string, qpm: number, position: () => number, opts: SheetOptions = {}): DrawnSheet {
   target.textContent = ''
-  const [tune] = renderAbc(target, abc, { responsive: 'resize', add_classes: true, paddingleft: 4, paddingright: 4, paddingtop: 8 })
+  const { onClick } = opts
+  const [tune] = renderAbc(target, abc, {
+    responsive: 'resize', add_classes: true, paddingleft: 4, paddingright: 4, paddingtop: 8,
+    ...(onClick ? { clickListener: el => { if (el.startChar !== undefined && el.endChar !== undefined) onClick(el.startChar, el.endChar) } } : {}),
+    ...(opts.selectionColor ? { selectionColor: opts.selectionColor } : {}),
+    ...(opts.wrapWidth ? { staffwidth: opts.wrapWidth, wrap: { minSpacing: 1.5, maxSpacing: 2.5, preferredMeasuresPerLine: 2 } } : {}),
+  })
   const svg = target.querySelector('svg')
   if (!tune || !svg) throw new Error('abcjs drew nothing')
   // abcjs times events at the tune's own Q: tempo; turn them back into beats
@@ -61,8 +78,10 @@ export function drawSheet(target: HTMLElement, abc: string, qpm: number, positio
     frame = requestAnimationFrame(tick)
   }
   tick()
+  const engraver = (tune as unknown as { engraver?: { rangeHighlight(start: number, end: number): void } }).engraver
   return {
     notes: target.querySelectorAll('.abcjs-note').length,
+    select: (start, end) => engraver?.rangeHighlight(start, end),
     destroy: () => cancelAnimationFrame(frame),
   }
 }

@@ -2,7 +2,7 @@
   {
     "slug": "yue2-sheet-music-tracks",
     "title": "Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody",
-    "dek": "Move a YuE2 ABC score into Tracks, edit its melody and chords, and export a score for YuE2.",
+    "dek": "Edit a YuE2 ABC score in the Tracks sheet music editor or the studio, then save a score for YuE2.",
     "date": "2026-11-27",
     "tags": [
       "yue2",

@@ -22,12 +22,14 @@ Cost and privacy: Tracks is free to use. Google Analytics and Google AdSense loa
 - [Tracks home](https://freetracks.app/): what Tracks is and what it can do
 - [Open the studio](https://freetracks.app/studio): the music studio itself, ready in a browser tab
 - [Synth](https://synth.freetracks.app/): the standalone browser synthesizer
+- [Sheet music editor](https://freetracks.app/sheet-music): edit two-part ABC scores in the format the YuE2 song model reads and writes, as notation and text side by side, with a live check, playback, printing and saving
 - [Help manual](https://freetracks.app/help/): a getting-started tutorial plus every feature explained, including keyboard shortcuts
 - [Privacy](https://freetracks.app/privacy): what is stored, where, and what loads only with consent
 
 ## Guides
 
 - [The best free online music studio](https://freetracks.app/blog/free-online-music-studio): what a browser-based studio can do and how to make a full track in one
+- [Use YuE2 with Tracks](https://freetracks.app/blog/yue2-sheet-music-tracks): open, edit and save the ABC scores the YuE2 song model reads and writes, in the sheet music editor or the studio
 - [What is a DAW](https://freetracks.app/blog/what-is-a-daw): what a digital audio workstation is, and whether you need an expensive one
 - [How to make a song in your browser for beginners](https://freetracks.app/blog/make-a-song-beginners): arrangement, melody and export, step by step
 - [How to make beats in your browser](https://freetracks.app/blog/how-to-make-beats-in-browser): drum machine, sampler and piano roll
