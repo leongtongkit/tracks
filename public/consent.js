@@ -10,6 +10,9 @@
   'use strict';
   var KEY = 'jfound_cookie_consent';
   var EVENT = 'jfound:consent'; // ads.js listens for this in THIS tab (see writeChoice)
+  // data-quiet (the embedded player): never show the panel, only re-apply a
+  // choice this browser already made on the site.
+  var QUIET = !!(document.currentScript && document.currentScript.hasAttribute('data-quiet'));
 
   function readChoice() {
     try {
@@ -128,6 +131,7 @@
   suppress();
   var saved = readChoice();
   if (saved) { applyToZaraz(saved.analytics); return; }
+  if (QUIET) return;
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', showPanel);
   else showPanel();
 })();

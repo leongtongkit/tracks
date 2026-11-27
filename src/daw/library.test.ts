@@ -160,3 +160,45 @@ describe('song helpers', () => {
     expect(fileBase('!!!')).toBe('tracks')
   })
 })
+
+describe('remix copies', () => {
+  it('keeps an untouched starter immediately and updates that same new entry', () => {
+    const { lib: l, storage } = lib()
+    const original = song('Mine')
+    expect(l.update(original)).toBe('ok')
+    const previous = l.currentId()
+    const copy = demoSong()
+    expect(l.createCopy(copy)).toBe('ok')
+    expect(l.currentId()).not.toBe(previous)
+    expect(l.list()).toHaveLength(2)
+    copy.bpm++
+    expect(l.update(copy)).toBe('ok')
+    expect(l.list()).toHaveLength(2)
+    const reloaded = new SongLibrary(storage)
+    expect(reloaded.get(previous!)?.name).toBe('Mine')
+    expect(reloaded.get(l.currentId()!)?.project.bpm).toBe(copy.bpm)
+  })
+})
+
+describe('kept copies and lost sessions', () => {
+  it('never writes an untouched demo over a kept song (the session was lost on reload)', () => {
+    const { lib: l } = lib()
+    expect(l.update(song('A'), 1000)).toBe('ok')
+    const id = l.currentId()!
+    expect(l.update(demoSong(), 2000)).toBe('skipped')
+    expect(l.get(id)?.name).toBe('A')
+    expect(l.list()).toHaveLength(1)
+  })
+
+  it('keeps saving a remixed starter copy, even a change only the mixer can hear', () => {
+    const { lib: l, storage } = lib()
+    const copy = demoSong()
+    expect(l.createCopy(copy, 1000)).toBe('ok')
+    const id = l.currentId()
+    copy.tracks[0].mixer.volume = 0.3
+    expect(l.update(copy, 2000)).toBe('ok')
+    const reloaded = new SongLibrary(storage)
+    expect(reloaded.list()).toHaveLength(1)
+    expect(reloaded.get(id!)?.project.tracks[0].mixer.volume).toBe(0.3)
+  })
+})

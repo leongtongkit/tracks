@@ -1,3 +1,6 @@
+import { shareableSong, songToHash } from './share-link'
+import { pendingSong } from '../player/pending'
+import { toast } from '../ui/toast'
 // Tracks DAW entry: arrangement view + transport + bottom editor panel.
 // Array (branding) + Satoshi (body) load via @font-face in style.css; mono
 // readout face from @fontsource.
@@ -257,6 +260,11 @@ for (const ev of ['project', 'tracks', 'clips', 'mixer'] as const) {
 window.addEventListener('beforeunload', () => {
   if (settings.autosave) saveSession(app)
 })
+// A share link opened in this tab only changes the #hash, which does not load
+// a new page: reload so it opens in the player (the song is saved on unload).
+window.addEventListener('hashchange', () => {
+  if (location.hash.startsWith('#s=')) location.reload()
+})
 
 // ---------- songs: new, templates, my songs ----------
 
@@ -451,6 +459,59 @@ const saveProject = (): void => {
   track('project_save')
 }
 saveBtn.addEventListener('click', saveProject)
+const shareBtn = document.createElement('button')
+shareBtn.type = 'button'
+shareBtn.className = 'seg-btn'
+shareBtn.textContent = 'Share'
+shareBtn.addEventListener('click', () => {
+  void (async () => {
+    app.song?.collectPatches(app.project)
+    const { song, leftOut } = shareableSong(app.project)
+    const hash = await songToHash(song)
+    const link = `${location.origin}/studio${hash}`
+    const safeName = song.name.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
+    const embed = `<iframe src="${location.origin}/embed${hash}" title="${safeName} on Tracks" width="100%" height="140" style="border:0;border-radius:8px" loading="lazy" allow="autoplay"></iframe>`
+    try { await navigator.clipboard.writeText(link); toast('Link copied. Anyone with it can listen and make their own copy.') } catch { toast('Copy the link below to share it.') }
+    const overlay = document.createElement('div')
+    overlay.className = 'help-overlay'
+    const card = document.createElement('div')
+    card.className = 'help-card replace-card share-card'
+    card.setAttribute('role', 'dialog')
+    card.setAttribute('aria-label', 'Share song')
+    const heading = document.createElement('h2')
+    heading.textContent = 'Share song'
+    card.appendChild(heading)
+    const addField = (label: string, value: string, multiline: boolean): void => {
+      const wrapper = document.createElement('label')
+      wrapper.textContent = label
+      const field = multiline ? document.createElement('textarea') : document.createElement('input')
+      field.value = value
+      field.readOnly = true
+      field.setAttribute('aria-label', label)
+      wrapper.appendChild(field)
+      const copy = document.createElement('button')
+      copy.className = 'seg-btn'
+      copy.textContent = multiline ? 'Copy embed code' : 'Copy link'
+      copy.addEventListener('click', () => { void navigator.clipboard.writeText(value).then(() => toast('Copied.')).catch(() => { field.focus(); field.select() }) })
+      card.append(wrapper, copy)
+    }
+    addField('Link', link, false)
+    addField('Embed code', embed, true)
+    if (leftOut.length) {
+      const note = document.createElement('p')
+      note.textContent = `Not included: ${leftOut.join(', ')}. They use your own recordings or samples, which can't travel in a link.`
+      card.appendChild(note)
+    }
+    const close = document.createElement('button')
+    close.className = 'seg-btn'
+    close.textContent = 'Close'
+    close.addEventListener('click', () => overlay.remove())
+    card.appendChild(close)
+    overlay.appendChild(card)
+    document.body.appendChild(overlay)
+    track('share_link', { tracks: song.tracks.length, left_out: leftOut.length })
+  })()
+})
 const openBtn = document.createElement('button')
 openBtn.type = 'button'
 openBtn.className = 'seg-btn'
@@ -507,6 +568,7 @@ songsBtn.title = 'Rename this song, start a new one, or open one kept in this br
 songsBtn.addEventListener('click', () => songsPanel.toggle())
 fileBar.appendChild(songsBtn)
 fileBar.appendChild(saveBtn)
+fileBar.appendChild(shareBtn)
 fileBar.appendChild(openBtn)
 fileBar.appendChild(fileInput)
 const backupNotice = document.createElement('div')
@@ -1104,4 +1166,19 @@ window.__tracksRenderTest = async () => {
     history.replaceState(null, '', url.pathname + url.search + url.hash)
     startTemplate(wanted, 'guide')
   }
+}
+
+if (pendingSong) {
+  const shared = pendingSong
+  switchSong({
+    message: openMessage,
+    startLabel: 'Start remix',
+    go: () => {
+      loadSong(shared, null)
+      const status = library.createCopy(shared)
+      showStorageFull(status === 'full')
+      history.replaceState(null, '', location.pathname + location.search)
+      track('remix', { tracks: shared.tracks.length })
+    },
+  })
 }

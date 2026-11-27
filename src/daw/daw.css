@@ -1965,3 +1965,5 @@
   height: 100%;
   pointer-events: none;
 }
+
+.share-card label{display:block;margin:12px 0 4px}.share-card input,.share-card textarea{display:block;box-sizing:border-box;width:100%;margin-top:4px}.share-card textarea{height:70px}.share-card{max-width:560px;width:90%}

@@ -118,7 +118,7 @@ export class SongLibrary {
   // Write the open song's entry (create it if it has none yet). Callers decide
   // whether this may run at all (autosave on); this never reads settings.
   update(project: Project, now = Date.now()): WriteStatus {
-    if (!this.worthKeeping(project)) return 'skipped'
+    if (!this.worthKeeping(project) && !this.keptCopyOpen()) return 'skipped'
     if (this.detached) return 'skipped'
     const copy = migrateProject(JSON.parse(JSON.stringify(project)))
     if (this.isKept(copy)) return 'ok' // unchanged since it was kept: keep its date
@@ -126,6 +126,26 @@ export class SongLibrary {
     const id = this.envelope.current && this.get(this.envelope.current) ? this.envelope.current : newId()
     songs.push({ id, name: copy.name, updatedAt: now, project: copy })
     return this.write({ current: id, songs })
+  }
+
+  // The open entry was kept on purpose while it still looks untouched (a
+  // remix of a starter song): keep saving its changes. Any other entry keeps
+  // the rule above, so a demo that opens in place of a lost session never
+  // overwrites the song it points at.
+  private keptCopyOpen(): boolean {
+    const cur = this.currentId()
+    const entry = cur ? this.get(cur) : undefined
+    return !!entry && !this.worthKeeping(entry.project)
+  }
+
+  // A song opened from a share link: always its own new entry, made current,
+  // even when it equals the demo or a starter song.
+  createCopy(project: Project, now = Date.now()): WriteStatus {
+    const copy = migrateProject(JSON.parse(JSON.stringify(project)))
+    const id = newId()
+    const status = this.write({ current: id, songs: [...this.envelope.songs, { id, name: copy.name, updatedAt: now, project: copy }] })
+    if (status === 'ok') this.detached = false
+    return status
   }
 
   // A song is safely kept when its entry holds exactly what is open now.

@@ -56,7 +56,9 @@ export default defineConfig({
     baseURL: tracksUrl,
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
-    launchOptions: { args: ['--autoplay-policy=no-user-gesture-required'] },
+    // Local network checks would stop the embed test's made-up public page from
+    // framing a local wrangler dev server; real embeds are public to public.
+    launchOptions: { args: ['--autoplay-policy=no-user-gesture-required', '--disable-features=LocalNetworkAccessChecks'] },
     serviceWorkers: 'block',
   },
   webServer,
