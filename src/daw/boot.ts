@@ -519,11 +519,12 @@ openBtn.textContent = 'Open'
 openBtn.title = 'Open a saved project (.tracks.json) or a MIDI file (.mid)'
 const fileInput = document.createElement('input')
 fileInput.type = 'file'
-fileInput.accept = '.json,application/json,.mid,.midi,audio/midi'
+fileInput.accept = '.json,application/json,.mid,.midi,audio/midi,.abc,text/vnd.abc,text/plain'
 fileInput.style.display = 'none'
 fileInput.addEventListener('change', () => {
   const f = fileInput.files?.[0]
   if (!f) return
+  if (/\.abc$/i.test(f.name)) { void importSheet(f); fileInput.value = ''; return }
   const loader = /\.midi?$/i.test(f.name)
     ? f.arrayBuffer().then(buf => importMidi(new Uint8Array(buf)))
     : importProjectJson(f)
@@ -542,6 +543,61 @@ fileInput.addEventListener('change', () => {
   fileInput.value = ''
 })
 openBtn.addEventListener('click', () => fileInput.click())
+let sheetStatus: HTMLElement | null = null
+let sheetClose: (() => void) | null = null
+async function importSheet(file: File): Promise<void> {
+  try {
+    const abc = await import('./abc')
+    const parsed = abc.parseAbc(await file.text())
+    if (parsed.error) { if (sheetStatus) sheetStatus.textContent = parsed.error; else toast(parsed.error); return }
+    const project = abc.abcToProject(parsed, file.name)
+    const replace = (): void => {
+      loadSong(project, null)
+      sheetClose?.()
+      const notes = parsed.voices.reduce((n, v) => n + v.notes.length, 0)
+      toast(`Opened ${project.name}: ${notes} notes, ${parsed.chords.length} chords.${parsed.lyrics ? " Lyrics weren't imported." : ''}${parsed.skipped.length ? ` Skipped: ${parsed.skipped.join(', ')}.` : ''}`)
+      track('abc_import', { notes, chords: parsed.chords.length, skipped: parsed.skipped.length, lyrics: parsed.lyrics ? 1 : 0 })
+    }
+    const occupied = app.project.tracks.length > 0 || app.project.scenes.length > 0 || app.project.markers.length > 0 || Object.keys(app.project.samples).length > 0
+    if (occupied) confirmReplace(saveProject, replace); else replace()
+  } catch { if (sheetStatus) sheetStatus.textContent = 'Could not open that file.'; else toast('Could not open that file.') }
+}
+const sheetBtn = document.createElement('button')
+sheetBtn.className = 'seg-btn'
+sheetBtn.textContent = 'Sheet music'
+sheetBtn.title = 'Import or export sheet music (ABC), for example from YuE2'
+sheetBtn.addEventListener('click', () => {
+  const overlay = document.createElement('div'); overlay.className = 'help-overlay'
+  const card = document.createElement('div'); card.className = 'help-card replace-card sheet-card'
+  card.setAttribute('role', 'dialog'); card.setAttribute('aria-label', 'Sheet music')
+  card.innerHTML = `<h2>Sheet music (ABC)</h2><h3>Import</h3><button class="seg-btn" type="button">Choose .abc file</button><input type="file" accept=".abc,text/vnd.abc,text/plain" hidden><div class="sheet-drop">or drop an .abc file here</div><p>Notes, chords, tempo, time signature and key come in. Lyrics don't.</p><h3>Export</h3><label>Melody from <select aria-label="Melody from"></select></label><label>Chords from <select aria-label="Chords from"><option value="">No chords</option></select></label><p class="sheet-empty"></p><button class="seg-btn sheet-download" type="button">Download .abc</button><p role="status"></p><a href="/blog/yue2-sheet-music-tracks" target="_blank" rel="noopener">How to use this with YuE2</a><button class="seg-btn sheet-close" type="button">Close</button>`
+  const input = card.querySelector('input')!; const select = card.querySelector<HTMLSelectElement>('[aria-label="Melody from"]')!; const chords = card.querySelector<HTMLSelectElement>('[aria-label="Chords from"]')!
+  sheetStatus = card.querySelector('[role="status"]')
+  const close = (): void => { overlay.remove(); sheetClose = null; sheetStatus = null; document.removeEventListener('keydown', escape) }
+  sheetClose = close
+  const escape = (e: KeyboardEvent): void => { if (e.key === 'Escape') close() }
+  document.addEventListener('keydown', escape)
+  card.querySelector('button')!.addEventListener('click', () => input.click())
+  input.addEventListener('change', () => { const f = input.files?.[0]; if (f) void importSheet(f) })
+  card.querySelector('.sheet-close')!.addEventListener('click', close)
+  const drop = card.querySelector('.sheet-drop')!
+  drop.addEventListener('dragover', e => { e.preventDefault() })
+  drop.addEventListener('drop', e => { const f = (e as DragEvent).dataTransfer?.files[0]; if (f && /\.abc$/i.test(f.name)) { e.preventDefault(); void importSheet(f) } })
+  const tracks = app.project.tracks.filter(t => t.clips.some(c => c.notes.length))
+  for (const t of tracks) { select.add(new Option(t.name, t.id)); chords.add(new Option(t.name, t.id)) }
+  const download = card.querySelector<HTMLButtonElement>('.sheet-download')!; download.disabled = !tracks.length
+  if (!tracks.length) card.querySelector('.sheet-empty')!.textContent = 'Add a track with notes to export it.'
+  download.addEventListener('click', () => { void (async () => {
+    const { exportAbc } = await import('./abc'); const result = exportAbc(app.project, select.value, chords.value)
+    if (result.error) { if (sheetStatus) sheetStatus.textContent = result.error; return }
+    const name = `${fileBase(app.project.name)}.abc`; downloadBlob(new Blob([result.text], { type: 'text/vnd.abc' }), name)
+    if (sheetStatus) sheetStatus.textContent = result.messages.join(' ') || `Saved ${name}.`
+    track('abc_export', { notes: result.notes, chords: result.chords, top_note: result.notes_dropped ? 1 : 0 })
+  })() })
+  overlay.appendChild(card); document.body.appendChild(overlay)
+})
+window.addEventListener('dragover', e => { if (!e.defaultPrevented && [...(e.dataTransfer?.items ?? [])].some(item => item.kind === 'file')) e.preventDefault() })
+window.addEventListener('drop', e => { if (e.defaultPrevented) return; const f = e.dataTransfer?.files[0]; if (f && /\.abc$/i.test(f.name)) { e.preventDefault(); void importSheet(f) } })
 const helpBtn = document.createElement('button')
 helpBtn.type = 'button'
 helpBtn.className = 'seg-btn'
@@ -570,6 +626,7 @@ fileBar.appendChild(songsBtn)
 fileBar.appendChild(saveBtn)
 fileBar.appendChild(shareBtn)
 fileBar.appendChild(openBtn)
+fileBar.appendChild(sheetBtn)
 fileBar.appendChild(fileInput)
 const backupNotice = document.createElement('div')
 backupNotice.className = 'backup-notice'

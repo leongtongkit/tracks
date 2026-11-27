@@ -1,5 +1,17 @@
 [
   {
+    "slug": "yue2-sheet-music-tracks",
+    "title": "Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody",
+    "dek": "Move a YuE2 ABC score into Tracks, edit its melody and chords, and export a score for YuE2.",
+    "date": "2026-11-27",
+    "tags": [
+      "yue2",
+      "sheet music",
+      "abc"
+    ],
+    "readingTime": 6
+  },
+  {
     "slug": "studio-one-alternative-browser",
     "title": "A free Studio One alternative that runs in your browser",
     "dek": "Studio One is a paid desktop DAW with a drag-and-drop workflow. Here is an honest look at what a free browser DAW covers, and where Studio One still wins.",

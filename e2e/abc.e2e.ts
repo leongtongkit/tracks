@@ -1,0 +1,26 @@
+import { readFile } from 'node:fs/promises'
+import { expect, openStudio, songState, test, transportState } from './fixtures'
+
+test('imports, plays, exports and drops ABC scores', async ({ page }) => {
+  await openStudio(page)
+  await page.getByRole('button', { name: 'Sheet music' }).click()
+  let dialog = page.getByRole('dialog', { name: 'Sheet music' })
+  await expect(dialog.getByRole('link', { name: 'How to use this with YuE2' })).toHaveAttribute('href', '/blog/yue2-sheet-music-tracks')
+  await dialog.locator('input[type=file]').setInputFiles('e2e/yue2/score.abc')
+  await page.getByRole('dialog', { name: 'Replace the current song?' }).getByRole('button', { name: 'Replace', exact: true }).click()
+  await expect.poll(() => songState(page)).toMatchObject({ name: 'score', bpm: 88, tracks: ['Vocal Melody', 'Chords'], noteCount: 80 })
+  await expect(page.locator('.toast')).toContainText('Opened score: 56 notes, 8 chords.')
+  const project = await page.evaluate(() => (window as any).__tracksApp.project)
+  expect(project.timeSig).toEqual({ num: 4, den: 4 }); expect(project.key).toEqual({ root: 0, scale: 'major' })
+  await page.getByRole('button', { name: 'Play', exact: true }).click()
+  await expect.poll(async () => (await transportState(page)).beat).toBeGreaterThan(0)
+  await page.getByRole('button', { name: 'Stop', exact: true }).click()
+  await page.getByRole('button', { name: 'Sheet music' }).click(); dialog = page.getByRole('dialog', { name: 'Sheet music' })
+  await dialog.getByLabel('Melody from').selectOption({ label: 'Vocal Melody' }); await dialog.getByLabel('Chords from').selectOption({ label: 'Chords' })
+  const [download] = await Promise.all([page.waitForEvent('download'), dialog.getByRole('button', { name: 'Download .abc' }).click()])
+  expect(await readFile((await download.path())!, 'utf8')).toBe((await readFile('e2e/yue2/score.abc', 'utf8')).split('\n').filter(l => !l.startsWith('% ')).join('\n'))
+  const melody = await readFile('e2e/yue2/melody.abc', 'utf8')
+  await dialog.locator('.sheet-drop').evaluate((el, content) => { const data = new DataTransfer(); data.items.add(new File([content], 'melody.abc', { type: 'text/vnd.abc' })); el.dispatchEvent(new DragEvent('dragover', { bubbles: true, cancelable: true, dataTransfer: data })); el.dispatchEvent(new DragEvent('drop', { bubbles: true, cancelable: true, dataTransfer: data })) }, melody)
+  await page.getByRole('dialog', { name: 'Replace the current song?' }).getByRole('button', { name: 'Replace', exact: true }).click()
+  await expect.poll(() => songState(page)).toMatchObject({ name: 'melody', tracks: ['Vocal Melody'], noteCount: 56 })
+})

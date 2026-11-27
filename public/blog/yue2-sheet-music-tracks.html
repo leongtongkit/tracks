@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody | Tracks</title>
+    <meta name="description" content="Move a YuE2 ABC score into Tracks, edit its melody and chords, and export a score for YuE2." />
+    <link rel="canonical" href="https://freetracks.app/blog/yue2-sheet-music-tracks" />
+    <meta property="og:title" content="Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody" />
+    <meta property="og:description" content="Move a YuE2 ABC score into Tracks, edit its melody and chords, and export a score for YuE2." />
+    <meta property="og:url" content="https://freetracks.app/blog/yue2-sheet-music-tracks" />
+    <meta property="og:type" content="article" />
+    <meta property="og:image" content="https://freetracks.app/og.png" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://freetracks.app/og.png" />
+    <meta name="google-adsense-account" content="ca-pub-4201800488909351" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="stylesheet" href="/site.css" />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody",
+        "description": "Move a YuE2 ABC score into Tracks, edit its melody and chords, and export a score for YuE2.",
+        "datePublished": "2026-11-27",
+        "author": { "@type": "Person", "name": "Tongkit Leong" },
+        "publisher": { "@type": "Organization", "name": "Tracks", "url": "https://freetracks.app" },
+        "url": "https://freetracks.app/blog/yue2-sheet-music-tracks",
+        "image": "https://freetracks.app/og.png"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Guides", "item": "https://freetracks.app/blog/" },
+          { "@type": "ListItem", "position": 2, "name": "Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody", "item": "https://freetracks.app/blog/yue2-sheet-music-tracks" }
+        ]
+      }
+    </script>
+    <script defer src="https://freetracks.app/cdn-cgi/zaraz/i.js"></script>
+    <script src="/consent.js" defer></script>
+    <script src="/ads.js" defer></script>
+  </head>
+  <body class="site">
+    <header class="site-nav">
+      <a class="brand" href="/"><span class="brand-mark">●</span><span class="brand-name">TRACKS</span></a>
+      <nav class="nav-links">
+        <a href="/help/">Help</a>
+        <a href="/blog/">Guides</a>
+        <a href="/community/">Community</a>
+        <a class="nav-cta" href="/studio">Open studio</a>
+      </nav>
+    </header>
+
+    <main>
+      <article class="article">
+        <a class="art-back" href="/blog/">← All guides</a>
+        <h1>Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody</h1>
+        <p class="art-meta">By Tongkit Leong · November 27, 2026 · 6 min read</p>
+
+        <p class="lede">YuE2 can write a song from a description and lyrics. It can also use a melody you give it. Tracks lets you open and edit that melody as sheet music in the studio, then save it for YuE2.</p>
+        <div class="ad-slot" data-ad-slot="blog-top" aria-hidden="true"></div>
+        <h2>What is YuE2?</h2>
+        <p><a href="https://github.com/multimodal-art-projection/YuE" rel="noopener">YuE2</a> is an open song model. It writes a score with a melody and chords before making the audio, and it can use a score you provide. Its <a href="https://map-yue2.github.io/" rel="noopener">official project page</a> has examples you can hear.</p>
+        <p>Tracks is not part of YuE2 and isn't made by its team. Tracks does not run the model. It gives you a way to edit a score in your browser and save it as an ABC file.</p>
+        <h2>What you need</h2>
+        <p>To run YuE2 yourself, you need a computer with a strong graphics card. The <a href="https://github.com/multimodal-art-projection/YuE/blob/main/docs/hardware.md" rel="noopener">hardware guide in the official repository</a> lists the graphics cards and computers it supports, and a low-memory mode for smaller cards. Read the installation and generation instructions there before you start.</p>
+        <p>There is also an online version linked from the <a href="https://github.com/multimodal-art-projection/YuE" rel="noopener">official GitHub page</a>. At the time of writing, it makes songs from a text description and lyrics, or from an audio recording you upload as a cover. It does not take sheet music. The score steps below therefore use YuE2 running on your own computer.</p>
+        <h2>Bring a YuE2 song into Tracks</h2>
+        <p>When YuE2 saves a song, it includes a file called <code>score.abc</code>. ABC is a text format for music notation. It describes note pitches and lengths, and can include chord names, a key, a tempo and a time signature. Keep a copy of the original score before editing so you can return to it.</p>
+        <ol><li>Open the <a href="/studio">Tracks studio</a>.</li><li>Choose <strong>Sheet music</strong>, then <strong>Choose .abc file</strong>.</li><li>Select the song's <code>score.abc</code> file. If Tracks asks about the current song, save it first if you want to keep it.</li><li>Open the melody and chord clips to edit their notes.</li></ol>
+        <p>You get an editable melody track and, when the score has chord symbols, a chord track. The tempo, time signature and key come in too. If the score has another melody voice with notes, it gets its own track. Lyrics in an ABC file do not come in. Tracks tells you if it had to skip or adjust anything else.</p>
+        <p>Listen to the melody and chords together. Move a melody note, change its length, or adjust a chord in the piano roll. A chord is a group of notes that start together. To change the harmony, move or replace those notes together. It helps to keep a separate copy of the original while you try ideas.</p>
+        <p>When you are ready, open <strong>Sheet music</strong> again. Choose your melody track and the Chords track, then select <strong>Download .abc</strong>. Give the edited file back to YuE2 with <code>cot="full"</code> to use the melody and chords. The <a href="https://github.com/multimodal-art-projection/YuE/blob/main/examples/README.md" rel="noopener">official examples</a> show how to run a score. Listen to the result: a score guides the model, and the audio may not follow every detail exactly.</p>
+        <h2>Write a melody in Tracks</h2>
+        <p>You can start with a blank song instead. Add an instrument track, create a clip and draw a melody in the piano roll. Use one note at a time. If notes overlap, export keeps the top note and tells you. Put notes on the grid; export chooses a fine enough grid when it can, and reports when it needs to move notes slightly.</p>
+        <p>If you want to supply harmony, add a separate track with block chords: the notes of each chord should begin at the same time. Choose that track in the Chords menu when you export. If the track has individual notes, arpeggios or chords that cannot be named, Tracks leaves the chords out and tells you. You can also choose <strong>No chords</strong> and leave the accompaniment up to YuE2.</p>
+        <ol><li>Open <strong>Sheet music</strong> in the file bar.</li><li>Choose the melody track under <strong>Melody from</strong>.</li><li>Choose a chord track or <strong>No chords</strong>.</li><li>Choose <strong>Download .abc</strong> and read any message shown.</li></ol>
+        <p>Put the downloaded score where your YuE2 installation can read it. Use your lyrics and style with the generation setup in the official examples. For a melody-only file, the example command has this shape:</p>
+        <pre><code>python examples/generate.py --abc-file my-melody.abc --cot melody --output outputs/melody</code></pre>
+        <p>Use <code>--cot full</code> when the file includes chords. The example's lyrics and melody use about one sung syllable per note. That is a useful starting point when writing your own words, though you can experiment. Check the <a href="https://github.com/multimodal-art-projection/YuE/blob/main/examples/README.md" rel="noopener">examples README</a> for the full setup and input files.</p>
+        <h2>No graphics card?</h2>
+        <p>You can still make a melody in Tracks. Export it as WAV or MP3, then use the online version's cover feature with your lyrics. Our guide to <a href="/blog/export-song-mp3-wav">exporting a song as MP3 or WAV</a> walks through the download. In this route you upload audio, not the ABC file, and the online service makes a cover from the recording.</p>
+        <h2>Licence</h2>
+        <p>YuE2's model has its own licence, <a href="https://github.com/multimodal-art-projection/YuE/blob/main/MODEL_LICENSE" rel="noopener">MODEL_LICENSE in the official repository</a>: read it to see how you may use the songs it makes.</p>
+        <h2>Try it</h2>
+        <p>Open the <a href="/studio">Tracks studio</a>, make a short melody, and use Sheet music to download it. A few bars are enough to learn the path from your notes to a score you can use with YuE2.</p>
+      </article>
+    </main>
+
+    <footer class="site-foot">
+      <div class="foot-cols">
+        <div><span class="brand-name">TRACKS</span><p class="foot-tag">A free music studio for the open web.</p></div>
+        <nav>
+          <a href="/studio">Studio</a>
+          <a href="/blog/">Guides</a>
+          <a href="/community/">Community</a>
+        </nav>
+      </div>
+      <p class="foot-fine">Built by JFound · Your music never leaves your device. · <a href="/privacy">Privacy</a> · <a href="/privacy#cookie-settings" data-cookie-settings>Cookie settings</a></p>
+    </footer>
+  </body>
+</html>

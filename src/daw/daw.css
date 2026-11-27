@@ -1967,3 +1967,8 @@
 }
 
 .share-card label{display:block;margin:12px 0 4px}.share-card input,.share-card textarea{display:block;box-sizing:border-box;width:100%;margin-top:4px}.share-card textarea{height:70px}.share-card{max-width:560px;width:90%}
+
+.sheet-card { display: flex; flex-direction: column; gap: 0.65rem; }
+.sheet-card h2, .sheet-card h3, .sheet-card p { margin: 0; }
+.sheet-card label { display: flex; justify-content: space-between; gap: 1rem; }
+.sheet-drop { border: 1px dashed currentColor; border-radius: 6px; padding: 1rem; text-align: center; }
