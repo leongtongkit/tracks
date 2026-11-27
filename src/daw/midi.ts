@@ -77,7 +77,8 @@ export function exportMidi(project: Project): Uint8Array {
 // ---------- import ----------
 
 // Parse a standard MIDI file (format 0/1, PPQ division) into a Project:
-// one track per MTrk with notes, drums for channel-10 parts, tempo applied.
+// one track per MTrk with notes, drums for channel-10 parts, the first tempo,
+// time signature and key signature applied.
 export function importMidi(bytes: Uint8Array): Project {
   const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength)
   if (ascii(bytes, 0, 4) !== 'MThd') throw new Error('not a MIDI file')
@@ -90,6 +91,8 @@ export function importMidi(bytes: Uint8Array): Project {
   project.tracks = []
   project.name = 'Imported MIDI'
   let tempoSet = false
+  let meterSet = false
+  let keySet = false
 
   let off = 14
   for (let t = 0; t < ntrks && off + 8 <= bytes.length; t++) {
@@ -100,7 +103,9 @@ export function importMidi(bytes: Uint8Array): Project {
     let tick = 0
     let running = 0
     let name = ''
-    const open = new Map<string, { tick: number; vel: number }>()
+    // a note-off ends the earliest note still sounding on that key, so a repeated
+    // note that starts a moment before the previous one ends keeps both
+    const open = new Map<string, { tick: number; vel: number }[]>()
     const notes: { start: number; dur: number; pitch: number; vel: number }[] = []
     let drumNotes = 0
 
@@ -130,6 +135,16 @@ export function importMidi(bytes: Uint8Array): Project {
           project.bpm = Math.min(240, Math.max(40, Math.round(60_000_000 / us)))
           tempoSet = true
         }
+        if (type === 0x58 && mlen >= 2 && !meterSet) {
+          project.timeSig = { num: bytes[p], den: 2 ** bytes[p + 1] } // migrateProject clamps odd values
+          meterSet = true
+        }
+        if (type === 0x59 && mlen === 2 && !keySet) {
+          const sharps = (bytes[p] << 24) >> 24 // signed: negative = flats
+          const minor = bytes[p + 1] === 1
+          if (sharps >= -7 && sharps <= 7) project.key = { root: (((sharps * 7 + (minor ? 9 : 0)) % 12) + 12) % 12, scale: minor ? 'minor' : 'major' }
+          keySet = true
+        }
         p += mlen
         continue
       }
@@ -142,13 +157,13 @@ export function importMidi(bytes: Uint8Array): Project {
       const d1 = bytes[p++]
       const d2 = kind === 0xc0 || kind === 0xd0 ? 0 : bytes[p++]
       if (kind === 0x90 && d2 > 0) {
-        open.set(`${channel}:${d1}`, { tick, vel: d2 })
+        const key = `${channel}:${d1}`
+        open.set(key, [...(open.get(key) ?? []), { tick, vel: d2 }])
         if (channel === 9) drumNotes++
       } else if (kind === 0x80 || (kind === 0x90 && d2 === 0)) {
         const key = `${channel}:${d1}`
-        const on = open.get(key)
+        const on = open.get(key)?.shift()
         if (on) {
-          open.delete(key)
           notes.push({
             start: on.tick / ppq,
             dur: Math.max(1 / 32, (tick - on.tick) / ppq),

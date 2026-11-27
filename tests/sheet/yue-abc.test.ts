@@ -3,49 +3,16 @@
 // the official examples open and save unchanged, random runs of note-button
 // edits always give a score YuE2 accepts with the notes the editor shows, and
 // the editor's checker agrees with YuE2's about what is broken.
-import { spawnSync } from 'node:child_process'
-import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { fileURLToPath } from 'node:url'
+import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
 import { parseAbc } from '../../src/daw/abc'
 import { check, DURATIONS, edit, MAJOR_KEYS, MINOR_KEYS, newScore, type Op, type Score, type VoiceName } from '../../src/sheet/yue-abc'
 import { fromFile, toFile } from '../../src/sheet/file'
+import { inspectCli, root, yue2 } from './yue2'
 
-const root = (p: string): string => fileURLToPath(new URL('../../' + p, import.meta.url))
 const EXAMPLES = ['melody.abc', 'score.abc', 'score-jazz.abc']
 const example = (name: string): Uint8Array => new Uint8Array(readFileSync(root(`e2e/yue2/${name}`)))
 
-interface Verdict { ok: boolean; error?: string; notes?: Record<VoiceName, string[]> }
-/** run YuE2's own parse() on each text; notes as "onset:pitch:duration" in quarter notes */
-function yue2(texts: string[]): Verdict[] {
-  const driver = `
-import json, sys
-sys.path.insert(0, sys.argv[1])
-import abc_tools
-out = []
-for text in json.load(sys.stdin):
-    try:
-        score = abc_tools.parse(text)
-        out.append({"ok": True, "notes": {n: [f"{t}:{p}:{d}" for t, p, d in v.notes] for n, v in score.voices.items()}})
-    except abc_tools.AbcError as e:
-        out.append({"ok": False, "error": str(e)})
-print(json.dumps(out))
-`
-  const run = spawnSync('python3', ['-I', '-c', driver, root('e2e/yue2')], { input: JSON.stringify(texts), encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 })
-  if (run.status !== 0) throw new Error(run.stderr)
-  return JSON.parse(run.stdout) as Verdict[]
-}
-/** YuE2's command-line check, exactly as its guide runs it */
-// a real file: on Linux, Node hands a child its input through a socket, which /dev/stdin can't open
-const scratch = mkdtempSync(join(tmpdir(), 'yue2-'))
-let files = 0
-function inspectCli(text: string): number {
-  const file = join(scratch, `score-${++files}.abc`)
-  writeFileSync(file, text)
-  return spawnSync('python3', ['-I', root('e2e/yue2/abc_tools.py'), 'inspect', file], { encoding: 'utf8' }).status ?? -1
-}
 const frac = (ticks: number): string => {
   // ticks are 1/1024 whole notes; Python prints quarter notes as a reduced fraction
   let n = ticks, d = 256

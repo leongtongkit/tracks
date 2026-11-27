@@ -139,21 +139,39 @@ export function exportAbc(project: Project, melodyTrackId: string, chordTrackId?
     }
     let grid=4;const all=[...mono.flatMap(n=>[n.start,n.end]),...chordEvents.map(c=>c.beat)];while(grid<16&&all.some(x=>Math.abs(x*grid-Math.round(x*grid))>1e-7))grid*=2
     if(all.some(x=>Math.abs(x*grid-Math.round(x*grid))>1e-7))out.messages.push('Some notes were moved slightly to fit the grid.')
-    const ns=mono.map(n=>({start:Math.round(n.start*grid),end:Math.max(Math.round(n.start*grid)+1,Math.round(n.end*grid)),pitch:n.pitch}));const cs=chordEvents.map(c=>({...c,beat:Math.round(c.beat*grid)}));const bar=project.timeSig.num*4/project.timeSig.den*grid
-    if(!Number.isInteger(bar)||bar<=0)throw new Error('meter')
-    const bars=Math.max(1,Math.ceil(Math.max(...ns.map(n=>n.end),...cs.map(c=>c.beat+1))/bar))
-    const keysMajor=['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'], keysMinor=['Cm','C#m','Dm','Ebm','Em','Fm','F#m','Gm','G#m','Am','Bbm','Bm'];const key=project.key.scale==='minor'?keysMinor[project.key.root]:project.key.scale==='major'?keysMajor[project.key.root]:'C';const info=keyInfo(key)
-    const head=['X:1','T:',`M:${project.timeSig.num}/${project.timeSig.den}`,`L:1/${grid*4}`,`Q:1/4=${Math.round(project.bpm)}`,'V: Vocal clef=treble name="Vocal Melody" snm="Vocal"','V: Ins clef=treble name="Ins Melody" snm="Inst."',`K:${key}`]
-    const tokens=[48,32,24,16,12,8,6,4,3,2,1];let body='';let accidental:Record<string,number>={}
-    function spelling(pitch:number): {letter:string;alter:number;written:number} {const candidates:{letter:string;alter:number;written:number;score:number}[]=[];for(const letter of 'CDEFGAB')for(let alter=-1;alter<=1;alter++){const written=pitch-alter;if(((written-60-natural[letter])%12+12)%12)continue;const inKey=info.acc[letter]===alter;const score=(inKey?0:10)+(alter!==0&&((info.count<0&&alter>0)||(info.count>=0&&alter<0))?4:0)+(['B','E'].includes(letter)&&alter===1||['C','F'].includes(letter)&&alter===-1?2:0);candidates.push({letter,alter,written,score})}return candidates.sort((a,b)=>a.score-b.score)[0]}
-    function noteName(pitch:number):string {const s=spelling(pitch),current=accidental[s.letter]??info.acc[s.letter];let prefix='';if(current!==s.alter){prefix=s.alter===0?'=':s.alter>0?'^':'_';accidental[s.letter]=s.alter}const octave=Math.floor((s.written-60)/12);const letter=octave>=1?s.letter.toLowerCase():s.letter;return prefix+letter+(octave>=1?"'".repeat(octave-1):','.repeat(-octave))}
-    for(let b=0;b<bars;b++){accidental={};let pos=b*bar;const end=pos+bar
+    const ns=mono.map(n=>({start:Math.round(n.start*grid),end:Math.max(Math.round(n.start*grid)+1,Math.round(n.end*grid)),pitch:n.pitch}));const cs=chordEvents.map(c=>({...c,beat:Math.round(c.beat*grid)}))
+    const text=writeYueAbc({timeSig:project.timeSig,bpm:project.bpm,key:project.key,grid,vocal:ns,ins:[],chords:cs})
+    out.text=text;out.notes=ns.length;out.chords=cs.length
+  } catch {out.error='Could not export that sheet music.'}
+  return out
+}
+
+export interface GridNote { start: number; end: number; pitch: number }
+export interface YueScore { timeSig: { num: number; den: number }; bpm: number; key: KeySig; grid: number; vocal: GridNote[]; ins: GridNote[]; chords: { beat: number; symbol: string }[] }
+
+// YuE2's two-part ABC from notes already on a grid of `grid` steps per quarter note
+// (L:1/(4*grid)), one note at a time per part. Chord names ride on the Vocal part,
+// as YuE2 writes them; an Ins line with no notes is a Z rest. Throws on a meter whose
+// bar isn't a whole number of steps.
+export function writeYueAbc(o: YueScore): string {
+  const grid=o.grid, bar=o.timeSig.num*4/o.timeSig.den*grid
+  if(!Number.isInteger(bar)||bar<=0)throw new Error('meter')
+  const bars=Math.max(1,Math.ceil(Math.max(...o.vocal.map(n=>n.end),...o.ins.map(n=>n.end),...o.chords.map(c=>c.beat+1))/bar))
+  const keysMajor=['C','Db','D','Eb','E','F','F#','G','Ab','A','Bb','B'], keysMinor=['Cm','C#m','Dm','Ebm','Em','Fm','F#m','Gm','G#m','Am','Bbm','Bm'];const key=o.key.scale==='minor'?keysMinor[o.key.root]:o.key.scale==='major'?keysMajor[o.key.root]:'C';const info=keyInfo(key)
+  const head=['X:1','T:',`M:${o.timeSig.num}/${o.timeSig.den}`,`L:1/${grid*4}`,`Q:1/4=${Math.round(o.bpm)}`,'V: Vocal clef=treble name="Vocal Melody" snm="Vocal"','V: Ins clef=treble name="Ins Melody" snm="Inst."',`K:${key}`]
+  const tokens=[48,32,24,16,12,8,6,4,3,2,1];let accidental:Record<string,number>={}
+  function spelling(pitch:number): {letter:string;alter:number;written:number} {const candidates:{letter:string;alter:number;written:number;score:number}[]=[];for(const letter of 'CDEFGAB')for(let alter=-1;alter<=1;alter++){const written=pitch-alter;if(((written-60-natural[letter])%12+12)%12)continue;const inKey=info.acc[letter]===alter;const score=(inKey?0:10)+(alter!==0&&((info.count<0&&alter>0)||(info.count>=0&&alter<0))?4:0)+(['B','E'].includes(letter)&&alter===1||['C','F'].includes(letter)&&alter===-1?2:0);candidates.push({letter,alter,written,score})}return candidates.sort((a,b)=>a.score-b.score)[0]}
+  function noteName(pitch:number):string {const s=spelling(pitch),current=accidental[s.letter]??info.acc[s.letter];let prefix='';if(current!==s.alter){prefix=s.alter===0?'=':s.alter>0?'^':'_';accidental[s.letter]=s.alter}const octave=Math.floor((s.written-60)/12);const letter=octave>=1?s.letter.toLowerCase():s.letter;return prefix+letter+(octave>=1?"'".repeat(octave-1):','.repeat(-octave))}
+  function barText(ns:GridNote[],cs:{beat:number;symbol:string}[],b:number):string {accidental={};let body='';let pos=b*bar;const end=pos+bar
       while(pos<end){const n=ns.find(n=>n.start<=pos&&n.end>pos);const nextNote=ns.find(n=>n.start>pos);const c=cs.find(c=>c.beat===pos);const nextChord=cs.find(c=>c.beat>pos);let limit=Math.min(end,n?.end??nextNote?.start??end,nextChord?.beat??end);if(limit<=pos)limit=pos+1
         if(c)body+=`"${c.symbol}"`;let len=limit-pos;while(len>0){const chunk=tokens.find(x=>x<=len)!;body+=(n?noteName(n.pitch):'z')+(chunk===1?'':chunk);len-=chunk;if(n&&(len>0||limit<n.end))body+='-'}pos=limit
       }
-      body+='|';if((b+1)%4===0||b===bars-1){const group=b%4+1;head.push('V: Vocal',body,'V: Ins',`Z${group===1?'':group}|`);body=''}
-    }
-    out.text=head.join('\n')+'\n';out.notes=ns.length;out.chords=cs.length
-  } catch {out.error='Could not export that sheet music.'}
-  return out
+    return body+'|'
+  }
+  for(let g=0;g<bars;g+=4){const count=Math.min(4,bars-g),from=g*bar,to=(g+count)*bar;let vocal='',ins=''
+    for(let b=g;b<g+count;b++)vocal+=barText(o.vocal,o.chords,b)
+    if(o.ins.some(n=>n.end>from&&n.start<to))for(let b=g;b<g+count;b++)ins+=barText(o.ins,[],b);else ins=`Z${count===1?'':count}|`
+    head.push('V: Vocal',vocal,'V: Ins',ins)
+  }
+  return head.join('\n')+'\n'
 }

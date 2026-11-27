@@ -8,3 +8,7 @@ export function fromFile(bytes: Uint8Array): string {
 export function toFile(text: string): Uint8Array {
   return new TextEncoder().encode(text)
 }
+
+/** a Standard MIDI File starts with MThd */
+export const isMidi = (bytes: Uint8Array): boolean =>
+  bytes.length >= 4 && bytes[0] === 0x4d && bytes[1] === 0x54 && bytes[2] === 0x68 && bytes[3] === 0x64

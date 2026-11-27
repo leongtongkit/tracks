@@ -5,7 +5,7 @@
 import { track } from '../daw/analytics'
 import type { DrawnSheet } from '../daw/sheet-render'
 import { isPhone } from '../mobile-gate'
-import { fromFile, toFile } from './file'
+import { fromFile, isMidi, toFile } from './file'
 import { sendScore, takeScore } from './handoff'
 import { check, edit, locate, newScore, noteName, unitsOf, type Op, type Score, type Target, type VoiceName } from './yue-abc'
 
@@ -399,9 +399,11 @@ function download(bytes: BlobPart, file: string, type: string): void {
 const base = (): string => name.replace(/\.abc$/i, '') || 'score'
 
 async function open(file: File): Promise<void> {
+  const bytes = new Uint8Array(await file.arrayBuffer())
+  if (/\.midi?$/i.test(file.name) || isMidi(bytes)) return openMidi(file, bytes)
   let opened: string
   try {
-    opened = fromFile(new Uint8Array(await file.arrayBuffer()))
+    opened = fromFile(bytes)
   } catch {
     say(`${file.name} isn't a text file, so it can't be a score.`)
     return
@@ -411,6 +413,18 @@ async function open(file: File): Promise<void> {
   commit(opened, null, 'load')
   const n = score.problems.length
   tell(`Opened ${file.name}${n ? `: it has ${n === 1 ? '1 problem' : `${n} problems`} for YuE2, listed under Score check` : ''}.${had ? ' Undo brings back the score you had.' : ''}`)
+}
+
+// a MIDI file, such as the one a YuE2 song page gives out, becomes a YuE2 score
+async function openMidi(file: File, bytes: Uint8Array): Promise<void> {
+  const { midiToScore } = await import('./midi-score')
+  const r = midiToScore(bytes)
+  if ('error' in r) { say(`${file.name}: ${r.error}`); return }
+  const had = text
+  name = `${file.name.replace(/\.midi?$/i, '') || 'score'}.abc`
+  commit(r.text, null, 'load')
+  const n = score.problems.length
+  tell(`Opened ${file.name} as sheet music. ${r.messages.join(' ')}${n ? ` It has ${n === 1 ? '1 problem' : `${n} problems`} for YuE2, listed under Score check.` : ''}${had ? ' Undo brings back the score you had.' : ''}`)
 }
 
 const act: Record<string, () => void> = {

@@ -46,13 +46,13 @@
     <main class="se">
       <div class="se-intro">
         <h1>Sheet music editor</h1>
-        <p>Edit a score in the ABC format <a href="/blog/yue2-sheet-music-tracks">YuE2</a> reads and writes. The sheet music and the text stay in step: click a note to pick it, change it with the buttons or the keyboard, or type in the text. Everything stays in your browser.</p>
+        <p>Edit a score in the ABC format <a href="/blog/yue2-sheet-music-tracks">YuE2</a> reads and writes. The sheet music and the text stay in step: click a note to pick it, change it with the buttons or the keyboard, or type in the text. A MIDI file opens too: its Vocal and Ins parts become the score's two parts. Everything stays in your browser.</p>
       </div>
 
       <div class="se-files" role="toolbar" aria-label="Score">
         <button type="button" class="se-btn" data-act="new">New score</button>
-        <button type="button" class="se-btn" data-act="open">Open .abc</button>
-        <input type="file" accept=".abc,text/vnd.abc,text/plain" hidden />
+        <button type="button" class="se-btn" data-act="open">Open .abc / .mid</button>
+        <input type="file" accept=".abc,.mid,.midi,text/vnd.abc,text/plain,audio/midi,audio/x-midi" hidden />
         <button type="button" class="se-btn" data-act="save">Save .abc</button>
         <button type="button" class="se-btn" data-act="print">Print / PDF</button>
         <button type="button" class="se-btn se-play" data-act="play">Play</button>
@@ -128,7 +128,7 @@
       <section class="se-help">
         <h2>Keys</h2>
         <p>With the sheet music picked (not the text): ← → move between notes · ↑ ↓ a step · Shift+↑ ↓ an octave · Alt+↑ ↓ a semitone · 1–5 sixteenth to whole note · . dotted · R rest · Delete · I insert after · | add bar · Ctrl+Z undo · Ctrl+Shift+Z redo.</p>
-        <p>The buttons change the text so that every bar stays the right length and the score stays in YuE2's format. Open a score with Open .abc, or drop an .abc file on the page. The <a href="/blog/yue2-sheet-music-tracks">YuE2 guide</a> shows how to use the score you save.</p>
+        <p>The buttons change the text so that every bar stays the right length and the score stays in YuE2's format. Open a score with Open .abc / .mid, or drop an .abc or MIDI file on the page. MIDI notes snap to the nearest sixteenth note, and where notes overlap the top one is kept. The <a href="/blog/yue2-sheet-music-tracks">YuE2 guide</a> shows how to use the score you save.</p>
       </section>
 
       <dialog class="se-new" aria-label="New score">

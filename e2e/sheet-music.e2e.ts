@@ -1,6 +1,7 @@
 import { spawnSync } from 'node:child_process'
 import { readFile } from 'node:fs/promises'
 import type { Page } from '@playwright/test'
+import { smf } from '../tests/sheet/smf'
 import { expect, songState, test, transportState, waitForStudio } from './fixtures'
 
 const SCORE = 'e2e/yue2/score.abc'
@@ -163,6 +164,32 @@ test('sends a score to the studio as tracks, and a studio track back to the edit
   await expect(page.locator('.se-verdict')).toHaveText('YuE2 can read this score: 8 bars, 56 notes, 8 chord symbols.')
   await page.getByRole('button', { name: 'Undo', exact: true }).click()
   await expect(text(page)).toHaveValue(original)
+  expect(diag.pageErrors).toEqual([])
+})
+
+test('opens a two-part MIDI file as a YuE2 score, and says plainly when a file has only drums', async ({ page, diag }) => {
+  await openEditor(page)
+  // parts named as YuE2 song pages name them
+  await page.locator('.se-files input[type=file]').setInputFiles('e2e/yue2/two-part.mid')
+  await expect(page.locator('.se-picked')).toHaveText('Opened two-part.mid as sheet music. Vocal part from “Vocal Melody”. Ins part from “Ins Melody”. Undo brings back the score you had.')
+  await expect(page.locator('.se-verdict')).toHaveText('YuE2 can read this score: 8 bars, 38 notes, 0 chord symbols.')
+  await expect(page.locator('.se-name')).toHaveText('two-part.abc · G major · 4/4 · 88 BPM')
+  await expect(text(page)).toHaveValue(/^X:1\nT:\nM:4\/4\nL:1\/16\nQ:1\/4=88\n/)
+  // both staves are drawn, each with its notes
+  await expect(page.locator('.se-view .abcjs-note.abcjs-v0')).toHaveCount(25)
+  await expect(page.locator('.se-view .abcjs-note.abcjs-v1')).toHaveCount(13)
+
+  const [download] = await Promise.all([page.waitForEvent('download'), page.getByRole('button', { name: 'Save .abc' }).click()])
+  expect(download.suggestedFilename()).toBe('two-part.abc')
+  const saved = await download.path()
+  expect(yue2Inspect(saved!)).toBe(0)
+
+  // a drums-only file leaves the score as it was
+  const before = await text(page).inputValue()
+  const drums = smf([{ name: 'Beat', channel: 9, notes: [[0, 0.25, 36], [1, 0.25, 38]] }])
+  await page.locator('.se-files input[type=file]').setInputFiles({ name: 'beat.mid', mimeType: 'audio/midi', buffer: Buffer.from(drums) })
+  await expect(page.locator('.se-picked')).toHaveText('beat.mid: That MIDI file only has drums. Sheet music needs a melody, so there is nothing to show.')
+  await expect(text(page)).toHaveValue(before)
   expect(diag.pageErrors).toEqual([])
 })
 
