@@ -16,8 +16,6 @@ export interface SheetOptions {
   /** a note, rest or bar was clicked: where it is written in the ABC text */
   onClick?(start: number, end: number): void
   selectionColor?: string
-  /** lay the score out for a narrow screen this many pixels wide, two bars to a line */
-  wrapWidth?: number
 }
 
 interface Moment {
@@ -40,7 +38,6 @@ export function drawSheet(target: HTMLElement, abc: string, qpm: number, positio
     responsive: 'resize', add_classes: true, paddingleft: 4, paddingright: 4, paddingtop: 8,
     ...(onClick ? { clickListener: el => { if (el.startChar !== undefined && el.endChar !== undefined) onClick(el.startChar, el.endChar) } } : {}),
     ...(opts.selectionColor ? { selectionColor: opts.selectionColor } : {}),
-    ...(opts.wrapWidth ? { staffwidth: opts.wrapWidth, wrap: { minSpacing: 1.5, maxSpacing: 2.5, preferredMeasuresPerLine: 2 } } : {}),
   })
   const svg = target.querySelector('svg')
   if (!tune || !svg) throw new Error('abcjs drew nothing')

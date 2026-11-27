@@ -44,6 +44,9 @@
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }
 .se-view svg { display: block; }
+/* on a phone, a 4-bar line fitted to the screen would make the notes tiny: keep them
+   readable and let the paper scroll sideways, each line still as the score writes it */
+@media (max-width: 600px) { .se-sheet { min-width: 540px; } }
 .se-view .abcjs-note, .se-view .abcjs-rest, .se-view .abcjs-mmrest { cursor: pointer; }
 .se-view .sheet-now { fill: var(--accent); }
 .se-view .sheet-cursor { stroke: var(--accent); stroke-width: 2; opacity: 0.75; }

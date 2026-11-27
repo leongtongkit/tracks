@@ -38,6 +38,7 @@ declare global {
 
 const $ = <T extends Element>(sel: string): T => document.querySelector<T>(sel)!
 const view = $<HTMLElement>('.se-view')
+const paper = $<HTMLElement>('.se-sheet')
 const ta = $<HTMLTextAreaElement>('#se-text')
 const mirror = $<HTMLElement>('.se-mirror')
 const picked = $<HTMLElement>('.se-picked')
@@ -102,26 +103,13 @@ async function draw(): Promise<void> {
   drawn?.destroy()
   drawn = null
   try {
-    narrow = narrowView()
-    drawn = drawSheet(view, text, score.bpm || 120, playBeat, { onClick: pickAt, selectionColor: '#ff4d00', ...(narrow ? { wrapWidth: narrow } : {}) })
-    if (sel) drawn.select(sel.start, sel.end)
+    drawn = drawSheet(paper, text, score.bpm || 120, playBeat, { onClick: pickAt, selectionColor: '#ff4d00' })
+    if (sel) { drawn.select(sel.start, sel.end); revealInSheet() }
     window.__tracksSheet!.renders++
   } catch {
-    view.innerHTML = '<p class="se-view-empty">Nothing to draw yet. Fix the text, or start a new score.</p>'
+    paper.innerHTML = '<p class="se-view-empty">Nothing to draw yet. Fix the text, or start a new score.</p>'
   }
 }
-
-/** on a phone-width view, the width to lay the score out at (two bars to a line); 0 when there's room */
-function narrowView(): number {
-  const w = view.clientWidth
-  return w && w < 560 ? Math.round(w - 24) : 0
-}
-let narrow = 0
-let resizeTimer: ReturnType<typeof setTimeout> | undefined
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimer)
-  resizeTimer = setTimeout(() => { if (Boolean(narrowView()) !== Boolean(narrow)) void draw() }, 250)
-})
 
 function escapeHtml(s: string): string {
   return s.replace(/[&<>]/g, c => (c === '&' ? '&amp;' : c === '<' ? '&lt;' : '&gt;'))
@@ -227,9 +215,18 @@ function pickAt(start: number, end: number): void {
   select({ start: t.start, end: t.end })
 }
 
+/** scroll the sheet music (not the page) so the picked note shows: it can be off to the side on a phone */
+function revealInSheet(): void {
+  const el = view.querySelector('.abcjs-note_selected, .abcjs-rest.abcjs-note_selected')
+  if (!el) return
+  const r = el.getBoundingClientRect(), v = view.getBoundingClientRect()
+  if (r.left < v.left + 12 || r.right > v.right - 12) view.scrollLeft += r.left - v.left - v.width / 3
+}
+
 function select(range: Range): void {
   sel = range
   drawn?.select(range.start, range.end)
+  revealInSheet()
   showMirror()
   revealInText()
   showPicked()
