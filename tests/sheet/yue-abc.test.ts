@@ -4,7 +4,9 @@
 // edits always give a score YuE2 accepts with the notes the editor shows, and
 // the editor's checker agrees with YuE2's about what is broken.
 import { spawnSync } from 'node:child_process'
-import { readFileSync } from 'node:fs'
+import { mkdtempSync, readFileSync, writeFileSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { describe, expect, it } from 'vitest'
 import { parseAbc } from '../../src/daw/abc'
@@ -36,8 +38,13 @@ print(json.dumps(out))
   return JSON.parse(run.stdout) as Verdict[]
 }
 /** YuE2's command-line check, exactly as its guide runs it */
+// a real file: on Linux, Node hands a child its input through a socket, which /dev/stdin can't open
+const scratch = mkdtempSync(join(tmpdir(), 'yue2-'))
+let files = 0
 function inspectCli(text: string): number {
-  return spawnSync('python3', ['-I', root('e2e/yue2/abc_tools.py'), 'inspect', '/dev/stdin'], { input: text, encoding: 'utf8' }).status ?? -1
+  const file = join(scratch, `score-${++files}.abc`)
+  writeFileSync(file, text)
+  return spawnSync('python3', ['-I', root('e2e/yue2/abc_tools.py'), 'inspect', file], { encoding: 'utf8' }).status ?? -1
 }
 const frac = (ticks: number): string => {
   // ticks are 1/1024 whole notes; Python prints quarter notes as a reduced fraction
