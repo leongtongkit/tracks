@@ -1,5 +1,17 @@
 [
   {
+    "slug": "make-holiday-music-browser",
+    "title": "How to make holiday music in your browser: a Christmas song from scratch",
+    "dek": "Write a simple holiday tune with sleigh-bell rhythm, bells, warm chords, and a bright mix in the free Tracks studio.",
+    "date": "2026-11-28",
+    "tags": [
+      "holiday",
+      "christmas",
+      "songwriting"
+    ],
+    "readingTime": 7
+  },
+  {
     "slug": "yue2-sheet-music-tracks",
     "title": "Use YuE2 with Tracks: edit the songs it writes, and have it sing your melody",
     "dek": "Edit a YuE2 ABC score in the Tracks sheet music editor or the studio, then save a score for YuE2.",
